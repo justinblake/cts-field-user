@@ -70,7 +70,7 @@
     </feature>
     <name>clear-task-solutions-mobile</name>
     <description>Clear Task Solutions Mobile App</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <author email="jblake@cleartasksolutions.com" href="https://www.cleartasksolutions.com">CTS</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
