@@ -1,0 +1,104 @@
+page-next-day {
+  .card p {
+    color: #000;
+    font-size: 1.7rem;
+  }
+
+  .card-header-md {
+    font-size: 2.5rem;
+    padding: 10px 16px;
+  }
+
+  .card-header-ios {
+    font-size: 2.5rem;
+    padding: 10px 16px;
+  }
+
+  h3 {
+    font-size: 1.8rem !important;
+    margin: 8px 0 8px 0 !important;
+  }
+
+  h4 {
+    font-size: 1.5rem !important;
+  }
+
+  h5 {
+    font-size: 1.2rem !important;
+  }
+
+  .head-font {
+    font-size: 2.5rem;
+  }
+
+  ion-grid ion-row ion-col {
+    height: 40px;
+  }
+
+  ion-footer ion-grid {
+    height: 62px;
+  }
+
+  .task-icon {
+    top: 16px;
+    right: -20px;
+    color: #3F51B5;
+  }
+
+  @media (max-width: 426px) {
+    .next-space {
+      width: 110%;
+      margin-left: -5%;
+    }
+  }
+
+  @media (max-width: 376px) {
+    .task-icon {
+      right: -10px;
+    }
+    .next-space {
+      width: 109%;
+      margin-left: -5%;
+    }
+  }
+
+  @media (max-width: 350px) {
+    .task-icon {
+      right: -5px;
+    }
+    .newTime {
+      color: white;
+      top: -1px;
+    }
+    .next-space {
+      width: 112%;
+      margin-left: -6%;
+    }
+  }
+
+  .gen-mar-bot20 {
+    margin-bottom: 20px !important;
+  }
+
+  .fs-no-results-container-ios {
+    top: 70px;
+  }
+
+  .fs-no-results-container {
+    top: 58px;
+  }
+
+  .ios-refresh {
+    margin-left: 15%;
+  }
+
+  .accept-icon {
+    top: 16px;
+    right: 4px;
+  }
+
+  .no-future {
+    font-weight: 700;
+    font-size: 2.5rem;
+  }
+}

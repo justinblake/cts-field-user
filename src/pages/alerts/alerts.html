@@ -1,0 +1,101 @@
+<ion-header>
+    <ion-navbar *ngIf="isIos">
+        <ion-row>
+            <ion-col width-50>
+                <div text-center>
+                    <div class="ios-title">
+                        Alerts
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col width-25>
+                <ion-buttons class="mar-right6" end>
+                    <button class="refresh" ion-button round icon-right color="secondary" (click)="loadAlerts()">
+                        Refresh
+                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+    </ion-navbar>
+    <ion-navbar *ngIf="!isIos">
+        <ion-buttons class="mar-right6" end>
+            <button class="refresh" ion-button round icon-right color="secondary" (click)="loadAlerts()"> Refresh
+                <ion-icon name="refresh"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>Alerts</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <div *ngIf="!hasAlerts">
+        <ion-card>
+            <ion-card-header text-center class="task-card-header no-alerts">
+                No Current Alerts
+            </ion-card-header>
+        </ion-card>
+    </div>
+
+    <div *ngIf="alerts">
+        <ion-card *ngFor="let alert of alerts.data; let i = index">
+            <ion-card-header *ngIf="alert.viewed === 1" class="read-alert">
+                <h3 class="text-info">From: {{alert.sending_emp.first_name}} {{alert.sending_emp.last_name}}</h3>
+            </ion-card-header>
+
+            <ion-card-header *ngIf="alert.viewed === 0" class="unread-alert">
+                New Alert!
+                <h3 class="text-info">From: {{alert.sending_emp.first_name}} {{alert.sending_emp.last_name}}</h3>
+            </ion-card-header>
+
+            <ion-card-content *ngIf="displayAlert === i" class="alert-padding">
+
+                <ion-row>
+                    <h4 class="contractor-main">Message:</h4>
+                </ion-row>
+                <ion-row>
+                    <h5 class="contractor-sub">{{alert.alert_description}}</h5>
+                </ion-row>
+                <ion-row>
+                    <h6 class="important">Sent:
+                        <span class="less-important" *ngIf="isIos">{{adjustTime(alert.updatedTimeSent) }} - {{alert.updatedTimeSent | date:'mediumDate'}}</span>
+                        <span class="less-important" *ngIf="!isIos">{{alert.updatedTimeSent | date:'shortTime'}} - {{alert.updatedTimeSent | date:'mediumDate'}}</span>
+                    </h6>
+                </ion-row>
+                <ion-row *ngIf="alert.updatedTimeView !== null">
+                    <h6 class="important">Read:
+                        <span class="less-important" *ngIf="isIos">{{adjustTime(alert.updatedTimeView) }} - {{alert.updatedTimeView | date:'mediumDate'}}</span>
+                        <span class="less-important" *ngIf="!isIos">{{alert.updatedTimeView | date:'shortTime'}} - {{alert.updatedTimeView | date:'mediumDate'}}</span>
+                    </h6>
+
+                </ion-row>
+                <ion-row>
+
+                    <h4>
+                        <button ion-button icon-left clear medium
+                                class="call-contractor"
+                                (click)="callPhone(alert.sending_emp.phone)">
+                            <span class="contractor-phone">{{alert.sending_emp.first_name}}'s #: </span> <span
+                                class="contractor-underline">{{alert.sending_emp.phone}}</span>
+                        </button>
+                    </h4>
+                </ion-row>
+
+            </ion-card-content>
+            <div no-padding class="more-back move-up">
+                <ion-row>
+                    <ion-col>
+                        <button class="view-alert" ion-button icon-left clear small (click)="readMessage(i)">
+                            <span class="view-alert-icon" *ngIf="displayAlert === -1 || displayAlert !== i">View Alert</span>
+                            <span class="view-alert-icon" *ngIf="displayAlert === i">Hide Alert</span>
+                            <ion-icon *ngIf="displayAlert === -1 || displayAlert !== i"
+                                      name="fa-chevron-circle-right"></ion-icon>
+                            <ion-icon *ngIf="displayAlert === i" name="fa-chevron-circle-up"></ion-icon>
+                        </button>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </ion-card>
+    </div>
+</ion-content>

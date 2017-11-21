@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "675697041935",
+    "firebase_url": "https://cleartasksolutionsmobile.firebaseio.com",
+    "project_id": "cleartasksolutionsmobile",
+    "storage_bucket": "cleartasksolutionsmobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675697041935:android:be40a189b07bd24f",
+        "android_client_info": {
+          "package_name": "com.clearTaskSolutions.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675697041935-385197cb2j9tqoatn6f4fgofp44piu53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt-9Ysf1YTcEMbjNL4YiOxV_83Qd1gX8k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675697041935:android:7301860a8c32adfc",
+        "android_client_info": {
+          "package_name": "com.ionicframework.cleartasksolutionsmobile323809"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675697041935-psc2e3k0i5q4k16cie0et98jn5k3eppn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ionicframework.cleartasksolutionsmobile323809",
+            "certificate_hash": "77cddab9192f53c2d628332af621097fadfac725"
+          }
+        },
+        {
+          "client_id": "675697041935-385197cb2j9tqoatn6f4fgofp44piu53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt-9Ysf1YTcEMbjNL4YiOxV_83Qd1gX8k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "675697041935-542hnsh6b5m1vffuoi9s595ii17rsdeu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ionicframework.cleartasksolutionsmobile323809"
+              }
+            },
+            {
+              "client_id": "675697041935-385197cb2j9tqoatn6f4fgofp44piu53.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
