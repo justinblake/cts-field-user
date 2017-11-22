@@ -44,6 +44,7 @@
     "@ionic-native/unique-device-id": "4.3.3",
     "@ionic/cli-utils": "^1.15.0",
     "@ionic/cloud-angular": "^0.7.0",
+    "@ionic/pro": "^1.0.16",
     "@ionic/storage": "2.0.1",
     "call-number": "^1.0.1",
     "cordova-android": "^6.3.0",

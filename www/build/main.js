@@ -6157,7 +6157,7 @@ var LoginPage = (function () {
 }());
 LoginPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-login',template:/*ion-inline-start:"/Users/justin/dev/cts-field-user/src/pages/login/login.html"*/'<ion-content padding class="cts-login-content">\n\n    <div class="title"><img src="assets/img/cts-lg.png"></div>\n    <div>\n\n        <ion-list *ngIf="!showEmail">\n            <ion-item *ngIf="!validEmail" class="login-pad">\n                <ion-label floating>Email Address</ion-label>\n                <ion-input type="email" [(ngModel)]="credentials.email" required></ion-input>\n            </ion-item>\n            <ion-item *ngIf="validEmail" class="login-pad">\n                <ion-label floating>Password</ion-label>\n                <ion-input type="password" [(ngModel)]="credentials.password" required></ion-input>\n            </ion-item>\n            <ion-row>\n                <ion-col class="login-btn" width-100>\n                    <button *ngIf="!validEmail" ion-button icon-left block color="secondary" (click)="validateEmail(credentials.email)">\n                        NEXT\n                    </button>\n                    <button *ngIf="validEmail" ion-button icon-left block color="secondary" (click)="doLogin()" [disabled]="disableForm()">\n                        LOGIN\n                    </button>\n                    <button *ngIf="validEmail" class="btn-shadow browser" ion-button icon-left block\n                            (click)="backToEmail()">\n                        BACK\n                    </button>\n                </ion-col>\n\n            </ion-row>\n            <ion-row>\n                <ion-col class="login-btn" width-100>\n                    <button class="pass-reset" ion-button icon-left block clear (click)="showPasswordReset()">\n                        Forgot Password?\n                    </button>\n                </ion-col>\n\n            </ion-row>\n        </ion-list>\n        <ion-row>\n            <ion-item *ngIf="showEmail" class="login-pad">\n                <ion-label floating>Email Address</ion-label>\n                <ion-input type="email" [(ngModel)]="resetEmail" required></ion-input>\n            </ion-item>\n            <ion-col *ngIf="showEmail" class="login-btn" width-100>\n                <button ion-button icon-left block color="primary" (click)="resetPassword()">\n                    Reset Password\n                </button>\n            </ion-col>\n            <ion-col *ngIf="showEmail" class="login-btn" width-100>\n                <button ion-button icon-left block color="primary" (click)="showEmail = false">\n                    Back To Login\n                </button>\n            </ion-col>\n        </ion-row>\n\n\n\n\n    </div>\n</ion-content>\n\n\n<ion-row>\n    <ion-col text-center class="version">\n        Version: 1.2.3\n    </ion-col>\n</ion-row>\n\n'/*ion-inline-end:"/Users/justin/dev/cts-field-user/src/pages/login/login.html"*/
+        selector: 'page-login',template:/*ion-inline-start:"/Users/justin/dev/cts-field-user/src/pages/login/login.html"*/'<ion-content padding class="cts-login-content">\n\n    <div class="title"><img src="assets/img/cts-lg.png"></div>\n    <div>\n\n        <ion-list *ngIf="!showEmail">\n            <ion-item *ngIf="!validEmail" class="login-pad">\n                <ion-label floating>Email Address</ion-label>\n                <ion-input type="email" [(ngModel)]="credentials.email" required></ion-input>\n            </ion-item>\n            <ion-item *ngIf="validEmail" class="login-pad">\n                <ion-label floating>Password</ion-label>\n                <ion-input type="password" [(ngModel)]="credentials.password" required></ion-input>\n            </ion-item>\n            <ion-row>\n                <ion-col class="login-btn" width-100>\n                    <button *ngIf="!validEmail" ion-button icon-left block color="secondary" (click)="validateEmail(credentials.email)">\n                        NEXT\n                    </button>\n                    <button *ngIf="validEmail" ion-button icon-left block color="secondary" (click)="doLogin()" [disabled]="disableForm()">\n                        LOGIN\n                    </button>\n                    <button *ngIf="validEmail" class="btn-shadow browser" ion-button icon-left block\n                            (click)="backToEmail()">\n                        BACK\n                    </button>\n                </ion-col>\n\n            </ion-row>\n            <ion-row>\n                <ion-col class="login-btn" width-100>\n                    <button class="pass-reset" ion-button icon-left block clear (click)="showPasswordReset()">\n                        Forgot Password?\n                    </button>\n                </ion-col>\n\n            </ion-row>\n        </ion-list>\n        <ion-row>\n            <ion-item *ngIf="showEmail" class="login-pad">\n                <ion-label floating>Email Address</ion-label>\n                <ion-input type="email" [(ngModel)]="resetEmail" required></ion-input>\n            </ion-item>\n            <ion-col *ngIf="showEmail" class="login-btn" width-100>\n                <button ion-button icon-left block color="primary" (click)="resetPassword()">\n                    Reset Password\n                </button>\n            </ion-col>\n            <ion-col *ngIf="showEmail" class="login-btn" width-100>\n                <button ion-button icon-left block color="primary" (click)="showEmail = false">\n                    Back To Login\n                </button>\n            </ion-col>\n        </ion-row>\n\n\n\n\n    </div>\n</ion-content>\n\n\n<ion-row>\n    <ion-col text-center class="version">\n        Version: 1.3.0\n    </ion-col>\n</ion-row>\n\n'/*ion-inline-end:"/Users/justin/dev/cts-field-user/src/pages/login/login.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavController */],
@@ -6308,6 +6308,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export MyErrorHandler */
 /* unused harmony export provideStorage */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_animations__ = __webpack_require__(650);
@@ -6362,11 +6363,16 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__providers_task_manager__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__providers_user_manager__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__utils_utils__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__ionic_pro__ = __webpack_require__(988);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__ionic_pro___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_52__ionic_pro__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 //libraries//
 
@@ -6423,6 +6429,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
+var IonicPro = __WEBPACK_IMPORTED_MODULE_52__ionic_pro__["Pro"].init('379d0062', {
+    appVersion: "1.3.0"
+});
+var MyErrorHandler = (function () {
+    function MyErrorHandler(injector) {
+        try {
+            this.ionicErrorHandler = injector.get(__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["f" /* IonicErrorHandler */]);
+        }
+        catch (e) {
+            // Unable to get the IonicErrorHandler provider, ensure
+            // IonicErrorHandler has been added to the providers list below
+        }
+    }
+    MyErrorHandler.prototype.handleError = function (err) {
+        IonicPro.monitoring.handleNewError(err);
+        // Remove this if you want to disable Ionic's auto exception handling
+        // in development mode.
+        this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
+    };
+    return MyErrorHandler;
+}());
+MyErrorHandler = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_4__angular_core__["B" /* Injectable */])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__angular_core__["D" /* Injector */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_core__["D" /* Injector */]) === "function" && _a || Object])
+], MyErrorHandler);
 
 // import {CloudSettings, CloudModule} from '@ionic/cloud-angular';
 // CloudModule.forRoot(cloudSettings),
@@ -6508,6 +6541,7 @@ AppModule = __decorate([
         providers: [
             { provide: __WEBPACK_IMPORTED_MODULE_4__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["f" /* IonicErrorHandler */] },
             { provide: __WEBPACK_IMPORTED_MODULE_21__ionic_storage__["a" /* Storage */], useFactory: provideStorage },
+            [{ provide: __WEBPACK_IMPORTED_MODULE_4__angular_core__["v" /* ErrorHandler */], useClass: MyErrorHandler }],
             __WEBPACK_IMPORTED_MODULE_7__ionic_native_action_sheet__["a" /* ActionSheet */],
             __WEBPACK_IMPORTED_MODULE_8__ionic_native_android_full_screen__["a" /* AndroidFullScreen */],
             __WEBPACK_IMPORTED_MODULE_41__providers_api_service__["a" /* ApiService */],
@@ -6537,6 +6571,7 @@ AppModule = __decorate([
     })
 ], AppModule);
 
+var _a;
 //# sourceMappingURL=app.module.js.map
 
 /***/ }),
