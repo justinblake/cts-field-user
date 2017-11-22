@@ -114,6 +114,9 @@ export class AlertsPage {
                 console.log('this.alerts', JSON.stringify(this.alerts));
             }
             this.utils.dismissLoading();
+        }).then(() => {
+            console.log("I have received the update");
+            this.presentDemoAlert();
         }).catch((error) => {
             this.utils.dismissLoading();
             setTimeout(() => {
