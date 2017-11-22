@@ -53879,6 +53879,7 @@ page-history .details {
 
 page-history .header-proj {
   font-size: 2.5rem;
+  padding-bottom: 0;
 }
 
 page-history img {

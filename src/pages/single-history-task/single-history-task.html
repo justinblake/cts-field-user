@@ -104,7 +104,7 @@
                 </ion-item>
             </ion-list>
 
-            <ion-list no-padding text-wrap  *ngFor="let contact of contractor_contacts">
+            <ion-list no-padding text-wrap *ngFor="let contact of contractor_contacts">
                 <ion-item no-padding text-wrap>
                     <h4 class="contractor-main">Contractor Contacts:</h4>
                     <div class="contractor-div">
@@ -169,39 +169,59 @@
         </ion-card-content>
     </ion-card>
 
-    <ion-card class="card-border" *ngIf="task_materials?.length > 0">
+    <ion-card class="card-border">
         <ion-card-header class="task-card-header">
             Materials/Supplier
         </ion-card-header>
-        <ion-card-content>
-            <div *ngFor="let material of task_materials; let m = index">
-                <div class="task-card-content" *ngIf="task_materials">
+        <div *ngIf="task_materials?.length > 0">
+            <ion-card-content>
+
+
+                <div *ngFor="let material of task_materials; let m = index">
+
                     <h3 class="text-info">{{material.material_name}}</h3>
-                    <ion-list no-padding>
-                        <ion-item no-padding>
-                            <p style="font-weight:bold">Supplier:
+                    <ion-list no-padding text-wrap>
+                        <ion-item no-padding text-wrap>
+                            <h4 class="contractor-main">
                                 {{material.supplier.name}}
-                            </p>
-                            <p>
+                            </h4>
+                            <h4 class="contractor-sub">
+                                {{material.supplier.address}}
+                            </h4>
+                            <h4 class="contractor-sub">
+                                {{material.supplier.city}}, {{material.supplier.state}}&nbsp;{{material.supplier.zip}}
+                            </h4>
+                            <h4>
                                 <button ion-button icon-left clear medium
-                                        class="phoneNum"
+                                        class="call-contractor"
                                         (click)="callPhone(material.supplier.phone)">
-                                    {{material.supplier.phone}}
+                                    <span class="contractor-phone">Office: </span> <span
+                                        class="contractor-underline">{{material.supplier.phone}}</span>
                                 </button>
-                            </p>
-                            <div>{{material.supplier.address}}</div>
-                            <div>{{material.supplier.city}},
-                                {{material.supplier.state}}&nbsp;{{material.supplier.zip}}
-                            </div>
+                            </h4>
                         </ion-item>
                     </ion-list>
+
                 </div>
+            </ion-card-content>
+            <div class="more-back">
+                <ion-row>
+                    <ion-col>
+                        <button ion-button icon-left clear medium
+                                (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
+                            <ion-icon name="navigate"></ion-icon>
+                            Get Directions
+                        </button>
+                    </ion-col>
+                </ion-row>
             </div>
-            <div class="task-card-content equip-center"
-                 *ngIf="task_materials.length === 0">No
-                Materials Specified
-            </div>
-        </ion-card-content>
+        </div>
+        <div class="task-card-content equip-center"
+             *ngIf="task_materials.length === 0">
+            <ion-card-content>
+                No Materials Specified
+            </ion-card-content>
+        </div>
     </ion-card>
 </ion-content>
 
