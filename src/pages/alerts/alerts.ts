@@ -81,6 +81,17 @@ export class AlertsPage {
         alert.present();
     }
 
+    presentDemoAlert() {
+        let alert = this.alertCtrl.create({
+            title: 'I got the update',
+            message: 'I got the update',
+            cssClass: 'myAlerts',
+            buttons: ['OK']
+        });
+
+        alert.present();
+    }
+
     loadAlerts() {
         this.utils.presentLoading();
         this.alertsLoaded = false;
@@ -122,6 +133,11 @@ export class AlertsPage {
                 .catch(() => console.log('Error launching dialer'));
         }
 
+    }
+
+    demoUpdate() {
+        console.log("I have received the update");
+        this.presentDemoAlert();
     }
 
 

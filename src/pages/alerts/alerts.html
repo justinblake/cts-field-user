@@ -38,6 +38,25 @@
         </ion-card>
     </div>
 
+    <ion-card>
+                <ion-card-header class="task-card-header">
+                    Additional Options
+                </ion-card-header>
+                <ion-card-content padding>
+
+                    <ion-row>
+
+                        <button class="home-btn" ion-button icon-left block color="secondary"
+                                (click)="demoUpdate()">
+                            Update Test
+                        </button>
+
+                    </ion-row>
+
+                </ion-card-content>
+            </ion-card>
+
+
     <div *ngIf="alerts">
         <ion-card *ngFor="let alert of alerts.data; let i = index">
             <ion-card-header *ngIf="alert.viewed === 1" class="read-alert">
