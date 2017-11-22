@@ -381,6 +381,15 @@ module.exports = [
     "clobbers": [
       "FCMPlugin"
     ]
+  },
+  {
+    "id": "cordova-plugin-ionic.common",
+    "file": "plugins/cordova-plugin-ionic/www/common.js",
+    "pluginId": "cordova-plugin-ionic",
+    "clobbers": [
+      "IonicCordova"
+    ],
+    "runs": true
   }
 ];
 module.exports.metadata = 
@@ -406,7 +415,9 @@ module.exports.metadata =
   "mx.ferreyra.callnumber": "0.0.2",
   "cordova-plugin-uniquedeviceid": "1.3.2",
   "cordova-plugin-sim": "1.3.3",
-  "cordova-plugin-fcm": "2.1.2"
+  "cordova-plugin-fcm": "2.1.2",
+  "cordova-plugin-add-swift-support": "1.7.0",
+  "cordova-plugin-ionic": "2.0.3"
 };
 // BOTTOM OF METADATA
 });

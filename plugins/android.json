@@ -70,7 +70,19 @@
     },
     "cordova-plugin-fcm": {
       "PACKAGE_NAME": "com.ionicframework.cleartasksolutionsmobile323809"
+    },
+    "cordova-plugin-ionic": {
+      "APP_ID": "379d0062",
+      "CHANNEL_NAME": "live-deploy",
+      "UPDATE_API": "https://api.ionicjs.com",
+      "UPDATE_METHOD": "background",
+      "MAX_STORE": "2",
+      "PACKAGE_NAME": "com.ionicframework.cleartasksolutionsmobile323809"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-add-swift-support": {
+      "PACKAGE_NAME": "com.ionicframework.cleartasksolutionsmobile323809"
+    }
+  }
 }
