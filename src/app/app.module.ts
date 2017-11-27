@@ -49,6 +49,7 @@ import {TimecardSearchPage} from '../pages/timecard-search/timecard-search'
 import {ApiService} from '../providers/api-service';
 import {CalendarModule, CALENDAR_COMPONENTS} from '../components/ion2-calendar';
 import {ConversionManager} from "../providers/conversion-manager";
+import {DeployManager} from '../providers/deploy-manager';
 import {Geolocation} from '@ionic-native/geolocation';
 import {GoogleMapsManager} from '../providers/google-maps-manager';
 import {GoogleMapsService} from '../providers/google-maps-service';
@@ -167,6 +168,7 @@ export function provideStorage() {
         CallNumber,
         Camera,
         ConversionManager,
+        DeployManager,
         Diagnostic,
         FCM,
         File,

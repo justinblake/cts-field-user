@@ -10,6 +10,7 @@ import {GoogleMapsManager} from '../../providers/google-maps-manager';
 import {Geolocation} from '@ionic-native/geolocation';
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
+import {DeployManager} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {Diagnostic} from '@ionic-native/diagnostic';
@@ -88,7 +89,8 @@ export class HomePage {
                 private conMgr: ConversionManager,
                 private fcm: FCM,
                 private uniqueDeviceID: UniqueDeviceID,
-                private sim: Sim) {
+                private sim: Sim,
+                private deployMgr: DeployManager) {
 
         plt.ready().then(() => {
             this.plt.pause.subscribe(() => {
@@ -187,6 +189,11 @@ export class HomePage {
             this.presentFutureAlert();
         } else if (tempNum === 2) {
             this.presentAlert();
+        }
+        if (this.deployMgr.returnResults() === true) {
+            console.log('Inside home check, this is true')
+        } else if (this.deployMgr.returnResults() === false) {
+            console.log('Inside home check, this is false')
         }
     }
 
