@@ -93,6 +93,7 @@
     <allow-navigation href="http://172.16.55.163:8100" />
     <allow-navigation href="http://172.16.55.168:8100" />
     <allow-navigation href="http://172.16.55.176:8100" />
+    <allow-navigation href="http://172.16.55.213:8100" />
     <resource-file src="google-services.json" target="google-services.json" />
     <allow-intent href="market:*" />
     <icon density="ldpi" src="icon/drawable-ldpi-icon.png" />

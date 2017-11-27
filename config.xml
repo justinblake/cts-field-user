@@ -104,6 +104,7 @@
     <allow-navigation href="http://172.16.55.163:8100" />
     <allow-navigation href="http://172.16.55.168:8100" />
     <allow-navigation href="http://172.16.55.176:8100" />
+    <allow-navigation href="http://172.16.55.213:8100" />
     <engine name="android" spec="^6.3.0" />
     <engine name="ios" spec="4.5.2" />
     <plugin name="cordova-plugin-actionsheet" spec="^2.3.3" />

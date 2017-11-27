@@ -85,16 +85,6 @@ export class MyErrorHandler implements ErrorHandler {
   }
 }
 
-
-// import {CloudSettings, CloudModule} from '@ionic/cloud-angular';
-// CloudModule.forRoot(cloudSettings),
-// const cloudSettings: CloudSettings = {
-//     'core': {
-//         'app_id': 'a1e0e4dc'
-//     }
-// };
-
-
 export function provideStorage() {
     return new Storage({name: '_ctsdb'});
 }
