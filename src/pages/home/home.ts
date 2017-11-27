@@ -10,7 +10,7 @@ import {GoogleMapsManager} from '../../providers/google-maps-manager';
 import {Geolocation} from '@ionic-native/geolocation';
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
-import {DeployManager} from '../../providers/deploy-manager';
+import {update} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {Diagnostic} from '@ionic-native/diagnostic';
@@ -22,6 +22,8 @@ import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {UniqueDeviceID} from '@ionic-native/unique-device-id';
 import {Sim} from '@ionic-native/sim';
+
+declare var IonicCordova;
 
 
 @Pipe({name: 'keys', pure: false})
@@ -70,6 +72,7 @@ export class HomePage {
     complete: boolean = false;
     fcmToken: any = '';
 
+
     constructor(public navCtrl: NavController,
                 public taskMgr: TaskManager,
                 public plt: Platform,
@@ -89,8 +92,7 @@ export class HomePage {
                 private conMgr: ConversionManager,
                 private fcm: FCM,
                 private uniqueDeviceID: UniqueDeviceID,
-                private sim: Sim,
-                private deployMgr: DeployManager) {
+                private sim: Sim) {
 
         plt.ready().then(() => {
             this.plt.pause.subscribe(() => {
@@ -157,6 +159,7 @@ export class HomePage {
 
 
     ionViewDidLoad() {
+
         this.setUser();
         setTimeout(() => this.setCompany(), 500);
         this._backBtn.registerAction(() => {
@@ -190,11 +193,12 @@ export class HomePage {
         } else if (tempNum === 2) {
             this.presentAlert();
         }
-        if (this.deployMgr.returnResults() === true) {
-            console.log('Inside home check, this is true')
-        } else if (this.deployMgr.returnResults() === false) {
-            console.log('Inside home check, this is false')
+
+        let test1 = update();
+        if(test1) {
+            console.log('test1 ', JSON.stringify(test1));
         }
+
     }
 
     // helper method for the expand/collapse div animation
@@ -219,12 +223,6 @@ export class HomePage {
             },
             () => console.log('Permission denied')
         );
-
-
-        // this.sim.hasReadPermission().then(
-        //     (info) => console.log('Has permission: ', info)
-        // );
-
     }
 
     //This sets the current user in the Task Manager so that when a user does not have a task the user ID is still available
@@ -804,6 +802,11 @@ export class HomePage {
 
     adjustTime(time) {
         return this.conMgr.adjustTime(time);
+    }
+
+    checkUpdates() {
+
+
     }
 }
 

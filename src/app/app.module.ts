@@ -49,7 +49,6 @@ import {TimecardSearchPage} from '../pages/timecard-search/timecard-search'
 import {ApiService} from '../providers/api-service';
 import {CalendarModule, CALENDAR_COMPONENTS} from '../components/ion2-calendar';
 import {ConversionManager} from "../providers/conversion-manager";
-import {DeployManager} from '../providers/deploy-manager';
 import {Geolocation} from '@ionic-native/geolocation';
 import {GoogleMapsManager} from '../providers/google-maps-manager';
 import {GoogleMapsService} from '../providers/google-maps-service';
@@ -62,7 +61,7 @@ import {Utils} from '../utils/utils';
 import { Pro } from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-  appVersion: "1.3.5"
+  appVersion: "1.3.6"
 });
 
 @Injectable()
@@ -168,7 +167,6 @@ export function provideStorage() {
         CallNumber,
         Camera,
         ConversionManager,
-        DeployManager,
         Diagnostic,
         FCM,
         File,
