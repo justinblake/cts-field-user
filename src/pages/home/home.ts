@@ -11,6 +11,7 @@ import {Geolocation} from '@ionic-native/geolocation';
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
 import {update} from '../../providers/deploy-manager';
+import {loadNewVersion} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {Diagnostic} from '@ionic-native/diagnostic';
@@ -805,8 +806,7 @@ export class HomePage {
     }
 
     checkUpdates() {
-
-
+        loadNewVersion();
     }
 }
 

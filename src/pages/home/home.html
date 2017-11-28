@@ -129,7 +129,7 @@
         <div *ngIf="currentTask">
             <ion-card>
                 <ion-card-header class="task-card-header">
-                    Deploy Update Test #2
+                    Deploy Update Test #3
                 </ion-card-header>
                 <ion-card-content class="task-card-content">
                     <ion-list no-padding>
@@ -371,6 +371,14 @@
 
                     </ion-row>
 
+                    <ion-row>
+
+                        <button class="home-btn" ion-button icon-left block color="secondary"
+                                (click)="loadNewVersion()">
+                            Load New Version
+                        </button>
+
+                    </ion-row>
 
                     <div *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && showTasks && !isLessor">
 
