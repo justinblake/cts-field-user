@@ -40,12 +40,13 @@ export function update(callback?: (err: any, success: boolean) => void) {
                         // We can unzip the latest version
                         IonicCordova.deploy.extract(config.appId, (res: any) => {
                             if (res === 'true' || res == 'false') {
-                                // we're ready to load the new version
-                                IonicCordova.deploy.redirect(() => {
-                                    callback(null, true)
-                                }, (e: any) => {
-                                    handleError(e, callback)
-                                })
+                                resolve(myResponse);
+                                // // we're ready to load the new version
+                                // IonicCordova.deploy.redirect(() => {
+                                //     callback(null, true)
+                                // }, (e: any) => {
+                                //     handleError(e, callback)
+                                // })
                             } else {
                                 // It's a progress update
                                 console.log('Extract progress:', res)
@@ -62,8 +63,11 @@ export function update(callback?: (err: any, success: boolean) => void) {
                     handleError(e, callback)
                 })
             }
+            if(res === 'false') {
+                resolve(myResponse);
+            }
             console.log('myResponse ' + myResponse + 'type of ' + typeof myResponse);
-            resolve(myResponse);
+
 
         }, (e: any) => {
             reject(handleError(e, callback))
