@@ -21,10 +21,8 @@ import {Badge} from '@ionic-native/badge';
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
-import {UniqueDeviceID} from '@ionic-native/unique-device-id';
 import {Sim} from '@ionic-native/sim';
 
-declare var IonicCordova;
 
 
 @Pipe({name: 'keys', pure: false})
@@ -92,7 +90,6 @@ export class HomePage {
                 private alertCtrl: AlertController,
                 private conMgr: ConversionManager,
                 private fcm: FCM,
-                private uniqueDeviceID: UniqueDeviceID,
                 private sim: Sim) {
 
         plt.ready().then(() => {
@@ -110,11 +107,6 @@ export class HomePage {
             });
         });
 
-        if (this.plt.is('cordova')) {
-            this.uniqueDeviceID.get()
-                .then((uuid: any) => console.log('uuid - ' + uuid))
-                .catch((error: any) => console.log('unique id error - ' + error));
-        }
 
 
         if (this.plt.is('cordova')) {
@@ -194,12 +186,19 @@ export class HomePage {
         } else if (tempNum === 2) {
             this.presentAlert();
         }
+        this.updateTest();
+    }
 
-        let test1 = update();
-        if(test1) {
-            console.log('test1 ', JSON.stringify(test1));
-        }
-
+    updateTest() {
+        update().then((res:any) =>{
+            if(res === 'true') {
+                loadNewVersion();
+                console.log('There is an update in the home page');
+            }
+            else if(res === 'false') {
+                console.log('There is not an update in the home page');
+            }
+        });
     }
 
     // helper method for the expand/collapse div animation
@@ -805,8 +804,5 @@ export class HomePage {
         return this.conMgr.adjustTime(time);
     }
 
-    checkUpdates() {
-        loadNewVersion();
-    }
 }
 

@@ -20,59 +20,56 @@ export function update(callback?: (err: any, success: boolean) => void) {
         handleError(err, callback)
     });
 
-    let myResponse: string;
-    // Check for available updates
-    IonicCordova.deploy.check((res: any) => {
-        console.log("Check result:", res);
+    return new Promise((resolve, reject) => {
 
+        let myResponse: string;
+        // Check for available updates
+        IonicCordova.deploy.check((res: any) => {
 
-        if (res === 'true') {
-            myResponse = 'true';
-        } else if (res === 'false') {
-            myResponse = 'false';
-        }
+            console.log("Check result:", res);
 
+            if (res === 'true') {
+                myResponse = 'true';
+            } else if (res === 'false') {
+                myResponse = 'false';
+            }
+            if (res === 'true') {
+                // A new version is ready to download
+                IonicCordova.deploy.download((res: any) => {
+                    if (res === 'true' || res == 'false') {
+                        // We can unzip the latest version
+                        IonicCordova.deploy.extract(config.appId, (res: any) => {
+                            if (res === 'true' || res == 'false') {
+                                // we're ready to load the new version
+                                IonicCordova.deploy.redirect(() => {
+                                    callback(null, true)
+                                }, (e: any) => {
+                                    handleError(e, callback)
+                                })
+                            } else {
+                                // It's a progress update
+                                console.log('Extract progress:', res)
+                            }
+                        }, (e: any) => {
+                            handleError(e, callback)
+                        })
+                    } else {
 
-        if (res === 'true') {
+                        // It's a progress update
+                        console.log('Download progress:', res)
+                    }
+                }, (e: any) => {
+                    handleError(e, callback)
+                })
+            }
+            console.log('myResponse ' + myResponse + 'type of ' + typeof myResponse);
+            resolve(myResponse);
 
-            // A new version is ready to download
-            IonicCordova.deploy.download((res: any) => {
-                if (res === 'true' || res == 'false') {
+        }, (e: any) => {
+            reject(handleError(e, callback))
+        });
 
-                    // We can unzip the latest version
-                    IonicCordova.deploy.extract(config.appId, (res: any) => {
-                        if (res === 'true' || res == 'false') {
-
-                            // we're ready to load the new version
-                            IonicCordova.deploy.redirect(() => {
-                                callback(null, true)
-                            }, (e: any) => {
-                                handleError(e, callback)
-                            })
-                        } else {
-
-                            // It's a progress update
-                            console.log('Extract progress:', res)
-                        }
-                    }, (e: any) => {
-                        handleError(e, callback)
-                    })
-                } else {
-
-                    // It's a progress update
-                    console.log('Download progress:', res)
-                }
-            }, (e: any) => {
-                handleError(e, callback)
-            })
-        }
-
-        console.log('myResponse ' + myResponse);
-        return myResponse
-
-    }, (e: any) => {
-        handleError(e, callback)
-    });
+    })
 
 
 }

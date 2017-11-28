@@ -23,7 +23,6 @@ import {Sim} from '@ionic-native/sim';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {Storage} from '@ionic/storage';
-import {UniqueDeviceID} from '@ionic-native/unique-device-id';
 
 //pages//
 import {AlertsPage} from '../pages/alerts/alerts';
@@ -61,7 +60,7 @@ import {Utils} from '../utils/utils';
 import { Pro } from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-  appVersion: "1.3.77"
+  appVersion: "1.3.78"
 });
 
 @Injectable()
@@ -182,7 +181,6 @@ export function provideStorage() {
         StatusBar,
         StorageService,
         TaskManager,
-        UniqueDeviceID,
         UserManager,
         Utils
     ]

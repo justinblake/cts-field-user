@@ -351,14 +351,6 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-uniquedeviceid.UniqueDeviceID",
-    "file": "plugins/cordova-plugin-uniquedeviceid/www/uniqueid.js",
-    "pluginId": "cordova-plugin-uniquedeviceid",
-    "merges": [
-      "window.plugins.uniqueDeviceID"
-    ]
-  },
-  {
     "id": "cordova-plugin-sim.Sim",
     "file": "plugins/cordova-plugin-sim/www/sim.js",
     "pluginId": "cordova-plugin-sim",
@@ -413,7 +405,6 @@ module.exports.metadata =
   "cordova-plugin-file-opener2": "2.0.19",
   "cordova-android-support-gradle-release": "1.1.4",
   "mx.ferreyra.callnumber": "0.0.2",
-  "cordova-plugin-uniquedeviceid": "1.3.2",
   "cordova-plugin-sim": "1.3.3",
   "cordova-plugin-fcm": "2.1.2",
   "cordova-plugin-add-swift-support": "1.7.0",
