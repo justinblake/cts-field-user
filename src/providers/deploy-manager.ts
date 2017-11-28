@@ -84,7 +84,9 @@ export function handleError(error: any, callback: (err: any, success: boolean) =
 
 export function loadNewVersion() {
     console.log('inside deploy manager load new version');
-    IonicCordova.deploy.load();
+    IonicCordova.deploy.redirect().then((res: any) => {
+        console.log('res ', JSON.stringify(res));
+    });
 }
 
 
