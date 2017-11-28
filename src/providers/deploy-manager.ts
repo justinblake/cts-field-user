@@ -44,7 +44,7 @@ export function update(callback?: (err: any, success: boolean) => void) {
                         if (res === 'true' || res == 'false') {
 
                             // we're ready to load the new version
-                            IonicCordova.deploy.load(() => {
+                            IonicCordova.deploy.redirect(() => {
                                 callback(null, true)
                             }, (e: any) => {
                                 handleError(e, callback)
