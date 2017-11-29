@@ -188,7 +188,7 @@ export class HomePage {
         } else if (tempNum === 2) {
             this.presentAlert();
         }
-
+        this.checkUpdates();
     }
 
     // updateTest() {
@@ -807,8 +807,6 @@ export class HomePage {
     }
 
     checkUpdates() {
-
-
         checkForUpdate().then((res: any) => {
             console.log('res in home ', JSON.stringify(res));
             if(res === 'true') {
