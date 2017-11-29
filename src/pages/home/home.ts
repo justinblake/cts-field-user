@@ -194,6 +194,7 @@ export class HomePage {
             if(res === 'true') {
                 this.checkUpdates();
                 console.log('There is an update in the home page');
+                console.log('There is an update in the home page');
             }
             else if(res === 'false') {
                 console.log('There is not an update in the home page');
