@@ -196,7 +196,7 @@
               "count": 1
             },
             {
-              "xml": "<string name=\"ionic_update_method\">background</string>",
+              "xml": "<string name=\"ionic_update_method\">none</string>",
               "count": 1
             },
             {
@@ -287,7 +287,7 @@
       "APP_ID": "379d0062",
       "CHANNEL_NAME": "Master",
       "UPDATE_API": "https://api.ionicjs.com",
-      "UPDATE_METHOD": "background",
+      "UPDATE_METHOD": "none",
       "MAX_STORE": "2",
       "PACKAGE_NAME": "com.ionicframework.cleartasksolutionsmobile323809"
     }

@@ -10,7 +10,9 @@ import {GoogleMapsManager} from '../../providers/google-maps-manager';
 import {Geolocation} from '@ionic-native/geolocation';
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
-import {update} from '../../providers/deploy-manager';
+import {checkForUpdate} from '../../providers/deploy-manager';
+import {downloadUpdate} from '../../providers/deploy-manager';
+import {extractUpdate} from '../../providers/deploy-manager';
 import {loadNewVersion} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
@@ -186,21 +188,20 @@ export class HomePage {
         } else if (tempNum === 2) {
             this.presentAlert();
         }
-        this.updateTest();
+
     }
 
-    updateTest() {
-        update().then((res:any) =>{
-            if(res === 'true') {
-                this.checkUpdates();
-                console.log('There is an update in the home page');
-                console.log('There is an update in the home page');
-            }
-            else if(res === 'false') {
-                console.log('There is not an update in the home page');
-            }
-        });
-    }
+    // updateTest() {
+    //     checkForUpdate().then((res:any) =>{
+    //         console.log('res in home page ', JSON.stringify(res));
+    //         // if(res === 'true') {
+    //         //     console.log('There is an update in the home page');
+    //         // }
+    //         // else if(res === 'false') {
+    //         //     console.log('There is not an update in the home page');
+    //         // }
+    //     });
+    // }
 
     // helper method for the expand/collapse div animation
     toggleDivState() {
@@ -806,7 +807,25 @@ export class HomePage {
     }
 
     checkUpdates() {
-        loadNewVersion();
+
+
+        checkForUpdate().then((res: any) => {
+            console.log('res in home ', JSON.stringify(res));
+            if(res === 'true') {
+                downloadUpdate().then((result: any) => {
+                    console.log('result ', JSON.stringify(result));
+                    if(result === 'true') {
+                        extractUpdate().then((extract: any) => {
+                            console.log('extract ', JSON.stringify(extract));
+                            if(extract === 'done') {
+                                console.log('done in home');
+                                loadNewVersion();
+                            }
+                        })
+                    }
+                })
+            }
+        });
     }
 }
 

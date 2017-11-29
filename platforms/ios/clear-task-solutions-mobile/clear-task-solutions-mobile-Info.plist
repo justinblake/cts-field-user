@@ -125,7 +125,7 @@
     <key>IonApi</key>
     <string>https://api.ionicjs.com</string>
     <key>IonUpdateMethod</key>
-    <string>background</string>
+    <string>none</string>
     <key>IonMaxVersions</key>
     <string>2</string>
   </dict>

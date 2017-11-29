@@ -187,7 +187,7 @@
     "variables": {
       "APP_ID": "379d0062",
       "CHANNEL_NAME": "Master",
-      "UPDATE_METHOD": "background",
+      "UPDATE_METHOD": "none",
       "UPDATE_API": "https://api.ionicjs.com",
       "MAX_STORE": "2"
     }
