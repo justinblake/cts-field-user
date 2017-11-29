@@ -192,7 +192,7 @@ export class HomePage {
     updateTest() {
         update().then((res:any) =>{
             if(res === 'true') {
-                loadNewVersion();
+                this.checkUpdates();
                 console.log('There is an update in the home page');
             }
             else if(res === 'false') {
@@ -804,5 +804,8 @@ export class HomePage {
         return this.conMgr.adjustTime(time);
     }
 
+    checkUpdates() {
+        loadNewVersion();
+    }
 }
 
