@@ -45,7 +45,7 @@ export class HomePage {
     @ViewChild('ctsNav') nav: NavController;
     @ViewChild(Content) content: Content;
 
-    debug: boolean = false;
+    debug: boolean = true;
 
     currentTask: any = '';
     currentUser: any = '';

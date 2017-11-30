@@ -109,16 +109,6 @@
     <string>This app requires camera access to function properly.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app requires access to your location when the screen is on and the app is displayed.</string>
-    <key>IonAppId</key>
-    <string>379d0062</string>
-    <key>IonChannelName</key>
-    <string>Master</string>
-    <key>IonApi</key>
-    <string>https://api.ionicjs.com</string>
-    <key>IonUpdateMethod</key>
-    <string>none</string>
-    <key>IonMaxVersions</key>
-    <string>2</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>This app requires constant access to your location in order to track your position, even when the screen is off.</string>
     <key>NSCalendarsUsageDescription</key>
@@ -147,5 +137,15 @@
       <string>here-route</string>
       <string>moovit</string>
     </array>
+    <key>IonAppId</key>
+    <string>379d0062</string>
+    <key>IonChannelName</key>
+    <string>Master</string>
+    <key>IonApi</key>
+    <string>https://api.ionicjs.com</string>
+    <key>IonUpdateMethod</key>
+    <string>none</string>
+    <key>IonMaxVersions</key>
+    <string>2</string>
   </dict>
 </plist>

@@ -51,12 +51,6 @@
         <param name="ios-package" value="CDVSplashScreen" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="IonicDeploy">
-        <param name="ios-package" onload="true" value="IonicDeploy" />
-    </feature>
-    <feature name="IonicCordovaCommon">
-        <param name="ios-package" onload="true" value="IonicCordovaCommon" />
-    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>
@@ -167,4 +161,10 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="orientation" value="portrait" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
+    <feature name="IonicDeploy">
+        <param name="ios-package" onload="true" value="IonicDeploy" />
+    </feature>
+    <feature name="IonicCordovaCommon">
+        <param name="ios-package" onload="true" value="IonicCordovaCommon" />
+    </feature>
 </widget>

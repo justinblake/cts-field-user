@@ -311,15 +311,6 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-ionic.common",
-    "file": "plugins/cordova-plugin-ionic/www/common.js",
-    "pluginId": "cordova-plugin-ionic",
-    "clobbers": [
-      "IonicCordova"
-    ],
-    "runs": true
-  },
-  {
     "id": "cordova-plugin-network-information.network",
     "file": "plugins/cordova-plugin-network-information/www/network.js",
     "pluginId": "cordova-plugin-network-information",
@@ -392,6 +383,15 @@ module.exports = [
     "merges": [
       "launchnavigator"
     ]
+  },
+  {
+    "id": "cordova-plugin-ionic.common",
+    "file": "plugins/cordova-plugin-ionic/www/common.js",
+    "pluginId": "cordova-plugin-ionic",
+    "clobbers": [
+      "IonicCordova"
+    ],
+    "runs": true
   }
 ];
 module.exports.metadata = 
@@ -399,7 +399,6 @@ module.exports.metadata =
 {
   "cordova-android-support-gradle-release": "1.1.4",
   "cordova-plugin-actionsheet": "2.3.3",
-  "cordova-plugin-add-swift-support": "1.7.0",
   "cordova-plugin-badge": "0.8.1",
   "cordova-plugin-compat": "1.2.0",
   "cordova-plugin-camera": "2.4.1",
@@ -411,7 +410,6 @@ module.exports.metadata =
   "cordova-plugin-geolocation": "2.4.3",
   "cordova-plugin-inappbrowser": "1.7.1",
   "cordova-plugin-splashscreen": "4.0.3",
-  "cordova-plugin-ionic": "2.0.3",
   "cordova-plugin-network-information": "1.3.3",
   "cordova-plugin-sim": "1.3.3",
   "cordova-plugin-statusbar": "2.2.3",
@@ -419,7 +417,9 @@ module.exports.metadata =
   "cordova.plugins.diagnostic": "3.6.5",
   "ionic-plugin-keyboard": "2.2.1",
   "mx.ferreyra.callnumber": "0.0.2",
-  "uk.co.workingedge.phonegap.plugin.launchnavigator": "3.2.2"
+  "uk.co.workingedge.phonegap.plugin.launchnavigator": "3.2.2",
+  "cordova-plugin-add-swift-support": "1.7.0",
+  "cordova-plugin-ionic": "2.0.3"
 };
 // BOTTOM OF METADATA
 });

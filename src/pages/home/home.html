@@ -129,7 +129,7 @@
         <div *ngIf="currentTask">
             <ion-card>
                 <ion-card-header class="task-card-header">
-                    Newest Label 11/30 11:37 am
+                    Newest Label 11/30 1:36 pm
                 </ion-card-header>
                 <ion-card-content class="task-card-content">
                     <ion-list no-padding>
@@ -227,9 +227,7 @@
                         <ion-list no-padding text-wrap>
                             <ion-item no-padding text-wrap>
                                 <h4 class="project-name capitalize">{{currentTask.job_tasks.task_description}}</h4>
-                                <h5 class="s-time">Start Time:
-                                    <span *ngIf="isIos">{{adjustTime(currentTask.job_tasks.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{currentTask.job_tasks.updatedTime | date:'shortTime'}}</span>
+                                <h5 class="s-time">Start Time: {{currentTask.job_tasks.strTime}}
                                 </h5>
 
                             </ion-item>
@@ -373,10 +371,10 @@
 
                     <!--<ion-row>-->
 
-                        <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                                <!--(click)="checkUpdates()">-->
-                            <!--Load New Version-->
-                        <!--</button>-->
+                    <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+                    <!--(click)="checkUpdates()">-->
+                    <!--Load New Version-->
+                    <!--</button>-->
 
                     <!--</ion-row>-->
 
