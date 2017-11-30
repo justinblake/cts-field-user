@@ -864,8 +864,7 @@ export class HomePage {
     }
 
     checkVersions() {
-        console.log('check versions in home');
-        this.checkVersions();
+        checkVersions();
     }
 }
 
