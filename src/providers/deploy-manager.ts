@@ -55,6 +55,17 @@ export function checkVersions() {
     })
 }
 
+export function checkVersionInfo() {
+    return new Promise((resolve, reject) => {
+        IonicCordova.deploy.info((res: any) => {
+            console.log('res ', JSON.stringify(res));
+            resolve(res);
+        })
+    })
+}
+
+
+
 export function handleError(error: any, callback: (err: any, success: boolean) => void) {
     console.error(error);
     callback(error, false)

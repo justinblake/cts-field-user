@@ -15,6 +15,7 @@ import {downloadUpdate} from '../../providers/deploy-manager';
 import {extractUpdate} from '../../providers/deploy-manager';
 import {loadNewVersion} from '../../providers/deploy-manager';
 import {checkVersions} from '../../providers/deploy-manager';
+import {checkVersionInfo} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {Diagnostic} from '@ionic-native/diagnostic';
@@ -864,7 +865,12 @@ export class HomePage {
     }
 
     checkVersions() {
-        checkVersions();
+        checkVersions().then((response:any)=>{
+            console.log('response in check version home ', JSON.stringify(response));
+        })
+        checkVersionInfo().then((res:any) => {
+            console.log('res in check version home ', JSON.stringify(res));
+        })
     }
 }
 
