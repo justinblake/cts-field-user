@@ -26,7 +26,6 @@ import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
 
 
-
 @Pipe({name: 'keys', pure: false})
 export class HomeKeysPipe implements PipeTransform {
     transform(value: any, args: any[] = null): any {
@@ -46,7 +45,7 @@ export class HomePage {
     @ViewChild('ctsNav') nav: NavController;
     @ViewChild(Content) content: Content;
 
-    debug: boolean = true;
+    debug: boolean = false;
 
     currentTask: any = '';
     currentUser: any = '';
@@ -72,6 +71,16 @@ export class HomePage {
     isLessor: boolean = false;
     complete: boolean = false;
     fcmToken: any = '';
+
+    empData: any = {};
+
+    cell_carrier: any;
+    app_version: any;
+    software_version: any;
+    emp_platform: any;
+    operating_system: any;
+    cell_number: any;
+    emp_device_id: any;
 
 
     constructor(public navCtrl: NavController,
@@ -110,7 +119,6 @@ export class HomePage {
         });
 
 
-
         if (this.plt.is('cordova')) {
             fcm.getToken().then(token => {
                 this.fcmToken = token;
@@ -122,9 +130,6 @@ export class HomePage {
             });
 
             fcm.onTokenRefresh().subscribe(token => {
-                if (this.debug) {
-                    console.log('FCM token ', JSON.stringify(token));
-                }
                 this.taskMgr.updateEmployeeToken(token).then(response => {
                 })
             });
@@ -143,10 +148,15 @@ export class HomePage {
         this.isIos = this.taskMgr.returnPlatform().isIos;
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
 
+
         if (this.isAndroid) {
             this.androidFullScreen.isImmersiveModeSupported()
                 .then(() => this.androidFullScreen.immersiveMode())
-                .catch((error: any) => console.log(error));
+                .catch((error: any) => {
+                    if (this.debug) {
+                        console.log(error)
+                    }
+                });
         }
         this.hideMoreProject = true;
         this.divState = 'collapse';
@@ -160,13 +170,36 @@ export class HomePage {
         this._backBtn.registerAction(() => {
             this._backBtn.doubleBackToExit();
         }, 101);
-        if (this.debug) {
-            console.log("Platform Versions ", JSON.stringify(this.plt.versions()));
-            console.log('Platform - ', JSON.stringify(this.plt.platforms()));
-        }
+
         if (this.plt.is('cordova')) {
             setTimeout(() => this.getSimInfo(), 10000)
         }
+
+        this.empData.employee_id = this.currentUser.userId;
+        this.empData.app_version = this.utils.returnAppVersion();
+
+        let userPlatform = this.plt.versions();
+        let stringPlatform = this.plt.platforms();
+
+        if (this.isIos) {
+            let software = 'ios';
+            this.empData.operating_system = 'ios';
+            this.empData.software_version = userPlatform[software].str;
+            this.empData.emp_platform = stringPlatform.toString();
+        }
+
+        if (this.isAndroid) {
+            let software = 'android';
+            this.empData.operating_system = 'android';
+            this.empData.software_version = userPlatform[software].str;
+            this.empData.emp_platform = stringPlatform.toString();
+        }
+
+        if (this.debug) {
+            console.log('empData ', JSON.stringify(this.empData));
+        }
+
+
     }
 
     ionViewDidEnter() {
@@ -191,18 +224,6 @@ export class HomePage {
         this.checkUpdates();
     }
 
-    // updateTest() {
-    //     checkForUpdate().then((res:any) =>{
-    //         console.log('res in home page ', JSON.stringify(res));
-    //         // if(res === 'true') {
-    //         //     console.log('There is an update in the home page');
-    //         // }
-    //         // else if(res === 'false') {
-    //         //     console.log('There is not an update in the home page');
-    //         // }
-    //     });
-    // }
-
     // helper method for the expand/collapse div animation
     toggleDivState() {
         let states = {
@@ -213,17 +234,25 @@ export class HomePage {
     }
 
     getSimInfo() {
-
         this.sim.requestReadPermission().then(
             () => {
-                console.log('Permission granted');
-                this.sim.getSimInfo().then(
-                    (info) => console.log('Sim info: ', info),
-                    (err) => console.log('Unable to get sim info: ', err)
-                );
-
+                this.sim.getSimInfo().then((info: any) => {
+                        this.empData.cell_carrier = info.carrierName;
+                        this.empData.cell_number = info.phoneNumber;
+                        this.empData.emp_device_id = info.deviceId;
+                        console.log('this.empData ', JSON.stringify(this.empData));
+                    },
+                    (err) => {
+                        if (this.debug) {
+                            console.log('Unable to get sim info: ', err)
+                        }
+                    })
             },
-            () => console.log('Permission denied')
+            () => {
+                if (this.debug) {
+                    console.log('Permission denied')
+                }
+            }
         );
     }
 
@@ -294,7 +323,9 @@ export class HomePage {
         else {
             let token = 'logged out';
             this.taskMgr.updateEmployeeToken(token, this.currentUser.userId).then(res => {
-                console.log('res ', JSON.stringify(res));
+                if (this.debug) {
+                    console.log('res ', JSON.stringify(res));
+                }
             });
             this.userMgr.logout().then(response => {
                 this.appCtrl.getRootNav().push(LoginPage);
@@ -557,12 +588,9 @@ export class HomePage {
                 this.currentTask.job_tasks.status_id === 13) {
 
                 this.showTasks = true;
-
-                console.log('this.currentTask ', JSON.stringify(this.currentTask));
-
-                // if (this.userRole === 1 || this.userRole === 2 || this.userRole === 4) {
-                //     this.content.scrollTo(0, 79, 300)
-                // }
+                if (this.debug) {
+                    console.log('this.currentTask ', JSON.stringify(this.currentTask));
+                }
             }
             else if (this.currentTask.job_tasks.status_id === 8) {
                 this.showTasks = false;
@@ -771,8 +799,16 @@ export class HomePage {
 
     callPhone(number) {
         this.callNumber.callNumber(number, false)
-            .then(() => console.log('Launched dialer!'))
-            .catch(() => console.log('Error launching dialer'));
+            .then(() => {
+                if (this.debug) {
+                    console.log('Launched dialer!')
+                }
+            })
+            .catch(() => {
+                if (this.debug) {
+                    console.log('Error launching dialer')
+                }
+            })
     }
 
     openInAppBrowser() {
@@ -809,13 +845,13 @@ export class HomePage {
     checkUpdates() {
         checkForUpdate().then((res: any) => {
             console.log('res in home ', JSON.stringify(res));
-            if(res === 'true') {
+            if (res === 'true') {
                 downloadUpdate().then((result: any) => {
                     console.log('result ', JSON.stringify(result));
-                    if(result === 'true') {
+                    if (result === 'true') {
                         extractUpdate().then((extract: any) => {
                             console.log('extract ', JSON.stringify(extract));
-                            if(extract === 'done') {
+                            if (extract === 'done') {
                                 console.log('done in home');
                                 loadNewVersion();
                             }

@@ -21,11 +21,11 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.2.3</string>
+    <string>1.3.88</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>1.2.3</string>
+    <string>1.3.88</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSMainNibFile</key>
@@ -78,6 +78,21 @@
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
         </dict>
+        <key>172.16.55.213</key>
+        <dict>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
+        <key>172.16.55.217</key>
+        <dict>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
+        <key>172.16.55.218</key>
+        <dict>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
       </dict>
       <key>NSAllowsArbitraryLoads</key>
       <true/>
@@ -92,6 +107,20 @@
     <string>This app requires photo library access to function properly.</string>
     <key>NSCameraUsageDescription</key>
     <string>This app requires camera access to function properly.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app requires access to your location when the screen is on and the app is displayed.</string>
+    <key>IonAppId</key>
+    <string>379d0062</string>
+    <key>IonChannelName</key>
+    <string>Master</string>
+    <key>IonApi</key>
+    <string>https://api.ionicjs.com</string>
+    <key>IonUpdateMethod</key>
+    <string>none</string>
+    <key>IonMaxVersions</key>
+    <string>2</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app requires constant access to your location in order to track your position, even when the screen is off.</string>
     <key>NSCalendarsUsageDescription</key>
     <string>This app requires calendar access to function properly.</string>
     <key>NSBluetoothPeripheralUsageDescription</key>
@@ -118,15 +147,5 @@
       <string>here-route</string>
       <string>moovit</string>
     </array>
-    <key>IonAppId</key>
-    <string>379d0062</string>
-    <key>IonChannelName</key>
-    <string>Master</string>
-    <key>IonApi</key>
-    <string>https://api.ionicjs.com</string>
-    <key>IonUpdateMethod</key>
-    <string>none</string>
-    <key>IonMaxVersions</key>
-    <string>2</string>
   </dict>
 </plist>

@@ -49,14 +49,6 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-device.device",
-    "file": "plugins/cordova-plugin-device/www/device.js",
-    "pluginId": "cordova-plugin-device",
-    "clobbers": [
-      "device"
-    ]
-  },
-  {
     "id": "cordova-plugin-fcm.FCMPlugin",
     "file": "plugins/cordova-plugin-fcm/www/FCMPlugin.js",
     "pluginId": "cordova-plugin-fcm",
@@ -311,30 +303,21 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-nativestorage.mainHandle",
-    "file": "plugins/cordova-plugin-nativestorage/www/mainHandle.js",
-    "pluginId": "cordova-plugin-nativestorage",
+    "id": "cordova-plugin-splashscreen.SplashScreen",
+    "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+    "pluginId": "cordova-plugin-splashscreen",
     "clobbers": [
-      "NativeStorage"
+      "navigator.splashscreen"
     ]
   },
   {
-    "id": "cordova-plugin-nativestorage.LocalStorageHandle",
-    "file": "plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js",
-    "pluginId": "cordova-plugin-nativestorage"
-  },
-  {
-    "id": "cordova-plugin-nativestorage.NativeStorageError",
-    "file": "plugins/cordova-plugin-nativestorage/www/NativeStorageError.js",
-    "pluginId": "cordova-plugin-nativestorage"
-  },
-  {
-    "id": "cordova-plugin-navigationbar.navigationbar",
-    "file": "plugins/cordova-plugin-navigationbar/www/navigationbar.js",
-    "pluginId": "cordova-plugin-navigationbar",
+    "id": "cordova-plugin-ionic.common",
+    "file": "plugins/cordova-plugin-ionic/www/common.js",
+    "pluginId": "cordova-plugin-ionic",
     "clobbers": [
-      "window.navigationbar"
-    ]
+      "IonicCordova"
+    ],
+    "runs": true
   },
   {
     "id": "cordova-plugin-network-information.network",
@@ -354,11 +337,11 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-splashscreen.SplashScreen",
-    "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-    "pluginId": "cordova-plugin-splashscreen",
-    "clobbers": [
-      "navigator.splashscreen"
+    "id": "cordova-plugin-sim.Sim",
+    "file": "plugins/cordova-plugin-sim/www/sim.js",
+    "pluginId": "cordova-plugin-sim",
+    "merges": [
+      "window.plugins.sim"
     ]
   },
   {
@@ -387,6 +370,14 @@ module.exports = [
     "runs": true
   },
   {
+    "id": "mx.ferreyra.callnumber.CallNumber",
+    "file": "plugins/mx.ferreyra.callnumber/www/CallNumber.js",
+    "pluginId": "mx.ferreyra.callnumber",
+    "clobbers": [
+      "call"
+    ]
+  },
+  {
     "id": "uk.co.workingedge.phonegap.plugin.launchnavigator.Common",
     "file": "plugins/uk.co.workingedge.phonegap.plugin.launchnavigator/www/common.js",
     "pluginId": "uk.co.workingedge.phonegap.plugin.launchnavigator",
@@ -401,22 +392,6 @@ module.exports = [
     "merges": [
       "launchnavigator"
     ]
-  },
-  {
-    "id": "mx.ferreyra.callnumber.CallNumber",
-    "file": "plugins/mx.ferreyra.callnumber/www/CallNumber.js",
-    "pluginId": "mx.ferreyra.callnumber",
-    "clobbers": [
-      "call"
-    ]
-  },
-  {
-    "id": "cordova-plugin-uniquedeviceid.UniqueDeviceID",
-    "file": "plugins/cordova-plugin-uniquedeviceid/www/uniqueid.js",
-    "pluginId": "cordova-plugin-uniquedeviceid",
-    "merges": [
-      "window.plugins.uniqueDeviceID"
-    ]
   }
 ];
 module.exports.metadata = 
@@ -424,10 +399,10 @@ module.exports.metadata =
 {
   "cordova-android-support-gradle-release": "1.1.4",
   "cordova-plugin-actionsheet": "2.3.3",
+  "cordova-plugin-add-swift-support": "1.7.0",
   "cordova-plugin-badge": "0.8.1",
   "cordova-plugin-compat": "1.2.0",
   "cordova-plugin-camera": "2.4.1",
-  "cordova-plugin-device": "1.1.6",
   "cordova-plugin-fcm": "2.1.2",
   "cordova-plugin-file": "4.3.3",
   "cordova-plugin-file-opener2": "2.0.19",
@@ -435,17 +410,16 @@ module.exports.metadata =
   "cordova-plugin-fullscreen": "1.1.0",
   "cordova-plugin-geolocation": "2.4.3",
   "cordova-plugin-inappbrowser": "1.7.1",
-  "cordova-plugin-nativestorage": "2.2.2",
-  "cordova-plugin-navigationbar": "1.0.31",
-  "cordova-plugin-network-information": "1.3.3",
   "cordova-plugin-splashscreen": "4.0.3",
+  "cordova-plugin-ionic": "2.0.3",
+  "cordova-plugin-network-information": "1.3.3",
+  "cordova-plugin-sim": "1.3.3",
   "cordova-plugin-statusbar": "2.2.3",
   "cordova-plugin-whitelist": "1.3.1",
   "cordova.plugins.diagnostic": "3.6.5",
   "ionic-plugin-keyboard": "2.2.1",
-  "uk.co.workingedge.phonegap.plugin.launchnavigator": "3.2.2",
   "mx.ferreyra.callnumber": "0.0.2",
-  "cordova-plugin-uniquedeviceid": "1.3.2"
+  "uk.co.workingedge.phonegap.plugin.launchnavigator": "3.2.2"
 };
 // BOTTOM OF METADATA
 });

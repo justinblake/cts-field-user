@@ -22,6 +22,7 @@ export class LoginPage {
     resetEmail: '';
     validEmail: boolean = false;
     showEmailPrompt: boolean = false;
+    appVersion: string;
 
 
     credentials = {
@@ -41,6 +42,7 @@ export class LoginPage {
         this.platform.ready().then(() => {
             Keyboard.disableScroll(true);
         });
+        this.appVersion = this.utils.returnAppVersion();
     }
 
     ionViewDidLoad() {
