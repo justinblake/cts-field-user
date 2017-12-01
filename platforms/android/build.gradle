@@ -92,8 +92,8 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
-apply from: "cordova-android-support-gradle-release/cleartasksolutionsmobile323809-cordova-android-support-gradle-release.gradle"
 apply from: "cordova-plugin-badge/cleartasksolutionsmobile323809-badge.gradle"
+apply from: "cordova-android-support-gradle-release/cleartasksolutionsmobile323809-cordova-android-support-gradle-release.gradle"
 apply from: "cordova-plugin-fcm/cleartasksolutionsmobile323809-FCMPlugin.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
@@ -257,12 +257,12 @@ dependencies {
     debugCompile(project(path: "CordovaLib", configuration: "debug"))
     releaseCompile(project(path: "CordovaLib", configuration: "release"))
     compile "com.android.support:support-v4:24.1.1+"
-    compile "com.google.firebase:firebase-core:+"
-    compile "com.google.firebase:firebase-messaging:+"
-    compile "com.android.support:support-v4:+"
     compile "com.android.support:support-v4:25.+"
     compile "com.android.support:appcompat-v7:25.+"
     compile "com.squareup.okhttp3:okhttp:3+"
+    compile "com.android.support:support-v4:+"
+    compile "com.google.firebase:firebase-core:+"
+    compile "com.google.firebase:firebase-messaging:+"
     // SUB-PROJECT DEPENDENCIES END
 }
 
