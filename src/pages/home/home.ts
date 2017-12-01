@@ -182,7 +182,9 @@ export class HomePage {
         this.empData.app_version = this.utils.returnAppVersion();
 
         let userPlatform = this.plt.versions();
+        console.log('userPlatform ', JSON.stringify(userPlatform));
         let stringPlatform = this.plt.platforms();
+        console.log('stringPlatform ', JSON.stringify(stringPlatform));
 
         if (this.isIos) {
             let software = 'ios';
