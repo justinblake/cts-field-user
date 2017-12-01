@@ -79,10 +79,9 @@ export function deleteOldVersions() {
                 allVersions = res;
 
                 for(let i = 0; i < allVersions.length; i++) {
-                    IonicCordova.deploy.deleteVersion(allVersions[i])
-                    // if(allVersions[i] !== currentVersion) {
-                    //     IonicCordova.deploy.deleteVersion(allVersions[i])
-                    // }
+                    if(allVersions[i] !== currentVersion) {
+                        IonicCordova.deploy.deleteVersion(allVersions[i])
+                    }
                 }
                 resolve(allVersions);
             })
