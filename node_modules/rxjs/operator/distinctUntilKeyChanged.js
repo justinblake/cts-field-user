@@ -1,5 +1,6 @@
 "use strict";
-var distinctUntilKeyChanged_1 = require('../operators/distinctUntilKeyChanged');
+Object.defineProperty(exports, "__esModule", { value: true });
+var distinctUntilKeyChanged_1 = require("../operators/distinctUntilKeyChanged");
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from the previous item,

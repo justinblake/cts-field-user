@@ -1,13 +1,19 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var async_1 = require('../scheduler/async');
-var isDate_1 = require('../util/isDate');
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var isDate_1 = require("../util/isDate");
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /* tslint:enable:max-line-length */
 /**
  *
@@ -65,7 +71,7 @@ function timeoutWith(due, withObservable, scheduler) {
     };
 }
 exports.timeoutWith = timeoutWith;
-var TimeoutWithOperator = (function () {
+var TimeoutWithOperator = /** @class */ (function () {
     function TimeoutWithOperator(waitFor, absoluteTimeout, withObservable, scheduler) {
         this.waitFor = waitFor;
         this.absoluteTimeout = absoluteTimeout;
@@ -82,16 +88,17 @@ var TimeoutWithOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var TimeoutWithSubscriber = (function (_super) {
+var TimeoutWithSubscriber = /** @class */ (function (_super) {
     __extends(TimeoutWithSubscriber, _super);
     function TimeoutWithSubscriber(destination, absoluteTimeout, waitFor, withObservable, scheduler) {
-        _super.call(this, destination);
-        this.absoluteTimeout = absoluteTimeout;
-        this.waitFor = waitFor;
-        this.withObservable = withObservable;
-        this.scheduler = scheduler;
-        this.action = null;
-        this.scheduleTimeout();
+        var _this = _super.call(this, destination) || this;
+        _this.absoluteTimeout = absoluteTimeout;
+        _this.waitFor = waitFor;
+        _this.withObservable = withObservable;
+        _this.scheduler = scheduler;
+        _this.action = null;
+        _this.scheduleTimeout();
+        return _this;
     }
     TimeoutWithSubscriber.dispatchTimeout = function (subscriber) {
         var withObservable = subscriber.withObservable;

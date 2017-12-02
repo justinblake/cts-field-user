@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscription PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscription } from '../Subscription';
 /**
  * A unit of work to be executed in a {@link Scheduler}. An action is typically
@@ -21,10 +26,10 @@ import { Subscription } from '../Subscription';
  *
  * @class Action<T>
  */
-export var Action = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var Action = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(Action, _super);
     function Action(scheduler, work) {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     /**
      * Schedules this action on its parent Scheduler for execution. May be passed
@@ -44,4 +49,5 @@ export var Action = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return Action;
 }(Subscription));
+export { Action };
 //# sourceMappingURL=Action.js.map 

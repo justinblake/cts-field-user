@@ -1,10 +1,16 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
 /* tslint:enable:max-line-length */
 /**
  * Emits a given value if the source Observable completes without emitting any
@@ -41,7 +47,7 @@ function defaultIfEmpty(defaultValue) {
     return function (source) { return source.lift(new DefaultIfEmptyOperator(defaultValue)); };
 }
 exports.defaultIfEmpty = defaultIfEmpty;
-var DefaultIfEmptyOperator = (function () {
+var DefaultIfEmptyOperator = /** @class */ (function () {
     function DefaultIfEmptyOperator(defaultValue) {
         this.defaultValue = defaultValue;
     }
@@ -55,12 +61,13 @@ var DefaultIfEmptyOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var DefaultIfEmptySubscriber = (function (_super) {
+var DefaultIfEmptySubscriber = /** @class */ (function (_super) {
     __extends(DefaultIfEmptySubscriber, _super);
     function DefaultIfEmptySubscriber(destination, defaultValue) {
-        _super.call(this, destination);
-        this.defaultValue = defaultValue;
-        this.isEmpty = true;
+        var _this = _super.call(this, destination) || this;
+        _this.defaultValue = defaultValue;
+        _this.isEmpty = true;
+        return _this;
     }
     DefaultIfEmptySubscriber.prototype._next = function (value) {
         this.isEmpty = false;

@@ -1,5 +1,6 @@
 "use strict";
-var every_1 = require('../operators/every');
+Object.defineProperty(exports, "__esModule", { value: true });
+var every_1 = require("../operators/every");
 /**
  * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
  *

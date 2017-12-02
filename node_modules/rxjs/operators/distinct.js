@@ -1,12 +1,18 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
-var Set_1 = require('../util/Set');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
+var Set_1 = require("../util/Set");
 /**
  * Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from previous items.
  *
@@ -56,7 +62,7 @@ function distinct(keySelector, flushes) {
     return function (source) { return source.lift(new DistinctOperator(keySelector, flushes)); };
 }
 exports.distinct = distinct;
-var DistinctOperator = (function () {
+var DistinctOperator = /** @class */ (function () {
     function DistinctOperator(keySelector, flushes) {
         this.keySelector = keySelector;
         this.flushes = flushes;
@@ -71,15 +77,16 @@ var DistinctOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var DistinctSubscriber = (function (_super) {
+var DistinctSubscriber = /** @class */ (function (_super) {
     __extends(DistinctSubscriber, _super);
     function DistinctSubscriber(destination, keySelector, flushes) {
-        _super.call(this, destination);
-        this.keySelector = keySelector;
-        this.values = new Set_1.Set();
+        var _this = _super.call(this, destination) || this;
+        _this.keySelector = keySelector;
+        _this.values = new Set_1.Set();
         if (flushes) {
-            this.add(subscribeToResult_1.subscribeToResult(this, flushes));
+            _this.add(subscribeToResult_1.subscribeToResult(_this, flushes));
         }
+        return _this;
     }
     DistinctSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
         this.values.clear();

@@ -1,5 +1,6 @@
 "use strict";
-var repeat_1 = require('../operators/repeat');
+Object.defineProperty(exports, "__esModule", { value: true });
+var repeat_1 = require("../operators/repeat");
 /**
  * Returns an Observable that repeats the stream of items emitted by the source Observable at most count times.
  *

@@ -1,5 +1,6 @@
 "use strict";
-var bufferWhen_1 = require('../operators/bufferWhen');
+Object.defineProperty(exports, "__esModule", { value: true });
+var bufferWhen_1 = require("../operators/bufferWhen");
 /**
  * Buffers the source Observable values, using a factory function of closing
  * Observables to determine when to close, emit, and reset the buffer.

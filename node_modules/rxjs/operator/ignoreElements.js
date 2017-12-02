@@ -1,5 +1,6 @@
 "use strict";
-var ignoreElements_1 = require('../operators/ignoreElements');
+Object.defineProperty(exports, "__esModule", { value: true });
+var ignoreElements_1 = require("../operators/ignoreElements");
 /**
  * Ignores all items emitted by the source Observable and only passes calls of `complete` or `error`.
  *

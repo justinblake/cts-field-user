@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var EmptyError_1 = require('../util/EmptyError');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var EmptyError_1 = require("../util/EmptyError");
 /**
  * Returns an Observable that emits the single item emitted by the source Observable that matches a specified
  * predicate, if that Observable emits one such item. If the source Observable emits more than one such item or no
@@ -26,7 +32,7 @@ function single(predicate) {
     return function (source) { return source.lift(new SingleOperator(predicate, source)); };
 }
 exports.single = single;
-var SingleOperator = (function () {
+var SingleOperator = /** @class */ (function () {
     function SingleOperator(predicate, source) {
         this.predicate = predicate;
         this.source = source;
@@ -41,14 +47,15 @@ var SingleOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var SingleSubscriber = (function (_super) {
+var SingleSubscriber = /** @class */ (function (_super) {
     __extends(SingleSubscriber, _super);
     function SingleSubscriber(destination, predicate, source) {
-        _super.call(this, destination);
-        this.predicate = predicate;
-        this.source = source;
-        this.seenValue = false;
-        this.index = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.predicate = predicate;
+        _this.source = source;
+        _this.seenValue = false;
+        _this.index = 0;
+        return _this;
     }
     SingleSubscriber.prototype.applySingleValue = function (value) {
         if (this.seenValue) {

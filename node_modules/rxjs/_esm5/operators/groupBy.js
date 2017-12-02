@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber,.._Subscription,.._Observable,.._Subject,.._util_Map,.._util_FastMap PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 import { Subscription } from '../Subscription';
 import { Observable } from '../Observable';
@@ -105,14 +110,15 @@ var GroupByOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var GroupBySubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(GroupBySubscriber, _super);
     function GroupBySubscriber(destination, keySelector, elementSelector, durationSelector, subjectSelector) {
-        _super.call(this, destination);
-        this.keySelector = keySelector;
-        this.elementSelector = elementSelector;
-        this.durationSelector = durationSelector;
-        this.subjectSelector = subjectSelector;
-        this.groups = null;
-        this.attemptedToUnsubscribe = false;
-        this.count = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.keySelector = keySelector;
+        _this.elementSelector = elementSelector;
+        _this.durationSelector = durationSelector;
+        _this.subjectSelector = subjectSelector;
+        _this.groups = null;
+        _this.attemptedToUnsubscribe = false;
+        _this.count = 0;
+        return _this;
     }
     GroupBySubscriber.prototype._next = function (value) {
         var key;
@@ -205,10 +211,11 @@ var GroupBySubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
 var GroupDurationSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(GroupDurationSubscriber, _super);
     function GroupDurationSubscriber(key, group, parent) {
-        _super.call(this, group);
-        this.key = key;
-        this.group = group;
-        this.parent = parent;
+        var _this = _super.call(this, group) || this;
+        _this.key = key;
+        _this.group = group;
+        _this.parent = parent;
+        return _this;
     }
     GroupDurationSubscriber.prototype._next = function (value) {
         this.complete();
@@ -230,13 +237,14 @@ var GroupDurationSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
  *
  * @class GroupedObservable<K, T>
  */
-export var GroupedObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var GroupedObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(GroupedObservable, _super);
     function GroupedObservable(key, groupSubject, refCountSubscription) {
-        _super.call(this);
-        this.key = key;
-        this.groupSubject = groupSubject;
-        this.refCountSubscription = refCountSubscription;
+        var _this = _super.call(this) || this;
+        _this.key = key;
+        _this.groupSubject = groupSubject;
+        _this.refCountSubscription = refCountSubscription;
+        return _this;
     }
     GroupedObservable.prototype._subscribe = function (subscriber) {
         var subscription = new Subscription();
@@ -249,6 +257,7 @@ export var GroupedObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return GroupedObservable;
 }(Observable));
+export { GroupedObservable };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -257,9 +266,10 @@ export var GroupedObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
 var InnerRefCountSubscription = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(InnerRefCountSubscription, _super);
     function InnerRefCountSubscription(parent) {
-        _super.call(this);
-        this.parent = parent;
+        var _this = _super.call(this) || this;
+        _this.parent = parent;
         parent.count++;
+        return _this;
     }
     InnerRefCountSubscription.prototype.unsubscribe = function () {
         var parent = this.parent;

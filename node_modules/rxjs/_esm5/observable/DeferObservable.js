@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Observable,.._util_subscribeToResult,.._OuterSubscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 import { subscribeToResult } from '../util/subscribeToResult';
 import { OuterSubscriber } from '../OuterSubscriber';
@@ -14,11 +19,12 @@ import { OuterSubscriber } from '../OuterSubscriber';
  * @extends {Ignored}
  * @hide true
  */
-export var DeferObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var DeferObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(DeferObservable, _super);
     function DeferObservable(observableFactory) {
-        _super.call(this);
-        this.observableFactory = observableFactory;
+        var _this = _super.call(this) || this;
+        _this.observableFactory = observableFactory;
+        return _this;
     }
     /**
      * Creates an Observable that, on subscribe, calls an Observable factory to
@@ -74,12 +80,14 @@ export var DeferObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return DeferObservable;
 }(Observable));
+export { DeferObservable };
 var DeferSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(DeferSubscriber, _super);
     function DeferSubscriber(destination, factory) {
-        _super.call(this, destination);
-        this.factory = factory;
-        this.tryDefer();
+        var _this = _super.call(this, destination) || this;
+        _this.factory = factory;
+        _this.tryDefer();
+        return _this;
     }
     DeferSubscriber.prototype.tryDefer = function () {
         try {

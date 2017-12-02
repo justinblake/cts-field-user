@@ -1,5 +1,6 @@
 "use strict";
-var publishLast_1 = require('../operators/publishLast');
+Object.defineProperty(exports, "__esModule", { value: true });
+var publishLast_1 = require("../operators/publishLast");
 /**
  * @return {ConnectableObservable<T>}
  * @method publishLast

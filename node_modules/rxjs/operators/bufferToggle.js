@@ -1,12 +1,18 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscription_1 = require('../Subscription');
-var subscribeToResult_1 = require('../util/subscribeToResult');
-var OuterSubscriber_1 = require('../OuterSubscriber');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscription_1 = require("../Subscription");
+var subscribeToResult_1 = require("../util/subscribeToResult");
+var OuterSubscriber_1 = require("../OuterSubscriber");
 /**
  * Buffers the source Observable values starting from an emission from
  * `openings` and ending when the output of `closingSelector` emits.
@@ -51,7 +57,7 @@ function bufferToggle(openings, closingSelector) {
     };
 }
 exports.bufferToggle = bufferToggle;
-var BufferToggleOperator = (function () {
+var BufferToggleOperator = /** @class */ (function () {
     function BufferToggleOperator(openings, closingSelector) {
         this.openings = openings;
         this.closingSelector = closingSelector;
@@ -66,14 +72,15 @@ var BufferToggleOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var BufferToggleSubscriber = (function (_super) {
+var BufferToggleSubscriber = /** @class */ (function (_super) {
     __extends(BufferToggleSubscriber, _super);
     function BufferToggleSubscriber(destination, openings, closingSelector) {
-        _super.call(this, destination);
-        this.openings = openings;
-        this.closingSelector = closingSelector;
-        this.contexts = [];
-        this.add(subscribeToResult_1.subscribeToResult(this, openings));
+        var _this = _super.call(this, destination) || this;
+        _this.openings = openings;
+        _this.closingSelector = closingSelector;
+        _this.contexts = [];
+        _this.add(subscribeToResult_1.subscribeToResult(_this, openings));
+        return _this;
     }
     BufferToggleSubscriber.prototype._next = function (value) {
         var contexts = this.contexts;
@@ -85,10 +92,10 @@ var BufferToggleSubscriber = (function (_super) {
     BufferToggleSubscriber.prototype._error = function (err) {
         var contexts = this.contexts;
         while (contexts.length > 0) {
-            var context = contexts.shift();
-            context.subscription.unsubscribe();
-            context.buffer = null;
-            context.subscription = null;
+            var context_1 = contexts.shift();
+            context_1.subscription.unsubscribe();
+            context_1.buffer = null;
+            context_1.subscription = null;
         }
         this.contexts = null;
         _super.prototype._error.call(this, err);
@@ -96,11 +103,11 @@ var BufferToggleSubscriber = (function (_super) {
     BufferToggleSubscriber.prototype._complete = function () {
         var contexts = this.contexts;
         while (contexts.length > 0) {
-            var context = contexts.shift();
-            this.destination.next(context.buffer);
-            context.subscription.unsubscribe();
-            context.buffer = null;
-            context.subscription = null;
+            var context_2 = contexts.shift();
+            this.destination.next(context_2.buffer);
+            context_2.subscription.unsubscribe();
+            context_2.buffer = null;
+            context_2.subscription = null;
         }
         this.contexts = null;
         _super.prototype._complete.call(this);

@@ -1,5 +1,6 @@
 "use strict";
-var throttle_1 = require('../operators/throttle');
+Object.defineProperty(exports, "__esModule", { value: true });
+var throttle_1 = require("../operators/throttle");
 /**
  * Emits a value from the source Observable, then ignores subsequent source
  * values for a duration determined by another Observable, then repeats this

@@ -1,14 +1,20 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Observable_1 = require('../Observable');
-var tryCatch_1 = require('../util/tryCatch');
-var isFunction_1 = require('../util/isFunction');
-var errorObject_1 = require('../util/errorObject');
-var Subscription_1 = require('../Subscription');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Observable_1 = require("../Observable");
+var tryCatch_1 = require("../util/tryCatch");
+var isFunction_1 = require("../util/isFunction");
+var errorObject_1 = require("../util/errorObject");
+var Subscription_1 = require("../Subscription");
 var toString = Object.prototype.toString;
 function isNodeStyleEventEmitter(sourceObj) {
     return !!sourceObj && typeof sourceObj.addListener === 'function' && typeof sourceObj.removeListener === 'function';
@@ -30,14 +36,15 @@ function isEventTarget(sourceObj) {
  * @extends {Ignored}
  * @hide true
  */
-var FromEventObservable = (function (_super) {
+var FromEventObservable = /** @class */ (function (_super) {
     __extends(FromEventObservable, _super);
     function FromEventObservable(sourceObj, eventName, selector, options) {
-        _super.call(this);
-        this.sourceObj = sourceObj;
-        this.eventName = eventName;
-        this.selector = selector;
-        this.options = options;
+        var _this = _super.call(this) || this;
+        _this.sourceObj = sourceObj;
+        _this.eventName = eventName;
+        _this.selector = selector;
+        _this.options = options;
+        return _this;
     }
     /* tslint:enable:max-line-length */
     /**
@@ -198,7 +205,7 @@ var FromEventObservable = (function (_super) {
         var handler = selector ? function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i - 0] = arguments[_i];
+                args[_i] = arguments[_i];
             }
             var result = tryCatch_1.tryCatch(selector).apply(void 0, args);
             if (result === errorObject_1.errorObject) {

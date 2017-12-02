@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_root,.._Observable PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { root } from '../util/root';
 import { Observable } from '../Observable';
 /**
@@ -13,12 +18,13 @@ import { Observable } from '../Observable';
  * @extends {Ignored}
  * @hide true
  */
-export var PromiseObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var PromiseObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(PromiseObservable, _super);
     function PromiseObservable(promise, scheduler) {
-        _super.call(this);
-        this.promise = promise;
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.promise = promise;
+        _this.scheduler = scheduler;
+        return _this;
     }
     /**
      * Converts a Promise to an Observable.
@@ -106,6 +112,7 @@ export var PromiseObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return PromiseObservable;
 }(Observable));
+export { PromiseObservable };
 function dispatchNext(arg) {
     var value = arg.value, subscriber = arg.subscriber;
     if (!subscriber.closed) {

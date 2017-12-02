@@ -1,7 +1,8 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var throttle_1 = require('../operators/throttle');
-var throttleTime_1 = require('../operators/throttleTime');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var throttle_1 = require("../operators/throttle");
+var throttleTime_1 = require("../operators/throttleTime");
 /**
  * Emits a value from the source Observable, then ignores subsequent source
  * values for `duration` milliseconds, then repeats this process.

@@ -1,5 +1,6 @@
 "use strict";
-var takeLast_1 = require('../operators/takeLast');
+Object.defineProperty(exports, "__esModule", { value: true });
+var takeLast_1 = require("../operators/takeLast");
 /**
  * Emits only the last `count` values emitted by the source Observable.
  *

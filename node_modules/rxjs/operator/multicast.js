@@ -1,5 +1,6 @@
 "use strict";
-var multicast_1 = require('../operators/multicast');
+Object.defineProperty(exports, "__esModule", { value: true });
+var multicast_1 = require("../operators/multicast");
 /* tslint:enable:max-line-length */
 /**
  * Allows source Observable to be subscribed only once with a Subject of choice,

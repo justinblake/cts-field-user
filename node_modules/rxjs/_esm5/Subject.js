@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START ._Observable,._Subscriber,._Subscription,._util_ObjectUnsubscribedError,._SubjectSubscription,._symbol_rxSubscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from './Observable';
 import { Subscriber } from './Subscriber';
 import { Subscription } from './Subscription';
@@ -15,26 +20,29 @@ import { rxSubscriber as rxSubscriberSymbol } from './symbol/rxSubscriber';
 /**
  * @class SubjectSubscriber<T>
  */
-export var SubjectSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var SubjectSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(SubjectSubscriber, _super);
     function SubjectSubscriber(destination) {
-        _super.call(this, destination);
-        this.destination = destination;
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        return _this;
     }
     return SubjectSubscriber;
 }(Subscriber));
+export { SubjectSubscriber };
 /**
  * @class Subject<T>
  */
-export var Subject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var Subject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(Subject, _super);
     function Subject() {
-        _super.call(this);
-        this.observers = [];
-        this.closed = false;
-        this.isStopped = false;
-        this.hasError = false;
-        this.thrownError = null;
+        var _this = _super.call(this) || this;
+        _this.observers = [];
+        _this.closed = false;
+        _this.isStopped = false;
+        _this.hasError = false;
+        _this.thrownError = null;
+        return _this;
     }
     Subject.prototype[rxSubscriberSymbol] = function () {
         return new SubjectSubscriber(this);
@@ -125,15 +133,17 @@ export var Subject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return Subject;
 }(Observable));
+export { Subject };
 /**
  * @class AnonymousSubject<T>
  */
-export var AnonymousSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AnonymousSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AnonymousSubject, _super);
     function AnonymousSubject(destination, source) {
-        _super.call(this);
-        this.destination = destination;
-        this.source = source;
+        var _this = _super.call(this) || this;
+        _this.destination = destination;
+        _this.source = source;
+        return _this;
     }
     AnonymousSubject.prototype.next = function (value) {
         var destination = this.destination;
@@ -164,4 +174,5 @@ export var AnonymousSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return AnonymousSubject;
 }(Subject));
+export { AnonymousSubject };
 //# sourceMappingURL=Subject.js.map 

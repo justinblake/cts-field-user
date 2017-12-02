@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var timestamp_1 = require('../operators/timestamp');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var timestamp_1 = require("../operators/timestamp");
 /**
  * @param scheduler
  * @return {Observable<Timestamp<any>>|WebSocketSubject<T>|Observable<T>}

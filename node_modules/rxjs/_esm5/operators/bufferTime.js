@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._scheduler_async,.._Subscriber,.._util_isScheduler PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { async } from '../scheduler/async';
 import { Subscriber } from '../Subscriber';
 import { isScheduler } from '../util/isScheduler';
@@ -98,35 +103,36 @@ var Context = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var BufferTimeSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(BufferTimeSubscriber, _super);
     function BufferTimeSubscriber(destination, bufferTimeSpan, bufferCreationInterval, maxBufferSize, scheduler) {
-        _super.call(this, destination);
-        this.bufferTimeSpan = bufferTimeSpan;
-        this.bufferCreationInterval = bufferCreationInterval;
-        this.maxBufferSize = maxBufferSize;
-        this.scheduler = scheduler;
-        this.contexts = [];
-        var context = this.openContext();
-        this.timespanOnly = bufferCreationInterval == null || bufferCreationInterval < 0;
-        if (this.timespanOnly) {
-            var timeSpanOnlyState = { subscriber: this, context: context, bufferTimeSpan: bufferTimeSpan };
-            this.add(context.closeAction = scheduler.schedule(dispatchBufferTimeSpanOnly, bufferTimeSpan, timeSpanOnlyState));
+        var _this = _super.call(this, destination) || this;
+        _this.bufferTimeSpan = bufferTimeSpan;
+        _this.bufferCreationInterval = bufferCreationInterval;
+        _this.maxBufferSize = maxBufferSize;
+        _this.scheduler = scheduler;
+        _this.contexts = [];
+        var context = _this.openContext();
+        _this.timespanOnly = bufferCreationInterval == null || bufferCreationInterval < 0;
+        if (_this.timespanOnly) {
+            var timeSpanOnlyState = { subscriber: _this, context: context, bufferTimeSpan: bufferTimeSpan };
+            _this.add(context.closeAction = scheduler.schedule(dispatchBufferTimeSpanOnly, bufferTimeSpan, timeSpanOnlyState));
         }
         else {
-            var closeState = { subscriber: this, context: context };
-            var creationState = { bufferTimeSpan: bufferTimeSpan, bufferCreationInterval: bufferCreationInterval, subscriber: this, scheduler: scheduler };
-            this.add(context.closeAction = scheduler.schedule(dispatchBufferClose, bufferTimeSpan, closeState));
-            this.add(scheduler.schedule(dispatchBufferCreation, bufferCreationInterval, creationState));
+            var closeState = { subscriber: _this, context: context };
+            var creationState = { bufferTimeSpan: bufferTimeSpan, bufferCreationInterval: bufferCreationInterval, subscriber: _this, scheduler: scheduler };
+            _this.add(context.closeAction = scheduler.schedule(dispatchBufferClose, bufferTimeSpan, closeState));
+            _this.add(scheduler.schedule(dispatchBufferCreation, bufferCreationInterval, creationState));
         }
+        return _this;
     }
     BufferTimeSubscriber.prototype._next = function (value) {
         var contexts = this.contexts;
         var len = contexts.length;
         var filledBufferContext;
         for (var i = 0; i < len; i++) {
-            var context = contexts[i];
-            var buffer = context.buffer;
+            var context_1 = contexts[i];
+            var buffer = context_1.buffer;
             buffer.push(value);
             if (buffer.length == this.maxBufferSize) {
-                filledBufferContext = context;
+                filledBufferContext = context_1;
             }
         }
         if (filledBufferContext) {
@@ -140,8 +146,8 @@ var BufferTimeSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     BufferTimeSubscriber.prototype._complete = function () {
         var _a = this, contexts = _a.contexts, destination = _a.destination;
         while (contexts.length > 0) {
-            var context = contexts.shift();
-            destination.next(context.buffer);
+            var context_2 = contexts.shift();
+            destination.next(context_2.buffer);
         }
         _super.prototype._complete.call(this);
     };

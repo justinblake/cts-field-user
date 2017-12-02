@@ -1,5 +1,6 @@
 "use strict";
-var skipLast_1 = require('../operators/skipLast');
+Object.defineProperty(exports, "__esModule", { value: true });
+var skipLast_1 = require("../operators/skipLast");
 /**
  * Skip the last `count` values emitted by the source Observable.
  *

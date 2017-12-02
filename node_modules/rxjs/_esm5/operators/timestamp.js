@@ -14,12 +14,13 @@ export function timestamp(scheduler) {
     return map(function (value) { return new Timestamp(value, scheduler.now()); });
     // return (source: Observable<T>) => source.lift(new TimestampOperator(scheduler));
 }
-export var Timestamp = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var Timestamp = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function Timestamp(value, timestamp) {
         this.value = value;
         this.timestamp = timestamp;
     }
     return Timestamp;
 }());
+export { Timestamp };
 ;
 //# sourceMappingURL=timestamp.js.map 

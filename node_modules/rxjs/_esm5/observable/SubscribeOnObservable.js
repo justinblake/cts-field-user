@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Observable,.._scheduler_asap,.._util_isNumeric PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 import { asap } from '../scheduler/asap';
 import { isNumeric } from '../util/isNumeric';
@@ -14,7 +19,7 @@ import { isNumeric } from '../util/isNumeric';
  * @extends {Ignored}
  * @hide true
  */
-export var SubscribeOnObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var SubscribeOnObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(SubscribeOnObservable, _super);
     function SubscribeOnObservable(source, delayTime, scheduler) {
         if (delayTime === void 0) {
@@ -23,16 +28,17 @@ export var SubscribeOnObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super
         if (scheduler === void 0) {
             scheduler = asap;
         }
-        _super.call(this);
-        this.source = source;
-        this.delayTime = delayTime;
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.source = source;
+        _this.delayTime = delayTime;
+        _this.scheduler = scheduler;
         if (!isNumeric(delayTime) || delayTime < 0) {
-            this.delayTime = 0;
+            _this.delayTime = 0;
         }
         if (!scheduler || typeof scheduler.schedule !== 'function') {
-            this.scheduler = asap;
+            _this.scheduler = asap;
         }
+        return _this;
     }
     SubscribeOnObservable.create = function (source, delay, scheduler) {
         if (delay === void 0) {
@@ -57,4 +63,5 @@ export var SubscribeOnObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super
     };
     return SubscribeOnObservable;
 }(Observable));
+export { SubscribeOnObservable };
 //# sourceMappingURL=SubscribeOnObservable.js.map 

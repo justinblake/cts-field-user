@@ -5,6 +5,8 @@
 export { Subject, AnonymousSubject } from './Subject';
 /* tslint:enable:no-unused-variable */
 export { Observable } from './Observable';
+// statics
+/* tslint:disable:no-use-before-declare */
 import './add/observable/bindCallback';
 import './add/observable/bindNodeCallback';
 import './add/observable/combineLatest';
@@ -30,8 +32,10 @@ import './add/observable/using';
 import './add/observable/throw';
 import './add/observable/timer';
 import './add/observable/zip';
+//dom
 import './add/observable/dom/ajax';
 import './add/observable/dom/webSocket';
+//operators
 import './add/operator/buffer';
 import './add/operator/bufferCount';
 import './add/operator/bufferTime';
@@ -134,7 +138,6 @@ import './add/operator/windowWhen';
 import './add/operator/withLatestFrom';
 import './add/operator/zip';
 import './add/operator/zipAll';
-/* tslint:disable:no-unused-variable */
 export { Subscription } from './Subscription';
 export { Subscriber } from './Subscriber';
 export { AsyncSubject } from './AsyncSubject';

@@ -1,5 +1,6 @@
 "use strict";
-var concatAll_1 = require('../operators/concatAll');
+Object.defineProperty(exports, "__esModule", { value: true });
+var concatAll_1 = require("../operators/concatAll");
 /* tslint:enable:max-line-length */
 /**
  * Converts a higher-order Observable into a first-order Observable by

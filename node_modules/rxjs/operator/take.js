@@ -1,5 +1,6 @@
 "use strict";
-var take_1 = require('../operators/take');
+Object.defineProperty(exports, "__esModule", { value: true });
+var take_1 = require("../operators/take");
 /**
  * Emits only the first `count` values emitted by the source Observable.
  *

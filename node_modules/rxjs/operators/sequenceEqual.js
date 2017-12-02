@@ -1,12 +1,18 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var tryCatch_1 = require('../util/tryCatch');
-var errorObject_1 = require('../util/errorObject');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var tryCatch_1 = require("../util/tryCatch");
+var errorObject_1 = require("../util/errorObject");
 /**
  * Compares all values of two observables in sequence using an optional comparor function
  * and returns an observable of a single boolean value representing whether or not the two sequences
@@ -63,7 +69,7 @@ function sequenceEqual(compareTo, comparor) {
     return function (source) { return source.lift(new SequenceEqualOperator(compareTo, comparor)); };
 }
 exports.sequenceEqual = sequenceEqual;
-var SequenceEqualOperator = (function () {
+var SequenceEqualOperator = /** @class */ (function () {
     function SequenceEqualOperator(compareTo, comparor) {
         this.compareTo = compareTo;
         this.comparor = comparor;
@@ -79,16 +85,17 @@ exports.SequenceEqualOperator = SequenceEqualOperator;
  * @ignore
  * @extends {Ignored}
  */
-var SequenceEqualSubscriber = (function (_super) {
+var SequenceEqualSubscriber = /** @class */ (function (_super) {
     __extends(SequenceEqualSubscriber, _super);
     function SequenceEqualSubscriber(destination, compareTo, comparor) {
-        _super.call(this, destination);
-        this.compareTo = compareTo;
-        this.comparor = comparor;
-        this._a = [];
-        this._b = [];
-        this._oneComplete = false;
-        this.add(compareTo.subscribe(new SequenceEqualCompareToSubscriber(destination, this)));
+        var _this = _super.call(this, destination) || this;
+        _this.compareTo = compareTo;
+        _this.comparor = comparor;
+        _this._a = [];
+        _this._b = [];
+        _this._oneComplete = false;
+        _this.add(compareTo.subscribe(new SequenceEqualCompareToSubscriber(destination, _this)));
+        return _this;
     }
     SequenceEqualSubscriber.prototype._next = function (value) {
         if (this._oneComplete && this._b.length === 0) {
@@ -144,11 +151,12 @@ var SequenceEqualSubscriber = (function (_super) {
     return SequenceEqualSubscriber;
 }(Subscriber_1.Subscriber));
 exports.SequenceEqualSubscriber = SequenceEqualSubscriber;
-var SequenceEqualCompareToSubscriber = (function (_super) {
+var SequenceEqualCompareToSubscriber = /** @class */ (function (_super) {
     __extends(SequenceEqualCompareToSubscriber, _super);
     function SequenceEqualCompareToSubscriber(destination, parent) {
-        _super.call(this, destination);
-        this.parent = parent;
+        var _this = _super.call(this, destination) || this;
+        _this.parent = parent;
+        return _this;
     }
     SequenceEqualCompareToSubscriber.prototype._next = function (value) {
         this.parent.nextB(value);

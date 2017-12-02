@@ -1,5 +1,6 @@
 "use strict";
-var expand_1 = require('../operators/expand');
+Object.defineProperty(exports, "__esModule", { value: true });
+var expand_1 = require("../operators/expand");
 /* tslint:enable:max-line-length */
 /**
  * Recursively projects each source value to an Observable which is merged in

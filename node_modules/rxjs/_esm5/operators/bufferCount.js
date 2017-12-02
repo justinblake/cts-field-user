@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 /**
  * Buffers the source Observable values until the size hits the maximum
@@ -80,9 +85,10 @@ var BufferCountOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var BufferCountSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(BufferCountSubscriber, _super);
     function BufferCountSubscriber(destination, bufferSize) {
-        _super.call(this, destination);
-        this.bufferSize = bufferSize;
-        this.buffer = [];
+        var _this = _super.call(this, destination) || this;
+        _this.bufferSize = bufferSize;
+        _this.buffer = [];
+        return _this;
     }
     BufferCountSubscriber.prototype._next = function (value) {
         var buffer = this.buffer;
@@ -109,11 +115,12 @@ var BufferCountSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
 var BufferSkipCountSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(BufferSkipCountSubscriber, _super);
     function BufferSkipCountSubscriber(destination, bufferSize, startBufferEvery) {
-        _super.call(this, destination);
-        this.bufferSize = bufferSize;
-        this.startBufferEvery = startBufferEvery;
-        this.buffers = [];
-        this.count = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.bufferSize = bufferSize;
+        _this.startBufferEvery = startBufferEvery;
+        _this.buffers = [];
+        _this.count = 0;
+        return _this;
     }
     BufferSkipCountSubscriber.prototype._next = function (value) {
         var _a = this, bufferSize = _a.bufferSize, startBufferEvery = _a.startBufferEvery, buffers = _a.buffers, count = _a.count;

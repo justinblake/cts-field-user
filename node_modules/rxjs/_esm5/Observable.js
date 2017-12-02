@@ -9,7 +9,7 @@ import { pipeFromArray } from './util/pipe';
  *
  * @class Observable<T>
  */
-export var Observable = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var Observable = /*@__PURE__*/ (/*@__PURE__*/ function () {
     /**
      * @constructor
      * @param {Function} subscribe the function that is called when the Observable is
@@ -260,7 +260,7 @@ export var Observable = /*@__PURE__*/ (/*@__PURE__*/ function () {
     Observable.prototype.pipe = function () {
         var operations = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            operations[_i - 0] = arguments[_i];
+            operations[_i] = arguments[_i];
         }
         if (operations.length === 0) {
             return this;
@@ -301,4 +301,5 @@ export var Observable = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return Observable;
 }());
+export { Observable };
 //# sourceMappingURL=Observable.js.map 

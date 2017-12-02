@@ -1,5 +1,8 @@
 "use strict";
-var concat_1 = require('../operators/concat');
+Object.defineProperty(exports, "__esModule", { value: true });
+var concat_1 = require("../operators/concat");
+var concat_2 = require("../observable/concat");
+exports.concatStatic = concat_2.concat;
 /* tslint:enable:max-line-length */
 /**
  * Creates an output Observable which sequentially emits all values from every
@@ -53,7 +56,7 @@ var concat_1 = require('../operators/concat');
 function concat() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     return concat_1.concat.apply(void 0, observables)(this);
 }

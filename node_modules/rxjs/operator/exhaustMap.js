@@ -1,5 +1,6 @@
 "use strict";
-var exhaustMap_1 = require('../operators/exhaustMap');
+Object.defineProperty(exports, "__esModule", { value: true });
+var exhaustMap_1 = require("../operators/exhaustMap");
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output

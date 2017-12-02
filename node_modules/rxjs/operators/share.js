@@ -1,7 +1,8 @@
 "use strict";
-var multicast_1 = require('./multicast');
-var refCount_1 = require('./refCount');
-var Subject_1 = require('../Subject');
+Object.defineProperty(exports, "__esModule", { value: true });
+var multicast_1 = require("./multicast");
+var refCount_1 = require("./refCount");
+var Subject_1 = require("../Subject");
 function shareSubjectFactory() {
     return new Subject_1.Subject();
 }

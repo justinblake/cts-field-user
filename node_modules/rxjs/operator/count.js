@@ -1,5 +1,6 @@
 "use strict";
-var count_1 = require('../operators/count');
+Object.defineProperty(exports, "__esModule", { value: true });
+var count_1 = require("../operators/count");
 /**
  * Counts the number of emissions on the source and emits that number when the
  * source completes.

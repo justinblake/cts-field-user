@@ -1,6 +1,7 @@
 "use strict";
-var mergeMap_1 = require('./mergeMap');
-var identity_1 = require('../util/identity');
+Object.defineProperty(exports, "__esModule", { value: true });
+var mergeMap_1 = require("./mergeMap");
+var identity_1 = require("../util/identity");
 /**
  * Converts a higher-order Observable into a first-order Observable which
  * concurrently delivers all values that are emitted on the inner Observables.

@@ -1,5 +1,6 @@
 "use strict";
-var defaultIfEmpty_1 = require('../operators/defaultIfEmpty');
+Object.defineProperty(exports, "__esModule", { value: true });
+var defaultIfEmpty_1 = require("../operators/defaultIfEmpty");
 /* tslint:enable:max-line-length */
 /**
  * Emits a given value if the source Observable completes without emitting any

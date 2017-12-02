@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var map_1 = require('./map');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var map_1 = require("./map");
 /**
  * @param scheduler
  * @return {Observable<Timestamp<any>>|WebSocketSubject<T>|Observable<T>}
@@ -13,7 +14,7 @@ function timestamp(scheduler) {
     // return (source: Observable<T>) => source.lift(new TimestampOperator(scheduler));
 }
 exports.timestamp = timestamp;
-var Timestamp = (function () {
+var Timestamp = /** @class */ (function () {
     function Timestamp(value, timestamp) {
         this.value = value;
         this.timestamp = timestamp;

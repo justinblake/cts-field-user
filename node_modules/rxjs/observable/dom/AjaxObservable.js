@@ -1,15 +1,21 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var root_1 = require('../../util/root');
-var tryCatch_1 = require('../../util/tryCatch');
-var errorObject_1 = require('../../util/errorObject');
-var Observable_1 = require('../../Observable');
-var Subscriber_1 = require('../../Subscriber');
-var map_1 = require('../../operators/map');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var root_1 = require("../../util/root");
+var tryCatch_1 = require("../../util/tryCatch");
+var errorObject_1 = require("../../util/errorObject");
+var Observable_1 = require("../../Observable");
+var Subscriber_1 = require("../../Subscriber");
+var map_1 = require("../../operators/map");
 function getCORSRequest() {
     if (root_1.root.XMLHttpRequest) {
         return new root_1.root.XMLHttpRequest();
@@ -37,6 +43,7 @@ function getXMLHttpRequest() {
                     }
                 }
                 catch (e) {
+                    //suppress exceptions
                 }
             }
             return new root_1.root.ActiveXObject(progId);
@@ -88,10 +95,10 @@ exports.ajaxGetJSON = ajaxGetJSON;
  * @extends {Ignored}
  * @hide true
  */
-var AjaxObservable = (function (_super) {
+var AjaxObservable = /** @class */ (function (_super) {
     __extends(AjaxObservable, _super);
     function AjaxObservable(urlOrRequest) {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         var request = {
             async: true,
             createXHR: function () {
@@ -114,7 +121,8 @@ var AjaxObservable = (function (_super) {
                 }
             }
         }
-        this.request = request;
+        _this.request = request;
+        return _this;
     }
     AjaxObservable.prototype._subscribe = function (subscriber) {
         return new AjaxSubscriber(subscriber, this.request);
@@ -165,12 +173,12 @@ exports.AjaxObservable = AjaxObservable;
  * @ignore
  * @extends {Ignored}
  */
-var AjaxSubscriber = (function (_super) {
+var AjaxSubscriber = /** @class */ (function (_super) {
     __extends(AjaxSubscriber, _super);
     function AjaxSubscriber(destination, request) {
-        _super.call(this, destination);
-        this.request = request;
-        this.done = false;
+        var _this = _super.call(this, destination) || this;
+        _this.request = request;
+        _this.done = false;
         var headers = request.headers = request.headers || {};
         // force CORS if requested
         if (!request.crossDomain && !headers['X-Requested-With']) {
@@ -181,8 +189,9 @@ var AjaxSubscriber = (function (_super) {
             headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
         }
         // properly serialize body
-        request.body = this.serializeBody(request.body, request.headers['Content-Type']);
-        this.send();
+        request.body = _this.serializeBody(request.body, request.headers['Content-Type']);
+        _this.send();
+        return _this;
     }
     AjaxSubscriber.prototype.next = function (e) {
         this.done = true;
@@ -250,7 +259,7 @@ var AjaxSubscriber = (function (_super) {
         }
         switch (contentType) {
             case 'application/x-www-form-urlencoded':
-                return Object.keys(body).map(function (key) { return (encodeURI(key) + "=" + encodeURI(body[key])); }).join('&');
+                return Object.keys(body).map(function (key) { return encodeURI(key) + "=" + encodeURI(body[key]); }).join('&');
             case 'application/json':
                 return JSON.stringify(body);
             default:
@@ -356,7 +365,7 @@ exports.AjaxSubscriber = AjaxSubscriber;
  *
  * @class AjaxResponse
  */
-var AjaxResponse = (function () {
+var AjaxResponse = /** @class */ (function () {
     function AjaxResponse(originalEvent, xhr, request) {
         this.originalEvent = originalEvent;
         this.xhr = xhr;
@@ -375,16 +384,17 @@ exports.AjaxResponse = AjaxResponse;
  *
  * @class AjaxError
  */
-var AjaxError = (function (_super) {
+var AjaxError = /** @class */ (function (_super) {
     __extends(AjaxError, _super);
     function AjaxError(message, xhr, request) {
-        _super.call(this, message);
-        this.message = message;
-        this.xhr = xhr;
-        this.request = request;
-        this.status = xhr.status;
-        this.responseType = xhr.responseType || request.responseType;
-        this.response = parseXhrResponse(this.responseType, xhr);
+        var _this = _super.call(this, message) || this;
+        _this.message = message;
+        _this.xhr = xhr;
+        _this.request = request;
+        _this.status = xhr.status;
+        _this.responseType = xhr.responseType || request.responseType;
+        _this.response = parseXhrResponse(_this.responseType, xhr);
+        return _this;
     }
     return AjaxError;
 }(Error));
@@ -411,10 +421,10 @@ function parseXhrResponse(responseType, xhr) {
  *
  * @class AjaxTimeoutError
  */
-var AjaxTimeoutError = (function (_super) {
+var AjaxTimeoutError = /** @class */ (function (_super) {
     __extends(AjaxTimeoutError, _super);
     function AjaxTimeoutError(xhr, request) {
-        _super.call(this, 'ajax timeout', xhr, request);
+        return _super.call(this, 'ajax timeout', xhr, request) || this;
     }
     return AjaxTimeoutError;
 }(AjaxError));

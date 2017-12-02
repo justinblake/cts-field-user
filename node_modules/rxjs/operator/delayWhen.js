@@ -1,5 +1,6 @@
 "use strict";
-var delayWhen_1 = require('../operators/delayWhen');
+Object.defineProperty(exports, "__esModule", { value: true });
+var delayWhen_1 = require("../operators/delayWhen");
 /**
  * Delays the emission of items from the source Observable by a given time span
  * determined by the emissions of another Observable.

@@ -1,4 +1,4 @@
-export var FastMap = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var FastMap = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function FastMap() {
         this.values = {};
     }
@@ -26,4 +26,5 @@ export var FastMap = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return FastMap;
 }());
+export { FastMap };
 //# sourceMappingURL=FastMap.js.map 

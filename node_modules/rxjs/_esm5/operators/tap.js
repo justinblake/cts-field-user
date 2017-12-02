@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 /* tslint:enable:max-line-length */
 /**
@@ -73,11 +78,12 @@ var DoOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var DoSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(DoSubscriber, _super);
     function DoSubscriber(destination, nextOrObserver, error, complete) {
-        _super.call(this, destination);
+        var _this = _super.call(this, destination) || this;
         var safeSubscriber = new Subscriber(nextOrObserver, error, complete);
         safeSubscriber.syncErrorThrowable = true;
-        this.add(safeSubscriber);
-        this.safeSubscriber = safeSubscriber;
+        _this.add(safeSubscriber);
+        _this.safeSubscriber = safeSubscriber;
+        return _this;
     }
     DoSubscriber.prototype._next = function (value) {
         var safeSubscriber = this.safeSubscriber;

@@ -1,5 +1,6 @@
 "use strict";
-var windowToggle_1 = require('../operators/windowToggle');
+Object.defineProperty(exports, "__esModule", { value: true });
+var windowToggle_1 = require("../operators/windowToggle");
 /**
  * Branch out the source Observable values as a nested Observable starting from
  * an emission from `openings` and ending when the output of `closingSelector`

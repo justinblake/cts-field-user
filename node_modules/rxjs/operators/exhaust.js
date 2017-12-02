@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /**
  * Converts a higher-order Observable into a first-order Observable by dropping
  * inner Observables while the previous inner Observable has not yet completed.
@@ -45,7 +51,7 @@ function exhaust() {
     return function (source) { return source.lift(new SwitchFirstOperator()); };
 }
 exports.exhaust = exhaust;
-var SwitchFirstOperator = (function () {
+var SwitchFirstOperator = /** @class */ (function () {
     function SwitchFirstOperator() {
     }
     SwitchFirstOperator.prototype.call = function (subscriber, source) {
@@ -58,12 +64,13 @@ var SwitchFirstOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var SwitchFirstSubscriber = (function (_super) {
+var SwitchFirstSubscriber = /** @class */ (function (_super) {
     __extends(SwitchFirstSubscriber, _super);
     function SwitchFirstSubscriber(destination) {
-        _super.call(this, destination);
-        this.hasCompleted = false;
-        this.hasSubscription = false;
+        var _this = _super.call(this, destination) || this;
+        _this.hasCompleted = false;
+        _this.hasSubscription = false;
+        return _this;
     }
     SwitchFirstSubscriber.prototype._next = function (value) {
         if (!this.hasSubscription) {

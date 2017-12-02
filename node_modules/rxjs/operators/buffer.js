@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /**
  * Buffers the source Observable values until `closingNotifier` emits.
  *
@@ -44,7 +50,7 @@ function buffer(closingNotifier) {
     };
 }
 exports.buffer = buffer;
-var BufferOperator = (function () {
+var BufferOperator = /** @class */ (function () {
     function BufferOperator(closingNotifier) {
         this.closingNotifier = closingNotifier;
     }
@@ -58,12 +64,13 @@ var BufferOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var BufferSubscriber = (function (_super) {
+var BufferSubscriber = /** @class */ (function (_super) {
     __extends(BufferSubscriber, _super);
     function BufferSubscriber(destination, closingNotifier) {
-        _super.call(this, destination);
-        this.buffer = [];
-        this.add(subscribeToResult_1.subscribeToResult(this, closingNotifier));
+        var _this = _super.call(this, destination) || this;
+        _this.buffer = [];
+        _this.add(subscribeToResult_1.subscribeToResult(_this, closingNotifier));
+        return _this;
     }
     BufferSubscriber.prototype._next = function (value) {
         this.buffer.push(value);

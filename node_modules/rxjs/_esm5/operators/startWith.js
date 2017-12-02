@@ -22,7 +22,7 @@ import { isScheduler } from '../util/isScheduler';
 export function startWith() {
     var array = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        array[_i - 0] = arguments[_i];
+        array[_i] = arguments[_i];
     }
     return function (source) {
         var scheduler = array[array.length - 1];

@@ -1,5 +1,6 @@
 "use strict";
-var tap_1 = require('../operators/tap');
+Object.defineProperty(exports, "__esModule", { value: true });
+var tap_1 = require("../operators/tap");
 /* tslint:enable:max-line-length */
 /**
  * Perform a side effect for every emission on the source Observable, but return

@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 exports.defaultThrottleConfig = {
     leading: true,
     trailing: false
@@ -55,7 +61,7 @@ function throttle(durationSelector, config) {
     return function (source) { return source.lift(new ThrottleOperator(durationSelector, config.leading, config.trailing)); };
 }
 exports.throttle = throttle;
-var ThrottleOperator = (function () {
+var ThrottleOperator = /** @class */ (function () {
     function ThrottleOperator(durationSelector, leading, trailing) {
         this.durationSelector = durationSelector;
         this.leading = leading;
@@ -71,15 +77,16 @@ var ThrottleOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var ThrottleSubscriber = (function (_super) {
+var ThrottleSubscriber = /** @class */ (function (_super) {
     __extends(ThrottleSubscriber, _super);
     function ThrottleSubscriber(destination, durationSelector, _leading, _trailing) {
-        _super.call(this, destination);
-        this.destination = destination;
-        this.durationSelector = durationSelector;
-        this._leading = _leading;
-        this._trailing = _trailing;
-        this._hasTrailingValue = false;
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        _this.durationSelector = durationSelector;
+        _this._leading = _leading;
+        _this._trailing = _trailing;
+        _this._hasTrailingValue = false;
+        return _this;
     }
     ThrottleSubscriber.prototype._next = function (value) {
         if (this.throttled) {

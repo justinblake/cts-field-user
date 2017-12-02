@@ -1,5 +1,6 @@
 "use strict";
-var sequenceEqual_1 = require('../operators/sequenceEqual');
+Object.defineProperty(exports, "__esModule", { value: true });
+var sequenceEqual_1 = require("../operators/sequenceEqual");
 /**
  * Compares all values of two observables in sequence using an optional comparor function
  * and returns an observable of a single boolean value representing whether or not the two sequences

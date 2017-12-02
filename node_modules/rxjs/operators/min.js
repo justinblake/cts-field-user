@@ -1,5 +1,6 @@
 "use strict";
-var reduce_1 = require('./reduce');
+Object.defineProperty(exports, "__esModule", { value: true });
+var reduce_1 = require("./reduce");
 /**
  * The Min operator operates on an Observable that emits numbers (or items that can be compared with a provided function),
  * and when source Observable completes it emits a single item: the item with the smallest value.

@@ -1,5 +1,6 @@
 "use strict";
-var last_1 = require('../operators/last');
+Object.defineProperty(exports, "__esModule", { value: true });
+var last_1 = require("../operators/last");
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits only the last item emitted by the source Observable.

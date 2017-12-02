@@ -1,5 +1,6 @@
 "use strict";
-var elementAt_1 = require('../operators/elementAt');
+Object.defineProperty(exports, "__esModule", { value: true });
+var elementAt_1 = require("../operators/elementAt");
 /**
  * Emits the single value at the specified `index` in a sequence of emissions
  * from the source Observable.

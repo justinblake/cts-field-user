@@ -1,5 +1,6 @@
 "use strict";
-var single_1 = require('../operators/single');
+Object.defineProperty(exports, "__esModule", { value: true });
+var single_1 = require("../operators/single");
 /**
  * Returns an Observable that emits the single item emitted by the source Observable that matches a specified
  * predicate, if that Observable emits one such item. If the source Observable emits more than one such item or no

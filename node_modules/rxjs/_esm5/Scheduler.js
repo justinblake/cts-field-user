@@ -14,7 +14,7 @@
  *
  * @class Scheduler
  */
-export var Scheduler = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var Scheduler = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function Scheduler(SchedulerAction, now) {
         if (now === void 0) {
             now = Scheduler.now;
@@ -48,4 +48,5 @@ export var Scheduler = /*@__PURE__*/ (/*@__PURE__*/ function () {
     Scheduler.now = Date.now ? Date.now : function () { return +new Date(); };
     return Scheduler;
 }());
+export { Scheduler };
 //# sourceMappingURL=Scheduler.js.map 

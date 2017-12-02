@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var Notification_1 = require('../Notification');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var Notification_1 = require("../Notification");
 /**
  *
  * Re-emits all notifications from source Observable with specified scheduler.
@@ -59,7 +65,7 @@ function observeOn(scheduler, delay) {
     };
 }
 exports.observeOn = observeOn;
-var ObserveOnOperator = (function () {
+var ObserveOnOperator = /** @class */ (function () {
     function ObserveOnOperator(scheduler, delay) {
         if (delay === void 0) { delay = 0; }
         this.scheduler = scheduler;
@@ -76,13 +82,14 @@ exports.ObserveOnOperator = ObserveOnOperator;
  * @ignore
  * @extends {Ignored}
  */
-var ObserveOnSubscriber = (function (_super) {
+var ObserveOnSubscriber = /** @class */ (function (_super) {
     __extends(ObserveOnSubscriber, _super);
     function ObserveOnSubscriber(destination, scheduler, delay) {
         if (delay === void 0) { delay = 0; }
-        _super.call(this, destination);
-        this.scheduler = scheduler;
-        this.delay = delay;
+        var _this = _super.call(this, destination) || this;
+        _this.scheduler = scheduler;
+        _this.delay = delay;
+        return _this;
     }
     ObserveOnSubscriber.dispatch = function (arg) {
         var notification = arg.notification, destination = arg.destination;
@@ -104,7 +111,7 @@ var ObserveOnSubscriber = (function (_super) {
     return ObserveOnSubscriber;
 }(Subscriber_1.Subscriber));
 exports.ObserveOnSubscriber = ObserveOnSubscriber;
-var ObserveOnMessage = (function () {
+var ObserveOnMessage = /** @class */ (function () {
     function ObserveOnMessage(notification, destination) {
         this.notification = notification;
         this.destination = destination;

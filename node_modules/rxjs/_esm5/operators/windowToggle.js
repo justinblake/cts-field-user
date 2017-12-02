@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subject,.._Subscription,.._util_tryCatch,.._util_errorObject,.._OuterSubscriber,.._util_subscribeToResult PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subject } from '../Subject';
 import { Subscription } from '../Subscription';
 import { tryCatch } from '../util/tryCatch';
@@ -74,11 +79,12 @@ var WindowToggleOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var WindowToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(WindowToggleSubscriber, _super);
     function WindowToggleSubscriber(destination, openings, closingSelector) {
-        _super.call(this, destination);
-        this.openings = openings;
-        this.closingSelector = closingSelector;
-        this.contexts = [];
-        this.add(this.openSubscription = subscribeToResult(this, openings, openings));
+        var _this = _super.call(this, destination) || this;
+        _this.openings = openings;
+        _this.closingSelector = closingSelector;
+        _this.contexts = [];
+        _this.add(_this.openSubscription = subscribeToResult(_this, openings, openings));
+        return _this;
     }
     WindowToggleSubscriber.prototype._next = function (value) {
         var contexts = this.contexts;
@@ -96,9 +102,9 @@ var WindowToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
             var len = contexts.length;
             var index = -1;
             while (++index < len) {
-                var context = contexts[index];
-                context.window.error(err);
-                context.subscription.unsubscribe();
+                var context_1 = contexts[index];
+                context_1.window.error(err);
+                context_1.subscription.unsubscribe();
             }
         }
         _super.prototype._error.call(this, err);
@@ -110,9 +116,9 @@ var WindowToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
             var len = contexts.length;
             var index = -1;
             while (++index < len) {
-                var context = contexts[index];
-                context.window.complete();
-                context.subscription.unsubscribe();
+                var context_2 = contexts[index];
+                context_2.window.complete();
+                context_2.subscription.unsubscribe();
             }
         }
         _super.prototype._complete.call(this);
@@ -124,9 +130,9 @@ var WindowToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
             var len = contexts.length;
             var index = -1;
             while (++index < len) {
-                var context = contexts[index];
-                context.window.unsubscribe();
-                context.subscription.unsubscribe();
+                var context_3 = contexts[index];
+                context_3.window.unsubscribe();
+                context_3.subscription.unsubscribe();
             }
         }
     };
@@ -140,14 +146,14 @@ var WindowToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
             else {
                 var window_1 = new Subject();
                 var subscription = new Subscription();
-                var context = { window: window_1, subscription: subscription };
-                this.contexts.push(context);
-                var innerSubscription = subscribeToResult(this, closingNotifier, context);
+                var context_4 = { window: window_1, subscription: subscription };
+                this.contexts.push(context_4);
+                var innerSubscription = subscribeToResult(this, closingNotifier, context_4);
                 if (innerSubscription.closed) {
                     this.closeWindow(this.contexts.length - 1);
                 }
                 else {
-                    innerSubscription.context = context;
+                    innerSubscription.context = context_4;
                     subscription.add(innerSubscription);
                 }
                 this.destination.next(window_1);

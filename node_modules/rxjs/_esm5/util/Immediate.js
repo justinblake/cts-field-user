@@ -3,7 +3,7 @@ Some credit for this helper goes to http://github.com/YuzuJS/setImmediate
 */
 /** PURE_IMPORTS_START ._root PURE_IMPORTS_END */
 import { root } from './root';
-export var ImmediateDefinition = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var ImmediateDefinition = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function ImmediateDefinition(root) {
         this.root = root;
         if (root.setImmediate && typeof root.setImmediate === 'function') {
@@ -204,5 +204,6 @@ export var ImmediateDefinition = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return ImmediateDefinition;
 }());
+export { ImmediateDefinition };
 export var Immediate = /*@__PURE__*/ new ImmediateDefinition(root);
 //# sourceMappingURL=Immediate.js.map 

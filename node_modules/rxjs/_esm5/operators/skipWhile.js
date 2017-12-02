@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 /**
  * Returns an Observable that skips all items emitted by the source Observable as long as a specified condition holds
@@ -39,10 +44,11 @@ var SkipWhileOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var SkipWhileSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(SkipWhileSubscriber, _super);
     function SkipWhileSubscriber(destination, predicate) {
-        _super.call(this, destination);
-        this.predicate = predicate;
-        this.skipping = true;
-        this.index = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.predicate = predicate;
+        _this.skipping = true;
+        _this.index = 0;
+        return _this;
     }
     SkipWhileSubscriber.prototype._next = function (value) {
         var destination = this.destination;

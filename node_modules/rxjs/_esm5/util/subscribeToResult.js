@@ -69,7 +69,7 @@ export function subscribeToResult(outerSubscriber, result, outerValue, outerInde
     }
     else {
         var value = isObject(result) ? 'an invalid object' : "'" + result + "'";
-        var msg = ("You provided " + value + " where a stream was expected.")
+        var msg = "You provided " + value + " where a stream was expected."
             + ' You can provide an Observable, Promise, Array, or Iterable.';
         destination.error(new TypeError(msg));
     }

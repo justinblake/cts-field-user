@@ -1,5 +1,6 @@
 "use strict";
-var share_1 = require('../operators/share');
+Object.defineProperty(exports, "__esModule", { value: true });
+var share_1 = require("../operators/share");
 /**
  * Returns a new Observable that multicasts (shares) the original Observable. As long as there is at least one
  * Subscriber this Observable will be subscribed and emitting data. When all subscribers have unsubscribed it will

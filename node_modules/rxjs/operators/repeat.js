@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var EmptyObservable_1 = require('../observable/EmptyObservable');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var EmptyObservable_1 = require("../observable/EmptyObservable");
 /**
  * Returns an Observable that repeats the stream of items emitted by the source Observable at most count times.
  *
@@ -33,7 +39,7 @@ function repeat(count) {
     };
 }
 exports.repeat = repeat;
-var RepeatOperator = (function () {
+var RepeatOperator = /** @class */ (function () {
     function RepeatOperator(count, source) {
         this.count = count;
         this.source = source;
@@ -48,12 +54,13 @@ var RepeatOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var RepeatSubscriber = (function (_super) {
+var RepeatSubscriber = /** @class */ (function (_super) {
     __extends(RepeatSubscriber, _super);
     function RepeatSubscriber(destination, count, source) {
-        _super.call(this, destination);
-        this.count = count;
-        this.source = source;
+        var _this = _super.call(this, destination) || this;
+        _this.count = count;
+        _this.source = source;
+        return _this;
     }
     RepeatSubscriber.prototype.complete = function () {
         if (!this.isStopped) {

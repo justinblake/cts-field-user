@@ -1,5 +1,6 @@
 "use strict";
-var debounce_1 = require('../operators/debounce');
+Object.defineProperty(exports, "__esModule", { value: true });
+var debounce_1 = require("../operators/debounce");
 /**
  * Emits a value from the source Observable only after a particular time span
  * determined by another Observable has passed without another source emission.

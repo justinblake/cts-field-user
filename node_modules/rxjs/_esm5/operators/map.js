@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 /**
  * Applies a given `project` function to each value emitted by the source
@@ -48,7 +53,7 @@ export function map(project, thisArg) {
         return source.lift(new MapOperator(project, thisArg));
     };
 }
-export var MapOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var MapOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function MapOperator(project, thisArg) {
         this.project = project;
         this.thisArg = thisArg;
@@ -58,6 +63,7 @@ export var MapOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return MapOperator;
 }());
+export { MapOperator };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -66,10 +72,11 @@ export var MapOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var MapSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(MapSubscriber, _super);
     function MapSubscriber(destination, project, thisArg) {
-        _super.call(this, destination);
-        this.project = project;
-        this.count = 0;
-        this.thisArg = thisArg || this;
+        var _this = _super.call(this, destination) || this;
+        _this.project = project;
+        _this.count = 0;
+        _this.thisArg = thisArg || _this;
+        return _this;
     }
     // NOTE: This looks unoptimized, but it's actually purposefully NOT
     // using try/catch optimizations.

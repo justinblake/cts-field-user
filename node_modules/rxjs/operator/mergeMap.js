@@ -1,5 +1,6 @@
 "use strict";
-var mergeMap_1 = require('../operators/mergeMap');
+Object.defineProperty(exports, "__esModule", { value: true });
+var mergeMap_1 = require("../operators/mergeMap");
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output

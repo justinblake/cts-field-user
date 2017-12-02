@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Observable,.._Notification,._ColdObservable,._HotObservable,._SubscriptionLog,.._scheduler_VirtualTimeScheduler PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 import { Notification } from '../Notification';
 import { ColdObservable } from './ColdObservable';
@@ -13,14 +18,15 @@ import { HotObservable } from './HotObservable';
 import { SubscriptionLog } from './SubscriptionLog';
 import { VirtualTimeScheduler, VirtualAction } from '../scheduler/VirtualTimeScheduler';
 var defaultMaxFrame = 750;
-export var TestScheduler = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var TestScheduler = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(TestScheduler, _super);
     function TestScheduler(assertDeepEqual) {
-        _super.call(this, VirtualAction, defaultMaxFrame);
-        this.assertDeepEqual = assertDeepEqual;
-        this.hotObservables = [];
-        this.coldObservables = [];
-        this.flushTests = [];
+        var _this = _super.call(this, VirtualAction, defaultMaxFrame) || this;
+        _this.assertDeepEqual = assertDeepEqual;
+        _this.hotObservables = [];
+        _this.coldObservables = [];
+        _this.flushTests = [];
+        return _this;
     }
     TestScheduler.prototype.createTime = function (marbles) {
         var indexOf = marbles.indexOf('|');
@@ -118,8 +124,8 @@ export var TestScheduler = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
         _super.prototype.flush.call(this);
         var readyFlushTests = this.flushTests.filter(function (test) { return test.ready; });
         while (readyFlushTests.length > 0) {
-            var test = readyFlushTests.shift();
-            this.assertDeepEqual(test.actual, test.expected);
+            var test_1 = readyFlushTests.shift();
+            this.assertDeepEqual(test_1.actual, test_1.expected);
         }
     };
     TestScheduler.parseMarblesAsSubscriptions = function (marbles) {
@@ -225,4 +231,5 @@ export var TestScheduler = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return TestScheduler;
 }(VirtualTimeScheduler));
+export { TestScheduler };
 //# sourceMappingURL=TestScheduler.js.map 

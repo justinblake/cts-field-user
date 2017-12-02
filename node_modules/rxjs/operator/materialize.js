@@ -1,5 +1,6 @@
 "use strict";
-var materialize_1 = require('../operators/materialize');
+Object.defineProperty(exports, "__esModule", { value: true });
+var materialize_1 = require("../operators/materialize");
 /**
  * Represents all of the notifications from the source Observable as `next`
  * emissions marked with their original types within {@link Notification}

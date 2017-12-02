@@ -1,7 +1,8 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var audit_1 = require('./audit');
-var timer_1 = require('../observable/timer');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var audit_1 = require("./audit");
+var timer_1 = require("../observable/timer");
 /**
  * Ignores source values for `duration` milliseconds, then emits the most recent
  * value from the source Observable, then repeats this process.

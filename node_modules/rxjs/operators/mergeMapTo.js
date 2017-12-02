@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to the same Observable which is merged multiple
@@ -61,7 +67,7 @@ function mergeMapTo(innerObservable, resultSelector, concurrent) {
 exports.mergeMapTo = mergeMapTo;
 // TODO: Figure out correct signature here: an Operator<Observable<T>, R>
 //       needs to implement call(observer: Subscriber<R>): Subscriber<Observable<T>>
-var MergeMapToOperator = (function () {
+var MergeMapToOperator = /** @class */ (function () {
     function MergeMapToOperator(ish, resultSelector, concurrent) {
         if (concurrent === void 0) { concurrent = Number.POSITIVE_INFINITY; }
         this.ish = ish;
@@ -79,18 +85,19 @@ exports.MergeMapToOperator = MergeMapToOperator;
  * @ignore
  * @extends {Ignored}
  */
-var MergeMapToSubscriber = (function (_super) {
+var MergeMapToSubscriber = /** @class */ (function (_super) {
     __extends(MergeMapToSubscriber, _super);
     function MergeMapToSubscriber(destination, ish, resultSelector, concurrent) {
         if (concurrent === void 0) { concurrent = Number.POSITIVE_INFINITY; }
-        _super.call(this, destination);
-        this.ish = ish;
-        this.resultSelector = resultSelector;
-        this.concurrent = concurrent;
-        this.hasCompleted = false;
-        this.buffer = [];
-        this.active = 0;
-        this.index = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.ish = ish;
+        _this.resultSelector = resultSelector;
+        _this.concurrent = concurrent;
+        _this.hasCompleted = false;
+        _this.buffer = [];
+        _this.active = 0;
+        _this.index = 0;
+        return _this;
     }
     MergeMapToSubscriber.prototype._next = function (value) {
         if (this.active < this.concurrent) {

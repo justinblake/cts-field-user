@@ -1,5 +1,6 @@
 "use strict";
-var windowWhen_1 = require('../operators/windowWhen');
+Object.defineProperty(exports, "__esModule", { value: true });
+var windowWhen_1 = require("../operators/windowWhen");
 /**
  * Branch out the source Observable values as a nested Observable using a
  * factory function of closing Observables to determine when to start a new

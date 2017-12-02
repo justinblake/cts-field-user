@@ -1,8 +1,9 @@
 "use strict";
-var scan_1 = require('./scan');
-var takeLast_1 = require('./takeLast');
-var defaultIfEmpty_1 = require('./defaultIfEmpty');
-var pipe_1 = require('../util/pipe');
+Object.defineProperty(exports, "__esModule", { value: true });
+var scan_1 = require("./scan");
+var takeLast_1 = require("./takeLast");
+var defaultIfEmpty_1 = require("./defaultIfEmpty");
+var pipe_1 = require("../util/pipe");
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns the

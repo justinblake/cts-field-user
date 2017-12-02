@@ -1,5 +1,6 @@
 "use strict";
-var mergeScan_1 = require('../operators/mergeScan');
+Object.defineProperty(exports, "__esModule", { value: true });
+var mergeScan_1 = require("../operators/mergeScan");
 /**
  * Applies an accumulator function over the source Observable where the
  * accumulator function itself returns an Observable, then each intermediate

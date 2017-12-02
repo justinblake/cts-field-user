@@ -1,5 +1,6 @@
 "use strict";
-var bufferToggle_1 = require('../operators/bufferToggle');
+Object.defineProperty(exports, "__esModule", { value: true });
+var bufferToggle_1 = require("../operators/bufferToggle");
 /**
  * Buffers the source Observable values starting from an emission from
  * `openings` and ending when the output of `closingSelector` emits.

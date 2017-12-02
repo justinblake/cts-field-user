@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber,.._Subject PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 import { Subject } from '../Subject';
 /**
@@ -82,13 +87,14 @@ var WindowCountOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var WindowCountSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(WindowCountSubscriber, _super);
     function WindowCountSubscriber(destination, windowSize, startWindowEvery) {
-        _super.call(this, destination);
-        this.destination = destination;
-        this.windowSize = windowSize;
-        this.startWindowEvery = startWindowEvery;
-        this.windows = [new Subject()];
-        this.count = 0;
-        destination.next(this.windows[0]);
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        _this.windowSize = windowSize;
+        _this.startWindowEvery = startWindowEvery;
+        _this.windows = [new Subject()];
+        _this.count = 0;
+        destination.next(_this.windows[0]);
+        return _this;
     }
     WindowCountSubscriber.prototype._next = function (value) {
         var startWindowEvery = (this.startWindowEvery > 0) ? this.startWindowEvery : this.windowSize;

@@ -20,8 +20,7 @@ export function minimalSetImpl() {
         clear() {
             this._values.length = 0;
         }
-    }
-    ;
+    };
 }
 export const Set = root.Set || minimalSetImpl();
 //# sourceMappingURL=Set.js.map

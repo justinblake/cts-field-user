@@ -1,5 +1,6 @@
 "use strict";
-var shareReplay_1 = require('../operators/shareReplay');
+Object.defineProperty(exports, "__esModule", { value: true });
+var shareReplay_1 = require("../operators/shareReplay");
 /**
  * @method shareReplay
  * @owner Observable

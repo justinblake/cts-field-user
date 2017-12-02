@@ -1,4 +1,4 @@
-export var MapPolyfill = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var MapPolyfill = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function MapPolyfill() {
         this.size = 0;
         this._values = [];
@@ -42,4 +42,5 @@ export var MapPolyfill = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return MapPolyfill;
 }());
+export { MapPolyfill };
 //# sourceMappingURL=MapPolyfill.js.map 

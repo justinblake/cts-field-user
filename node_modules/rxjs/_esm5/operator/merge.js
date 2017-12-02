@@ -1,6 +1,6 @@
 /** PURE_IMPORTS_START .._operators_merge PURE_IMPORTS_END */
 import { merge as higherOrder } from '../operators/merge';
-export { mergeStatic } from '../operators/merge';
+export { merge as mergeStatic } from '../observable/merge';
 /* tslint:enable:max-line-length */
 /**
  * Creates an output Observable which concurrently emits all values from every
@@ -51,7 +51,7 @@ export { mergeStatic } from '../operators/merge';
 export function merge() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     return higherOrder.apply(void 0, observables)(this);
 }

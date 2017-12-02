@@ -1,5 +1,6 @@
 "use strict";
-var filter_1 = require('../operators/filter');
+Object.defineProperty(exports, "__esModule", { value: true });
+var filter_1 = require("../operators/filter");
 /* tslint:enable:max-line-length */
 /**
  * Filter items emitted by the source Observable by only emitting those that

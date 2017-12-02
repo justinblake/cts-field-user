@@ -1,5 +1,6 @@
 "use strict";
-var findIndex_1 = require('../operators/findIndex');
+Object.defineProperty(exports, "__esModule", { value: true });
+var findIndex_1 = require("../operators/findIndex");
 /**
  * Emits only the index of the first value emitted by the source Observable that
  * meets some condition.

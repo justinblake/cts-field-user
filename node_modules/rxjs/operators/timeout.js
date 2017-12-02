@@ -1,13 +1,19 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var async_1 = require('../scheduler/async');
-var isDate_1 = require('../util/isDate');
-var Subscriber_1 = require('../Subscriber');
-var TimeoutError_1 = require('../util/TimeoutError');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var isDate_1 = require("../util/isDate");
+var Subscriber_1 = require("../Subscriber");
+var TimeoutError_1 = require("../util/TimeoutError");
 /**
  *
  * Errors if Observable does not emit a value in given time span.
@@ -80,7 +86,7 @@ function timeout(due, scheduler) {
     return function (source) { return source.lift(new TimeoutOperator(waitFor, absoluteTimeout, scheduler, new TimeoutError_1.TimeoutError())); };
 }
 exports.timeout = timeout;
-var TimeoutOperator = (function () {
+var TimeoutOperator = /** @class */ (function () {
     function TimeoutOperator(waitFor, absoluteTimeout, scheduler, errorInstance) {
         this.waitFor = waitFor;
         this.absoluteTimeout = absoluteTimeout;
@@ -97,16 +103,17 @@ var TimeoutOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var TimeoutSubscriber = (function (_super) {
+var TimeoutSubscriber = /** @class */ (function (_super) {
     __extends(TimeoutSubscriber, _super);
     function TimeoutSubscriber(destination, absoluteTimeout, waitFor, scheduler, errorInstance) {
-        _super.call(this, destination);
-        this.absoluteTimeout = absoluteTimeout;
-        this.waitFor = waitFor;
-        this.scheduler = scheduler;
-        this.errorInstance = errorInstance;
-        this.action = null;
-        this.scheduleTimeout();
+        var _this = _super.call(this, destination) || this;
+        _this.absoluteTimeout = absoluteTimeout;
+        _this.waitFor = waitFor;
+        _this.scheduler = scheduler;
+        _this.errorInstance = errorInstance;
+        _this.action = null;
+        _this.scheduleTimeout();
+        return _this;
     }
     TimeoutSubscriber.dispatchTimeout = function (subscriber) {
         subscriber.error(subscriber.errorInstance);

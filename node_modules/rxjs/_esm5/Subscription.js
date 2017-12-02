@@ -17,7 +17,7 @@ import { UnsubscriptionError } from './util/UnsubscriptionError';
  *
  * @class Subscription
  */
-export var Subscription = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var Subscription = /*@__PURE__*/ (/*@__PURE__*/ function () {
     /**
      * @param {function(): void} [unsubscribe] A function describing how to
      * perform the disposal of resources when the `unsubscribe` method is called.
@@ -186,6 +186,7 @@ export var Subscription = /*@__PURE__*/ (/*@__PURE__*/ function () {
     }(new Subscription()));
     return Subscription;
 }());
+export { Subscription };
 function flattenUnsubscriptionErrors(errors) {
     return errors.reduce(function (errs, err) { return errs.concat((err instanceof UnsubscriptionError) ? err.errors : err); }, []);
 }

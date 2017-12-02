@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._observable_FromObservable,.._util_isArray,.._OuterSubscriber,.._util_subscribeToResult PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { FromObservable } from '../observable/FromObservable';
 import { isArray } from '../util/isArray';
 import { OuterSubscriber } from '../OuterSubscriber';
@@ -75,7 +80,7 @@ import { subscribeToResult } from '../util/subscribeToResult';
 export function onErrorResumeNext() {
     var nextSources = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        nextSources[_i - 0] = arguments[_i];
+        nextSources[_i] = arguments[_i];
     }
     if (nextSources.length === 1 && isArray(nextSources[0])) {
         nextSources = nextSources[0];
@@ -86,7 +91,7 @@ export function onErrorResumeNext() {
 export function onErrorResumeNextStatic() {
     var nextSources = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        nextSources[_i - 0] = arguments[_i];
+        nextSources[_i] = arguments[_i];
     }
     var source = null;
     if (nextSources.length === 1 && isArray(nextSources[0])) {
@@ -107,9 +112,10 @@ var OnErrorResumeNextOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var OnErrorResumeNextSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(OnErrorResumeNextSubscriber, _super);
     function OnErrorResumeNextSubscriber(destination, nextSources) {
-        _super.call(this, destination);
-        this.destination = destination;
-        this.nextSources = nextSources;
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        _this.nextSources = nextSources;
+        return _this;
     }
     OnErrorResumeNextSubscriber.prototype.notifyError = function (error, innerSub) {
         this.subscribeToNextSource();

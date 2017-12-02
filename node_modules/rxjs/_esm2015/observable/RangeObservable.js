@@ -5,12 +5,6 @@ import { Observable } from '../Observable';
  * @hide true
  */
 export class RangeObservable extends Observable {
-    constructor(start, count, scheduler) {
-        super();
-        this.start = start;
-        this._count = count;
-        this.scheduler = scheduler;
-    }
     /**
      * Creates an Observable that emits a sequence of numbers within a specified
      * range.
@@ -57,6 +51,12 @@ export class RangeObservable extends Observable {
         state.index = index + 1;
         state.start = start + 1;
         this.schedule(state);
+    }
+    constructor(start, count, scheduler) {
+        super();
+        this.start = start;
+        this._count = count;
+        this.scheduler = scheduler;
     }
     _subscribe(subscriber) {
         let index = 0;

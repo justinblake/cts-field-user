@@ -1,5 +1,6 @@
 "use strict";
-var groupBy_1 = require('../operators/groupBy');
+Object.defineProperty(exports, "__esModule", { value: true });
+var groupBy_1 = require("../operators/groupBy");
 exports.GroupedObservable = groupBy_1.GroupedObservable;
 /* tslint:enable:max-line-length */
 /**

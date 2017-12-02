@@ -32,7 +32,8 @@ export class GenerateObservable extends Observable {
                 iterate: this.iterate,
                 condition: this.condition,
                 resultSelector: this.resultSelector,
-                state });
+                state
+            });
         }
         const { condition, resultSelector, iterate } = this;
         do {

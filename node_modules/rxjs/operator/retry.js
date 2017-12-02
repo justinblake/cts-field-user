@@ -1,5 +1,6 @@
 "use strict";
-var retry_1 = require('../operators/retry');
+Object.defineProperty(exports, "__esModule", { value: true });
+var retry_1 = require("../operators/retry");
 /**
  * Returns an Observable that mirrors the source Observable with the exception of an `error`. If the source Observable
  * calls `error`, this method will resubscribe to the source Observable for a maximum of `count` resubscriptions (given

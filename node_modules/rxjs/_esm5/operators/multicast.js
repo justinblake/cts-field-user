@@ -40,7 +40,7 @@ export function multicast(subjectOrSubjectFactory, selector) {
         return connectable;
     };
 }
-export var MulticastOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var MulticastOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function MulticastOperator(subjectFactory, selector) {
         this.subjectFactory = subjectFactory;
         this.selector = selector;
@@ -54,4 +54,5 @@ export var MulticastOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return MulticastOperator;
 }());
+export { MulticastOperator };
 //# sourceMappingURL=multicast.js.map 

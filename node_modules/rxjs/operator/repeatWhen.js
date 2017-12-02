@@ -1,5 +1,6 @@
 "use strict";
-var repeatWhen_1 = require('../operators/repeatWhen');
+Object.defineProperty(exports, "__esModule", { value: true });
+var repeatWhen_1 = require("../operators/repeatWhen");
 /**
  * Returns an Observable that mirrors the source Observable with the exception of a `complete`. If the source
  * Observable calls `complete`, this method will emit to the Observable returned from `notifier`. If that Observable

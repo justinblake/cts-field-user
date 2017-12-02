@@ -1,5 +1,6 @@
 "use strict";
-var skip_1 = require('../operators/skip');
+Object.defineProperty(exports, "__esModule", { value: true });
+var skip_1 = require("../operators/skip");
 /**
  * Returns an Observable that skips the first `count` items emitted by the source Observable.
  *

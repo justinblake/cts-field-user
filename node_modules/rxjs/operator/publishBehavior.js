@@ -1,5 +1,6 @@
 "use strict";
-var publishBehavior_1 = require('../operators/publishBehavior');
+Object.defineProperty(exports, "__esModule", { value: true });
+var publishBehavior_1 = require("../operators/publishBehavior");
 /**
  * @param value
  * @return {ConnectableObservable<T>}

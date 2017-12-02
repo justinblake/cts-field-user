@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var timeoutWith_1 = require('../operators/timeoutWith');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var timeoutWith_1 = require("../operators/timeoutWith");
 /* tslint:enable:max-line-length */
 /**
  *

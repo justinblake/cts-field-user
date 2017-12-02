@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._.._util_root,.._.._util_tryCatch,.._.._util_errorObject,.._.._Observable,.._.._Subscriber,.._.._operators_map PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { root } from '../../util/root';
 import { tryCatch } from '../../util/tryCatch';
 import { errorObject } from '../../util/errorObject';
@@ -39,6 +44,7 @@ function getXMLHttpRequest() {
                     }
                 }
                 catch (e) {
+                    //suppress exceptions
                 }
             }
             return new root.ActiveXObject(progId);
@@ -86,10 +92,10 @@ export function ajaxGetJSON(url, headers) {
  * @extends {Ignored}
  * @hide true
  */
-export var AjaxObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AjaxObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AjaxObservable, _super);
     function AjaxObservable(urlOrRequest) {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         var request = {
             async: true,
             createXHR: function () {
@@ -112,7 +118,8 @@ export var AjaxObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
                 }
             }
         }
-        this.request = request;
+        _this.request = request;
+        return _this;
     }
     AjaxObservable.prototype._subscribe = function (subscriber) {
         return new AjaxSubscriber(subscriber, this.request);
@@ -157,17 +164,18 @@ export var AjaxObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     })();
     return AjaxObservable;
 }(Observable));
+export { AjaxObservable };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
  * @extends {Ignored}
  */
-export var AjaxSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AjaxSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AjaxSubscriber, _super);
     function AjaxSubscriber(destination, request) {
-        _super.call(this, destination);
-        this.request = request;
-        this.done = false;
+        var _this = _super.call(this, destination) || this;
+        _this.request = request;
+        _this.done = false;
         var headers = request.headers = request.headers || {};
         // force CORS if requested
         if (!request.crossDomain && !headers['X-Requested-With']) {
@@ -178,8 +186,9 @@ export var AjaxSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
             headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
         }
         // properly serialize body
-        request.body = this.serializeBody(request.body, request.headers['Content-Type']);
-        this.send();
+        request.body = _this.serializeBody(request.body, request.headers['Content-Type']);
+        _this.send();
+        return _this;
     }
     AjaxSubscriber.prototype.next = function (e) {
         this.done = true;
@@ -247,7 +256,7 @@ export var AjaxSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
         }
         switch (contentType) {
             case 'application/x-www-form-urlencoded':
-                return Object.keys(body).map(function (key) { return (encodeURI(key) + "=" + encodeURI(body[key])); }).join('&');
+                return Object.keys(body).map(function (key) { return encodeURI(key) + "=" + encodeURI(body[key]); }).join('&');
             case 'application/json':
                 return JSON.stringify(body);
             default:
@@ -345,6 +354,7 @@ export var AjaxSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return AjaxSubscriber;
 }(Subscriber));
+export { AjaxSubscriber };
 /**
  * A normalized AJAX response.
  *
@@ -352,7 +362,7 @@ export var AjaxSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
  *
  * @class AjaxResponse
  */
-export var AjaxResponse = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var AjaxResponse = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function AjaxResponse(originalEvent, xhr, request) {
         this.originalEvent = originalEvent;
         this.xhr = xhr;
@@ -363,6 +373,7 @@ export var AjaxResponse = /*@__PURE__*/ (/*@__PURE__*/ function () {
     }
     return AjaxResponse;
 }());
+export { AjaxResponse };
 /**
  * A normalized AJAX error.
  *
@@ -370,19 +381,21 @@ export var AjaxResponse = /*@__PURE__*/ (/*@__PURE__*/ function () {
  *
  * @class AjaxError
  */
-export var AjaxError = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AjaxError = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AjaxError, _super);
     function AjaxError(message, xhr, request) {
-        _super.call(this, message);
-        this.message = message;
-        this.xhr = xhr;
-        this.request = request;
-        this.status = xhr.status;
-        this.responseType = xhr.responseType || request.responseType;
-        this.response = parseXhrResponse(this.responseType, xhr);
+        var _this = _super.call(this, message) || this;
+        _this.message = message;
+        _this.xhr = xhr;
+        _this.request = request;
+        _this.status = xhr.status;
+        _this.responseType = xhr.responseType || request.responseType;
+        _this.response = parseXhrResponse(_this.responseType, xhr);
+        return _this;
     }
     return AjaxError;
 }(Error));
+export { AjaxError };
 function parseXhrResponse(responseType, xhr) {
     switch (responseType) {
         case 'json':
@@ -405,11 +418,12 @@ function parseXhrResponse(responseType, xhr) {
  *
  * @class AjaxTimeoutError
  */
-export var AjaxTimeoutError = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AjaxTimeoutError = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AjaxTimeoutError, _super);
     function AjaxTimeoutError(xhr, request) {
-        _super.call(this, 'ajax timeout', xhr, request);
+        return _super.call(this, 'ajax timeout', xhr, request) || this;
     }
     return AjaxTimeoutError;
 }(AjaxError));
+export { AjaxTimeoutError };
 //# sourceMappingURL=AjaxObservable.js.map 

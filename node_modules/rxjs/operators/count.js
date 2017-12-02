@@ -1,10 +1,16 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
 /**
  * Counts the number of emissions on the source and emits that number when the
  * source completes.
@@ -57,7 +63,7 @@ function count(predicate) {
     return function (source) { return source.lift(new CountOperator(predicate, source)); };
 }
 exports.count = count;
-var CountOperator = (function () {
+var CountOperator = /** @class */ (function () {
     function CountOperator(predicate, source) {
         this.predicate = predicate;
         this.source = source;
@@ -72,14 +78,15 @@ var CountOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var CountSubscriber = (function (_super) {
+var CountSubscriber = /** @class */ (function (_super) {
     __extends(CountSubscriber, _super);
     function CountSubscriber(destination, predicate, source) {
-        _super.call(this, destination);
-        this.predicate = predicate;
-        this.source = source;
-        this.count = 0;
-        this.index = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.predicate = predicate;
+        _this.source = source;
+        _this.count = 0;
+        _this.index = 0;
+        return _this;
     }
     CountSubscriber.prototype._next = function (value) {
         if (this.predicate) {

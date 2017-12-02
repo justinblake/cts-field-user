@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 /* tslint:enable:max-line-length */
 /**
@@ -70,10 +75,11 @@ var FilterOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var FilterSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(FilterSubscriber, _super);
     function FilterSubscriber(destination, predicate, thisArg) {
-        _super.call(this, destination);
-        this.predicate = predicate;
-        this.thisArg = thisArg;
-        this.count = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.predicate = predicate;
+        _this.thisArg = thisArg;
+        _this.count = 0;
+        return _this;
     }
     // the try catch block below is left specifically for
     // optimization and perf reasons. a tryCatcher is not necessary here.

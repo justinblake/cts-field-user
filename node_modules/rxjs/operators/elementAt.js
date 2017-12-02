@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var ArgumentOutOfRangeError_1 = require('../util/ArgumentOutOfRangeError');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var ArgumentOutOfRangeError_1 = require("../util/ArgumentOutOfRangeError");
 /**
  * Emits the single value at the specified `index` in a sequence of emissions
  * from the source Observable.
@@ -52,7 +58,7 @@ function elementAt(index, defaultValue) {
     return function (source) { return source.lift(new ElementAtOperator(index, defaultValue)); };
 }
 exports.elementAt = elementAt;
-var ElementAtOperator = (function () {
+var ElementAtOperator = /** @class */ (function () {
     function ElementAtOperator(index, defaultValue) {
         this.index = index;
         this.defaultValue = defaultValue;
@@ -70,12 +76,13 @@ var ElementAtOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var ElementAtSubscriber = (function (_super) {
+var ElementAtSubscriber = /** @class */ (function (_super) {
     __extends(ElementAtSubscriber, _super);
     function ElementAtSubscriber(destination, index, defaultValue) {
-        _super.call(this, destination);
-        this.index = index;
-        this.defaultValue = defaultValue;
+        var _this = _super.call(this, destination) || this;
+        _this.index = index;
+        _this.defaultValue = defaultValue;
+        return _this;
     }
     ElementAtSubscriber.prototype._next = function (x) {
         if (this.index-- === 0) {

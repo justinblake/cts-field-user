@@ -1,14 +1,20 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscription_1 = require('../Subscription');
-var tryCatch_1 = require('../util/tryCatch');
-var errorObject_1 = require('../util/errorObject');
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscription_1 = require("../Subscription");
+var tryCatch_1 = require("../util/tryCatch");
+var errorObject_1 = require("../util/errorObject");
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /**
  * Buffers the source Observable values, using a factory function of closing
  * Observables to determine when to close, emit, and reset the buffer.
@@ -48,7 +54,7 @@ function bufferWhen(closingSelector) {
     };
 }
 exports.bufferWhen = bufferWhen;
-var BufferWhenOperator = (function () {
+var BufferWhenOperator = /** @class */ (function () {
     function BufferWhenOperator(closingSelector) {
         this.closingSelector = closingSelector;
     }
@@ -62,13 +68,14 @@ var BufferWhenOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var BufferWhenSubscriber = (function (_super) {
+var BufferWhenSubscriber = /** @class */ (function (_super) {
     __extends(BufferWhenSubscriber, _super);
     function BufferWhenSubscriber(destination, closingSelector) {
-        _super.call(this, destination);
-        this.closingSelector = closingSelector;
-        this.subscribing = false;
-        this.openBuffer();
+        var _this = _super.call(this, destination) || this;
+        _this.closingSelector = closingSelector;
+        _this.subscribing = false;
+        _this.openBuffer();
+        return _this;
     }
     BufferWhenSubscriber.prototype._next = function (value) {
         this.buffer.push(value);

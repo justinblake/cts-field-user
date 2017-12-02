@@ -1,5 +1,6 @@
 "use strict";
-var partition_1 = require('../operators/partition');
+Object.defineProperty(exports, "__esModule", { value: true });
+var partition_1 = require("../operators/partition");
 /**
  * Splits the source Observable into two, one with values that satisfy a
  * predicate, and another with values that don't satisfy the predicate.

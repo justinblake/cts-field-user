@@ -1,5 +1,6 @@
 "use strict";
-var first_1 = require('../operators/first');
+Object.defineProperty(exports, "__esModule", { value: true });
+var first_1 = require("../operators/first");
 /**
  * Emits only the first value (or the first value that meets some condition)
  * emitted by the source Observable.

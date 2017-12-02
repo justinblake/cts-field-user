@@ -1,5 +1,6 @@
 "use strict";
-var distinct_1 = require('../operators/distinct');
+Object.defineProperty(exports, "__esModule", { value: true });
+var distinct_1 = require("../operators/distinct");
 /**
  * Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from previous items.
  *

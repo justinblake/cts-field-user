@@ -1,5 +1,6 @@
 "use strict";
-var subscribeOn_1 = require('../operators/subscribeOn');
+Object.defineProperty(exports, "__esModule", { value: true });
+var subscribeOn_1 = require("../operators/subscribeOn");
 /**
  * Asynchronously subscribes Observers to this Observable on the specified IScheduler.
  *

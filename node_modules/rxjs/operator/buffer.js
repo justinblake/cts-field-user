@@ -1,5 +1,6 @@
 "use strict";
-var buffer_1 = require('../operators/buffer');
+Object.defineProperty(exports, "__esModule", { value: true });
+var buffer_1 = require("../operators/buffer");
 /**
  * Buffers the source Observable values until `closingNotifier` emits.
  *

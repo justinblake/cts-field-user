@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Observable,._ScalarObservable,._EmptyObservable,.._util_isScheduler PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 import { ScalarObservable } from './ScalarObservable';
 import { EmptyObservable } from './EmptyObservable';
@@ -15,16 +20,17 @@ import { isScheduler } from '../util/isScheduler';
  * @extends {Ignored}
  * @hide true
  */
-export var ArrayObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var ArrayObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(ArrayObservable, _super);
     function ArrayObservable(array, scheduler) {
-        _super.call(this);
-        this.array = array;
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.array = array;
+        _this.scheduler = scheduler;
         if (!scheduler && array.length === 1) {
-            this._isScalar = true;
-            this.value = array[0];
+            _this._isScalar = true;
+            _this.value = array[0];
         }
+        return _this;
     }
     ArrayObservable.create = function (array, scheduler) {
         return new ArrayObservable(array, scheduler);
@@ -68,7 +74,7 @@ export var ArrayObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     ArrayObservable.of = function () {
         var array = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            array[_i - 0] = arguments[_i];
+            array[_i] = arguments[_i];
         }
         var scheduler = array[array.length - 1];
         if (isScheduler(scheduler)) {
@@ -120,4 +126,5 @@ export var ArrayObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return ArrayObservable;
 }(Observable));
+export { ArrayObservable };
 //# sourceMappingURL=ArrayObservable.js.map 

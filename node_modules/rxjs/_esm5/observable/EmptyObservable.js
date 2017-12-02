@@ -1,22 +1,28 @@
 /** PURE_IMPORTS_START .._Observable PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
  * @hide true
  */
-export var EmptyObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var EmptyObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(EmptyObservable, _super);
     function EmptyObservable(scheduler) {
-        _super.call(this);
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.scheduler = scheduler;
+        return _this;
     }
     /**
      * Creates an Observable that emits no items to the Observer and immediately
@@ -79,4 +85,5 @@ export var EmptyObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return EmptyObservable;
 }(Observable));
+export { EmptyObservable };
 //# sourceMappingURL=EmptyObservable.js.map 

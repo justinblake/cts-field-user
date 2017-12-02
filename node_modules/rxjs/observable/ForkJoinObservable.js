@@ -1,25 +1,32 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Observable_1 = require('../Observable');
-var EmptyObservable_1 = require('./EmptyObservable');
-var isArray_1 = require('../util/isArray');
-var subscribeToResult_1 = require('../util/subscribeToResult');
-var OuterSubscriber_1 = require('../OuterSubscriber');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Observable_1 = require("../Observable");
+var EmptyObservable_1 = require("./EmptyObservable");
+var isArray_1 = require("../util/isArray");
+var subscribeToResult_1 = require("../util/subscribeToResult");
+var OuterSubscriber_1 = require("../OuterSubscriber");
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
  * @hide true
  */
-var ForkJoinObservable = (function (_super) {
+var ForkJoinObservable = /** @class */ (function (_super) {
     __extends(ForkJoinObservable, _super);
     function ForkJoinObservable(sources, resultSelector) {
-        _super.call(this);
-        this.sources = sources;
-        this.resultSelector = resultSelector;
+        var _this = _super.call(this) || this;
+        _this.sources = sources;
+        _this.resultSelector = resultSelector;
+        return _this;
     }
     /* tslint:enable:max-line-length */
     /**
@@ -122,7 +129,7 @@ var ForkJoinObservable = (function (_super) {
     ForkJoinObservable.create = function () {
         var sources = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            sources[_i - 0] = arguments[_i];
+            sources[_i] = arguments[_i];
         }
         if (sources === null || arguments.length === 0) {
             return new EmptyObservable_1.EmptyObservable();
@@ -152,25 +159,26 @@ exports.ForkJoinObservable = ForkJoinObservable;
  * @ignore
  * @extends {Ignored}
  */
-var ForkJoinSubscriber = (function (_super) {
+var ForkJoinSubscriber = /** @class */ (function (_super) {
     __extends(ForkJoinSubscriber, _super);
     function ForkJoinSubscriber(destination, sources, resultSelector) {
-        _super.call(this, destination);
-        this.sources = sources;
-        this.resultSelector = resultSelector;
-        this.completed = 0;
-        this.haveValues = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.sources = sources;
+        _this.resultSelector = resultSelector;
+        _this.completed = 0;
+        _this.haveValues = 0;
         var len = sources.length;
-        this.total = len;
-        this.values = new Array(len);
+        _this.total = len;
+        _this.values = new Array(len);
         for (var i = 0; i < len; i++) {
             var source = sources[i];
-            var innerSubscription = subscribeToResult_1.subscribeToResult(this, source, null, i);
+            var innerSubscription = subscribeToResult_1.subscribeToResult(_this, source, null, i);
             if (innerSubscription) {
                 innerSubscription.outerIndex = i;
-                this.add(innerSubscription);
+                _this.add(innerSubscription);
             }
         }
+        return _this;
     }
     ForkJoinSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
         this.values[outerIndex] = innerValue;

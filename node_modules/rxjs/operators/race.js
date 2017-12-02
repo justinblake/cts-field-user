@@ -1,6 +1,7 @@
 "use strict";
-var isArray_1 = require('../util/isArray');
-var race_1 = require('../observable/race');
+Object.defineProperty(exports, "__esModule", { value: true });
+var isArray_1 = require("../util/isArray");
+var race_1 = require("../observable/race");
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that mirrors the first source Observable to emit an item
@@ -13,7 +14,7 @@ var race_1 = require('../observable/race');
 function race() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     return function raceOperatorFunction(source) {
         // if the only argument is an array, it was most likely called with

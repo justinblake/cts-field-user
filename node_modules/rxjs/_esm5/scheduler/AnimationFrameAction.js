@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START ._AsyncAction,.._util_AnimationFrame PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { AsyncAction } from './AsyncAction';
 import { AnimationFrame } from '../util/AnimationFrame';
 /**
@@ -13,12 +18,13 @@ import { AnimationFrame } from '../util/AnimationFrame';
  * @ignore
  * @extends {Ignored}
  */
-export var AnimationFrameAction = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AnimationFrameAction = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AnimationFrameAction, _super);
     function AnimationFrameAction(scheduler, work) {
-        _super.call(this, scheduler, work);
-        this.scheduler = scheduler;
-        this.work = work;
+        var _this = _super.call(this, scheduler, work) || this;
+        _this.scheduler = scheduler;
+        _this.work = work;
+        return _this;
     }
     AnimationFrameAction.prototype.requestAsyncId = function (scheduler, id, delay) {
         if (delay === void 0) {
@@ -57,4 +63,5 @@ export var AnimationFrameAction = /*@__PURE__*/ (/*@__PURE__*/ function (_super)
     };
     return AnimationFrameAction;
 }(AsyncAction));
+export { AnimationFrameAction };
 //# sourceMappingURL=AnimationFrameAction.js.map 

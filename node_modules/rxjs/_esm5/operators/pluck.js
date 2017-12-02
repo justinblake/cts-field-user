@@ -29,7 +29,7 @@ import { map } from './map';
 export function pluck() {
     var properties = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        properties[_i - 0] = arguments[_i];
+        properties[_i] = arguments[_i];
     }
     var length = properties.length;
     if (length === 0) {

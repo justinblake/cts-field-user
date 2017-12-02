@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to the same Observable which is flattened multiple
@@ -53,7 +59,7 @@ function switchMapTo(innerObservable, resultSelector) {
     return function (source) { return source.lift(new SwitchMapToOperator(innerObservable, resultSelector)); };
 }
 exports.switchMapTo = switchMapTo;
-var SwitchMapToOperator = (function () {
+var SwitchMapToOperator = /** @class */ (function () {
     function SwitchMapToOperator(observable, resultSelector) {
         this.observable = observable;
         this.resultSelector = resultSelector;
@@ -68,13 +74,14 @@ var SwitchMapToOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var SwitchMapToSubscriber = (function (_super) {
+var SwitchMapToSubscriber = /** @class */ (function (_super) {
     __extends(SwitchMapToSubscriber, _super);
     function SwitchMapToSubscriber(destination, inner, resultSelector) {
-        _super.call(this, destination);
-        this.inner = inner;
-        this.resultSelector = resultSelector;
-        this.index = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.inner = inner;
+        _this.resultSelector = resultSelector;
+        _this.index = 0;
+        return _this;
     }
     SwitchMapToSubscriber.prototype._next = function (value) {
         var innerSubscription = this.innerSubscription;

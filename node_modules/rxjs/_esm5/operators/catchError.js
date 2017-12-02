@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._OuterSubscriber,.._util_subscribeToResult PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { OuterSubscriber } from '../OuterSubscriber';
 import { subscribeToResult } from '../util/subscribeToResult';
 /**
@@ -89,9 +94,10 @@ var CatchOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var CatchSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(CatchSubscriber, _super);
     function CatchSubscriber(destination, selector, caught) {
-        _super.call(this, destination);
-        this.selector = selector;
-        this.caught = caught;
+        var _this = _super.call(this, destination) || this;
+        _this.selector = selector;
+        _this.caught = caught;
+        return _this;
     }
     // NOTE: overriding `error` instead of `_error` because we don't want
     // to have this flag this subscriber as `isStopped`. We can mimic the

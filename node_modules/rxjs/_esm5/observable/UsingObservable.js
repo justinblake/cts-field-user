@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Observable,.._util_subscribeToResult,.._OuterSubscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 import { subscribeToResult } from '../util/subscribeToResult';
 import { OuterSubscriber } from '../OuterSubscriber';
@@ -14,12 +19,13 @@ import { OuterSubscriber } from '../OuterSubscriber';
  * @extends {Ignored}
  * @hide true
  */
-export var UsingObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var UsingObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(UsingObservable, _super);
     function UsingObservable(resourceFactory, observableFactory) {
-        _super.call(this);
-        this.resourceFactory = resourceFactory;
-        this.observableFactory = observableFactory;
+        var _this = _super.call(this) || this;
+        _this.resourceFactory = resourceFactory;
+        _this.observableFactory = observableFactory;
+        return _this;
     }
     UsingObservable.create = function (resourceFactory, observableFactory) {
         return new UsingObservable(resourceFactory, observableFactory);
@@ -37,14 +43,16 @@ export var UsingObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return UsingObservable;
 }(Observable));
+export { UsingObservable };
 var UsingSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(UsingSubscriber, _super);
     function UsingSubscriber(destination, resource, observableFactory) {
-        _super.call(this, destination);
-        this.resource = resource;
-        this.observableFactory = observableFactory;
+        var _this = _super.call(this, destination) || this;
+        _this.resource = resource;
+        _this.observableFactory = observableFactory;
         destination.add(resource);
-        this.tryUse();
+        _this.tryUse();
+        return _this;
     }
     UsingSubscriber.prototype.tryUse = function () {
         try {

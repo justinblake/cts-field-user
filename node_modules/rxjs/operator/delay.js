@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var delay_1 = require('../operators/delay');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var delay_1 = require("../operators/delay");
 /**
  * Delays the emission of items from the source Observable by a given timeout or
  * until a given Date.

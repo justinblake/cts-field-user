@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_isNumeric,.._Observable,.._scheduler_async PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { isNumeric } from '../util/isNumeric';
 import { Observable } from '../Observable';
 import { async } from '../scheduler/async';
@@ -14,7 +19,7 @@ import { async } from '../scheduler/async';
  * @extends {Ignored}
  * @hide true
  */
-export var IntervalObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var IntervalObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(IntervalObservable, _super);
     function IntervalObservable(period, scheduler) {
         if (period === void 0) {
@@ -23,15 +28,16 @@ export var IntervalObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
         if (scheduler === void 0) {
             scheduler = async;
         }
-        _super.call(this);
-        this.period = period;
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.period = period;
+        _this.scheduler = scheduler;
         if (!isNumeric(period) || period < 0) {
-            this.period = 0;
+            _this.period = 0;
         }
         if (!scheduler || typeof scheduler.schedule !== 'function') {
-            this.scheduler = async;
+            _this.scheduler = async;
         }
+        return _this;
     }
     /**
      * Creates an Observable that emits sequential numbers every specified
@@ -94,4 +100,5 @@ export var IntervalObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return IntervalObservable;
 }(Observable));
+export { IntervalObservable };
 //# sourceMappingURL=IntervalObservable.js.map 

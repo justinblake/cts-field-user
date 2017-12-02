@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_subscribeToResult,.._OuterSubscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { subscribeToResult } from '../util/subscribeToResult';
 import { OuterSubscriber } from '../OuterSubscriber';
 /* tslint:enable:max-line-length */
@@ -79,7 +84,7 @@ export function mergeMap(project, resultSelector, concurrent) {
         return source.lift(new MergeMapOperator(project, resultSelector, concurrent));
     };
 }
-export var MergeMapOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var MergeMapOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function MergeMapOperator(project, resultSelector, concurrent) {
         if (concurrent === void 0) {
             concurrent = Number.POSITIVE_INFINITY;
@@ -93,25 +98,27 @@ export var MergeMapOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return MergeMapOperator;
 }());
+export { MergeMapOperator };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
  * @extends {Ignored}
  */
-export var MergeMapSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var MergeMapSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(MergeMapSubscriber, _super);
     function MergeMapSubscriber(destination, project, resultSelector, concurrent) {
         if (concurrent === void 0) {
             concurrent = Number.POSITIVE_INFINITY;
         }
-        _super.call(this, destination);
-        this.project = project;
-        this.resultSelector = resultSelector;
-        this.concurrent = concurrent;
-        this.hasCompleted = false;
-        this.buffer = [];
-        this.active = 0;
-        this.index = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.project = project;
+        _this.resultSelector = resultSelector;
+        _this.concurrent = concurrent;
+        _this.hasCompleted = false;
+        _this.buffer = [];
+        _this.active = 0;
+        _this.index = 0;
+        return _this;
     }
     MergeMapSubscriber.prototype._next = function (value) {
         if (this.active < this.concurrent) {
@@ -175,4 +182,5 @@ export var MergeMapSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return MergeMapSubscriber;
 }(OuterSubscriber));
+export { MergeMapSubscriber };
 //# sourceMappingURL=mergeMap.js.map 

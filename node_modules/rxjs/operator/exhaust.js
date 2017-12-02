@@ -1,5 +1,6 @@
 "use strict";
-var exhaust_1 = require('../operators/exhaust');
+Object.defineProperty(exports, "__esModule", { value: true });
+var exhaust_1 = require("../operators/exhaust");
 /**
  * Converts a higher-order Observable into a first-order Observable by dropping
  * inner Observables while the previous inner Observable has not yet completed.

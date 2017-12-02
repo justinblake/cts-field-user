@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber,.._Notification PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 import { Notification } from '../Notification';
 /**
@@ -62,7 +67,7 @@ export function observeOn(scheduler, delay) {
         return source.lift(new ObserveOnOperator(scheduler, delay));
     };
 }
-export var ObserveOnOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var ObserveOnOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function ObserveOnOperator(scheduler, delay) {
         if (delay === void 0) {
             delay = 0;
@@ -75,20 +80,22 @@ export var ObserveOnOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return ObserveOnOperator;
 }());
+export { ObserveOnOperator };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
  * @extends {Ignored}
  */
-export var ObserveOnSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var ObserveOnSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(ObserveOnSubscriber, _super);
     function ObserveOnSubscriber(destination, scheduler, delay) {
         if (delay === void 0) {
             delay = 0;
         }
-        _super.call(this, destination);
-        this.scheduler = scheduler;
-        this.delay = delay;
+        var _this = _super.call(this, destination) || this;
+        _this.scheduler = scheduler;
+        _this.delay = delay;
+        return _this;
     }
     ObserveOnSubscriber.dispatch = function (arg) {
         var notification = arg.notification, destination = arg.destination;
@@ -109,11 +116,13 @@ export var ObserveOnSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) 
     };
     return ObserveOnSubscriber;
 }(Subscriber));
-export var ObserveOnMessage = /*@__PURE__*/ (/*@__PURE__*/ function () {
+export { ObserveOnSubscriber };
+var ObserveOnMessage = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function ObserveOnMessage(notification, destination) {
         this.notification = notification;
         this.destination = destination;
     }
     return ObserveOnMessage;
 }());
+export { ObserveOnMessage };
 //# sourceMappingURL=observeOn.js.map 

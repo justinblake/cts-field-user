@@ -1,5 +1,6 @@
 "use strict";
-var dematerialize_1 = require('../operators/dematerialize');
+Object.defineProperty(exports, "__esModule", { value: true });
+var dematerialize_1 = require("../operators/dematerialize");
 /**
  * Converts an Observable of {@link Notification} objects into the emissions
  * that they represent.

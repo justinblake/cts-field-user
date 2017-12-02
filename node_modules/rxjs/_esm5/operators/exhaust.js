@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._OuterSubscriber,.._util_subscribeToResult PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { OuterSubscriber } from '../OuterSubscriber';
 import { subscribeToResult } from '../util/subscribeToResult';
 /**
@@ -62,9 +67,10 @@ var SwitchFirstOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var SwitchFirstSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(SwitchFirstSubscriber, _super);
     function SwitchFirstSubscriber(destination) {
-        _super.call(this, destination);
-        this.hasCompleted = false;
-        this.hasSubscription = false;
+        var _this = _super.call(this, destination) || this;
+        _this.hasCompleted = false;
+        _this.hasSubscription = false;
+        return _this;
     }
     SwitchFirstSubscriber.prototype._next = function (value) {
         if (!this.hasSubscription) {

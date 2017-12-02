@@ -1,30 +1,36 @@
 /** PURE_IMPORTS_START .._Scheduler PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Scheduler } from '../Scheduler';
-export var AsyncScheduler = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AsyncScheduler = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AsyncScheduler, _super);
     function AsyncScheduler() {
-        _super.apply(this, arguments);
-        this.actions = [];
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.actions = [];
         /**
          * A flag to indicate whether the Scheduler is currently executing a batch of
          * queued actions.
          * @type {boolean}
          */
-        this.active = false;
+        _this.active = false;
         /**
          * An internal ID used to track the latest asynchronous task such as those
          * coming from `setTimeout`, `setInterval`, `requestAnimationFrame`, and
          * others.
          * @type {any}
          */
-        this.scheduled = undefined;
+        _this.scheduled = undefined;
+        return _this;
     }
     AsyncScheduler.prototype.flush = function (action) {
         var actions = this.actions;
@@ -49,4 +55,5 @@ export var AsyncScheduler = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return AsyncScheduler;
 }(Scheduler));
+export { AsyncScheduler };
 //# sourceMappingURL=AsyncScheduler.js.map 

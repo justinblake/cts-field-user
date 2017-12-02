@@ -1,15 +1,21 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var ArrayObservable_1 = require('../observable/ArrayObservable');
-var isArray_1 = require('../util/isArray');
-var Subscriber_1 = require('../Subscriber');
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
-var iterator_1 = require('../symbol/iterator');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var ArrayObservable_1 = require("../observable/ArrayObservable");
+var isArray_1 = require("../util/isArray");
+var Subscriber_1 = require("../Subscriber");
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
+var iterator_1 = require("../symbol/iterator");
 /* tslint:enable:max-line-length */
 /**
  * @param observables
@@ -20,7 +26,7 @@ var iterator_1 = require('../symbol/iterator');
 function zip() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     return function zipOperatorFunction(source) {
         return source.lift.call(zipStatic.apply(void 0, [source].concat(observables)));
@@ -62,7 +68,7 @@ exports.zip = zip;
 function zipStatic() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     var project = observables[observables.length - 1];
     if (typeof project === 'function') {
@@ -71,7 +77,7 @@ function zipStatic() {
     return new ArrayObservable_1.ArrayObservable(observables).lift(new ZipOperator(project));
 }
 exports.zipStatic = zipStatic;
-var ZipOperator = (function () {
+var ZipOperator = /** @class */ (function () {
     function ZipOperator(project) {
         this.project = project;
     }
@@ -86,15 +92,16 @@ exports.ZipOperator = ZipOperator;
  * @ignore
  * @extends {Ignored}
  */
-var ZipSubscriber = (function (_super) {
+var ZipSubscriber = /** @class */ (function (_super) {
     __extends(ZipSubscriber, _super);
     function ZipSubscriber(destination, project, values) {
         if (values === void 0) { values = Object.create(null); }
-        _super.call(this, destination);
-        this.iterators = [];
-        this.active = 0;
-        this.project = (typeof project === 'function') ? project : null;
-        this.values = values;
+        var _this = _super.call(this, destination) || this;
+        _this.iterators = [];
+        _this.active = 0;
+        _this.project = (typeof project === 'function') ? project : null;
+        _this.values = values;
+        return _this;
     }
     ZipSubscriber.prototype._next = function (value) {
         var iterators = this.iterators;
@@ -183,7 +190,7 @@ var ZipSubscriber = (function (_super) {
     return ZipSubscriber;
 }(Subscriber_1.Subscriber));
 exports.ZipSubscriber = ZipSubscriber;
-var StaticIterator = (function () {
+var StaticIterator = /** @class */ (function () {
     function StaticIterator(iterator) {
         this.iterator = iterator;
         this.nextResult = iterator.next();
@@ -202,7 +209,7 @@ var StaticIterator = (function () {
     };
     return StaticIterator;
 }());
-var StaticArrayIterator = (function () {
+var StaticArrayIterator = /** @class */ (function () {
     function StaticArrayIterator(array) {
         this.array = array;
         this.index = 0;
@@ -230,15 +237,16 @@ var StaticArrayIterator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var ZipBufferIterator = (function (_super) {
+var ZipBufferIterator = /** @class */ (function (_super) {
     __extends(ZipBufferIterator, _super);
     function ZipBufferIterator(destination, parent, observable) {
-        _super.call(this, destination);
-        this.parent = parent;
-        this.observable = observable;
-        this.stillUnsubscribed = true;
-        this.buffer = [];
-        this.isComplete = false;
+        var _this = _super.call(this, destination) || this;
+        _this.parent = parent;
+        _this.observable = observable;
+        _this.stillUnsubscribed = true;
+        _this.buffer = [];
+        _this.isComplete = false;
+        return _this;
     }
     ZipBufferIterator.prototype[iterator_1.iterator] = function () {
         return this;

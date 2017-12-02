@@ -1,15 +1,16 @@
 "use strict";
-var root_1 = require('./util/root');
-var toSubscriber_1 = require('./util/toSubscriber');
-var observable_1 = require('./symbol/observable');
-var pipe_1 = require('./util/pipe');
+Object.defineProperty(exports, "__esModule", { value: true });
+var root_1 = require("./util/root");
+var toSubscriber_1 = require("./util/toSubscriber");
+var observable_1 = require("./symbol/observable");
+var pipe_1 = require("./util/pipe");
 /**
  * A representation of any set of values over any amount of time. This is the most basic building block
  * of RxJS.
  *
  * @class Observable<T>
  */
-var Observable = (function () {
+var Observable = /** @class */ (function () {
     /**
      * @constructor
      * @param {Function} subscribe the function that is called when the Observable is
@@ -260,7 +261,7 @@ var Observable = (function () {
     Observable.prototype.pipe = function () {
         var operations = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            operations[_i - 0] = arguments[_i];
+            operations[_i] = arguments[_i];
         }
         if (operations.length === 0) {
             return this;

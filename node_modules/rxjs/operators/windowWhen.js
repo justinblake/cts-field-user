@@ -1,14 +1,20 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subject_1 = require('../Subject');
-var tryCatch_1 = require('../util/tryCatch');
-var errorObject_1 = require('../util/errorObject');
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subject_1 = require("../Subject");
+var tryCatch_1 = require("../util/tryCatch");
+var errorObject_1 = require("../util/errorObject");
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /**
  * Branch out the source Observable values as a nested Observable using a
  * factory function of closing Observables to determine when to start a new
@@ -53,7 +59,7 @@ function windowWhen(closingSelector) {
     };
 }
 exports.windowWhen = windowWhen;
-var WindowOperator = (function () {
+var WindowOperator = /** @class */ (function () {
     function WindowOperator(closingSelector) {
         this.closingSelector = closingSelector;
     }
@@ -67,13 +73,14 @@ var WindowOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var WindowSubscriber = (function (_super) {
+var WindowSubscriber = /** @class */ (function (_super) {
     __extends(WindowSubscriber, _super);
     function WindowSubscriber(destination, closingSelector) {
-        _super.call(this, destination);
-        this.destination = destination;
-        this.closingSelector = closingSelector;
-        this.openWindow();
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        _this.closingSelector = closingSelector;
+        _this.openWindow();
+        return _this;
     }
     WindowSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
         this.openWindow(innerSub);

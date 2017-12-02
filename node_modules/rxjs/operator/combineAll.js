@@ -1,5 +1,6 @@
 "use strict";
-var combineAll_1 = require('../operators/combineAll');
+Object.defineProperty(exports, "__esModule", { value: true });
+var combineAll_1 = require("../operators/combineAll");
 /**
  * Converts a higher-order Observable into a first-order Observable by waiting
  * for the outer Observable to complete, then applying {@link combineLatest}.

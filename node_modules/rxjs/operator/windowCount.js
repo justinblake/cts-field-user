@@ -1,5 +1,6 @@
 "use strict";
-var windowCount_1 = require('../operators/windowCount');
+Object.defineProperty(exports, "__esModule", { value: true });
+var windowCount_1 = require("../operators/windowCount");
 /**
  * Branch out the source Observable values as a nested Observable with each
  * nested Observable emitting at most `windowSize` values.

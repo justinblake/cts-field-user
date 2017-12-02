@@ -31,6 +31,7 @@ function getXMLHttpRequest() {
                     }
                 }
                 catch (e) {
+                    //suppress exceptions
                 }
             }
             return new root.ActiveXObject(progId);

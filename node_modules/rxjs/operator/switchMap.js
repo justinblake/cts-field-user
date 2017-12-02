@@ -1,5 +1,6 @@
 "use strict";
-var switchMap_1 = require('../operators/switchMap');
+Object.defineProperty(exports, "__esModule", { value: true });
+var switchMap_1 = require("../operators/switchMap");
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output

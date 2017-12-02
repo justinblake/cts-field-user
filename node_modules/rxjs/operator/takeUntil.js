@@ -1,5 +1,6 @@
 "use strict";
-var takeUntil_1 = require('../operators/takeUntil');
+Object.defineProperty(exports, "__esModule", { value: true });
+var takeUntil_1 = require("../operators/takeUntil");
 /**
  * Emits the values emitted by the source Observable until a `notifier`
  * Observable emits a value.

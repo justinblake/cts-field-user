@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Observable,.._util_isScheduler PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 import { isScheduler } from '../util/isScheduler';
 var selfSelector = function (value) { return value; };
@@ -14,15 +19,16 @@ var selfSelector = function (value) { return value; };
  * @extends {Ignored}
  * @hide true
  */
-export var GenerateObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var GenerateObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(GenerateObservable, _super);
     function GenerateObservable(initialState, condition, iterate, resultSelector, scheduler) {
-        _super.call(this);
-        this.initialState = initialState;
-        this.condition = condition;
-        this.iterate = iterate;
-        this.resultSelector = resultSelector;
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.initialState = initialState;
+        _this.condition = condition;
+        _this.iterate = iterate;
+        _this.resultSelector = resultSelector;
+        _this.scheduler = scheduler;
+        return _this;
     }
     GenerateObservable.create = function (initialStateOrOptions, condition, iterate, resultSelectorOrObservable, scheduler) {
         if (arguments.length == 1) {
@@ -134,4 +140,5 @@ export var GenerateObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return GenerateObservable;
 }(Observable));
+export { GenerateObservable };
 //# sourceMappingURL=GenerateObservable.js.map 

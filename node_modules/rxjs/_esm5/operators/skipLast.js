@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber,.._util_ArgumentOutOfRangeError PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 import { ArgumentOutOfRangeError } from '../util/ArgumentOutOfRangeError';
 /**
@@ -70,10 +75,11 @@ var SkipLastOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var SkipLastSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(SkipLastSubscriber, _super);
     function SkipLastSubscriber(destination, _skipCount) {
-        _super.call(this, destination);
-        this._skipCount = _skipCount;
-        this._count = 0;
-        this._ring = new Array(_skipCount);
+        var _this = _super.call(this, destination) || this;
+        _this._skipCount = _skipCount;
+        _this._count = 0;
+        _this._ring = new Array(_skipCount);
+        return _this;
     }
     SkipLastSubscriber.prototype._next = function (value) {
         var skipCount = this._skipCount;

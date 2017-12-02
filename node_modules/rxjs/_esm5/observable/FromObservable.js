@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_isArray,.._util_isArrayLike,.._util_isPromise,._PromiseObservable,._IteratorObservable,._ArrayObservable,._ArrayLikeObservable,.._symbol_iterator,.._Observable,.._operators_observeOn,.._symbol_observable PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { isArray } from '../util/isArray';
 import { isArrayLike } from '../util/isArrayLike';
 import { isPromise } from '../util/isPromise';
@@ -22,12 +27,13 @@ import { observable as Symbol_observable } from '../symbol/observable';
  * @extends {Ignored}
  * @hide true
  */
-export var FromObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var FromObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(FromObservable, _super);
     function FromObservable(ish, scheduler) {
-        _super.call(this, null);
-        this.ish = ish;
-        this.scheduler = scheduler;
+        var _this = _super.call(this, null) || this;
+        _this.ish = ish;
+        _this.scheduler = scheduler;
+        return _this;
     }
     /**
      * Creates an Observable from an Array, an array-like object, a Promise, an
@@ -120,4 +126,5 @@ export var FromObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return FromObservable;
 }(Observable));
+export { FromObservable };
 //# sourceMappingURL=FromObservable.js.map 

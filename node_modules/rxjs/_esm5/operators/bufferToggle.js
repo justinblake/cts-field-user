@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscription,.._util_subscribeToResult,.._OuterSubscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscription } from '../Subscription';
 import { subscribeToResult } from '../util/subscribeToResult';
 import { OuterSubscriber } from '../OuterSubscriber';
@@ -70,11 +75,12 @@ var BufferToggleOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var BufferToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(BufferToggleSubscriber, _super);
     function BufferToggleSubscriber(destination, openings, closingSelector) {
-        _super.call(this, destination);
-        this.openings = openings;
-        this.closingSelector = closingSelector;
-        this.contexts = [];
-        this.add(subscribeToResult(this, openings));
+        var _this = _super.call(this, destination) || this;
+        _this.openings = openings;
+        _this.closingSelector = closingSelector;
+        _this.contexts = [];
+        _this.add(subscribeToResult(_this, openings));
+        return _this;
     }
     BufferToggleSubscriber.prototype._next = function (value) {
         var contexts = this.contexts;
@@ -86,10 +92,10 @@ var BufferToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     BufferToggleSubscriber.prototype._error = function (err) {
         var contexts = this.contexts;
         while (contexts.length > 0) {
-            var context = contexts.shift();
-            context.subscription.unsubscribe();
-            context.buffer = null;
-            context.subscription = null;
+            var context_1 = contexts.shift();
+            context_1.subscription.unsubscribe();
+            context_1.buffer = null;
+            context_1.subscription = null;
         }
         this.contexts = null;
         _super.prototype._error.call(this, err);
@@ -97,11 +103,11 @@ var BufferToggleSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     BufferToggleSubscriber.prototype._complete = function () {
         var contexts = this.contexts;
         while (contexts.length > 0) {
-            var context = contexts.shift();
-            this.destination.next(context.buffer);
-            context.subscription.unsubscribe();
-            context.buffer = null;
-            context.subscription = null;
+            var context_2 = contexts.shift();
+            this.destination.next(context_2.buffer);
+            context_2.subscription.unsubscribe();
+            context_2.buffer = null;
+            context_2.subscription = null;
         }
         this.contexts = null;
         _super.prototype._complete.call(this);

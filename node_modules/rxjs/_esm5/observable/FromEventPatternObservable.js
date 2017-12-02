@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_isFunction,.._Observable,.._Subscription PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { isFunction } from '../util/isFunction';
 import { Observable } from '../Observable';
 import { Subscription } from '../Subscription';
@@ -14,13 +19,14 @@ import { Subscription } from '../Subscription';
  * @extends {Ignored}
  * @hide true
  */
-export var FromEventPatternObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var FromEventPatternObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(FromEventPatternObservable, _super);
     function FromEventPatternObservable(addHandler, removeHandler, selector) {
-        _super.call(this);
-        this.addHandler = addHandler;
-        this.removeHandler = removeHandler;
-        this.selector = selector;
+        var _this = _super.call(this) || this;
+        _this.addHandler = addHandler;
+        _this.removeHandler = removeHandler;
+        _this.selector = selector;
+        return _this;
     }
     /**
      * Creates an Observable from an API based on addHandler/removeHandler
@@ -79,7 +85,7 @@ export var FromEventPatternObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_
         var handler = !!this.selector ? function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i - 0] = arguments[_i];
+                args[_i] = arguments[_i];
             }
             _this._callSelector(subscriber, args);
         } : function (e) { subscriber.next(e); };
@@ -111,4 +117,5 @@ export var FromEventPatternObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_
     };
     return FromEventPatternObservable;
 }(Observable));
+export { FromEventPatternObservable };
 //# sourceMappingURL=FromEventPatternObservable.js.map 

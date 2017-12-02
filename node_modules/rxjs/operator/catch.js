@@ -1,5 +1,6 @@
 "use strict";
-var catchError_1 = require('../operators/catchError');
+Object.defineProperty(exports, "__esModule", { value: true });
+var catchError_1 = require("../operators/catchError");
 /**
  * Catches errors on the observable to be handled by returning a new observable or throwing an error.
  *

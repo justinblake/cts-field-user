@@ -1,5 +1,6 @@
 "use strict";
-var ReplaySubject_1 = require('../ReplaySubject');
+Object.defineProperty(exports, "__esModule", { value: true });
+var ReplaySubject_1 = require("../ReplaySubject");
 /**
  * @method shareReplay
  * @owner Observable

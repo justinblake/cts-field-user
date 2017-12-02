@@ -1,5 +1,6 @@
 "use strict";
-var map_1 = require('../operators/map');
+Object.defineProperty(exports, "__esModule", { value: true });
+var map_1 = require("../operators/map");
 /**
  * Applies a given `project` function to each value emitted by the source
  * Observable, and emits the resulting values as an Observable.

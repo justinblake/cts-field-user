@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._observable_ArrayObservable,.._util_isArray,.._OuterSubscriber,.._util_subscribeToResult PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { ArrayObservable } from '../observable/ArrayObservable';
 import { isArray } from '../util/isArray';
 import { OuterSubscriber } from '../OuterSubscriber';
@@ -58,7 +63,7 @@ var none = {};
 export function combineLatest() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     var project = null;
     if (typeof observables[observables.length - 1] === 'function') {
@@ -71,7 +76,7 @@ export function combineLatest() {
     }
     return function (source) { return source.lift.call(new ArrayObservable([source].concat(observables)), new CombineLatestOperator(project)); };
 }
-export var CombineLatestOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var CombineLatestOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function CombineLatestOperator(project) {
         this.project = project;
     }
@@ -80,19 +85,21 @@ export var CombineLatestOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return CombineLatestOperator;
 }());
+export { CombineLatestOperator };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
  * @extends {Ignored}
  */
-export var CombineLatestSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var CombineLatestSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(CombineLatestSubscriber, _super);
     function CombineLatestSubscriber(destination, project) {
-        _super.call(this, destination);
-        this.project = project;
-        this.active = 0;
-        this.values = [];
-        this.observables = [];
+        var _this = _super.call(this, destination) || this;
+        _this.project = project;
+        _this.active = 0;
+        _this.values = [];
+        _this.observables = [];
+        return _this;
     }
     CombineLatestSubscriber.prototype._next = function (observable) {
         this.values.push(none);
@@ -147,4 +154,5 @@ export var CombineLatestSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_sup
     };
     return CombineLatestSubscriber;
 }(OuterSubscriber));
+export { CombineLatestSubscriber };
 //# sourceMappingURL=combineLatest.js.map 

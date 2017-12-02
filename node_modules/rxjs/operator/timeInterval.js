@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var timeInterval_1 = require('../operators/timeInterval');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var timeInterval_1 = require("../operators/timeInterval");
 exports.TimeInterval = timeInterval_1.TimeInterval;
 /**
  * @param scheduler

@@ -163,8 +163,8 @@ export class TestScheduler extends VirtualTimeScheduler {
         const subIndex = marbles.indexOf('^');
         const frameOffset = subIndex === -1 ? 0 : (subIndex * -this.frameTimeFactor);
         const getValue = typeof values !== 'object' ?
-                (x) => x :
-                (x) => {
+            (x) => x :
+            (x) => {
                 // Support Observable-of-Observables
                 if (materializeInnerObservables && values[x] instanceof ColdObservable) {
                     return values[x].messages;

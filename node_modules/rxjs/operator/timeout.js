@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var timeout_1 = require('../operators/timeout');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var timeout_1 = require("../operators/timeout");
 /**
  *
  * Errors if Observable does not emit a value in given time span.

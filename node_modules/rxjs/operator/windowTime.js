@@ -1,8 +1,9 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var isNumeric_1 = require('../util/isNumeric');
-var isScheduler_1 = require('../util/isScheduler');
-var windowTime_1 = require('../operators/windowTime');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var isNumeric_1 = require("../util/isNumeric");
+var isScheduler_1 = require("../util/isScheduler");
+var windowTime_1 = require("../operators/windowTime");
 function windowTime(windowTimeSpan) {
     var scheduler = async_1.async;
     var windowCreationInterval = null;

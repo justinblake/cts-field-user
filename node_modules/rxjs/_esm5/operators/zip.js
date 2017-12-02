@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._observable_ArrayObservable,.._util_isArray,.._Subscriber,.._OuterSubscriber,.._util_subscribeToResult,.._symbol_iterator PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { ArrayObservable } from '../observable/ArrayObservable';
 import { isArray } from '../util/isArray';
 import { Subscriber } from '../Subscriber';
@@ -22,7 +27,7 @@ import { iterator as Symbol_iterator } from '../symbol/iterator';
 export function zip() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     return function zipOperatorFunction(source) {
         return source.lift.call(zipStatic.apply(void 0, [source].concat(observables)));
@@ -63,7 +68,7 @@ export function zip() {
 export function zipStatic() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     var project = observables[observables.length - 1];
     if (typeof project === 'function') {
@@ -71,7 +76,7 @@ export function zipStatic() {
     }
     return new ArrayObservable(observables).lift(new ZipOperator(project));
 }
-export var ZipOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var ZipOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function ZipOperator(project) {
         this.project = project;
     }
@@ -80,22 +85,24 @@ export var ZipOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return ZipOperator;
 }());
+export { ZipOperator };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
  * @extends {Ignored}
  */
-export var ZipSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var ZipSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(ZipSubscriber, _super);
     function ZipSubscriber(destination, project, values) {
         if (values === void 0) {
             values = Object.create(null);
         }
-        _super.call(this, destination);
-        this.iterators = [];
-        this.active = 0;
-        this.project = (typeof project === 'function') ? project : null;
-        this.values = values;
+        var _this = _super.call(this, destination) || this;
+        _this.iterators = [];
+        _this.active = 0;
+        _this.project = (typeof project === 'function') ? project : null;
+        _this.values = values;
+        return _this;
     }
     ZipSubscriber.prototype._next = function (value) {
         var iterators = this.iterators;
@@ -183,6 +190,7 @@ export var ZipSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return ZipSubscriber;
 }(Subscriber));
+export { ZipSubscriber };
 var StaticIterator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function StaticIterator(iterator) {
         this.iterator = iterator;
@@ -233,12 +241,13 @@ var StaticArrayIterator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var ZipBufferIterator = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(ZipBufferIterator, _super);
     function ZipBufferIterator(destination, parent, observable) {
-        _super.call(this, destination);
-        this.parent = parent;
-        this.observable = observable;
-        this.stillUnsubscribed = true;
-        this.buffer = [];
-        this.isComplete = false;
+        var _this = _super.call(this, destination) || this;
+        _this.parent = parent;
+        _this.observable = observable;
+        _this.stillUnsubscribed = true;
+        _this.buffer = [];
+        _this.isComplete = false;
+        return _this;
     }
     ZipBufferIterator.prototype[Symbol_iterator] = function () {
         return this;

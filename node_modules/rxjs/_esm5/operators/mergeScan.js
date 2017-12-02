@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_tryCatch,.._util_errorObject,.._util_subscribeToResult,.._OuterSubscriber PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { tryCatch } from '../util/tryCatch';
 import { errorObject } from '../util/errorObject';
 import { subscribeToResult } from '../util/subscribeToResult';
@@ -47,7 +52,7 @@ export function mergeScan(accumulator, seed, concurrent) {
     }
     return function (source) { return source.lift(new MergeScanOperator(accumulator, seed, concurrent)); };
 }
-export var MergeScanOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var MergeScanOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function MergeScanOperator(accumulator, seed, concurrent) {
         this.accumulator = accumulator;
         this.seed = seed;
@@ -58,23 +63,25 @@ export var MergeScanOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return MergeScanOperator;
 }());
+export { MergeScanOperator };
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
  * @extends {Ignored}
  */
-export var MergeScanSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var MergeScanSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(MergeScanSubscriber, _super);
     function MergeScanSubscriber(destination, accumulator, acc, concurrent) {
-        _super.call(this, destination);
-        this.accumulator = accumulator;
-        this.acc = acc;
-        this.concurrent = concurrent;
-        this.hasValue = false;
-        this.hasCompleted = false;
-        this.buffer = [];
-        this.active = 0;
-        this.index = 0;
+        var _this = _super.call(this, destination) || this;
+        _this.accumulator = accumulator;
+        _this.acc = acc;
+        _this.concurrent = concurrent;
+        _this.hasValue = false;
+        _this.hasCompleted = false;
+        _this.buffer = [];
+        _this.active = 0;
+        _this.index = 0;
+        return _this;
     }
     MergeScanSubscriber.prototype._next = function (value) {
         if (this.active < this.concurrent) {
@@ -127,4 +134,5 @@ export var MergeScanSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) 
     };
     return MergeScanSubscriber;
 }(OuterSubscriber));
+export { MergeScanSubscriber };
 //# sourceMappingURL=mergeScan.js.map 

@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber,.._Notification PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 import { Notification } from '../Notification';
 /**
@@ -73,7 +78,7 @@ var MaterializeOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var MaterializeSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(MaterializeSubscriber, _super);
     function MaterializeSubscriber(destination) {
-        _super.call(this, destination);
+        return _super.call(this, destination) || this;
     }
     MaterializeSubscriber.prototype._next = function (value) {
         this.destination.next(Notification.createNext(value));

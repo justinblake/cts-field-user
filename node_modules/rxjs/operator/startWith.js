@@ -1,5 +1,6 @@
 "use strict";
-var startWith_1 = require('../operators/startWith');
+Object.defineProperty(exports, "__esModule", { value: true });
+var startWith_1 = require("../operators/startWith");
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits the items you specify as arguments before it begins to emit
@@ -18,7 +19,7 @@ var startWith_1 = require('../operators/startWith');
 function startWith() {
     var array = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        array[_i - 0] = arguments[_i];
+        array[_i] = arguments[_i];
     }
     return startWith_1.startWith.apply(void 0, array)(this);
 }

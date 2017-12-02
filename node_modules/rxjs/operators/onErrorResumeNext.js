@@ -1,13 +1,19 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var FromObservable_1 = require('../observable/FromObservable');
-var isArray_1 = require('../util/isArray');
-var OuterSubscriber_1 = require('../OuterSubscriber');
-var subscribeToResult_1 = require('../util/subscribeToResult');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var FromObservable_1 = require("../observable/FromObservable");
+var isArray_1 = require("../util/isArray");
+var OuterSubscriber_1 = require("../OuterSubscriber");
+var subscribeToResult_1 = require("../util/subscribeToResult");
 /* tslint:enable:max-line-length */
 /**
  * When any of the provided Observable emits an complete or error notification, it immediately subscribes to the next one
@@ -73,7 +79,7 @@ var subscribeToResult_1 = require('../util/subscribeToResult');
 function onErrorResumeNext() {
     var nextSources = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        nextSources[_i - 0] = arguments[_i];
+        nextSources[_i] = arguments[_i];
     }
     if (nextSources.length === 1 && isArray_1.isArray(nextSources[0])) {
         nextSources = nextSources[0];
@@ -85,7 +91,7 @@ exports.onErrorResumeNext = onErrorResumeNext;
 function onErrorResumeNextStatic() {
     var nextSources = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        nextSources[_i - 0] = arguments[_i];
+        nextSources[_i] = arguments[_i];
     }
     var source = null;
     if (nextSources.length === 1 && isArray_1.isArray(nextSources[0])) {
@@ -95,7 +101,7 @@ function onErrorResumeNextStatic() {
     return new FromObservable_1.FromObservable(source, null).lift(new OnErrorResumeNextOperator(nextSources));
 }
 exports.onErrorResumeNextStatic = onErrorResumeNextStatic;
-var OnErrorResumeNextOperator = (function () {
+var OnErrorResumeNextOperator = /** @class */ (function () {
     function OnErrorResumeNextOperator(nextSources) {
         this.nextSources = nextSources;
     }
@@ -104,12 +110,13 @@ var OnErrorResumeNextOperator = (function () {
     };
     return OnErrorResumeNextOperator;
 }());
-var OnErrorResumeNextSubscriber = (function (_super) {
+var OnErrorResumeNextSubscriber = /** @class */ (function (_super) {
     __extends(OnErrorResumeNextSubscriber, _super);
     function OnErrorResumeNextSubscriber(destination, nextSources) {
-        _super.call(this, destination);
-        this.destination = destination;
-        this.nextSources = nextSources;
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        _this.nextSources = nextSources;
+        return _this;
     }
     OnErrorResumeNextSubscriber.prototype.notifyError = function (error, innerSub) {
         this.subscribeToNextSource();

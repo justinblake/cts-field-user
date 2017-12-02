@@ -1,5 +1,6 @@
 "use strict";
-var ConnectableObservable_1 = require('../observable/ConnectableObservable');
+Object.defineProperty(exports, "__esModule", { value: true });
+var ConnectableObservable_1 = require("../observable/ConnectableObservable");
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits the results of invoking a specified selector on items
@@ -41,7 +42,7 @@ function multicast(subjectOrSubjectFactory, selector) {
     };
 }
 exports.multicast = multicast;
-var MulticastOperator = (function () {
+var MulticastOperator = /** @class */ (function () {
     function MulticastOperator(subjectFactory, selector) {
         this.subjectFactory = subjectFactory;
         this.selector = selector;

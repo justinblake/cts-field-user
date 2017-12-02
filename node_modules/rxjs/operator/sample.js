@@ -1,5 +1,6 @@
 "use strict";
-var sample_1 = require('../operators/sample');
+Object.defineProperty(exports, "__esModule", { value: true });
+var sample_1 = require("../operators/sample");
 /**
  * Emits the most recently emitted value from the source Observable whenever
  * another Observable, the `notifier`, emits.

@@ -1,6 +1,7 @@
 "use strict";
-var Subject_1 = require('../Subject');
-var multicast_1 = require('./multicast');
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subject_1 = require("../Subject");
+var multicast_1 = require("./multicast");
 /* tslint:enable:max-line-length */
 /**
  * Returns a ConnectableObservable, which is a variety of Observable that waits until its connect method is called

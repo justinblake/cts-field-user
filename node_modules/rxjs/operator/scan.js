@@ -1,5 +1,6 @@
 "use strict";
-var scan_1 = require('../operators/scan');
+Object.defineProperty(exports, "__esModule", { value: true });
+var scan_1 = require("../operators/scan");
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns each

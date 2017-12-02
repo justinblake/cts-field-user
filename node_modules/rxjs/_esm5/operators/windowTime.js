@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subject,.._scheduler_async,.._Subscriber,.._util_isNumeric,.._util_isScheduler PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subject } from '../Subject';
 import { async } from '../scheduler/async';
 import { Subscriber } from '../Subscriber';
@@ -49,8 +54,9 @@ var WindowTimeOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var CountedSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(CountedSubject, _super);
     function CountedSubject() {
-        _super.apply(this, arguments);
-        this._numberOfNextedValues = 0;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._numberOfNextedValues = 0;
+        return _this;
     }
     CountedSubject.prototype.next = function (value) {
         this._numberOfNextedValues++;
@@ -73,24 +79,25 @@ var CountedSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
 var WindowTimeSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(WindowTimeSubscriber, _super);
     function WindowTimeSubscriber(destination, windowTimeSpan, windowCreationInterval, maxWindowSize, scheduler) {
-        _super.call(this, destination);
-        this.destination = destination;
-        this.windowTimeSpan = windowTimeSpan;
-        this.windowCreationInterval = windowCreationInterval;
-        this.maxWindowSize = maxWindowSize;
-        this.scheduler = scheduler;
-        this.windows = [];
-        var window = this.openWindow();
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        _this.windowTimeSpan = windowTimeSpan;
+        _this.windowCreationInterval = windowCreationInterval;
+        _this.maxWindowSize = maxWindowSize;
+        _this.scheduler = scheduler;
+        _this.windows = [];
+        var window = _this.openWindow();
         if (windowCreationInterval !== null && windowCreationInterval >= 0) {
-            var closeState = { subscriber: this, window: window, context: null };
-            var creationState = { windowTimeSpan: windowTimeSpan, windowCreationInterval: windowCreationInterval, subscriber: this, scheduler: scheduler };
-            this.add(scheduler.schedule(dispatchWindowClose, windowTimeSpan, closeState));
-            this.add(scheduler.schedule(dispatchWindowCreation, windowCreationInterval, creationState));
+            var closeState = { subscriber: _this, window: window, context: null };
+            var creationState = { windowTimeSpan: windowTimeSpan, windowCreationInterval: windowCreationInterval, subscriber: _this, scheduler: scheduler };
+            _this.add(scheduler.schedule(dispatchWindowClose, windowTimeSpan, closeState));
+            _this.add(scheduler.schedule(dispatchWindowCreation, windowCreationInterval, creationState));
         }
         else {
-            var timeSpanOnlyState = { subscriber: this, window: window, windowTimeSpan: windowTimeSpan };
-            this.add(scheduler.schedule(dispatchWindowTimeSpanOnly, windowTimeSpan, timeSpanOnlyState));
+            var timeSpanOnlyState = { subscriber: _this, window: window, windowTimeSpan: windowTimeSpan };
+            _this.add(scheduler.schedule(dispatchWindowTimeSpanOnly, windowTimeSpan, timeSpanOnlyState));
         }
+        return _this;
     }
     WindowTimeSubscriber.prototype._next = function (value) {
         var windows = this.windows;

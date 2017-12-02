@@ -1,5 +1,6 @@
 "use strict";
-var bufferCount_1 = require('../operators/bufferCount');
+Object.defineProperty(exports, "__esModule", { value: true });
+var bufferCount_1 = require("../operators/bufferCount");
 /**
  * Buffers the source Observable values until the size hits the maximum
  * `bufferSize` given.

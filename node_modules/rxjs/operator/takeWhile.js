@@ -1,5 +1,6 @@
 "use strict";
-var takeWhile_1 = require('../operators/takeWhile');
+Object.defineProperty(exports, "__esModule", { value: true });
+var takeWhile_1 = require("../operators/takeWhile");
 /**
  * Emits values emitted by the source Observable so long as each value satisfies
  * the given `predicate`, and then completes as soon as this `predicate` is not

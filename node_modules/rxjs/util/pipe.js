@@ -1,10 +1,11 @@
 "use strict";
-var noop_1 = require('./noop');
+Object.defineProperty(exports, "__esModule", { value: true });
+var noop_1 = require("./noop");
 /* tslint:enable:max-line-length */
 function pipe() {
     var fns = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        fns[_i - 0] = arguments[_i];
+        fns[_i] = arguments[_i];
     }
     return pipeFromArray(fns);
 }

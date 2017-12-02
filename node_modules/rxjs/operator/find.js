@@ -1,5 +1,6 @@
 "use strict";
-var find_1 = require('../operators/find');
+Object.defineProperty(exports, "__esModule", { value: true });
+var find_1 = require("../operators/find");
 /* tslint:enable:max-line-length */
 /**
  * Emits only the first value emitted by the source Observable that meets some

@@ -1,6 +1,7 @@
 "use strict";
-var not_1 = require('../util/not');
-var filter_1 = require('./filter');
+Object.defineProperty(exports, "__esModule", { value: true });
+var not_1 = require("../util/not");
+var filter_1 = require("./filter");
 /**
  * Splits the source Observable into two, one with values that satisfy a
  * predicate, and another with values that don't satisfy the predicate.

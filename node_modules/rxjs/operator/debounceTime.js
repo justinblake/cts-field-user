@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var debounceTime_1 = require('../operators/debounceTime');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var debounceTime_1 = require("../operators/debounceTime");
 /**
  * Emits a value from the source Observable only after a particular time span
  * has passed without another source emission.

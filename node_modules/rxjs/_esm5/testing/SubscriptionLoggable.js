@@ -1,6 +1,6 @@
 /** PURE_IMPORTS_START ._SubscriptionLog PURE_IMPORTS_END */
 import { SubscriptionLog } from './SubscriptionLog';
-export var SubscriptionLoggable = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var SubscriptionLoggable = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function SubscriptionLoggable() {
         this.subscriptions = [];
     }
@@ -15,4 +15,5 @@ export var SubscriptionLoggable = /*@__PURE__*/ (/*@__PURE__*/ function () {
     };
     return SubscriptionLoggable;
 }());
+export { SubscriptionLoggable };
 //# sourceMappingURL=SubscriptionLoggable.js.map 

@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subject,.._Observable,.._Subscriber,.._Subscription,.._operators_refCount PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { SubjectSubscriber } from '../Subject';
 import { Observable } from '../Observable';
 import { Subscriber } from '../Subscriber';
@@ -14,14 +19,15 @@ import { refCount as higherOrderRefCount } from '../operators/refCount';
 /**
  * @class ConnectableObservable<T>
  */
-export var ConnectableObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var ConnectableObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(ConnectableObservable, _super);
     function ConnectableObservable(source, subjectFactory) {
-        _super.call(this);
-        this.source = source;
-        this.subjectFactory = subjectFactory;
-        this._refCount = 0;
-        this._isComplete = false;
+        var _this = _super.call(this) || this;
+        _this.source = source;
+        _this.subjectFactory = subjectFactory;
+        _this._refCount = 0;
+        _this._isComplete = false;
+        return _this;
     }
     ConnectableObservable.prototype._subscribe = function (subscriber) {
         return this.getSubject().subscribe(subscriber);
@@ -55,6 +61,7 @@ export var ConnectableObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super
     };
     return ConnectableObservable;
 }(Observable));
+export { ConnectableObservable };
 var connectableProto = ConnectableObservable.prototype;
 export var connectableObservableDescriptor = {
     operator: { value: null },
@@ -70,8 +77,9 @@ export var connectableObservableDescriptor = {
 var ConnectableSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(ConnectableSubscriber, _super);
     function ConnectableSubscriber(destination, connectable) {
-        _super.call(this, destination);
-        this.connectable = connectable;
+        var _this = _super.call(this, destination) || this;
+        _this.connectable = connectable;
+        return _this;
     }
     ConnectableSubscriber.prototype._error = function (err) {
         this._unsubscribe();
@@ -116,8 +124,9 @@ var RefCountOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var RefCountSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(RefCountSubscriber, _super);
     function RefCountSubscriber(destination, connectable) {
-        _super.call(this, destination);
-        this.connectable = connectable;
+        var _this = _super.call(this, destination) || this;
+        _this.connectable = connectable;
+        return _this;
     }
     RefCountSubscriber.prototype._unsubscribe = function () {
         var connectable = this.connectable;

@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_isNumeric,.._Observable,.._scheduler_async,.._util_isScheduler,.._util_isDate PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { isNumeric } from '../util/isNumeric';
 import { Observable } from '../Observable';
 import { async } from '../scheduler/async';
@@ -16,17 +21,17 @@ import { isDate } from '../util/isDate';
  * @extends {Ignored}
  * @hide true
  */
-export var TimerObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var TimerObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(TimerObservable, _super);
     function TimerObservable(dueTime, period, scheduler) {
         if (dueTime === void 0) {
             dueTime = 0;
         }
-        _super.call(this);
-        this.period = -1;
-        this.dueTime = 0;
+        var _this = _super.call(this) || this;
+        _this.period = -1;
+        _this.dueTime = 0;
         if (isNumeric(period)) {
-            this.period = Number(period) < 1 && 1 || Number(period);
+            _this.period = Number(period) < 1 && 1 || Number(period);
         }
         else if (isScheduler(period)) {
             scheduler = period;
@@ -34,10 +39,11 @@ export var TimerObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
         if (!isScheduler(scheduler)) {
             scheduler = async;
         }
-        this.scheduler = scheduler;
-        this.dueTime = isDate(dueTime) ?
-            (+dueTime - this.scheduler.now()) :
+        _this.scheduler = scheduler;
+        _this.dueTime = isDate(dueTime) ?
+            (+dueTime - _this.scheduler.now()) :
             dueTime;
+        return _this;
     }
     /**
      * Creates an Observable that starts emitting after an `initialDelay` and
@@ -109,4 +115,5 @@ export var TimerObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return TimerObservable;
 }(Observable));
+export { TimerObservable };
 //# sourceMappingURL=TimerObservable.js.map 

@@ -1,6 +1,7 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var sampleTime_1 = require('../operators/sampleTime');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var sampleTime_1 = require("../operators/sampleTime");
 /**
  * Emits the most recently emitted value from the source Observable within
  * periodic time intervals.

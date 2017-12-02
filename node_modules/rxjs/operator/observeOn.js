@@ -1,5 +1,6 @@
 "use strict";
-var observeOn_1 = require('../operators/observeOn');
+Object.defineProperty(exports, "__esModule", { value: true });
+var observeOn_1 = require("../operators/observeOn");
 /**
  *
  * Re-emits all notifications from source Observable with specified scheduler.

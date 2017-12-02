@@ -1,5 +1,6 @@
 "use strict";
-var isEmpty_1 = require('../operators/isEmpty');
+Object.defineProperty(exports, "__esModule", { value: true });
+var isEmpty_1 = require("../operators/isEmpty");
 /**
  * If the source Observable is empty it returns an Observable that emits true, otherwise it emits false.
  *

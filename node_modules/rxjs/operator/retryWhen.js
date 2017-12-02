@@ -1,5 +1,6 @@
 "use strict";
-var retryWhen_1 = require('../operators/retryWhen');
+Object.defineProperty(exports, "__esModule", { value: true });
+var retryWhen_1 = require("../operators/retryWhen");
 /**
  * Returns an Observable that mirrors the source Observable with the exception of an `error`. If the source Observable
  * calls `error`, this method will emit the Throwable that caused the error to the Observable returned from `notifier`.

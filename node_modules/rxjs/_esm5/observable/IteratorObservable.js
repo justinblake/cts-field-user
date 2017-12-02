@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_root,.._Observable,.._symbol_iterator PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { root } from '../util/root';
 import { Observable } from '../Observable';
 import { iterator as Symbol_iterator } from '../symbol/iterator';
@@ -14,15 +19,16 @@ import { iterator as Symbol_iterator } from '../symbol/iterator';
  * @extends {Ignored}
  * @hide true
  */
-export var IteratorObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var IteratorObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(IteratorObservable, _super);
     function IteratorObservable(iterator, scheduler) {
-        _super.call(this);
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.scheduler = scheduler;
         if (iterator == null) {
             throw new Error('iterator cannot be null.');
         }
-        this.iterator = getIterator(iterator);
+        _this.iterator = getIterator(iterator);
+        return _this;
     }
     IteratorObservable.create = function (iterator, scheduler) {
         return new IteratorObservable(iterator, scheduler);
@@ -77,6 +83,7 @@ export var IteratorObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return IteratorObservable;
 }(Observable));
+export { IteratorObservable };
 var StringIterator = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function StringIterator(str, idx, len) {
         if (idx === void 0) {

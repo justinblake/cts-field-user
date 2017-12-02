@@ -18,7 +18,7 @@ import { startWith as higherOrder } from '../operators/startWith';
 export function startWith() {
     var array = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        array[_i - 0] = arguments[_i];
+        array[_i] = arguments[_i];
     }
     return higherOrder.apply(void 0, array)(this);
 }

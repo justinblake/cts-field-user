@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subject,.._util_tryCatch,.._util_errorObject,.._OuterSubscriber,.._util_subscribeToResult PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subject } from '../Subject';
 import { tryCatch } from '../util/tryCatch';
 import { errorObject } from '../util/errorObject';
@@ -45,10 +50,11 @@ var RepeatWhenOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var RepeatWhenSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(RepeatWhenSubscriber, _super);
     function RepeatWhenSubscriber(destination, notifier, source) {
-        _super.call(this, destination);
-        this.notifier = notifier;
-        this.source = source;
-        this.sourceIsBeingSubscribedTo = true;
+        var _this = _super.call(this, destination) || this;
+        _this.notifier = notifier;
+        _this.source = source;
+        _this.sourceIsBeingSubscribedTo = true;
+        return _this;
     }
     RepeatWhenSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
         this.sourceIsBeingSubscribedTo = true;

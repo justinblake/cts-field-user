@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Subscriber,.._Observable,.._OuterSubscriber,.._util_subscribeToResult PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subscriber } from '../Subscriber';
 import { Observable } from '../Observable';
 import { OuterSubscriber } from '../OuterSubscriber';
@@ -81,11 +86,12 @@ var DelayWhenOperator = /*@__PURE__*/ (/*@__PURE__*/ function () {
 var DelayWhenSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(DelayWhenSubscriber, _super);
     function DelayWhenSubscriber(destination, delayDurationSelector) {
-        _super.call(this, destination);
-        this.delayDurationSelector = delayDurationSelector;
-        this.completed = false;
-        this.delayNotifierSubscriptions = [];
-        this.values = [];
+        var _this = _super.call(this, destination) || this;
+        _this.delayDurationSelector = delayDurationSelector;
+        _this.completed = false;
+        _this.delayNotifierSubscriptions = [];
+        _this.values = [];
+        return _this;
     }
     DelayWhenSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
         this.destination.next(outerValue);
@@ -151,9 +157,10 @@ var DelayWhenSubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
 var SubscriptionDelayObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(SubscriptionDelayObservable, _super);
     function SubscriptionDelayObservable(source, subscriptionDelay) {
-        _super.call(this);
-        this.source = source;
-        this.subscriptionDelay = subscriptionDelay;
+        var _this = _super.call(this) || this;
+        _this.source = source;
+        _this.subscriptionDelay = subscriptionDelay;
+        return _this;
     }
     SubscriptionDelayObservable.prototype._subscribe = function (subscriber) {
         this.subscriptionDelay.subscribe(new SubscriptionDelaySubscriber(subscriber, this.source));
@@ -168,10 +175,11 @@ var SubscriptionDelayObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super)
 var SubscriptionDelaySubscriber = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(SubscriptionDelaySubscriber, _super);
     function SubscriptionDelaySubscriber(parent, source) {
-        _super.call(this);
-        this.parent = parent;
-        this.source = source;
-        this.sourceSubscribed = false;
+        var _this = _super.call(this) || this;
+        _this.parent = parent;
+        _this.source = source;
+        _this.sourceSubscribed = false;
+        return _this;
     }
     SubscriptionDelaySubscriber.prototype._next = function (unused) {
         this.subscribeToSource();

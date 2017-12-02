@@ -1,5 +1,6 @@
 "use strict";
-var mergeAll_1 = require('../operators/mergeAll');
+Object.defineProperty(exports, "__esModule", { value: true });
+var mergeAll_1 = require("../operators/mergeAll");
 /**
  * Converts a higher-order Observable into a first-order Observable which
  * concurrently delivers all values that are emitted on the inner Observables.

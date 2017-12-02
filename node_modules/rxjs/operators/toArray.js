@@ -1,5 +1,6 @@
 "use strict";
-var reduce_1 = require('./reduce');
+Object.defineProperty(exports, "__esModule", { value: true });
+var reduce_1 = require("./reduce");
 function toArrayReducer(arr, item, index) {
     arr.push(item);
     return arr;

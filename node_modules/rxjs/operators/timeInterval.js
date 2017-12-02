@@ -1,17 +1,23 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var async_1 = require('../scheduler/async');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var async_1 = require("../scheduler/async");
 function timeInterval(scheduler) {
     if (scheduler === void 0) { scheduler = async_1.async; }
     return function (source) { return source.lift(new TimeIntervalOperator(scheduler)); };
 }
 exports.timeInterval = timeInterval;
-var TimeInterval = (function () {
+var TimeInterval = /** @class */ (function () {
     function TimeInterval(value, interval) {
         this.value = value;
         this.interval = interval;
@@ -20,7 +26,7 @@ var TimeInterval = (function () {
 }());
 exports.TimeInterval = TimeInterval;
 ;
-var TimeIntervalOperator = (function () {
+var TimeIntervalOperator = /** @class */ (function () {
     function TimeIntervalOperator(scheduler) {
         this.scheduler = scheduler;
     }
@@ -34,13 +40,14 @@ var TimeIntervalOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var TimeIntervalSubscriber = (function (_super) {
+var TimeIntervalSubscriber = /** @class */ (function (_super) {
     __extends(TimeIntervalSubscriber, _super);
     function TimeIntervalSubscriber(destination, scheduler) {
-        _super.call(this, destination);
-        this.scheduler = scheduler;
-        this.lastTime = 0;
-        this.lastTime = scheduler.now();
+        var _this = _super.call(this, destination) || this;
+        _this.scheduler = scheduler;
+        _this.lastTime = 0;
+        _this.lastTime = scheduler.now();
+        return _this;
     }
     TimeIntervalSubscriber.prototype._next = function (value) {
         var now = this.scheduler.now();

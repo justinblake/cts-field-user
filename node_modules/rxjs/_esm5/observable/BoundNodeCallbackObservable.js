@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._Observable,.._util_tryCatch,.._util_errorObject,.._AsyncSubject PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 import { tryCatch } from '../util/tryCatch';
 import { errorObject } from '../util/errorObject';
@@ -15,15 +20,16 @@ import { AsyncSubject } from '../AsyncSubject';
  * @extends {Ignored}
  * @hide true
  */
-export var BoundNodeCallbackObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var BoundNodeCallbackObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(BoundNodeCallbackObservable, _super);
     function BoundNodeCallbackObservable(callbackFunc, selector, args, context, scheduler) {
-        _super.call(this);
-        this.callbackFunc = callbackFunc;
-        this.selector = selector;
-        this.args = args;
-        this.context = context;
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.callbackFunc = callbackFunc;
+        _this.selector = selector;
+        _this.args = args;
+        _this.context = context;
+        _this.scheduler = scheduler;
+        return _this;
     }
     /* tslint:enable:max-line-length */
     /**
@@ -158,7 +164,7 @@ export var BoundNodeCallbackObservable = /*@__PURE__*/ (/*@__PURE__*/ function (
         return function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i - 0] = arguments[_i];
+                args[_i] = arguments[_i];
             }
             return new BoundNodeCallbackObservable(func, selector, args, this, scheduler);
         };
@@ -174,7 +180,7 @@ export var BoundNodeCallbackObservable = /*@__PURE__*/ (/*@__PURE__*/ function (
                 var handler = function handlerFn() {
                     var innerArgs = [];
                     for (var _i = 0; _i < arguments.length; _i++) {
-                        innerArgs[_i - 0] = arguments[_i];
+                        innerArgs[_i] = arguments[_i];
                     }
                     var source = handlerFn.source;
                     var selector = source.selector, subject = source.subject;
@@ -212,6 +218,7 @@ export var BoundNodeCallbackObservable = /*@__PURE__*/ (/*@__PURE__*/ function (
     };
     return BoundNodeCallbackObservable;
 }(Observable));
+export { BoundNodeCallbackObservable };
 function dispatch(state) {
     var self = this;
     var source = state.source, subscriber = state.subscriber, context = state.context;
@@ -223,7 +230,7 @@ function dispatch(state) {
         var handler = function handlerFn() {
             var innerArgs = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                innerArgs[_i - 0] = arguments[_i];
+                innerArgs[_i] = arguments[_i];
             }
             var source = handlerFn.source;
             var selector = source.selector, subject = source.subject;

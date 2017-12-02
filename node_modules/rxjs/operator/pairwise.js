@@ -1,5 +1,6 @@
 "use strict";
-var pairwise_1 = require('../operators/pairwise');
+Object.defineProperty(exports, "__esModule", { value: true });
+var pairwise_1 = require("../operators/pairwise");
 /**
  * Groups pairs of consecutive emissions together and emits them as an array of
  * two values.

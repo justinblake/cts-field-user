@@ -1,5 +1,6 @@
 "use strict";
-var audit_1 = require('../operators/audit');
+Object.defineProperty(exports, "__esModule", { value: true });
+var audit_1 = require("../operators/audit");
 /**
  * Ignores source values for a duration determined by another Observable, then
  * emits the most recent value from the source Observable, then repeats this

@@ -1,5 +1,6 @@
 "use strict";
-var finalize_1 = require('../operators/finalize');
+Object.defineProperty(exports, "__esModule", { value: true });
+var finalize_1 = require("../operators/finalize");
 /**
  * Returns an Observable that mirrors the source Observable, but will call a specified function when
  * the source terminates on complete or error.

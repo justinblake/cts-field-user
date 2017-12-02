@@ -1,5 +1,6 @@
 "use strict";
-var mapTo_1 = require('../operators/mapTo');
+Object.defineProperty(exports, "__esModule", { value: true });
+var mapTo_1 = require("../operators/mapTo");
 /**
  * Emits the given constant value on the output Observable every time the source
  * Observable emits a value.

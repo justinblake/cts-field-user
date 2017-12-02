@@ -1,5 +1,6 @@
 "use strict";
-var window_1 = require('../operators/window');
+Object.defineProperty(exports, "__esModule", { value: true });
+var window_1 = require("../operators/window");
 /**
  * Branch out the source Observable values as a nested Observable whenever
  * `windowBoundaries` emits.

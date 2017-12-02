@@ -1,24 +1,30 @@
 /** PURE_IMPORTS_START .._Observable PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Observable } from '../Observable';
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
  * @hide true
  */
-export var RangeObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var RangeObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(RangeObservable, _super);
     function RangeObservable(start, count, scheduler) {
-        _super.call(this);
-        this.start = start;
-        this._count = count;
-        this.scheduler = scheduler;
+        var _this = _super.call(this) || this;
+        _this.start = start;
+        _this._count = count;
+        _this.scheduler = scheduler;
+        return _this;
     }
     /**
      * Creates an Observable that emits a sequence of numbers within a specified
@@ -98,4 +104,5 @@ export var RangeObservable = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return RangeObservable;
 }(Observable));
+export { RangeObservable };
 //# sourceMappingURL=RangeObservable.js.map 

@@ -1,5 +1,6 @@
 "use strict";
-var skipUntil_1 = require('../operators/skipUntil');
+Object.defineProperty(exports, "__esModule", { value: true });
+var skipUntil_1 = require("../operators/skipUntil");
 /**
  * Returns an Observable that skips items emitted by the source Observable until a second Observable emits an item.
  *

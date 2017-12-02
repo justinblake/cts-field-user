@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._util_Immediate,._AsyncAction PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Immediate } from '../util/Immediate';
 import { AsyncAction } from './AsyncAction';
 /**
@@ -13,12 +18,13 @@ import { AsyncAction } from './AsyncAction';
  * @ignore
  * @extends {Ignored}
  */
-export var AsapAction = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var AsapAction = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(AsapAction, _super);
     function AsapAction(scheduler, work) {
-        _super.call(this, scheduler, work);
-        this.scheduler = scheduler;
-        this.work = work;
+        var _this = _super.call(this, scheduler, work) || this;
+        _this.scheduler = scheduler;
+        _this.work = work;
+        return _this;
     }
     AsapAction.prototype.requestAsyncId = function (scheduler, id, delay) {
         if (delay === void 0) {
@@ -57,4 +63,5 @@ export var AsapAction = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return AsapAction;
 }(AsyncAction));
+export { AsapAction };
 //# sourceMappingURL=AsapAction.js.map 

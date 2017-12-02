@@ -1,5 +1,6 @@
 "use strict";
-var concatMap_1 = require('./concatMap');
+Object.defineProperty(exports, "__esModule", { value: true });
+var concatMap_1 = require("./concatMap");
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to the same Observable which is merged multiple

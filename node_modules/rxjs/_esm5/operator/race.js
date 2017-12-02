@@ -14,7 +14,7 @@ export { race as raceStatic } from '../observable/race';
 export function race() {
     var observables = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        observables[_i - 0] = arguments[_i];
+        observables[_i] = arguments[_i];
     }
     return higherOrder.apply(void 0, observables)(this);
 }

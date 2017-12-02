@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var Notification_1 = require('../Notification');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var Notification_1 = require("../Notification");
 /**
  * Represents all of the notifications from the source Observable as `next`
  * emissions marked with their original types within {@link Notification}
@@ -56,7 +62,7 @@ function materialize() {
     };
 }
 exports.materialize = materialize;
-var MaterializeOperator = (function () {
+var MaterializeOperator = /** @class */ (function () {
     function MaterializeOperator() {
     }
     MaterializeOperator.prototype.call = function (subscriber, source) {
@@ -69,10 +75,10 @@ var MaterializeOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var MaterializeSubscriber = (function (_super) {
+var MaterializeSubscriber = /** @class */ (function (_super) {
     __extends(MaterializeSubscriber, _super);
     function MaterializeSubscriber(destination) {
-        _super.call(this, destination);
+        return _super.call(this, destination) || this;
     }
     MaterializeSubscriber.prototype._next = function (value) {
         this.destination.next(Notification_1.Notification.createNext(value));

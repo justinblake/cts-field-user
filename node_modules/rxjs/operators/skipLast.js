@@ -1,11 +1,17 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var ArgumentOutOfRangeError_1 = require('../util/ArgumentOutOfRangeError');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var ArgumentOutOfRangeError_1 = require("../util/ArgumentOutOfRangeError");
 /**
  * Skip the last `count` values emitted by the source Observable.
  *
@@ -42,7 +48,7 @@ function skipLast(count) {
     return function (source) { return source.lift(new SkipLastOperator(count)); };
 }
 exports.skipLast = skipLast;
-var SkipLastOperator = (function () {
+var SkipLastOperator = /** @class */ (function () {
     function SkipLastOperator(_skipCount) {
         this._skipCount = _skipCount;
         if (this._skipCount < 0) {
@@ -66,13 +72,14 @@ var SkipLastOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var SkipLastSubscriber = (function (_super) {
+var SkipLastSubscriber = /** @class */ (function (_super) {
     __extends(SkipLastSubscriber, _super);
     function SkipLastSubscriber(destination, _skipCount) {
-        _super.call(this, destination);
-        this._skipCount = _skipCount;
-        this._count = 0;
-        this._ring = new Array(_skipCount);
+        var _this = _super.call(this, destination) || this;
+        _this._skipCount = _skipCount;
+        _this._count = 0;
+        _this._ring = new Array(_skipCount);
+        return _this;
     }
     SkipLastSubscriber.prototype._next = function (value) {
         var skipCount = this._skipCount;

@@ -1,5 +1,6 @@
 "use strict";
-var toArray_1 = require('../operators/toArray');
+Object.defineProperty(exports, "__esModule", { value: true });
+var toArray_1 = require("../operators/toArray");
 /**
  * Collects all source emissions and emits them as an array when the source completes.
  *

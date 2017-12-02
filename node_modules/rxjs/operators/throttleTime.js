@@ -1,12 +1,18 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Subscriber_1 = require('../Subscriber');
-var async_1 = require('../scheduler/async');
-var throttle_1 = require('./throttle');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subscriber_1 = require("../Subscriber");
+var async_1 = require("../scheduler/async");
+var throttle_1 = require("./throttle");
 /**
  * Emits a value from the source Observable, then ignores subsequent source
  * values for `duration` milliseconds, then repeats this process.
@@ -52,7 +58,7 @@ function throttleTime(duration, scheduler, config) {
     return function (source) { return source.lift(new ThrottleTimeOperator(duration, scheduler, config.leading, config.trailing)); };
 }
 exports.throttleTime = throttleTime;
-var ThrottleTimeOperator = (function () {
+var ThrottleTimeOperator = /** @class */ (function () {
     function ThrottleTimeOperator(duration, scheduler, leading, trailing) {
         this.duration = duration;
         this.scheduler = scheduler;
@@ -69,16 +75,17 @@ var ThrottleTimeOperator = (function () {
  * @ignore
  * @extends {Ignored}
  */
-var ThrottleTimeSubscriber = (function (_super) {
+var ThrottleTimeSubscriber = /** @class */ (function (_super) {
     __extends(ThrottleTimeSubscriber, _super);
     function ThrottleTimeSubscriber(destination, duration, scheduler, leading, trailing) {
-        _super.call(this, destination);
-        this.duration = duration;
-        this.scheduler = scheduler;
-        this.leading = leading;
-        this.trailing = trailing;
-        this._hasTrailingValue = false;
-        this._trailingValue = null;
+        var _this = _super.call(this, destination) || this;
+        _this.duration = duration;
+        _this.scheduler = scheduler;
+        _this.leading = leading;
+        _this.trailing = trailing;
+        _this._hasTrailingValue = false;
+        _this._trailingValue = null;
+        return _this;
     }
     ThrottleTimeSubscriber.prototype._next = function (value) {
         if (this.throttled) {

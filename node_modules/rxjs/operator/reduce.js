@@ -1,5 +1,6 @@
 "use strict";
-var reduce_1 = require('../operators/reduce');
+Object.defineProperty(exports, "__esModule", { value: true });
+var reduce_1 = require("../operators/reduce");
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns the

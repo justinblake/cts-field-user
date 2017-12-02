@@ -3,7 +3,7 @@ import { root } from './root';
 export function minimalSetImpl() {
     // THIS IS NOT a full impl of Set, this is just the minimum
     // bits of functionality we need for this library.
-    return (function () {
+    return /** @class */ (function () {
         function MinimalSet() {
             this._values = [];
         }

@@ -1,7 +1,8 @@
 "use strict";
-var async_1 = require('../scheduler/async');
-var isScheduler_1 = require('../util/isScheduler');
-var bufferTime_1 = require('../operators/bufferTime');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("../scheduler/async");
+var isScheduler_1 = require("../util/isScheduler");
+var bufferTime_1 = require("../operators/bufferTime");
 /* tslint:enable:max-line-length */
 /**
  * Buffers the source Observable values for a specific time period.

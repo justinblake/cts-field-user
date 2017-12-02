@@ -1,6 +1,6 @@
 /** PURE_IMPORTS_START ._root PURE_IMPORTS_END */
 import { root } from './root';
-export var RequestAnimationFrameDefinition = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var RequestAnimationFrameDefinition = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function RequestAnimationFrameDefinition(root) {
         if (root.requestAnimationFrame) {
             this.cancelAnimationFrame = root.cancelAnimationFrame.bind(root);
@@ -29,5 +29,6 @@ export var RequestAnimationFrameDefinition = /*@__PURE__*/ (/*@__PURE__*/ functi
     }
     return RequestAnimationFrameDefinition;
 }());
+export { RequestAnimationFrameDefinition };
 export var AnimationFrame = /*@__PURE__*/ new RequestAnimationFrameDefinition(root);
 //# sourceMappingURL=AnimationFrame.js.map 

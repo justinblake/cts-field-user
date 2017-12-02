@@ -1,5 +1,6 @@
 "use strict";
-var switchAll_1 = require('../operators/switchAll');
+Object.defineProperty(exports, "__esModule", { value: true });
+var switchAll_1 = require("../operators/switchAll");
 /**
  * Converts a higher-order Observable into a first-order Observable by
  * subscribing to only the most recently emitted of those inner Observables.

@@ -1,5 +1,6 @@
 "use strict";
-var publishReplay_1 = require('../operators/publishReplay');
+Object.defineProperty(exports, "__esModule", { value: true });
+var publishReplay_1 = require("../operators/publishReplay");
 /* tslint:enable:max-line-length */
 /**
  * @param bufferSize

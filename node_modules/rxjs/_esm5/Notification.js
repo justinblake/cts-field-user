@@ -14,7 +14,7 @@ import { Observable } from './Observable';
  *
  * @class Notification<T>
  */
-export var Notification = /*@__PURE__*/ (/*@__PURE__*/ function () {
+var Notification = /*@__PURE__*/ (/*@__PURE__*/ function () {
     function Notification(kind, value, error) {
         this.kind = kind;
         this.value = value;
@@ -123,4 +123,5 @@ export var Notification = /*@__PURE__*/ (/*@__PURE__*/ function () {
     Notification.undefinedValueNotification = new Notification('N', undefined);
     return Notification;
 }());
+export { Notification };
 //# sourceMappingURL=Notification.js.map 

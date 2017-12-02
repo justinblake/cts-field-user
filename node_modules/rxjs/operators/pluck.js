@@ -1,5 +1,6 @@
 "use strict";
-var map_1 = require('./map');
+Object.defineProperty(exports, "__esModule", { value: true });
+var map_1 = require("./map");
 /**
  * Maps each source value (an object) to its specified nested property.
  *
@@ -29,7 +30,7 @@ var map_1 = require('./map');
 function pluck() {
     var properties = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        properties[_i - 0] = arguments[_i];
+        properties[_i] = arguments[_i];
     }
     var length = properties.length;
     if (length === 0) {

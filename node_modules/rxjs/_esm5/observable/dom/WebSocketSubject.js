@@ -1,11 +1,16 @@
 /** PURE_IMPORTS_START .._.._Subject,.._.._Subscriber,.._.._Observable,.._.._Subscription,.._.._util_root,.._.._ReplaySubject,.._.._util_tryCatch,.._.._util_errorObject,.._.._util_assign PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subject, AnonymousSubject } from '../../Subject';
 import { Subscriber } from '../../Subscriber';
 import { Observable } from '../../Observable';
@@ -20,28 +25,30 @@ import { assign } from '../../util/assign';
  * @extends {Ignored}
  * @hide true
  */
-export var WebSocketSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var WebSocketSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(WebSocketSubject, _super);
     function WebSocketSubject(urlConfigOrSource, destination) {
+        var _this = this;
         if (urlConfigOrSource instanceof Observable) {
-            _super.call(this, destination, urlConfigOrSource);
+            _this = _super.call(this, destination, urlConfigOrSource) || this;
         }
         else {
-            _super.call(this);
-            this.WebSocketCtor = root.WebSocket;
-            this._output = new Subject();
+            _this = _super.call(this) || this;
+            _this.WebSocketCtor = root.WebSocket;
+            _this._output = new Subject();
             if (typeof urlConfigOrSource === 'string') {
-                this.url = urlConfigOrSource;
+                _this.url = urlConfigOrSource;
             }
             else {
                 // WARNING: config object could override important members here.
-                assign(this, urlConfigOrSource);
+                assign(_this, urlConfigOrSource);
             }
-            if (!this.WebSocketCtor) {
+            if (!_this.WebSocketCtor) {
                 throw new Error('no WebSocket constructor can be found');
             }
-            this.destination = new ReplaySubject();
+            _this.destination = new ReplaySubject();
         }
+        return _this;
     }
     WebSocketSubject.prototype.resultSelector = function (e) {
         return JSON.parse(e.data);
@@ -248,4 +255,5 @@ export var WebSocketSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return WebSocketSubject;
 }(AnonymousSubject));
+export { WebSocketSubject };
 //# sourceMappingURL=WebSocketSubject.js.map 

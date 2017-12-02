@@ -1,21 +1,27 @@
 /** PURE_IMPORTS_START ._Subject,._util_ObjectUnsubscribedError PURE_IMPORTS_END */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b)
-        if (b.hasOwnProperty(p))
-            d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || /*@__PURE__*/ (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b)
+            if (b.hasOwnProperty(p))
+                d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { Subject } from './Subject';
 import { ObjectUnsubscribedError } from './util/ObjectUnsubscribedError';
 /**
  * @class BehaviorSubject<T>
  */
-export var BehaviorSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
+var BehaviorSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     __extends(BehaviorSubject, _super);
     function BehaviorSubject(_value) {
-        _super.call(this);
-        this._value = _value;
+        var _this = _super.call(this) || this;
+        _this._value = _value;
+        return _this;
     }
     Object.defineProperty(BehaviorSubject.prototype, "value", {
         get: function () {
@@ -47,4 +53,5 @@ export var BehaviorSubject = /*@__PURE__*/ (/*@__PURE__*/ function (_super) {
     };
     return BehaviorSubject;
 }(Subject));
+export { BehaviorSubject };
 //# sourceMappingURL=BehaviorSubject.js.map 
