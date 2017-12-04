@@ -64,6 +64,30 @@ export function checkVersionInfo() {
     })
 }
 
+export function deleteOldVersions() {
+
+    let allVersions = [];
+    let currentVersion = '';
+
+    return new Promise((resolve, reject) => {
+
+        IonicCordova.deploy.info((res: any) => {
+            console.log('res ', JSON.stringify(res));
+            currentVersion = res.deploy_uuid;
+            IonicCordova.deploy.getVersions((res: any) => {
+                console.log('res ', JSON.stringify(res));
+                allVersions = res;
+
+                for(let i = 0; i < allVersions.length; i++) {
+                    if(allVersions[i] !== currentVersion) {
+                        IonicCordova.deploy.deleteVersion(allVersions[i])
+                    }
+                }
+                resolve(allVersions);
+            })
+        })
+    })
+}
 
 
 export function handleError(error: any, callback: (err: any, success: boolean) => void) {
