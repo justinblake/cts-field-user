@@ -1,0 +1,102 @@
+page-timecard-search {
+
+  .task-card-header {
+    background-color: #EFEFEF;
+    padding: 10px 5px 10px 5px;
+  }
+
+  .card-header-ios, .card-header-md {
+    font-weight: 700;
+    font-size: 2.1rem;
+  }
+
+  .search-results {
+    padding-left: 14px;
+    font-size: 2.3rem;
+  }
+
+  .search-button {
+    margin-top: 15px;
+  }
+
+  .clock-out {
+    background-color: #d9534f;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: 15px;
+  }
+
+  .clock-in {
+    background-color: #57AD57;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: 15px;
+  }
+
+  .clock-in > h3 {
+    color: #57AD57;
+    padding: 10px 0;
+  }
+
+  .clock-out > h3 {
+    color: #d9534f;
+    padding: 10px 0;
+  }
+
+  .normal-back {
+    background-color: white;
+    margin-left: 10px;
+  }
+
+  .clock-status {
+    font-size: 2.1rem;
+    padding-top: 7px;
+  }
+
+  .clock-time {
+    font-size: 2.1rem;
+    padding-top: 7px;
+
+  }
+
+  .in-col {
+    width: 20px;
+  }
+
+  .clock-pad {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .no-pad-left {
+    padding-right: 0;
+    padding-left: 0;
+    margin-left: -5%;
+    margin-right: 5%;
+  }
+
+  .search-buttons {
+    height: 3.8rem;
+    font-size: 1.7rem;
+  }
+
+  .clock-notes {
+    font-size: 1.6rem;
+    margin-top: 0;
+    padding-left: 14px;
+  }
+
+  h4 {
+    font-size: 1.8rem !important;
+    font-weight: 500 !important;
+  }
+
+  .toolbar-title-ios {
+    text-align: center;
+    font-size: 2rem;
+    color: #fff;
+    margin-top: 7px;
+    font-weight: 400;
+  }
+
+}

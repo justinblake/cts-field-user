@@ -1,0 +1,156 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Feedback</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content no-padding>
+    <ion-card *ngIf="!hasStatus">
+        <ion-card-header class="task-card-header first-header">
+            Select Task Action Below
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col width-10></ion-col>
+                    <ion-col width-80>
+                        <button class="btn-shadow delayed" ion-button color="danger" full (click)="selectedStatus(5)">
+                            Delayed
+                        </button>
+                    </ion-col>
+                    <ion-col width-10></ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col width-10></ion-col>
+                    <ion-col width-80>
+                        <button class="btn-shadow temp-color" ion-button color="danger" full
+                                (click)="selectedStatus(12)">Temporary
+                            Hold
+                        </button>
+                    </ion-col>
+                    <ion-col width-10></ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col width-10></ion-col>
+                    <ion-col width-80>
+                        <button class="btn-shadow emergency-color" ion-button color="danger" full
+                                (click)="selectedStatus(7)">
+                            Emergency
+                        </button>
+
+                    </ion-col>
+                    <ion-col width-10></ion-col>
+                </ion-row>
+
+                <ion-row>
+                    <ion-col width-10></ion-col>
+                    <ion-col width-80>
+                        <button class="btn-shadow" ion-button color="light" full (click)="selectedStatus(10)">Feedback
+                        </button>
+                    </ion-col>
+                    <ion-col width-10></ion-col>
+                </ion-row>
+
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
+
+    <ion-card *ngIf="hasStatus">
+
+        <ion-card-header class="task-card-header">
+            <ion-grid>
+                <ion-row>
+                    <h3 class="action-desc">
+                        <span *ngIf="data.statusId === 5">Action: Delayed </span>
+                        <span *ngIf="data.statusId === 7">Action: Emergency</span>
+                        <span *ngIf="data.statusId === 12">Action: Temporary Hold</span>
+                        <span *ngIf="data.statusId === 10">Action: Feedback</span>
+                    </h3>
+                </ion-row>
+            </ion-grid>
+        </ion-card-header>
+
+        <ion-card-content>
+
+            <ion-grid>
+
+                <ion-row class="action-margin">
+
+                    <span text-wrap *ngIf="data.statusId === 5">This will pause your current task. It can be resumed from the home tab
+                    </span>
+                    <span text-wrap *ngIf="data.statusId === 7">This will pause your current task. It can be resumed from the home tab
+                    </span>
+                    <span text-wrap *ngIf="data.statusId === 12">This will pause your
+                        current task and load the next task. Your current task can be resumed in the history tab
+                    </span>
+                    <span text-wrap *ngIf="data.statusId === 10">This will save your
+                        notes so others can read later
+                    </span>
+                </ion-row>
+            </ion-grid>
+
+
+            <ion-grid>
+                <ion-row>
+                    <div><strong>Notes: </strong>(4 Character minimum)</div>
+                </ion-row>
+                <ion-row>
+                    <ion-textarea class="ios-textarea" [(ngModel)]="data.notes" (blur)="trimNotes()"></ion-textarea>
+                </ion-row>
+            </ion-grid>
+
+            <ion-list>
+                <ion-row class="mar-bot15">
+                    <ion-col>
+                        <button class="btn-shadow width100" ion-button icon-left block
+                                (click)="presentActionSheet()">
+                            <ion-icon name="add-circle"></ion-icon>
+                            Add Image
+                        </button>
+                    </ion-col>
+                </ion-row>
+
+                <ion-list *ngFor="let file of data.files; let i = index">
+                    <ion-item>
+                        {{file.name}}
+                        <button ion-button icon-only item-right clear (click)="deleteImage(i)">
+                            <ion-icon color="danger" name="trash"></ion-icon>
+                        </button>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label stacked>Caption: (Tap Below to add a caption to this image)</ion-label>
+                        <ion-input [(ngModel)]="data.files[i].caption"></ion-input>
+                    </ion-item>
+                </ion-list>
+
+            </ion-list>
+
+        </ion-card-content>
+
+        <ion-row class="feedback-footer">
+            <ion-col class="pad-left0">
+                <button class="btn-shadow" ion-button icon-left block color="cancel" (click)="backToSelection()">
+                    <ion-icon name="fa-arrow-left"></ion-icon>
+                    Cancel
+                </button>
+            </ion-col>
+            <ion-col class="pad-right0">
+                <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="save()"
+                        [disabled]="disableFormSubmit()">
+                    <ion-icon name="checkbox-outline"></ion-icon>
+                    Save
+                </button>
+            </ion-col>
+        </ion-row>
+
+
+    </ion-card>
+
+    <ion-card class="fixed-height" *ngIf="hasStatus">
+
+    </ion-card>
+</ion-content>

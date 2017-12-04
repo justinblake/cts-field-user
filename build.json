@@ -1,0 +1,11 @@
+{
+ "android": {
+     "release": {
+         "keystore": "com.cleartasksolutions.keystore",
+         "storePassword": "E3mmnLerxHuPkX",
+         "alias": "cts-mobile",
+         "password" : "E3mmnLerxHuPkX",
+         "keystoreType": "jks"
+     }
+ }
+}

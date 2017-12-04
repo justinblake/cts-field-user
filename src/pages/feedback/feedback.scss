@@ -1,0 +1,134 @@
+page-feedback {
+  ion-item {
+    border-bottom: 1px solid red;
+  }
+  ion-label {
+    font-weight: bold;
+  }
+
+  .temp-color {
+    background-color: rgba(216, 64, 62, .9);
+    color: white;
+  }
+
+  .emergency-color {
+    background-color: rgba(178, 53, 51, 1);
+    color: white;
+  }
+
+  .delayed {
+    background-color: rgba(242, 72, 69, .7);
+    color: white;
+  }
+
+  ion-row > span {
+    font-size: 1.7rem;
+    font-weight: bold;
+  }
+
+  .card-header-md {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .action-margin {
+    margin: 15px 0;
+  }
+
+  .card-header-ios {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+
+  ion-textarea {
+    height: 150px;
+    border: 1px solid #CCC;
+    background-color: #FFF;
+
+    textarea {
+      &.text-input {
+        height: 90%;
+        ///background-color:#FFF;
+        //border: 1px solid blue;
+      }
+    }
+  }
+  .card {
+    background-color: #FFF;
+    //height: 90vh;
+  }
+
+
+  .btn-shadow {
+    -webkit-box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.55);
+    box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.55);
+  }
+
+  ion-list > ion-item {
+    padding-left: 0;
+  }
+
+  .pad-left0 {
+    padding-left: 0;
+  }
+
+  .pad-right0 {
+    padding-right: 0;
+  }
+
+  .label-ios + ion-textarea .text-input {
+    margin-left: 9px;
+  }
+
+  .fixed-height {
+    height: 500px;
+    background-color: #A2A2A2;
+    box-shadow: none;
+  }
+
+  .feedback-footer {
+    background-color: #EFEFEF;
+    padding: 7px 8px;
+    margin-top: 30px;
+  }
+
+  .mar-bot15 {
+    margin-bottom: 15px;
+  }
+
+  .action-desc {
+    font-size: 2.5rem;
+    color: orange;
+    font-weight: bold;
+  }
+
+  .first-header {
+    font-size: 2.2rem;
+  }
+
+  .list-md .item-input:last-child {
+    border-bottom: none;
+  }
+
+  .list-ios > .item-block:first-child {
+    border-top: none;
+  }
+
+  .list-ios > .item-block:last-child {
+    border-bottom: none;
+  }
+
+  .list-md .item-input.item-input-has-focus:last-child, .list-md .item-input.input-has-focus:last-child {
+    border-bottom-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .item-input > .item-inner > .input-wrapper {
+    border-bottom: 1px solid #dedede;
+  }
+
+
+
+}
