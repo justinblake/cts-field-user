@@ -49,7 +49,9 @@
     "android-versions": "^1.2.1",
     "autoprefixer": "^7.1.6",
     "call-number": "^1.0.1",
+    "cordova-android": "6.3.0",
     "cordova-android-support-gradle-release": "^1.1.4",
+    "cordova-ios": "4.5.4",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-add-swift-support": "^1.7.0",
     "cordova-plugin-badge": "^0.8.1",
@@ -140,6 +142,9 @@
         "MAX_STORE": "2"
       }
     },
-    "platforms": []
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }
