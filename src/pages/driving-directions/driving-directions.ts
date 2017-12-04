@@ -63,7 +63,7 @@ export class DrivingDirectionsPage {
 
 
             this.utils.presentLoading();
-            this.geolocation.getCurrentPosition().then((position: Geoposition) => {
+            this.geolocation.getCurrentPosition().then((position: any) => {
                 this.utils.dismissLoading();
 
                 let lat = position.coords.latitude;

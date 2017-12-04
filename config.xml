@@ -113,7 +113,6 @@
     <allow-navigation href="http://172.16.55.213:8100" />
     <allow-navigation href="http://172.16.55.217:8100" />
     <allow-navigation href="http://172.16.55.218:8100" />
-    <engine name="android" spec="6.3.0" />
     <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-actionsheet" spec="^2.3.3" />
     <plugin name="cordova-plugin-badge" spec="^0.8.1" />
@@ -150,4 +149,5 @@
         <variable name="UPDATE_API" value="https://api.ionicjs.com" />
         <variable name="MAX_STORE" value="2" />
     </plugin>
+    <engine name="android" spec="~6.3.0" />
 </widget>
