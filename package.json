@@ -49,7 +49,9 @@
     "android-versions": "^1.2.1",
     "autoprefixer": "^7.1.6",
     "call-number": "^1.0.1",
+    "cordova-android": "6.3.0",
     "cordova-android-support-gradle-release": "^1.1.4",
+    "cordova-ios": "4.5.4",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-add-swift-support": "^1.7.0",
     "cordova-plugin-badge": "^0.8.1",
@@ -92,7 +94,43 @@
     "plugins": {
       "cordova-android-support-gradle-release": {
         "ANDROID_SUPPORT_VERSION": "26.+"
+      },
+      "cordova-plugin-actionsheet": {},
+      "cordova-plugin-badge": {},
+      "cordova-plugin-camera": {
+        "CAMERA_USAGE_DESCRIPTION": " ",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
+      },
+      "cordova-plugin-file": {},
+      "cordova-plugin-fullscreen": {},
+      "cordova-plugin-geolocation": {
+        "GEOLOCATION_USAGE_DESCRIPTION": " "
+      },
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-statusbar": {},
+      "ionic-plugin-keyboard": {},
+      "uk.co.workingedge.phonegap.plugin.launchnavigator": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-file-transfer": {},
+      "cordova.plugins.diagnostic": {},
+      "cordova-plugin-file-opener2": {},
+      "mx.ferreyra.callnumber": {},
+      "cordova-plugin-sim": {},
+      "cordova-plugin-fcm": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "379d0062",
+        "CHANNEL_NAME": "Master",
+        "UPDATE_METHOD": "none",
+        "MAX_VERSIONS": "1",
+        "UPDATE_API": "https://api.ionicjs.com",
+        "MAX_STORE": "2"
       }
-    }
+    },
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }
