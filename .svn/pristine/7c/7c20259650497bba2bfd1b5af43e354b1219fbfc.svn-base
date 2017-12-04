@@ -1,0 +1,76 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Complete Task</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content no-padding>
+    <ion-card>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+
+                    <div><strong>Enter Task Notes</strong> (not required)</div>
+
+
+                </ion-row>
+                <ion-row>
+                    <ion-textarea class="" [(ngModel)]="data.notes" placeholder="" (blur)="trimNotes()"></ion-textarea>
+                </ion-row>
+            </ion-grid>
+
+            <ion-list>
+
+
+                <ion-item>
+                    <ion-label stacked>Images</ion-label>
+                </ion-item>
+                <ion-list *ngFor="let file of data.files; let i = index">
+                    <ion-item>
+                        {{file.name}}
+                        <button ion-button icon-only item-right clear (click)="deleteImage(i)">
+                            <ion-icon color="danger" name="trash"></ion-icon>
+                        </button>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label stacked>Caption</ion-label>
+                        <ion-input [(ngModel)]="data.files[i].caption"></ion-input>
+                    </ion-item>
+
+                </ion-list>
+
+                <ion-item>
+                    <button ion-button icon-left color="secondary" (click)="presentActionSheet()">
+                        <ion-icon name="add-circle"></ion-icon>
+                        Add Image
+                    </button>
+                </ion-item>
+                <ion-item>&nbsp;</ion-item>
+
+
+            </ion-list>
+
+        </ion-card-content>
+
+
+        <ion-row style="background-color:white">
+            <ion-col width-50>
+                <button ion-button icon-left block color="secondary" (click)="save()">
+                    <ion-icon name="checkbox-outline"></ion-icon>
+                    Save
+                </button>
+            </ion-col>
+            <ion-col width-50>
+                <button ion-button icon-left block color="dark" (click)="cancel()">
+                    <ion-icon name="close"></ion-icon>
+                    Cancel
+                </button>
+            </ion-col>
+        </ion-row>
+
+
+    </ion-card>
+</ion-content>

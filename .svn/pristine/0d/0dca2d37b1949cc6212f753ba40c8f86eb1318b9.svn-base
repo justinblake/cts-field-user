@@ -1,0 +1,1 @@
+<ion-nav #ctsNav [root]="rootPage"></ion-nav>

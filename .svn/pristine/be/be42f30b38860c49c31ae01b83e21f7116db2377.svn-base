@@ -1,0 +1,8 @@
+{
+  "name": "clear-task-solutions-mobile",
+  "app_id": "379d0062",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

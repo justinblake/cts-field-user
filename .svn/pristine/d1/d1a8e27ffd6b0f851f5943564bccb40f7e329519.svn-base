@@ -1,0 +1,189 @@
+<ion-header>
+    <ion-navbar>
+        <ion-row *ngIf="isIos">
+            <ion-col width-50>
+                <div text-center>
+                    <div class="ios-title">
+                        Timecard
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col width-25>
+                <ion-buttons class="mar-right6" end>
+                    <button class="refresh" ion-button round icon-right color="secondary" (click)="loadTodaysTime()">
+                        Refresh
+                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!isIos">
+            <ion-title>Timecard</ion-title>
+            <ion-buttons class="mar-right6" end>
+                <button class="refresh" ion-button round icon-right color="secondary" (click)="loadTodaysTime()">
+                    Refresh
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-row>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+    <!--Today's Timecard-->
+
+    <ion-card>
+        <ion-card-header class="task-card-header">
+            Today's Timecard
+        </ion-card-header>
+
+        <ion-card-content *ngIf="noEntry">
+            <h3 class="noEntries">No Current Timecard Entries</h3>
+        </ion-card-content>
+
+        <ion-card-content *ngIf="!noEntry">
+            <ion-list class="first-list">
+                <div *ngFor="let time of todaysTime; let i = index;let first=first;">
+                    <ion-row [ngClass]="{first:first}">
+                        <ion-col width-100>
+                            <ion-item *ngIf="time.status === 0" class="o">
+                                <ion-label>
+                                    <span *ngIf="time.status === 0">Clocked Out</span>
+                                </ion-label>
+                                <ion-datetime displayFormat="h:mm a" pickerFormat="h mm A"
+                                              [(ngModel)]="todaysTime[i].alt_timestamp">
+                                </ion-datetime>
+
+                            </ion-item>
+                            <ion-item *ngIf="time.status === 1" class="e">
+                                <ion-label>
+                                    <span *ngIf="time.status === 1">Clocked In</span>
+                                </ion-label>
+                                <ion-datetime displayFormat="h:mm a" pickerFormat="h mm A"
+                                              [(ngModel)]="todaysTime[i].alt_timestamp">
+                                </ion-datetime>
+
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+
+                    <ion-item class="notes">
+                        <ion-input class="mar0" [(ngModel)]="todaysTime[i].notes" placeholder="Notes"
+                                   clearInput></ion-input>
+                    </ion-item>
+
+                    <ion-row class="btn-margin">
+                        <ion-col width-50>
+                            <ion-buttons
+                                    *ngIf="todaysTime[i].alt_timestamp !== todaysTime[i].timestamp || todaysTime[i].originalNotes !== todaysTime[i].notes">
+                                <button ion-button block color="danger" small
+                                        (click)="loadTodaysTime()">
+                                    Discard Changes
+
+                                </button>
+                            </ion-buttons>
+                        </ion-col>
+                        <ion-col width-50>
+                            <ion-buttons
+                                    *ngIf="todaysTime[i].alt_timestamp !== todaysTime[i].timestamp || todaysTime[i].originalNotes !== todaysTime[i].notes">
+                                <button ion-button block color="secondary" small
+                                        (click)="updateTodaysTimecard(todaysTime[i].id, todaysTime[i].alt_timestamp, i, todaysTime[i].notes)">
+                                    Save Changes
+
+                                </button>
+                            </ion-buttons>
+                        </ion-col>
+                    </ion-row>
+                </div>
+            </ion-list>
+
+
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-card-header>
+            <ion-buttons text-center>
+                <button color="secondary" ion-button block icon-left
+                        (click)="goToSearch()">
+                    Search Timecard Entries
+                </button>
+            </ion-buttons>
+        </ion-card-header>
+    </ion-card>
+
+
+</ion-content>
+
+<!--<ion-row class="mar-top25">-->
+<!--<ion-col text-center>-->
+<!--<ion-buttons *ngIf="!showCreateToday">-->
+<!--<button ion-button block color="secondary" (click)="showNewEntryCreation()">Create New Entry-->
+<!--</button>-->
+<!--</ion-buttons>-->
+<!--</ion-col>-->
+<!--</ion-row>-->
+
+
+<!--<div *ngIf="showCreateToday">-->
+<!--<ion-card class="card-border2">-->
+<!--<ion-card-header class="task-card-header">-->
+<!--New Timecard Entry-->
+<!--</ion-card-header>-->
+<!--<ion-card-content>-->
+<!--<ion-list radio-group [(ngModel)]="newDayEntry.status" required>-->
+<!--<ion-item>-->
+<!--<ion-label>Clock In</ion-label>-->
+<!--<ion-radio value="1"></ion-radio>-->
+<!--</ion-item>-->
+
+<!--<ion-item>-->
+<!--<ion-label>Clock Out</ion-label>-->
+<!--<ion-radio value="0"></ion-radio>-->
+<!--</ion-item>-->
+
+<!--</ion-list>-->
+<!--<ion-item>-->
+<!--<ion-label>Time</ion-label>-->
+<!--<ion-datetime displayFormat="h:mm a" pickerFormat="h mm A"-->
+<!--[(ngModel)]="newDayEntry.time">-->
+<!--</ion-datetime>-->
+<!--</ion-item>-->
+
+<!--<ion-item>-->
+<!--<ion-input [(ngModel)]="newDayEntry.notes" placeholder="Notes" clearInput></ion-input>-->
+<!--</ion-item>-->
+
+<!--<ion-row>-->
+<!--<ion-col width-50>-->
+<!--<ion-buttons>-->
+<!--<button ion-button block color="danger" (click)="cancelEntry()">-->
+<!--Cancel-->
+<!--</button>-->
+<!--</ion-buttons>-->
+<!--</ion-col>-->
+<!--<ion-col width-50>-->
+<!--<ion-buttons>-->
+<!--<button ion-button block color="secondary"-->
+<!--(click)="createNewEntry(newDayEntry, currentDate, newDayEntry.time, newDayEntry.status, newDayEntry.notes)"-->
+<!--[disabled]="disableCurrentEntry()">-->
+<!--Save-->
+<!--</button>-->
+<!--</ion-buttons>-->
+<!--</ion-col>-->
+<!--</ion-row>-->
+
+
+<!--</ion-card-content>-->
+<!--</ion-card>-->
+
+
+<!--</div>-->
+
+<!--<ion-item>-->
+<!--<ion-label>Start Time</ion-label>-->
+<!--<ion-datetime displayFormat="h:mm A" pickerFormat="h mm A"></ion-datetime>-->
+<!--</ion-item>-->

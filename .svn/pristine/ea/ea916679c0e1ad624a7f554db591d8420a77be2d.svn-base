@@ -1,0 +1,196 @@
+page-next-day {
+  .card p {
+    color: #000;
+    font-size: 1.7rem;
+  }
+
+  .time {
+    color: #3F51B5;
+  }
+  h3 {
+    font-size: 1.8rem !important;
+    margin: 8px 0 8px 0 !important;
+  }
+
+  h4 {
+    font-size: 1.5rem !important;
+  }
+
+  h5 {
+    font-size: 1.2rem !important;
+  }
+  .task-desc {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    background-color: #EFEFEF;
+    color: #3F51B5;
+  }
+
+  .contractor-margin {
+    margin-top: -5px;
+  }
+
+  .phone-space {
+    margin: -5px 0px !important;
+  }
+
+  .supplier-phone {
+    font-size: 1.6rem !important;
+    margin-left: -17px;
+  }
+
+  .btn-width {
+    width: 100%;
+  }
+
+  .directions {
+    margin-left: -13px;
+  }
+
+  .btns-center {
+    display: inline-flex;
+  }
+  .next-day {
+    font-size: 2.2rem;
+  }
+  .next-day-head {
+    padding: 0;
+  }
+
+  .btn-margin {
+    margin-left: 11px;
+    color: orange;
+    box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.35);
+    margin-top: 13px;
+  }
+
+  .nd-margin {
+    margin-bottom: 10px;
+  }
+
+  .btn-top {
+    margin-top: 16px;
+    margin-left: 11px;
+    box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .new-task-background {
+    background-color: white;
+    color: orange;
+  }
+
+  .head-font {
+    font-size: 2.5rem;
+  }
+
+  ion-grid ion-row ion-col {
+    height: 40px;
+  }
+
+  ion-footer ion-grid {
+    height: 62px;
+  }
+
+  .laborer-btn {
+    color: white;
+    font-weight: bolder;
+    background-color: #57AD57;
+    border-radius: 7px;
+    box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.85);
+    width: 100%;
+    font-size: 1.7rem;
+  }
+
+  .task-icon {
+    top: 16px;
+    right: -20px;
+    color: #3F51B5;
+  }
+
+  @media (max-width: 426px) {
+    .next-space {
+      width: 110%;
+      margin-left: -5%;
+    }
+  }
+
+  @media (max-width: 376px) {
+    .task-icon {
+      right: -10px;
+    }
+    .laborer-btn {
+      width: 120%;
+      font-size: 1.6rem;
+      margin-left: -10px;
+    }
+    .next-space {
+      width: 109%;
+      margin-left: -5%;
+    }
+  }
+
+  @media (max-width: 350px) {
+    .task-icon {
+      right: -5px;
+    }
+    .newTime {
+      color: white;
+      top: -1px;
+    }
+    .laborer-btn {
+      width: 130%;
+      font-size: 1.5rem;
+      margin-left: -15px;
+    }
+    .next-space {
+      width: 112%;
+      margin-left: -6%;
+    }
+  }
+
+  .gen-mar-bot20 {
+    margin-bottom: 20px !important;
+  }
+
+  //.card-width {
+  //  width: 110%;
+  //  margin-left: -20px;
+  //}
+
+  .fs-no-results-container-ios {
+    top: 70px;
+  }
+
+  .fs-no-results-container {
+    top: 58px;
+  }
+
+  .ios-refresh {
+    margin-left: 15%;
+  }
+
+  .crew-font {
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 1.7rem;
+  }
+
+  .accept-icon {
+    top: 16px;
+    right: 4px;
+  }
+}
+
+.list-font {
+  font-size: 1.5rem;
+}
+
+.multiple-suppliers {
+  margin-bottom: -35px;
+}
+
+
+
+
+

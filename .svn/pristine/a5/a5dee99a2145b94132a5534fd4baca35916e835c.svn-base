@@ -1,0 +1,24 @@
+page-complete-notes {
+  ion-textarea {
+    height: 150px;
+    border: 1px solid #CCC;
+    background-color: #FFF;
+
+    textarea {
+      &.text-input {
+        height: 90%;
+        background-color: #FFF;
+        //border: 1px solid blue;
+      }
+    }
+  }
+
+  .back-color {
+    background-color:white;
+  }
+
+  .card {
+    background-color: #FFF;
+    //height: 90vh;
+  }
+}

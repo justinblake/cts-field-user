@@ -1,0 +1,706 @@
+<!--iOS header-->
+
+<ion-header *ngIf="isIos">
+    <ion-navbar>
+        <ion-row>
+            <ion-col width-50 class="bottom-pad">
+                <div text-center>
+                    <div class="main-title-ios">
+                        Current Task
+                    </div>
+                    <div text-nowrap class="company-name comp-wrap">
+                        {{compName}}
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col width-25 class="mar-top10">
+                <ion-buttons class="mar-right6" end>
+                    <button class="refresh" ion-button round icon-right color="secondary"
+                            (click)="setCurrentTask(true)">
+                        Refresh
+                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+            <ion-col width-25 class="mar-top10">
+                <ion-buttons class="mar-right6" end>
+                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
+                        <ion-icon class="logout-hide" name="log-out"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+    </ion-navbar>
+</ion-header>
+
+<!--android header-->
+
+<ion-header *ngIf="!isIos">
+    <ion-navbar>
+        <ion-row>
+            <ion-col width-50 class="bottom-pad">
+                <div text-center>
+                    <ion-title class="main-title-ios">
+                        Current Task
+                    </ion-title>
+                    <ion-title text-wrap class="company-name android-title">
+                        {{compName}}
+                    </ion-title>
+                </div>
+            </ion-col>
+            <ion-col width-25 class="mar-top10">
+                <ion-buttons class="mar-right6" end>
+                    <button class="refresh" ion-button round icon-right color="secondary"
+                            (click)="setCurrentTask(true)">
+                        Refresh
+                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+            <ion-col width-25 class="mar-top10">
+                <ion-buttons class="mar-right6" end>
+                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
+                        <ion-icon class="logout-hide" name="log-out"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+    </ion-navbar>
+</ion-header>
+<ion-content footer *ngIf="userRole !== 6">
+
+    <div *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && showTasks && !isLessor">
+        <ion-card class="manage-app">
+            <ion-card-header class="task-card-header">
+                <button class="home-btn" ion-button icon-left block color="secondary"
+                        (click)="openInAppBrowser()">
+                    Open Management App
+                </button>
+            </ion-card-header>
+        </ion-card>
+    </div>
+
+    <!--<ion-card>-->
+        <!--<ion-card-content>-->
+            <!--<ion-buttons>-->
+                <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+                        <!--(click)="showData()">-->
+                    <!--Data-->
+                <!--</button>-->
+            <!--</ion-buttons>-->
+        <!--</ion-card-content>-->
+
+    <!--</ion-card>-->
+
+
+    <ion-card class="manage-app" *ngIf="!isLessor">
+        <ion-card-header class="task-card-header" (click)="showClockInOut()">
+
+            <div *ngIf="!showTimecard" text-center class="pad-top4">
+                Timecard Status: <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
+                    class="clockIn"
+                    *ngIf="timecardStatus === 1">Clocked In</span>
+                <h3 class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
+                        *ngIf="timecardStatus === 1">out</span>)</h3>
+            </div>
+
+            <div *ngIf="showTimecard">
+
+                <!--clock in-->
+                <div *ngIf="timecardStatus === 0">
+                    <button class="home-btn" ion-button icon-left block color="secondary"
+                            (click)="createTimecardEntry(1)">
+                        Clock In
+                    </button>
+                </div>
+                <!--clock out-->
+                <div *ngIf="timecardStatus === 1">
+                    <button class="home-btn" ion-button icon-left block color="danger"
+                            (click)="createTimecardEntry(0)">
+                        Clock Out
+                    </button>
+                </div>
+            </div>
+        </ion-card-header>
+
+    </ion-card>
+
+
+    <div *ngIf="showTasks">
+        <div *ngIf="currentTask">
+            <ion-card>
+                <ion-card-header class="task-card-header">
+                    Project Details
+                </ion-card-header>
+                <ion-card-content>
+                    <div class="task-card-content">
+                        <h3 class="text-info">{{currentTask.job_name}}</h3>
+                        <ion-list no-padding>
+                            <ion-item no-padding>
+                                <div>{{currentTask.address}}</div>
+                                <div>{{currentTask.city}}, {{currentTask.state}}&nbsp;{{currentTask.zip}}</div>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                    <div [@expandCollapse]="divState">
+                        <p [@expandCollapse]="divState" class="bold">Contractor:</p>
+                        <p [@expandCollapse]="divState">
+                            {{currentTask.contractor[0].name}}</p>
+                        <p [@expandCollapse]="divState" class="bold">Office Phone:</p>
+                        <p [@expandCollapse]="divState">
+                            <button [@expandCollapse]="divState" ion-button icon-left clear medium
+                                    class="contractorPhoneNum"
+                                    (click)="callPhone(currentTask.contractor[0].office_phone)">
+                                {{currentTask.contractor[0].office_phone}}
+                            </button>
+                        </p>
+                    </div>
+                </ion-card-content>
+
+                <div no-padding class="more-back">
+                    <ion-row>
+                        <ion-col>
+                            <button ion-button icon-left clear medium (click)="toggleDivState()">
+                                {{divState == 'collapse' ? 'More' : 'Less'}}...
+                            </button>
+                        </ion-col>
+                        <ion-col>
+                            <button ion-button icon-left clear medium
+                                    (click)="showDrivingDirections(currentTask.lat, currentTask.lon)">
+                                <ion-icon name="navigate"></ion-icon>
+                                Get Directions
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </div>
+            </ion-card>
+
+            <ion-card>
+                <ion-card-header class="task-card-header">
+                    Current Task
+                </ion-card-header>
+                <ion-card-content>
+                    <div class="task-card-content">
+                        <ion-list no-padding text-wrap>
+                            <ion-item no-padding text-wrap>
+                                <h4 class="text-info capitalize">{{currentTask.job_tasks.task_description}}</h4>
+                                <h5 class="s-time">Start Time: {{iosTime}} - {{iosMonth}} {{iosDay}},
+                                    {{iosYear}}</h5>
+
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-card>
+                <ion-card-header class="task-card-header">
+                    Crew
+                </ion-card-header>
+                <ion-card-content>
+                    <div class="task-card-content">
+                        <ion-row *ngFor="let crewMember of currentTask.job_tasks.task_crew; let k = index">
+                            <ion-col class="margin-left-crew">
+                                <h4>{{k + 1}}: {{crewMember.first_name}} {{crewMember.last_name}} </h4>
+                                <h4 class="indent18" *ngIf="crewMember.is_foreman === 1"> -- Foreman --</h4>
+                                <p class="crew-phone">
+                                    <button ion-button icon-left clear medium
+                                            class="phoneNum2"
+                                            (click)="callPhone(crewMember.phone)">
+                                        {{crewMember.phone}}
+                                    </button>
+                                </p>
+                            </ion-col>
+                        </ion-row>
+                        <div *ngIf="currentTask.job_tasks.task_crew === 0">No Crew Specified</div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-card>
+                <ion-card-header class="task-card-header">
+                    Assigned Equipment
+                </ion-card-header>
+                <ion-card-content>
+                    <div class="task-card-content">
+                        <ion-list no-padding text-wrap>
+                            <ion-item text-wrap no-padding
+                                      *ngFor="let item of currentTask.job_tasks.task_equipment; let z = index">
+                                <h3 class="text-info">{{item.equipment_name}}</h3>
+                                <h4 class="s-time" *ngIf="item.notes">{{item.notes}}</h4>
+                            </ion-item>
+                        </ion-list>
+
+
+                        <div class="equip-center" *ngIf="currentTask.job_tasks.task_equipment.length === 0">
+                            <h4>No Assigned Equipment For This Task</h4>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+
+            <!--<ion-card>-->
+                <!--<ion-card-content>-->
+                    <!--<ion-buttons>-->
+                        <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+                                <!--(click)="showData()">-->
+                            <!--Data-->
+                        <!--</button>-->
+                    <!--</ion-buttons>-->
+                <!--</ion-card-content>-->
+
+            <!--</ion-card>-->
+
+
+            <ion-card class="mar-bot75">
+                <ion-card-header class="task-card-header">
+                    Materials/Supplier
+                </ion-card-header>
+                <div *ngIf="currentTask.job_tasks.task_materials.length > 0">
+                    <ion-card-content *ngFor="let material of currentTask.job_tasks.task_materials; let i = index">
+                        <div class="multiple-suppliers">
+                            <div class="task-card-content">
+                                <h3 class="text-info">{{material.material_name}}</h3>
+                                <ion-list no-padding>
+                                    <ion-item no-padding>
+                                        <p>Supplier: {{material.supplier.name}}
+                                        </p>
+                                        <p>
+                                            <button ion-button icon-left clear medium
+                                                    class="phoneNum"
+                                                    (click)="callPhone(material.supplier.phone)">
+                                                {{material.supplier.phone}}
+                                            </button>
+                                        </p>
+                                        <div>{{material.supplier.address}}</div>
+                                        <div>{{material.supplier.city}},
+                                            {{material.supplier.state}}&nbsp;{{material.supplier.zip}}
+                                        </div>
+                                        <ion-col>
+                                            <button class="gen-mar-bot20" ion-button icon-left clear medium
+                                                    (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
+                                                <ion-icon name="navigate"></ion-icon>
+                                                Get Directions
+                                            </button>
+                                        </ion-col>
+                                    </ion-item>
+                                </ion-list>
+                            </div>
+                        </div>
+                        <div class="task-card-content" *ngIf="currentTask.job_tasks.task_materials.length === 0">
+                            <div class="equip-center">No Materials Specified
+                            </div>
+                        </div>
+                    </ion-card-content>
+                </div>
+                <div *ngIf="currentTask.job_tasks.task_materials.length === 0">
+                    <ion-card-content>
+                        <div class="task-card-content">
+                            <div class="equip-center">
+                                <h4>No Materials Specified</h4>
+                            </div>
+                        </div>
+                    </ion-card-content>
+                </div>
+            </ion-card>
+
+
+        </div>
+    </div>
+
+</ion-content>
+
+<ion-content footer *ngIf="userRole === 6">
+    <div class="pad-bot18">
+        <div *ngIf="showTasks">
+            <ion-card class="card-border pad-bot30 mar-top25"
+                      *ngFor="let date of laborerTasks.data | keys ; let i = index">
+                <ion-card-header class="task-card-header">
+                    <div bold class="head-font" text-center *ngIf="laborerTasks.data[date].length === 1">
+                        <span *ngIf="date[5] !== '0'">{{date[5]}}</span>{{date[6]}}-{{date[8]}}{{date[9]}}-{{date[0]}}{{date[1]}}{{date[2]}}{{date[3]}}:
+                        {{laborerTasks.data[date].length}} TASK
+                    </div>
+                    <div bold class="head-font" text-center *ngIf="laborerTasks.data[date].length > 1">
+                        <span *ngIf="date[5] !== '0'">{{date[5]}}</span>{{date[6]}}-{{date[8]}}{{date[9]}}-{{date[0]}}{{date[1]}}{{date[2]}}{{date[3]}}:
+                        {{laborerTasks.data[date].length}} TASKS
+                    </div>
+                </ion-card-header>
+                <ion-card-content>
+                    <div *ngFor="let task of laborerTasks.data[date]; let j = index">
+                        <div class="card-width">
+
+                            <ion-grid class="task-button">
+                                <ion-row (click)="expandTask(task.id, j)">
+                                    <ion-col class="task-text" text-left *ngIf="j === 0" width-60>
+                                        {{j + 1}}: {{task.job_name}}
+                                    </ion-col>
+                                    <ion-col class="task-text" text-left *ngIf="j > 0" width-60>
+                                        {{j + 1}}: {{task.job_name}}
+                                    </ion-col>
+                                    <ion-col width-30 class="newTime">{{task.newTime}}</ion-col>
+                                    <ion-col class="task-icon" width-10>
+                                        <ion-icon *ngIf="expandTaskId !== task.id && taskId !== j"
+                                                  name="fa-chevron-circle-right"></ion-icon>
+                                        <ion-icon *ngIf="expandTaskId === task.id && taskId === j"
+                                                  name="fa-chevron-circle-down"></ion-icon>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+
+
+                            <div class="mar-top25" *ngIf="expandTaskId === task.id && taskId === j">
+                                <ion-card class="card-border">
+                                    <ion-card-header class="task-card-header">
+                                        Project Details
+                                    </ion-card-header>
+
+
+                                    <ion-card-content>
+                                        <div class="task-card-content">
+                                            <h3 class="text-info">{{task.job_name}}</h3>
+                                            <ion-list no-padding>
+                                                <ion-item no-padding>
+                                                    <div>{{task.address}}</div>
+                                                    <div>{{task.city}}, {{task.state}}&nbsp;{{task.zip}}</div>
+                                                </ion-item>
+                                            </ion-list>
+                                        </div>
+                                        <div [@expandCollapse]="divState">
+                                            <p [@expandCollapse]="divState" style="font-weight: bold">
+                                                Contractor:</p>
+                                            <p [@expandCollapse]="divState" style="font-weight: normal">
+                                                {{task.contractor[0].name}}</p>
+                                            <p [@expandCollapse]="divState" style="font-weight: bold">Office
+                                                Phone:</p>
+
+                                            <p [@expandCollapse]="divState" style="font-weight: normal">
+                                                <button [@expandCollapse]="divState" ion-button icon-left clear
+                                                        medium
+                                                        class="contractorPhoneNum"
+                                                        (click)="callPhone(task.contractor[0].office_phone)">
+                                                    {{task.contractor[0].office_phone}}
+                                                </button>
+                                            </p>
+                                        </div>
+                                    </ion-card-content>
+
+                                    <div no-padding class="more-back">
+                                        <ion-row>
+                                            <ion-col>
+                                                <button ion-button icon-left clear medium
+                                                        (click)="toggleDivState()">
+                                                    {{divState == 'collapse' ? 'More' : 'Less'}}...
+                                                </button>
+                                            </ion-col>
+                                            <ion-col>
+                                                <button ion-button icon-left clear medium
+                                                        (click)="showDrivingDirections(task.lat, task.lon)">
+                                                    <ion-icon name="navigate"></ion-icon>
+                                                    Get Directions
+                                                </button>
+                                            </ion-col>
+                                        </ion-row>
+                                    </div>
+                                </ion-card>
+
+                                <ion-card class="card-border">
+                                    <ion-card-header class="task-card-header">
+                                        Task Details
+                                    </ion-card-header>
+                                    <ion-card-content>
+                                        <div class="task-card-content">
+                                            <ion-list no-padding text-wrap>
+                                                <ion-item no-padding text-wrap>
+                                                    <h4 class="text-info capitalize">
+                                                        {{task.task_description}}</h4>
+                                                    <h5 class="s-time">
+                                                        Start Time: {{task.newTime}}
+                                                    </h5>
+
+                                                </ion-item>
+                                            </ion-list>
+                                        </div>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card class="card-border">
+                                    <ion-card-header class="task-card-header">
+                                        Foreman
+                                    </ion-card-header>
+                                    <ion-card-content>
+                                        <div class="task-card-content">
+
+                                            <ion-row *ngFor="let crewMember of task.task_crew; let k = index">
+                                                <ion-col class="margin-left-crew" *ngIf="crewMember.is_foreman === 1">
+                                                    <h4>{{k + 1}}: {{crewMember.first_name}}
+                                                        {{crewMember.last_name}} </h4>
+                                                    <p class="crew-phone">
+                                                        <button ion-button icon-left clear medium
+                                                                class="phoneNum2"
+                                                                (click)="callPhone(crewMember.phone)">
+                                                            {{crewMember.phone}}
+                                                        </button>
+                                                    </p>
+                                                </ion-col>
+
+                                            </ion-row>
+
+
+                                            <div *ngIf="task.task_crew.length === 0">No Foreman Has Been Assigned</div>
+                                        </div>
+                                    </ion-card-content>
+                                </ion-card>
+
+
+                                <ion-row class="mar-bot25">
+                                    <ion-grid>
+                                        <ion-row>
+                                            <ion-col width-50>
+                                                <button class="btn-shadow" ion-button icon-left block
+                                                        color="secondary"
+                                                        (click)="setLaborerStatus(3, laborerTasks.data[date][j].id, date, j)"
+                                                        *ngIf="task.status_id === 2 || task.status_id === 8">
+                                                    <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                                                    Accept
+                                                </button>
+                                                <button class="btn-shadow" disabled ion-button icon-left block
+                                                        color="secondary"
+                                                        *ngIf="task.status_id === 3">
+                                                    <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                                                    Accepted
+                                                </button>
+
+                                            </ion-col>
+                                            <ion-col width-50>
+                                                <button class="btn-shadow" ion-button icon-left block color="danger"
+                                                        (click)="openLaborerRejectModal(8, task.id, date, j)"
+                                                        *ngIf="task.status_id === 2 || task.status_id === 3">
+                                                    <ion-icon name="fa-thumbs-o-down"></ion-icon>
+                                                    Reject
+                                                </button>
+                                                <button class="btn-shadow" disabled ion-button icon-left block
+                                                        color="danger"
+                                                        *ngIf="task.status_id === 8">
+                                                    <ion-icon name="fa-thumbs-o-down"></ion-icon>
+                                                    Rejected
+                                                </button>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-grid>
+                                </ion-row>
+                            </div>
+                        </div>
+                    </div>
+                </ion-card-content>
+
+            </ion-card>
+            <ion-grid>
+                <ion-row>
+
+                    <ion-col width-50 text-center>
+                        <div class="button-container">
+                            <button class="laborer-btn" ion-button icon-right block color="secondary"
+                                    (click)="openNextDayTasks()">
+                                SEE UPCOMING TASKS
+                            </button>
+                        </div>
+                    </ion-col>
+
+                </ion-row>
+            </ion-grid>
+
+        </div>
+    </div>
+</ion-content>
+
+
+<ion-footer *ngIf="userRole !== 6">
+
+    <ion-grid *ngIf="timecardStatus === 0 && currentTask && currentTask.job_tasks.status_id === 2 && !isLessor">
+        <ion-row>
+            <ion-col width-50>
+                <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="setStatus(3)"
+                        *ngIf="currentTask && currentTask.job_tasks.status_id === 2">
+                    <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                    Accept
+                </button>
+            </ion-col>
+            <ion-col width-50>
+                <button class="btn-shadow" ion-button icon-left block color="danger" (click)="openRejectModal()"
+                        *ngIf="currentTask && currentTask.job_tasks.status_id === 2">
+                    <ion-icon name="fa-thumbs-o-down"></ion-icon>
+                    Reject
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <div *ngIf="timecardStatus === 1">
+        <ion-grid>
+            <ion-row>
+                <ion-col width-50>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="setStatus(3)"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 2">
+                        <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                        Accept
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary"
+                            (click)="setStatus(4, '', true)"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 3">
+                        <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                        Start Task
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary"
+                            (click)="setStatus(4,  '', true)"
+                            *ngIf="currentTask && (currentTask.job_tasks.status_id === 5 || currentTask.job_tasks.status_id === 6 || currentTask.job_tasks.status_id === 7 )">
+                        <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                        Resume Task
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="openCompletePage()"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 4">
+                        <ion-icon name="checkbox-outline"></ion-icon>
+                        Complete Task
+                    </button>
+                </ion-col>
+                <ion-col width-50>
+                    <button class="btn-shadow" ion-button icon-left block color="danger" (click)="openRejectModal()"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 2">
+                        <ion-icon name="fa-thumbs-o-down"></ion-icon>
+                        Reject
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="warning" (click)="openFeedbackModal()"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id >= 3">
+                        <ion-icon name="fa-chatbubble"></ion-icon>
+                        Feedback
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+
+    <div *ngIf="isLessor">
+        <ion-grid>
+            <ion-row>
+                <ion-col width-50>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="setStatus(3)"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 2">
+                        <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                        Accept
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary"
+                            (click)="setStatus(4, '', true)"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 3">
+                        <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                        Start Task
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="setStatus(4)"
+                            *ngIf="currentTask && (currentTask.job_tasks.status_id === 5 || currentTask.job_tasks.status_id === 6 || currentTask.job_tasks.status_id === 7 )">
+                        <ion-icon name="fa-thumbs-o-up"></ion-icon>
+                        Resume Task
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="openCompletePage()"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 4">
+                        <ion-icon name="checkbox-outline"></ion-icon>
+                        Complete Task
+                    </button>
+                </ion-col>
+                <ion-col width-50>
+                    <button class="btn-shadow" ion-button icon-left block color="danger" (click)="openRejectModal()"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id === 2">
+                        <ion-icon name="fa-thumbs-o-down"></ion-icon>
+                        Reject
+                    </button>
+                    <button class="btn-shadow" ion-button icon-left block color="warning" (click)="openFeedbackModal()"
+                            *ngIf="currentTask && currentTask.job_tasks.status_id >= 3">
+                        <ion-icon name="fa-chatbubble"></ion-icon>
+                        Feedback
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+
+</ion-footer>
+
+<div *ngIf="!isIos && !isLessor">
+    <div ion-fixed class="fs-no-results-container" *ngIf="showTasks === false">
+        <div class="content">
+            <div class="fs-no-results-msg">You Do Not Have<br/>A Current Task</div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="setCurrentTask(true)">
+                    CHECK FOR NEW TASKS
+                </button>
+            </div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="openNextDayTasks()">
+                    SEE UPCOMING TASKS
+                </button>
+            </div>
+            <div class="button-container" *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && !isLessor">
+                <button class="home-btn" ion-button icon-left block color="secondary" (click)="openInAppBrowser()">
+                    OPEN MANAGEMENT APP
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isIos  && !isLessor">
+    <div ion-fixed class="fs-no-results-container-ios" *ngIf="showTasks === false">
+        <div class="content">
+            <div class="fs-no-results-msg">You Do Not Have<br/>A Current Task</div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="setCurrentTask(true)">
+                    CHECK FOR NEW TASKS
+                </button>
+            </div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="openNextDayTasks()">
+                    SEE UPCOMING TASKS
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!isIos && isLessor">
+    <div ion-fixed class="fs-no-results-container-lessor" *ngIf="showTasks === false">
+        <div class="content">
+            <div class="fs-no-results-msg">You Do Not Have<br/>A Current Task</div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="setCurrentTask(true)">
+                    CHECK FOR NEW TASKS
+                </button>
+            </div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="openNextDayTasks()">
+                    SEE UPCOMING TASKS
+                </button>
+            </div>
+            <div class="button-container" *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && !isLessor">
+                <button class="home-btn" ion-button icon-left block color="secondary" (click)="openInAppBrowser()">
+                    OPEN MANAGEMENT APP
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isIos  && isLessor">
+    <div ion-fixed class="fs-no-results-container-ios-lessor" *ngIf="showTasks === false">
+        <div class="content">
+            <div class="fs-no-results-msg">You Do Not Have<br/>A Current Task</div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="setCurrentTask(true)">
+                    CHECK FOR NEW TASKS
+                </button>
+            </div>
+            <div class="button-container">
+                <button class="home-btn" ion-button icon-right block color="secondary" (click)="openNextDayTasks()">
+                    SEE UPCOMING TASKS
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,230 @@
+import {Component} from '@angular/core';
+import {NavController, NavParams, ActionSheetController, Platform} from 'ionic-angular';
+import {Camera} from '@ionic-native/camera';
+import {Diagnostic} from '@ionic-native/diagnostic';
+// import {TaskManager} from '../../providers/task-manager';
+import {Utils} from '../../utils/utils';
+// import {FileOpener} from '@ionic-native/file-opener';
+// import {File} from '@ionic-native/file';
+
+declare let cordova: any;    //global;
+
+@Component({
+    selector: 'page-history-review',
+    templateUrl: 'history-review.html'
+})
+
+export class HistoryReviewPage {
+    data: any;
+    files: Array<any> = [];
+    type: any = {options: ''};
+    isIos: boolean = false;
+    lat: any;
+    lon: any;
+    mySelection: number = 0;
+    lastCheck: number = null;
+    public id;
+    public logId;
+    public fileName;
+    allowSave: boolean = false;
+    imageurlfrompicker: any;
+    imageurlfromresizer: any;
+    imagebase64: any;
+    public base64Image: string;
+
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,
+                private actionSheetCtrl: ActionSheetController,
+                private platform: Platform,
+                private utils: Utils,
+                private camera: Camera,
+                private diagnostic: Diagnostic) {
+
+        this.id = navParams.get("id");
+        this.logId = navParams.get("log_id");
+        this.fileName = navParams.get("file_name");
+
+        if (this.platform.is('ios')) {
+            // This will only print when on iOS
+            this.isIos = true;
+        }
+
+        let successCallback = (isAvailable) => {
+            console.log('Is available? ' + isAvailable);
+        };
+        let errorCallback = (e) => {
+            this.diagnostic.requestCameraAuthorization().then(successCallback)
+        };
+
+        this.diagnostic.isCameraAvailable().then(successCallback).catch(errorCallback);
+
+
+    }
+
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad FeedbackPage');
+
+    }
+
+    ionViewDidEnter() {
+        console.log('ionView stuff');
+        this.loadTaskInfo();
+
+    }
+
+    loadTaskInfo() {
+        console.log('this.id', JSON.stringify(this.id));
+        console.log('this.logId', JSON.stringify(this.logId));
+        console.log('this.fileName', JSON.stringify(this.fileName));
+    }
+
+    update() {
+        console.log('this.id', JSON.stringify(this.id));
+        console.log('this.logId', JSON.stringify(this.logId));
+        console.log('this.fileName', JSON.stringify(this.fileName));
+    }
+
+    cancel() {
+        this.navCtrl.pop();
+    }
+
+    /** when cordova, present an action sheet to take a pic or import from gallery */
+    presentActionSheet() {
+        let buttons: any = [];
+        if (this.platform.is('cordova')) {
+            buttons.push({
+                text: 'Choose Photo',
+                handler: () => {
+                    this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY); // 0 == Library
+                }
+            }, {
+                text: 'Take Photo',
+                handler: () => {
+                    this.getPicture(this.camera.PictureSourceType.CAMERA); // 1 == Camera
+                }
+            })
+        }
+        buttons.push(
+            {
+                text: 'Cancel',
+                role: 'cancel'
+            }
+        );
+
+        let actionSheet = this.actionSheetCtrl.create({
+            buttons: buttons
+        });
+        actionSheet.present();
+
+        this.allowSave = true;
+    }
+
+    /**
+     * get picture from gallery or camera
+     * @Param sourceType:number camera or gallery
+     */
+    getPicture(sourceType: number) {
+        this.utils.presentLoading();
+
+        let cameraShit = this.camera.getPicture({
+            quality: 50,
+            destinationType: 0,
+            sourceType: sourceType,
+            allowEdit: false,
+            saveToPhotoAlbum: false,
+            correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
+        }).then((imageData) => {
+
+            console.log("Shit " + cameraShit)
+
+            console.log(`IMAGEDATA: ${Utils.toJson(imageData, true)}`)
+            //fix for android, remove query string from end of file_uri or crashes android //
+            imageData = imageData.split('?')[0];
+            let filename = imageData.replace(/^.*[\\\/]/, '');
+            let fileData = {
+                name: filename,
+                caption: '',
+                //notes : '',
+                path: imageData,
+                //file : file
+            }
+
+            this.data.files.push(fileData);
+            this.utils.dismissLoading();
+        }, (err) => {
+            console.log(`ERROR -> ${JSON.stringify(err)}`);
+            this.utils.dismissLoading();
+        });
+    }
+
+    pdfCreator() {
+        cordova.plugins.pdf.htmlToPDF({
+                url: "http://www.google.com",
+                documentSize: "A4",
+                landscape: "portrait",
+                type: "base64"
+            },
+            (success) => console.log('success: ', success),
+            (error) => console.log('error:', error));
+    }
+
+    // takePicture() {
+    //     this.camera.getPicture({
+    //         destinationType: this.camera.DestinationType.DATA_URL,
+    //         targetWidth: 1000,
+    //         targetHeight: 1000
+    //     }).then((imageData) => {
+    //         // imageData is a base64 encoded string
+    //         this.base64Image = "data:image/jpeg;base64," + imageData;
+    //         console.log('this.base64Image', JSON.stringify(this.base64Image));
+    //     }, (err) => {
+    //         console.log(err);
+    //     });
+    // }
+
+    // b64toBlob(b64Data, contentType, sliceSize) {
+    //     contentType = contentType || '';
+    //     sliceSize = sliceSize || 512;
+    //
+    //     let byteCharacters = atob(b64Data);
+    //     let byteArrays = [];
+    //
+    //     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    //         let slice = byteCharacters.slice(offset, offset + sliceSize);
+    //
+    //         let byteNumbers = new Array(slice.length);
+    //         for (let i = 0; i < slice.length; i++) {
+    //             byteNumbers[i] = slice.charCodeAt(i);
+    //         }
+    //
+    //         let byteArray = new Uint8Array(byteNumbers);
+    //
+    //         byteArrays.push(byteArray);
+    //     }
+    //
+    //     let blob = new Blob(byteArrays, {type: contentType});
+    //     return blob;
+    // }
+    //
+    // savebase64AsPDF(folderpath, filename, content, contentType) {
+    //     // Convert the base64 string in a Blob
+    //     let DataBlob = this.b64toBlob(content, contentType, 512);
+    //
+    //     console.log("Starting to write the file :3");
+    //
+    //     window.resolveLocalFileSystemURL(folderpath, function (dir) {
+    //         console.log("Access to the directory granted succesfully");
+    //         dir.getFile(filename, {create: true}, function (file) {
+    //             console.log("File created succesfully.");
+    //             file.createWriter(function (fileWriter) {
+    //                 console.log("Writing content to file");
+    //                 fileWriter.write(DataBlob);
+    //             }, function () {
+    //                 alert('Unable to save file in path ' + folderpath);
+    //             });
+    //         });
+    //     });
+    // }
+
+
+}

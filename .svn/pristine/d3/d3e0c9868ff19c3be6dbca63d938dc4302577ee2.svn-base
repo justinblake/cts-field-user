@@ -1,0 +1,345 @@
+<ion-header>
+    <ion-navbar *ngIf="isIos">
+        <ion-row>
+            <ion-col width-50>
+                <div text-center>
+                    <div class="ios-title">
+                        Task Status
+                    </div>
+                </div>
+            </ion-col>
+
+            <ion-col width-33 class="ios-refresh">
+                <ion-buttons class="mar-right6" end>
+                    <button class="refresh" ion-button round icon-right color="secondary"
+                            (click)="loadTomorrowsTasks(userId)"> Refresh
+                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+    </ion-navbar>
+    <ion-navbar *ngIf="!isIos">
+        <ion-row>
+            <ion-title>Task Status</ion-title>
+        </ion-row>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content footer>
+
+    <ion-card class="card-border">
+        <ion-card-header class="task-card-header">
+            Task Details
+        </ion-card-header>
+        <ion-card-content>
+            <div class="task-card-content">
+                <ion-list no-padding text-wrap>
+                    <ion-item no-padding text-wrap>
+                        <h4 class="text-info capitalize">
+                            {{task_description}}</h4>
+                        <h5 class="s-time">
+                            Start Time:
+                            <span>{{updatedTime | date: 'shortTime'}}</span>
+                        </h5>
+                    </ion-item>
+
+                    <div *ngIf="additional_notes.length > 0">
+                        <h5 class="text-info">Additional Task Notes</h5>
+                        <ion-item no-padding text-wrap
+                                  *ngFor="let newNotes of additional_notes; let u = index">
+                            <h5 class="add_notes">{{u + 1}}: {{newNotes.notes}}</h5>
+                            <h5 class="add_by">Added By: <strong>{{newNotes.employee.first_name}}
+                                {{newNotes.employee.last_name}}</strong> at
+                                <span *ngIf="isIos">{{adjustTime(newNotes.updatedTime) }}</span>
+                                <span *ngIf="!isIos">{{newNotes.updatedTime | date: 'shortTime'}}</span>
+                            </h5>
+                        </ion-item>
+                    </div>
+                </ion-list>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="card-border">
+        <ion-card-header class="task-card-header">
+            Crew Status
+        </ion-card-header>
+        <ion-card-content>
+            <div class="task-card-content">
+                <ion-row *ngFor="let crewMember of task_crew; let k = index">
+                    <ion-col [ngClass]="setBackground(crewMember)">
+                        <h4 class="emp-font">{{k + 1}}: {{crewMember.first_name}}
+                            {{crewMember.last_name}} </h4>
+                        <h4 class="indent19" *ngIf="crewMember.is_foreman === 1"> --
+                            Foreman
+                            --</h4>
+                        <h4 class="indent19" *ngIf="crewMember.is_supervisor === 1"> --
+                            Supervisor
+                            --</h4>
+                        <p class="crew-phone">
+                            <button ion-button icon-left clear medium
+                                    class="foremanPhone"
+                                    (click)="callPhone(crewMember.phone)">
+                                {{crewMember.phone}}
+                            </button>
+                        </p>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 1">
+                            Current
+                            Status: New</h4>
+
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 2">
+                            Current
+                            Status: Sent</h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 3">
+                            Current
+                            Status: <span ion-text color="accepted">Accepted</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 4">
+                            Current
+                            Status: <span ion-text color="started">Started</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 5">
+                            Current
+                            Status: <span ion-text color="on-hold">Delayed</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 6">
+                            Current
+                            Status: <span ion-text color="on-hold">On Hold</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 7">
+                            Current
+                            Status: <span ion-text color="on-hold">Emergency</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 11">
+                            Current
+                            Status: <span ion-text
+                                          color="on-hold">Cancelled</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 12">
+                            Current
+                            Status: <span ion-text
+                                          color="on-hold">Temporary Hold</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 13">
+                            Current
+                            Status: <span ion-text
+                                          color="on-hold">Timecard Pause</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 8">
+                            Current
+                            Status: <span ion-text color="on-hold">Rejected</span>
+                        </h4>
+                        <h4 class="job-status" *ngIf="crewMember.status_id === 9">
+                            Current
+                            Status: <span ion-text color="complete">Completed</span>
+                        </h4>
+
+                        <h4 class="margin-left18 link-blue"
+                            *ngIf="crewMember.statusLog.length > 0"
+                            (click)="detailedStatus(k)">
+                            View Detailed Status History
+                            <ion-icon *ngIf="detailedStats.emp !== k"
+                                      name="arrow-dropright"></ion-icon>
+                            <ion-icon
+                                    *ngIf="detailedStats.emp === k"
+                                    name="arrow-dropdown"></ion-icon>
+                        </h4>
+                        <div *ngIf="detailedStats.emp === k">
+                            <div *ngFor="let status of crewMember.statusLog">
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 3">
+                                    <span ion-text color="accepted">Accepted</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 4">
+                                    <span ion-text color="started">Started</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 5">
+                                    <span ion-text color="on-hold">Delayed</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 6">
+                                    <span ion-text color="on-hold">On Hold</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 7">
+                                    <span ion-text color="on-hold">Emergency</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 12">
+                                                                <span ion-text
+                                                                      color="on-hold">Temporary Hold</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 13">
+                                                                <span ion-text
+                                                                      color="on-hold">Timecard Pause</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 8">
+                                    <span ion-text color="on-hold">Rejected</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                                <h4 class="job-status"
+                                    *ngIf="status.status_id === 9">
+                                    <span ion-text color="complete">Completed</span> at
+                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
+                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <button ion-button icon-left medium class="margin-left18"
+                                *ngIf="crewMember.status_id === 5 || crewMember.status_id === 6 || crewMember.status_id === 7 || crewMember.status_id === 12"
+                                (click)="loadNotes(crewMember, taskId)">
+                            <div *ngIf="employeeId === -1 || employeeId !== crewMember.employee_id">
+                                Check For Images
+                            </div>
+                            <div *ngIf="employeeId === crewMember.employee_id">
+                                Hide Results
+                            </div>
+                        </button>
+
+                        <div *ngIf="(imageLength === -1) && (employeeId === crewMember.employee_id)">
+                            <p class="no-images">No Images To Display</p>
+                        </div>
+
+                        <div *ngIf="employeeId === crewMember.employee_id && employeeId !== -1">
+                            <div *ngFor="let note of delayNotes">
+                                <div *ngFor="let image of note.images">
+                                    <img class="mar-bot10" src="{{image}}">
+                                </div>
+                            </div>
+                        </div>
+                    </ion-col>
+                </ion-row>
+                <div *ngIf="task_crew.length === 0">No Crew Specified</div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="card-border" *ngIf="contractor_contacts.length > 0">
+        <ion-card-header class="task-card-header">
+            Contractor Contacts
+        </ion-card-header>
+        <ion-card-content>
+            <div class="task-card-content">
+                <ion-list no-padding text-wrap>
+                    <ion-item no-padding text-wrap
+                              *ngFor="let contact of contractor_contacts; let p = index ">
+                        <h4 class="emp-font">
+                            {{contact.first_name}} {{contact.last_name}}
+                        </h4>
+                        <h4 class="contractor-title2"><span class="bold">Title: </span>{{contact.title}}</h4>
+                        <p class="crew-phone" *ngIf="contact.office_phone">
+                            <button ion-button icon-left clear medium
+                                    class="call-contractor"
+                                    (click)="callPhone(contact.office_phone)">
+                                <span class="contractor-phone">Office: </span> {{contact.office_phone}}
+                            </button>
+                        </p>
+                        <p class="crew-phone" *ngIf="contact.cell_phone">
+                            <button ion-button icon-left clear medium
+                                    class="call-contractor"
+                                    (click)="callPhone(contact.cell_phone)">
+                                <span class="contractor-phone">Cell: </span> {{contact.cell_phone}}
+                            </button>
+                        </p>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="card-border" *ngIf="role_id !== 6">
+        <ion-card-header class="task-card-header">
+            Equipment
+        </ion-card-header>
+        <ion-card-content>
+            <div class="task-card-content">
+                <div class="equip-div" *ngFor="let item of task_equipment">
+                    <h4 class="equip-name">{{item.equipment_name}}</h4>
+                    <h4 class="equip-assig" *ngIf="item.employee_id === 0">Assigned
+                        Employee: <span class="equip-bold">Unassigned</span>
+                    </h4>
+                    <h4 class="equip-assig" *ngIf="item.employee_id !== 0">Assigned
+                        Employee: <span
+                                class="equip-bold">{{getEmployeeName(task_crew, item)}}</span>
+                    </h4>
+                </div>
+                <div class="equip-center" *ngIf="task_equipment.length === 0">
+                    No Equipment Specified
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="card-border">
+        <ion-card-header class="task-card-header">
+            Materials/Supplier
+        </ion-card-header>
+        <ion-card-content>
+            <div *ngFor="let material of task_materials; let m = index">
+                <div class="task-card-content" *ngIf="task_materials">
+                    <h3 class="text-info">{{material.material_name}}</h3>
+                    <ion-list no-padding>
+                        <ion-item no-padding>
+                            <p style="font-weight:bold">Supplier:
+                                {{material.supplier.name}}
+                            </p>
+                            <p>
+                                <button ion-button icon-left clear medium
+                                        class="phoneNum"
+                                        (click)="callPhone(material.supplier.phone)">
+                                    {{material.supplier.phone}}
+                                </button>
+                            </p>
+                            <div>{{material.supplier.address}}</div>
+                            <div>{{material.supplier.city}},
+                                {{material.supplier.state}}&nbsp;{{material.supplier.zip}}
+                            </div>
+                        </ion-item>
+                    </ion-list>
+                </div>
+            </div>
+            <div class="task-card-content equip-center"
+                 *ngIf="task_materials.length === 0">No
+                Materials Specified
+            </div>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
+
+
+
+
+

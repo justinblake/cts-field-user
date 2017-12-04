@@ -1,0 +1,208 @@
+import {Component} from '@angular/core';
+import {NavController, Platform} from 'ionic-angular';
+import {Utils} from '../../utils/utils';
+import {CalendarController} from '../../components/ion2-calendar'
+import {CalendarComponentOptions, DayConfig} from '../../components/ion2-calendar/calendar.model';
+import * as moment from 'moment';
+import {TaskManager} from "../../providers/task-manager";
+import {UserManager} from "../../providers/user-manager";
+import {ConversionManager} from "../../providers/conversion-manager";
+
+
+@Component({
+    selector: 'page-timecard-search',
+    templateUrl: 'timecard-search.html'
+})
+export class TimecardSearchPage {
+
+    startDay: any = -1;
+    isIos: boolean = false;
+    endDay: any = -1;
+    prettyStart: any;
+    prettyEnd: any;
+    date: string;
+    timecardHistory: any;
+    currentUser: any = '';
+    userId: any = '';
+    showSearchResults: boolean = false;
+    hasEnteredDates: boolean = false;
+    myInput: any;
+    dayTime: any;
+    totalSearchSeconds: number = 0;
+    holdArray: Array<any> = [];
+
+
+    constructor(public navCtrl: NavController,
+                public calendarCtrl: CalendarController,
+                public plt: Platform,
+                private utils: Utils,
+                private taskMgr: TaskManager,
+                private userMgr: UserManager,
+                private conMgr: ConversionManager) {
+        this.currentUser = this.userMgr.getUser();
+        this.userId = this.currentUser.userId;
+        if (this.plt.is('ios')) {
+            this.isIos = true;
+        }
+
+    }
+
+    ionViewDidLoad() {
+
+    }
+
+
+    dateRange() {
+        this.showSearchResults = false;
+        this.startDay = -1;
+        this.calendarCtrl.openCalendar({
+            pickMode: 'range',
+            title: '',
+            canBackwardsSelected: true,
+            color: 'timecard',
+            autoDone: true
+        }).then(res => {
+            console.log('res ', JSON.stringify(res));
+            this.startDay = res.from.time;
+            this.endDay = res.to.time;
+
+        })
+            .catch(err => console.log(err))
+    }
+
+
+    updateEntry(num: number) {
+        if (num === 0) {
+            return this.startDay
+        } else if (num === 1) {
+            return this.endDay
+        }
+    }
+
+
+    timecardSearch() {
+        this.holdArray = [];
+        this.utils.presentLoading();
+        let hasTime = false;
+
+        let tempStart = this.conMgr.convertDateTime(this.startDay);
+        let tempEnd = this.conMgr.convertDateTime(this.endDay + 172800000);
+
+        console.log('tempStart ', JSON.stringify(tempStart));
+        console.log('tempEnd ', JSON.stringify(tempEnd));
+        console.log('this.userId ', JSON.stringify(this.userId));
+
+        let newStartDate = new Date(this.startDay);
+        let startDate = newStartDate.setHours(0, 0, 0, 0);
+
+
+        this.taskMgr.loadTimeCardTotal(this.userId, tempStart, tempEnd).then((response: any) => {
+
+                this.timecardHistory = response.data;
+                console.log('this.timecardHistory ', JSON.stringify(this.timecardHistory));
+
+                if (response.data.length > 0) {
+                    hasTime = true;
+                }
+
+                // for (let key in this.timecardHistory) {
+                //     if (this.timecardHistory.hasOwnProperty(key)) {
+                //         let obj = this.timecardHistory[key];
+                //         for (let prop in obj) {
+                //             if (obj.hasOwnProperty(prop)) {
+                //                 if(prop === "totaltime") {
+                //                     this.totalSearchSeconds += obj[prop].total_seconds
+                //                 }
+                //
+                //             }
+                //         }
+                //     }
+                // }
+
+                //
+                // this.timecardHistory = response.data;
+                // let dupArray = [];
+                // for (let i = 0; i < this.timecardHistory.length; i++) {
+                //     if (this.timecardHistory[i].alt_timestamp === null) {
+                //         this.timecardHistory[i].alt_timestamp = this.timecardHistory[i].timestamp;
+                //     }
+                //     if (this.timecardHistory[i].alt_timestamp) {
+                //         let newYear = this.timecardHistory[i].alt_timestamp.slice(0, 10);
+                //         let newTime = this.timecardHistory[i].alt_timestamp.slice(11);
+                //         this.timecardHistory[i].alt_timestamp = newYear + 'T' + newTime;
+                //         this.timecardHistory[i].timestamp = this.timecardHistory[i].alt_timestamp;
+                //     }
+                //     if (this.timecardHistory[i].notes === "NULL") {
+                //         this.timecardHistory[i].notes = '';
+                //     }
+                //
+                //     let demoDate = new Date(this.timecardHistory[i].timestamp);
+                //
+                //     this.timecardHistory[i].newDate = this.timecardHistory[i].timestamp.slice(0, 10);
+                //     let newYear = this.timecardHistory[i].timestamp.slice(0, 10);
+                //     let newTime = this.timecardHistory[i].timestamp.slice(11);
+                //     this.timecardHistory[i].timestamp = newYear + 'T' + newTime;
+                //
+                //     if (+startDate <= +demoDate) {
+                //         dupArray.push(this.timecardHistory[i]);
+                //     } else if (+startDate > +demoDate) {
+                //         console.log("less");
+                //     }
+                // }
+                // this.timecardHistory = dupArray;
+                // this.timecardHistory.sort(function (a, b) {
+                //     return (a.alt_timestamp > b.alt_timestamp) ? 1 : ((b.alt_timestamp > a.alt_timestamp) ? -1 : 0);
+                // });
+                // this.timecardHistory = this.groupBy(this.timecardHistory, "newDate");
+                //
+                // console.log('this.timecardHistory ', JSON.stringify(this.timecardHistory));
+                //
+                this.utils.dismissLoading();
+
+            }
+        );
+
+
+        this.showSearchResults = true;
+    }
+
+    returnTime(time) {
+        return this.conMgr.convertTimeToT(time);
+    }
+
+    convertSeconds(dateObject) {
+        if(this.holdArray.indexOf(dateObject.date) === -1) {
+            this.totalSearchSeconds += dateObject.total_seconds;
+            this.holdArray.push(dateObject.date);
+        }
+
+        let timeObject = this.conMgr.secondsToTime(dateObject.total_seconds);
+        return timeObject.hour + ' hrs ' + timeObject.min + ' min';
+    }
+
+    convertTotalSeconds() {
+         let timeObject = this.conMgr.secondsToTime(this.totalSearchSeconds);
+        return timeObject.hour + ' hrs ' + timeObject.min + ' min';
+    }
+
+    showSeconds() {
+        console.log('this.totalSearchSeconds ', JSON.stringify(this.totalSearchSeconds));
+    }
+
+    // function to sort timecard data into their individual days
+    groupBy(array, property) {
+        let hash = {};
+        for (let i = 0; i < array.length; i++) {
+            if (!hash[array[i][property]]) hash[array[i][property]] = [];
+            hash[array[i][property]].push(array[i]);
+        }
+        return hash;
+    }
+
+
+    searchDate(date) {
+        return this.conMgr.convertDate(date)
+    }
+
+
+}

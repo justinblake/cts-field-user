@@ -1,0 +1,43 @@
+page-complete-notes {
+  ion-textarea {
+    height: 150px;
+    border: 1px solid #CCC;
+    background-color: #FFF;
+
+    textarea {
+      &.text-input {
+        height: 90%;
+        background-color: #FFF;
+        //border: 1px solid blue;
+      }
+    }
+  }
+
+  .back-color {
+    background-color: white;
+  }
+
+  ion-col[width-50] {
+    -webkit-flex: 0 0 50%;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .image-btn {
+    font-size: 1.1rem;
+  }
+
+  .card {
+    background-color: #FFF;
+    //height: 90vh;
+  }
+
+  .mar-top100 {
+    margin-top: 100px;
+  }
+
+  .width100 {
+    width: 100%;
+  }
+}

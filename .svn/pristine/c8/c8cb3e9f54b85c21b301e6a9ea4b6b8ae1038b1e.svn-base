@@ -1,0 +1,101 @@
+<ion-header>
+    <ion-navbar *ngIf="isIos">
+        <ion-row>
+            <ion-col width-50>
+                <div text-center>
+                    <div class="ios-title">
+                        Alerts
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col width-25>
+                <ion-buttons class="mar-right6" end>
+                    <button class="refresh" ion-button round icon-right color="secondary" (click)="loadAlerts()">
+                        Refresh
+                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+            <ion-col width-25>
+                <ion-buttons class="mar-right6" end>
+                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
+                        <ion-icon class="logout-hide" name="log-out"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+    </ion-navbar>
+    <ion-navbar *ngIf="!isIos">
+        <ion-buttons class="mar-right6" end>
+            <button class="refresh" ion-button round icon-right color="secondary" (click)="loadAlerts()"> Refresh
+                <ion-icon name="refresh"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-buttons class="mar-right6" end>
+            <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
+                <ion-icon name="log-out"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>Alerts</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div *ngIf="alerts">
+        <ion-card *ngFor="let alert of alerts.data; let i = index">
+            <ion-card-header *ngIf="alert.viewed === 1" class="read-alert">
+                <h3 class="text-info">From: {{alert.sending_emp.first_name}} {{alert.sending_emp.last_name}}</h3>
+            </ion-card-header>
+
+            <ion-card-header *ngIf="alert.viewed === 0" class="unread-alert">
+                New Alert!
+                <h3 class="text-info">From: {{alert.sending_emp.first_name}} {{alert.sending_emp.last_name}}</h3>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-row>
+                    <button ion-button icon-left clear small (click)="readMessage(i)">
+                        <ion-icon *ngIf="displayAlert === -1 || displayAlert !== i"
+                                  name="fa-chevron-circle-right"></ion-icon>
+                        <ion-icon *ngIf="displayAlert === i" name="fa-chevron-circle-down"></ion-icon>
+                        <div *ngIf="displayAlert === -1 || displayAlert !== i">View Alert</div>
+                        <div *ngIf="displayAlert === i">Hide Alert</div>
+                    </button>
+                </ion-row>
+                <div *ngIf="displayAlert === i">
+                    <ion-row>
+                        <h4>Message:</h4>
+                    </ion-row>
+                    <ion-row>
+                        <h5 class="message">{{alert.alert_description}}</h5>
+                    </ion-row>
+                    <ion-row>
+                        <h6 *ngIf="!isIos">Time Sent: {{alert.time_stamp_sent | date:'MMMM d, hh:mm'}} </h6>
+                        <h6 *ngIf="isIos">Time Sent: {{alert.time_stamp_sent}} </h6>
+                    </ion-row>
+                    <ion-row *ngIf="alert.time_stamp_viewed !== null">
+                        <h6 *ngIf="!isIos">Time Read: {{alert.time_stamp_viewed | date:'MMMM d, hh:mm'}} </h6>
+                        <h6 *ngIf="isIos">Time Read: {{alert.time_stamp_viewed}} </h6>
+                    </ion-row>
+                    <ion-row>
+                        <h4>{{alert.sending_emp.first_name}}'s #: </h4>
+                        <p class="crew-phone" *ngIf="!isIos">
+                            <button ion-button icon-left clear medium
+                                    class="phoneNum"
+                                    (click)="callPhone(alert.sending_emp.phone)">
+                                {{alert.sending_emp.phone}}
+                            </button>
+                        </p>
+                        <p class="crew-phone" *ngIf="isIos">
+                            <button ion-button icon-left clear medium
+                                    class="phoneNum iosPhone"
+                                    (click)="callPhone(alert.sending_emp.phone)">
+                                {{alert.sending_emp.phone}}
+                            </button>
+                        </p>
+                    </ion-row>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>

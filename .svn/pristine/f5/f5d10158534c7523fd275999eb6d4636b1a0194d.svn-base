@@ -1,0 +1,166 @@
+<ion-header>
+    <ion-navbar *ngIf="isIos">
+        <ion-row>
+            <ion-col width-50>
+                <div text-center>
+                    <div class="ios-title">
+                        Crews <span *ngIf="!search">- {{currentDate | date: 'MMM dd, yyyy'}}</span>
+                    </div>
+                </div>
+            </ion-col>
+
+            <ion-col width-25>
+                <ion-buttons class="mar-right6" end>
+                    <button class="refresh" ion-button round icon-right color="secondary"
+                            (click)="refreshCrews()"> Refresh
+                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+    </ion-navbar>
+    <ion-navbar *ngIf="!isIos">
+        <ion-buttons class="mar-right6" end>
+            <button class="refresh" ion-button round icon-right color="secondary"
+                    (click)="refreshCrews()"> Refresh
+                <ion-icon name="refresh"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>Crews <span *ngIf="!search">- {{currentDate | date: 'MMM dd, yyyy'}}</span></ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content footer>
+    <ion-card class="manage-app">
+        <ion-card-header class="task-card-header">
+            <div *ngIf="!search">
+                <ion-buttons text-center>
+                    <button color="secondary" ion-button block icon-left
+                            (click)="search = !search">
+                        <ion-icon name="search"></ion-icon>
+                        Search Future Crew's Tasks
+                    </button>
+                </ion-buttons>
+            </div>
+            <div *ngIf="search">
+                <ion-item>
+                    <ion-label>Foreman Task Search</ion-label>
+                    <ion-datetime displayFormat="MM/DD/YYYY" pickerFormat="MMM D YYYY"
+                                  [(ngModel)]="currentDate"></ion-datetime>
+                </ion-item>
+                <ion-row>
+                    <ion-col width-50>
+                        <ion-buttons text-center>
+                            <button color="primary" ion-button block icon-left
+                                    (click)="loadCurrentDay()">
+                                Today's Tasks
+                            </button>
+                        </ion-buttons>
+                    </ion-col>
+                    <ion-col width-50>
+                        <ion-buttons text-center>
+                            <button color="secondary" ion-button block icon-left
+                                    (click)="getForemanTasks(true)">
+                                <ion-icon name="search"></ion-icon>
+                                Search
+                            </button>
+                        </ion-buttons>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </ion-card-header>
+    </ion-card>
+
+    <div *ngIf="showTasks">
+        <div *ngIf="!tasks">
+            <ion-card>
+                <ion-card-header text-center class="task-card-header">
+                    No Tasks For This Date
+                </ion-card-header>
+            </ion-card>
+        </div>
+        <div *ngIf="tasks">
+            <ion-card class="card-space" *ngFor="let project of tasks; let i = index">
+                <ion-card-header class="task-card-header">
+                    {{project.job_name}}
+                </ion-card-header>
+                <ion-card-content *ngIf="contractorDetails.proj === i">
+
+                    <div class="task-card-content">
+                        <ion-list no-padding>
+                            <ion-item no-padding>
+                                <div>{{project.address}}</div>
+                                <div>{{project.city}}, {{project.state}}&nbsp;{{project.zip}}</div>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                    <div class="mar-bot25">
+                        <p class="bold">Contractor:</p>
+                        <p>
+                            {{project.contractor[0].name}}</p>
+                        <p class="bold">Office Phone:</p>
+                        <p>
+                            <button ion-button icon-left clear medium
+                                    class="contractorPhoneNum"
+                                    (click)="callPhone(project.contractor[0].office_phone)">
+                                {{project.contractor[0].office_phone}}
+                            </button>
+                        </p>
+                    </div>
+                </ion-card-content>
+
+                <div no-padding class="more-back move-up">
+                    <ion-row>
+                        <ion-col>
+                            <button class="more-left" ion-button icon-left clear medium (click)="toggleDivState(i)">
+                                <span *ngIf="contractorDetails.proj !== i">More ...</span>
+                                <span *ngIf="contractorDetails.proj === i">Less ...</span>
+                            </button>
+                        </ion-col>
+                        <ion-col text-right>
+                            <button class="pad8" ion-button icon-left clear medium
+                                    (click)="showDrivingDirections(project.lat, project.lon)">
+                                <ion-icon name="navigate"></ion-icon>
+                                Get Directions
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </div>
+
+                <ion-card-content>
+                    <div *ngFor="let task of project.job_tasks; let j = index">
+                        <div class="card-width">
+                            <ion-grid class="task-button">
+                                <ion-row (click)="expandTask(i, j, task.id)">
+                                    <ion-col *ngIf="task.importantStatus === 7" width-5
+                                             class="current-status status-problem"></ion-col>
+                                    <ion-col *ngIf="task.importantStatus === 5" width-5
+                                             class="current-status status-delay"></ion-col>
+                                    <ion-col *ngIf="task.importantStatus === 4" width-5
+                                             class="current-status status-working"></ion-col>
+                                    <ion-col *ngIf="task.importantStatus === 9" width-5
+                                             class="current-status status-complete"></ion-col>
+                                    <ion-col *ngIf="task.importantStatus === 11" width-5
+                                             class="current-status status-cancelled"></ion-col>
+                                    <ion-col *ngIf="task.importantStatus === 0" width-5
+                                             class="current-status not-started"></ion-col>
+
+                                    <ion-col class="task-text" text-left *ngIf="j === 0" width-65>
+                                        <span>{{task.task_description}}</span>
+                                    </ion-col>
+                                    <ion-col class="task-text" text-left *ngIf="j > 0" width-65>
+                                        <span>{{task.task_description}}</span>
+                                    </ion-col>
+                                    <ion-col width-30 class="newTime" text-right>
+                                            <span *ngIf="isIos">{{adjustTime(task.updatedTime) }}</span>
+                                            <span *ngIf="!isIos">{{task.updatedTime | date:'shortTime'}}</span>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </div>
+</ion-content>

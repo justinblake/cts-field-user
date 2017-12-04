@@ -1,0 +1,299 @@
+import {Component} from '@angular/core';
+import {NavController, NavParams, App, Platform} from 'ionic-angular';
+import {TaskManager} from '../../providers/task-manager';
+import {UserManager} from '../../providers/user-manager';
+import {LoginPage} from '../login/login';
+import {Utils} from '../../utils/utils';
+import {Animations} from '../../animations/animations';
+import {CallNumber} from '@ionic-native/call-number';
+import {HistoryFeedbackPage} from '../history-feedback/history-feedback';
+import {HistoryReviewPage} from '../history-review/history-review';
+import {ConversionManager} from "../../providers/conversion-manager";
+
+@Component({
+    selector: 'page-history',
+    templateUrl: 'history.html',
+    animations: [
+        Animations.expandCollapse
+    ]
+})
+export class HistoryPage {
+
+    history: any = '';
+    user: any = '';
+    userId: any = '';
+    currentUser: any = '';
+    historyLoaded = false;
+    divState: string = 'hide';
+    isIos: boolean = false;
+    url: string = "https://www.cleartasksolutions.com/uploads/";
+    tempArray: Array<any> = [];
+    holdArray: Array<any> = [];
+    public displayOptions = {
+        proj: -1,
+        task: -1
+    };
+    currentDay: any;
+    month: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,
+                public plt: Platform,
+                private userMgr: UserManager,
+                private appCtrl: App,
+                private taskMgr: TaskManager,
+                private callNumber: CallNumber,
+                private utils: Utils,
+                private conMgr: ConversionManager) {
+
+
+        this.currentUser = this.userMgr.getUser();
+        this.userId = this.currentUser.userId;
+        this.divState = 'collapse';
+        if (this.plt.is('ios')) {
+            this.isIos = true;
+        }
+
+    }
+
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad HistoryPage');
+        this.loadHistory();
+    }
+
+
+    ionViewWillLoad() {
+        console.log('ionViewWillLoad HistoryPage');
+
+    }
+
+    // /** load history into this view  */
+    loadHistory() {
+        let interimTime = new Date(Date.now());
+        console.log('interimTime ', JSON.stringify(interimTime));
+        let crud = interimTime.valueOf();
+        console.log('crud ', JSON.stringify(crud));
+        let myZone = interimTime.getTimezoneOffset();
+        let year = interimTime.getFullYear();
+        let month = interimTime.getMonth();
+        let day = interimTime.getUTCDate();
+        console.log('day', JSON.stringify(day));
+        let hour = interimTime.getUTCHours() - (myZone/60);
+        let minute = interimTime.getUTCMinutes();
+        let seconds = interimTime.getUTCSeconds();
+        let adjustTimezone = new Date(Date.UTC(year, month, day, hour, minute, seconds));
+        let timeZero = adjustTimezone.setHours(0,0,0,0);
+
+        this.currentDay = timeZero.valueOf();
+
+        console.log('this.currentDay ', JSON.stringify(this.currentDay));
+
+        console.log('this.currentUser', JSON.stringify(this.currentUser));
+        this.displayOptions = {
+            proj: -1,
+            task: -1
+        };
+        console.log('this.userId', JSON.stringify(this.userId));
+        this.utils.presentLoading();
+        this.historyLoaded = false;
+        this.taskMgr.getTaskHistoryRemote(this.userId).then((response: any) => {
+            this.history = response;
+            console.log('this.history ', JSON.stringify(this.history));
+            this.user = response.userdata;
+            this.historyLoaded = true;
+            let myHistory = response.data;
+            let updatedHistory = [];
+            for (let i = 0; i < myHistory.length; i++) {
+                if (myHistory[i].job_tasks.length !== 0) {
+                    updatedHistory.push(myHistory[i]);
+                    console.log('updatedHistory', JSON.stringify(updatedHistory));
+                }
+            }
+            this.history.data = updatedHistory;
+
+
+            for (let p = 0; p < this.history.data.length; p++) {
+                console.log('this.history.data job task length ', JSON.stringify(this.history.data[p].job_tasks.length));
+                for (let q = 0; q < this.history.data[p].job_tasks.length; q++) {
+                    this.history.data[p].job_tasks[q].newDate = this.history.data[p].job_tasks[q].task_date + 'T' + this.history.data[p].job_tasks[q].task_start_time;
+                    let newMilli = new Date(this.history.data[p].job_tasks[q].newDate.valueOf());
+                    this.history.data[p].job_tasks[q].milliseconds = newMilli.valueOf();
+                    let month = this.history.data[p].job_tasks[q].task_date[5] + '' + this.history.data[p].job_tasks[q].task_date[6];
+                    let monthInt = parseInt(month);
+                    this.history.data[p].job_tasks[q].month = this.month[monthInt - 1];
+
+                    if (this.history.data[p].job_tasks[q].task_date[8] === '0') {
+                        this.history.data[p].job_tasks[q].day = this.history.data[p].job_tasks[q].task_date[9];
+                    }
+                    else {
+                        this.history.data[p].job_tasks[q].day = this.history.data[p].job_tasks[q].task_date[8] + '' + this.history.data[p].job_tasks[q].task_date[9];
+                    }
+
+                    this.history.data[p].job_tasks[q].year = this.history.data[p].job_tasks[q].task_date[0] + '' + this.history.data[p].job_tasks[q].task_date[1] + '' + this.history.data[p].job_tasks[q].task_date[2] + '' + this.history.data[p].job_tasks[q].task_date[3]
+                }
+            }
+            console.log('this.history.data ', JSON.stringify(this.history.data));
+
+            this.utils.dismissLoading();
+        }).catch((error) => {
+            this.utils.dismissLoading();
+            setTimeout(() => {
+                this.utils.toastError(error);
+            }, 500)
+        })
+    }
+
+    resumeTask(project, task) {
+        // this.utils.presentLoading();
+        let data = {
+            taskId: this.history.data[project].job_tasks[task].id,
+            userId: this.userId,
+            notes: '',
+            statusId: 4,
+            files: [],
+            timestamp: new Date(Date.now())
+        };
+        this.taskMgr.resumeOnHoldTask(data).then((response) => {
+            this.loadHistory();
+            // this.utils.dismissLoading();
+        })
+    }
+
+    // leaveFeedback(newNotes, input) {
+    //     let data = {
+    //         statusId: 9,
+    //         taskId: input,
+    //         notes: newNotes
+    //     };
+    //     this.taskMgr.updateNextDayTaskStatus(data).then(response => {
+    //         this.loadHistory();
+    //     })
+    // }
+    //
+    // openFeedbackModal(taskId) {
+    //     let modal: Modal = this.utils.presentHistoryFeedbackModal();
+    //     modal.onDidDismiss((data) => {
+    //         if (data.save === true) {
+    //             this.leaveFeedback(data.notes, taskId);
+    //         }
+    //     })
+    // }
+
+
+    openHistoryFeedbackPage(jobId) {
+        this.displayOptions = {
+            proj: -1,
+            task: -1
+        };
+        let params = {
+            id: jobId
+        };
+        this.navCtrl.push(HistoryFeedbackPage, params);
+        return true;
+    }
+
+
+    openImage(image) {
+        console.log('image', JSON.stringify(image));
+        let params = image;
+        this.navCtrl.push(HistoryReviewPage, params).then(response => {
+            console.log('response', JSON.stringify(response));
+        });
+        return true;
+    }
+
+    displayTask(i, j) {
+        if (this.displayOptions.proj === i && this.displayOptions.task === j) {
+            this.displayOptions = {
+                proj: -1,
+                task: -1
+            };
+        } else {
+            this.utils.presentLoading();
+            this.taskMgr.loadTaskUserLogArray(this.history.data[i].job_tasks[j].id).then((response: any) => {
+                let json: any = response;
+                this.history.data[i].job_tasks[j].task_user_log = json.data;
+
+                this.tempArray = json.data;
+
+
+                this.utils.dismissLoading();
+
+                let myKey1 = Object.keys(this.tempArray);
+
+
+                for (let k = 0; k < myKey1.length; k++) {
+                    let tempKey = this.tempArray[Object.keys(this.tempArray)[k]];
+                    console.log("tempKey.fileData length " + tempKey.fileData.length);
+                    if (tempKey.fileData.length > 0) {
+                        for (let m = 0; m < tempKey.fileData.length; m++) {
+                            tempKey.fileData[m].file_name = this.url + tempKey.fileData[m].file_name;
+                        }
+                        console.log('tempKey.fileData', JSON.stringify(tempKey.fileData));
+                    }
+
+
+                }
+
+
+                for (let m = 0; m < this.history.data[i].job_tasks[j].task_user_log.length; m++) {
+
+                    // ugly code to display date and time since iOS can't handle angular date pipes
+
+                    let noteMonth = this.history.data[i].job_tasks[j].task_user_log[m].timestamp[5] + '' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[6];
+                    let noteMonthInt = parseInt(noteMonth);
+                    this.history.data[i].job_tasks[j].task_user_log[m].month = this.month[noteMonthInt - 1];
+
+
+                    if (this.history.data[i].job_tasks[j].task_user_log[m].timestamp[8] === '0') {
+                        this.history.data[i].job_tasks[j].task_user_log[m].day = this.history.data[i].job_tasks[j].task_user_log[m].timestamp[9];
+                    }
+                    else {
+                        this.history.data[i].job_tasks[j].task_user_log[m].day = this.history.data[i].job_tasks[j].task_user_log[m].timestamp[8] + '' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[9];
+                    }
+
+                    let combined = this.history.data[i].job_tasks[j].task_user_log[m].timestamp[11] + '' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[12];
+                    let combinedInt = parseInt(combined);
+
+                    if (combinedInt > 12) {
+                        combinedInt -= 12;
+                        this.history.data[i].job_tasks[j].task_user_log[m].noteTime = combinedInt + ':' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[14] + '' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[15] + ' ' + 'PM';
+                    }
+                    else if (combinedInt === 12) {
+                        this.history.data[i].job_tasks[j].task_user_log[m].noteTime = combinedInt + ':' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[14] + '' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[15] + ' ' + 'PM';
+                    }
+                    else if (combinedInt > 9 && combinedInt < 12) {
+                        this.history.data[i].job_tasks[j].task_user_log[m].noteTime = combinedInt + ':' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[14] + '' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[15] + ' ' + 'AM';
+                    }
+                    else if (combinedInt < 10) {
+                        let morning = this.history.data[i].job_tasks[j].task_user_log[m].timestamp[12];
+                        this.history.data[i].job_tasks[j].task_user_log[m].noteTime = morning + ':' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[14] + '' + this.history.data[i].job_tasks[j].task_user_log[m].timestamp[15] + ' ' + 'AM';
+                    }
+
+
+                }
+
+                console.log('this.history.data[i].job_tasks[j].task_user_log', JSON.stringify(this.history.data[i].job_tasks[j].task_user_log));
+
+
+            });
+            this.displayOptions = {
+                proj: i,
+                task: j
+            };
+        }
+        return this.displayOptions;
+    }
+
+    logout() {
+        this.userMgr.logout().then(response => {
+            this.appCtrl.getRootNav().push(LoginPage);
+        })
+    }
+
+    callPhone(number) {
+        this.callNumber.callNumber(number, false)
+            .then(() => console.log('Launched dialer!'))
+            .catch(() => console.log('Error launching dialer'));
+    }
+}

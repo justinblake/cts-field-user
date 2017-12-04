@@ -1,0 +1,19 @@
+page-reject-notes {
+ion-textarea {
+    height: 250px;
+    border: 1px solid #CCC;
+    background-color:#FFF;
+
+textarea {
+    &.text-input {
+    height:90%;
+    background-color:#FFF;
+    //border: 1px solid blue;
+    }
+}
+}
+ .card {
+     background-color:#FFF;
+     //height: 90vh;
+ }
+}

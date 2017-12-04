@@ -1,0 +1,32 @@
+page-feedback {
+    ion-item {
+        border-bottom: 1px solid red;
+    }
+    ion-label {
+        font-weight: bold;
+    }
+
+    .temp-hold {
+        color: #FF0000 !important;
+        font-size: 1.4rem;
+        font-weight: normal;
+    }
+
+    ion-textarea {
+        height: 100px;
+        border: 1px solid #CCC;
+        background-color: #FFF;
+
+        textarea {
+            &.text-input {
+                height: 90%;
+                ///background-color:#FFF;
+                //border: 1px solid blue;
+            }
+        }
+    }
+    .card {
+        background-color: #FFF;
+        //height: 90vh;
+    }
+}

@@ -1,0 +1,112 @@
+import {Component} from '@angular/core';
+import {Platform, NavController, NavParams} from 'ionic-angular';
+import {Keyboard} from 'ionic-native';
+import {TabsPage} from '../tabs/tabs';
+import {UserManager} from '../../providers/user-manager';
+import {TaskManager} from '../../providers/task-manager';
+import {InAppBrowser} from '@ionic-native/in-app-browser';
+
+
+import {Utils} from '../../utils/utils';
+
+@Component({
+    selector: 'page-login',
+    templateUrl: 'login.html'
+})
+export class LoginPage {
+
+    isLoggedIn: boolean = false;
+    platform: Platform;
+    showEmail: boolean = false;
+    resetEmail: '';
+
+
+    credentials = {
+        email: '',
+        password: ''
+    };
+
+    constructor(platform: Platform,
+                public navCtrl: NavController,
+                public navParams: NavParams,
+                private userMgr: UserManager,
+                private taskMgr: TaskManager,
+                private utils: Utils,
+                private iab: InAppBrowser) {
+        this.platform = platform;
+        this.platform.ready().then(() => {
+            Keyboard.disableScroll(true);
+        });
+    }
+
+    ionViewDidLoad() {
+        //this.isLoggedIn = this.userMgr.isLoggedIn();
+        console.log('ionViewDidLoad LoginPage');
+    }
+
+    ionViewDidEnter() {
+        // fix for android hiding the text input //
+        this.platform.ready().then(() => {
+            Keyboard.disableScroll(true);
+        });
+        // disable back button to fix navigation //
+        // otherwise back button could take you back to tasks //
+        this.platform.registerBackButtonAction(() => {
+            //do nothing....
+        })
+        this.isLoggedIn = this.userMgr.isLoggedIn();
+        console.log('ionViewDidEnter LoginPage');
+    }
+
+    ionViewWillLeave() {
+        // reverse android keyboard workaround //
+        this.platform.ready().then(() => {
+            Keyboard.disableScroll(false);
+        });
+        this.platform.registerBackButtonAction(() => {
+            //this.navCtrl.pop();
+        })
+    }
+
+    /** used to enable/disable login button */
+    disableForm() {
+        return this.credentials.email.trim().length < 1 || this.credentials.password.trim().length < 1;
+    }
+
+    // yep //
+    trimNotes() {
+        this.credentials.email = this.credentials.email.trim();
+    }
+
+    /** log the user in */
+    doLogin() {
+        this.utils.presentLoading('Logging in...');
+        let credentials = {};
+        Object.assign(credentials, this.credentials);
+        this.userMgr.authenticate(credentials).then(valid => {
+            this.utils.dismissLoading();
+            if (valid) {
+                this.navCtrl.push(TabsPage);
+            } else {
+                let msg = "Unable to log you in. Check your username and password and try again";
+                this.utils.presentToast(msg, true, 'OK');
+            }
+        })
+    }
+
+    showPasswordReset() {
+        this.showEmail = true;
+    }
+
+    resetPassword() {
+        console.log('this.resetEmail', JSON.stringify(this.resetEmail));
+        this.taskMgr.resetPassword(this.resetEmail);
+        this.resetEmail = '';
+        this.showEmail = false;
+    }
+
+    openInAppBrowser() {
+        let options = "location=no";
+        this.iab.create("https://www.cleartasksolutions.com/app/login/index.html", "_system", options);
+    }
+}
