@@ -82,7 +82,7 @@ export class DrivingDirectionsPage {
 
 
 
-                this.launchNavigator.navigate(this.destination, options.start)
+                this.launchNavigator.navigate(this.destination)
                     .then(
                         success => console.log("Launched Navigator"),
                         error => console.log('Error launching navigator: ' + error)
