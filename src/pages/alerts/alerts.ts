@@ -81,16 +81,16 @@ export class AlertsPage {
         alert.present();
     }
 
-    presentDemoAlert() {
-        let alert = this.alertCtrl.create({
-            title: 'I got the update',
-            message: 'I got the update',
-            cssClass: 'myAlerts',
-            buttons: ['OK']
-        });
-
-        alert.present();
-    }
+    // presentDemoAlert() {
+    //     let alert = this.alertCtrl.create({
+    //         title: 'I got the update',
+    //         message: 'I got the update',
+    //         cssClass: 'myAlerts',
+    //         buttons: ['OK']
+    //     });
+    //
+    //     alert.present();
+    // }
 
     loadAlerts() {
         this.utils.presentLoading();
@@ -114,9 +114,6 @@ export class AlertsPage {
                 console.log('this.alerts', JSON.stringify(this.alerts));
             }
             this.utils.dismissLoading();
-        }).then(() => {
-            console.log("I have received the update");
-            this.presentDemoAlert();
         }).catch((error) => {
             this.utils.dismissLoading();
             setTimeout(() => {
@@ -138,10 +135,10 @@ export class AlertsPage {
 
     }
 
-    demoUpdate() {
-        console.log("I have received the update");
-        this.presentDemoAlert();
-    }
+    // demoUpdate() {
+    //     console.log("I have received the update");
+    //     this.presentDemoAlert();
+    // }
 
 
     readMessage(i) {

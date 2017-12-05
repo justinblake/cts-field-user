@@ -38,23 +38,23 @@
         </ion-card>
     </div>
 
-    <ion-card>
-                <ion-card-header class="task-card-header">
-                    Additional Options
-                </ion-card-header>
-                <ion-card-content padding>
+    <!--<ion-card>-->
+        <!--<ion-card-header class="task-card-header">-->
+            <!--Additional Options-->
+        <!--</ion-card-header>-->
+        <!--<ion-card-content padding>-->
 
-                    <ion-row>
+            <!--<ion-row>-->
 
-                        <button class="home-btn" ion-button icon-left block color="secondary"
-                                (click)="demoUpdate()">
-                            Update Test
-                        </button>
+                <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+                        <!--(click)="demoUpdate()">-->
+                    <!--Update Test-->
+                <!--</button>-->
 
-                    </ion-row>
+            <!--</ion-row>-->
 
-                </ion-card-content>
-            </ion-card>
+        <!--</ion-card-content>-->
+    <!--</ion-card>-->
 
 
     <div *ngIf="alerts">
@@ -106,7 +106,8 @@
                 <ion-row>
                     <ion-col>
                         <button class="view-alert" ion-button icon-left clear small (click)="readMessage(i)">
-                            <span class="view-alert-icon" *ngIf="displayAlert === -1 || displayAlert !== i">View Alert</span>
+                            <span class="view-alert-icon"
+                                  *ngIf="displayAlert === -1 || displayAlert !== i">View Alert</span>
                             <span class="view-alert-icon" *ngIf="displayAlert === i">Hide Alert</span>
                             <ion-icon *ngIf="displayAlert === -1 || displayAlert !== i"
                                       name="fa-chevron-circle-right"></ion-icon>
