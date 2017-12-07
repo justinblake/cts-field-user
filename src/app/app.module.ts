@@ -15,7 +15,7 @@ import {CallNumber} from '@ionic-native/call-number';
 import {Camera} from '@ionic-native/camera';
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {FCM} from '@ionic-native/fcm';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import {FileTransfer, FileUploadOptions, FileTransferObject} from '@ionic-native/file-transfer';
 import {File} from '@ionic-native/file';
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {Keyboard} from '@ionic-native/keyboard';
@@ -58,31 +58,31 @@ import {TaskManager} from '../providers/task-manager';
 import {UserManager} from '../providers/user-manager';
 import {Utils} from '../utils/utils';
 
-import { Pro } from '@ionic/pro';
+import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-  appVersion: "1.3.117"
+    appVersion: "1.3.117"
 });
 
 @Injectable()
 export class MyErrorHandler implements ErrorHandler {
-  ionicErrorHandler: IonicErrorHandler;
+    ionicErrorHandler: IonicErrorHandler;
 
-  constructor(injector: Injector) {
-    try {
-      this.ionicErrorHandler = injector.get(IonicErrorHandler);
-    } catch(e) {
-      // Unable to get the IonicErrorHandler provider, ensure
-      // IonicErrorHandler has been added to the providers list below
+    constructor(injector: Injector) {
+        try {
+            this.ionicErrorHandler = injector.get(IonicErrorHandler);
+        } catch (e) {
+            // Unable to get the IonicErrorHandler provider, ensure
+            // IonicErrorHandler has been added to the providers list below
+        }
     }
-  }
 
-  handleError(err: any): void {
-    IonicPro.monitoring.handleNewError(err);
-    // Remove this if you want to disable Ionic's auto exception handling
-    // in development mode.
-    this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
-  }
+    handleError(err: any): void {
+        IonicPro.monitoring.handleNewError(err);
+        // Remove this if you want to disable Ionic's auto exception handling
+        // in development mode.
+        this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
+    }
 }
 
 export function provideStorage() {
@@ -159,7 +159,7 @@ export function provideStorage() {
     providers: [
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         {provide: Storage, useFactory: provideStorage},
-        [{ provide: ErrorHandler, useClass: MyErrorHandler }],
+        [{provide: ErrorHandler, useClass: MyErrorHandler}],
         ActionSheet,
         AndroidFullScreen,
         ApiService,

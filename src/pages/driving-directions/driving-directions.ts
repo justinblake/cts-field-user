@@ -1,7 +1,7 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation';
 import {NavController, NavParams, Platform} from 'ionic-angular';
-import {Geoposition} from 'ionic-native';
+// import {Geoposition} from 'ionic-native';
 
 
 import {Utils} from '../../utils/utils';

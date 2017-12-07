@@ -1,7 +1,8 @@
-import {Injectable, NgZone} from '@angular/core';
+import {Injectable} from '@angular/core';
+//NgZone from above
 import {Http, Request, RequestMethod, RequestOptions, Headers} from '@angular/http';
-import {FileTransfer, FileUploadOptions, FileTransferObject} from '@ionic-native/file-transfer';
-import {File} from '@ionic-native/file';
+import {FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
+// import {File} from '@ionic-native/file';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/delay';
@@ -24,11 +25,9 @@ export class ApiService {
 
 
     constructor(public http: Http,
-                private ngZone: NgZone,
-                private transfer: FileTransfer,
-                private file: File) {
+                private transfer: FileTransfer) {
 
-
+        //remove private ngZone: NgZone from constructor
         // settings for api endpoints //
         this.apiBase = 'https://www.cleartasksolutions.com/api';
         this.utilApi = `${this.apiBase}/utilApi.php`;
@@ -343,16 +342,16 @@ export class ApiService {
         })
     };
 
-    // /* show progress of upload -- not implemented */
-    onProgress = (progressEvent: ProgressEvent): void => {
-        this.ngZone.run(() => {
-            if (progressEvent.lengthComputable) {
-                this.progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-            } else {
-                // -- //
-            }
-        });
-    };
+    // // /* show progress of upload -- not implemented */
+    // onProgress = (progressEvent: ProgressEvent): void => {
+    //     this.ngZone.run(() => {
+    //         if (progressEvent.lengthComputable) {
+    //             this.progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+    //         } else {
+    //             // -- //
+    //         }
+    //     });
+    // };
 
 
     // * creates a postTaskFeedbackImage HTML5
