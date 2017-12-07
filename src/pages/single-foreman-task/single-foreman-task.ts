@@ -36,6 +36,7 @@ export class SingleForemanTaskPage {
         emp: -1
     };
     imageLength: number = -1;
+    role_id: number = -1;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,

@@ -133,17 +133,27 @@ export class LoginPage {
     /** log the user in */
     doLogin() {
         this.utils.presentLoading('Logging in...');
-        let credentials = {};
+        let credentials: any = {};
         Object.assign(credentials, this.credentials);
-        this.userMgr.authenticate(credentials).then(valid => {
-            this.utils.dismissLoading();
-            if (valid) {
-                this.navCtrl.push(TabsPage);
-            } else {
-                let msg = "Unable to log you in. Check your username and password and try again";
-                this.utils.presentToast(msg, true, 'OK');
-            }
+
+        console.log('credentials ', JSON.stringify(credentials));
+
+        this.userMgr.md5Password(credentials).then((res: any) => {
+            console.log('res ', JSON.stringify(res));
+            credentials.password = res.md5Pass;
+
+            this.userMgr.authenticate(credentials).then(valid => {
+                this.utils.dismissLoading();
+                if (valid) {
+                    this.navCtrl.push(TabsPage);
+                } else {
+                    let msg = "Unable to log you in. Check your username and password and try again";
+                    this.utils.presentToast(msg, true, 'OK');
+                }
+            })
         })
+
+
     }
 
     showPasswordReset() {

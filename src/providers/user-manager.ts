@@ -47,9 +47,19 @@ export class UserManager {
         })
     }
 
+    md5Password(credentials) {
+        console.log('credentials in user manager ', JSON.stringify(credentials));
+        return new Promise((resolve, reject) => {
+            this.api.md5(credentials.password).then(response => {
+                console.log('response in md5Password', JSON.stringify(response));
+                resolve(response);
+            })
+        })
+    }
+
     authenticate(credentials) {
         //md5 hash the password
-        credentials.password = Utils.md5hashStr(credentials.password);
+
         return new Promise((resolve, reject) => {
             this.api.authenticate(credentials).then(response => {
                 if (response.hasOwnProperty('userdata')) {
@@ -67,6 +77,8 @@ export class UserManager {
                 }
             })
         })
+
+
     }
 
     logout() {

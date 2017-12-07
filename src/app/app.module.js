@@ -1,95 +1,89 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 //libraries//
-var core_1 = require("@angular/core");
-//import { JsonPipe } from '@angular/common';
-var ionic_angular_1 = require("ionic-angular");
-var storage_1 = require("@ionic/storage");
-var app_component_1 = require("./app.component");
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { NgModule, ErrorHandler, Injectable, Injector } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MyApp } from './app.component';
+//plugins
+import { ActionSheet } from '@ionic-native/action-sheet';
+import { AndroidFullScreen } from '@ionic-native/android-full-screen';
+import { Badge } from '@ionic-native/badge';
+import { CallNumber } from '@ionic-native/call-number';
+import { Camera } from '@ionic-native/camera';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { FCM } from '@ionic-native/fcm';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { Keyboard } from '@ionic-native/keyboard';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
+import { Sim } from '@ionic-native/sim';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
+import { Storage } from '@ionic/storage';
 //pages//
-var history_1 = require("../pages/history/history");
-var alerts_1 = require("../pages/alerts/alerts");
-var home_1 = require("../pages/home/home");
-var driving_directions_1 = require("../pages/driving-directions/driving-directions");
-var tabs_1 = require("../pages/tabs/tabs");
-var login_1 = require("../pages/login/login");
-var splash_1 = require("../pages/splash/splash");
-var reject_notes_1 = require("../pages/reject-notes/reject-notes");
-var feedback_1 = require("../pages/feedback/feedback");
+import { AlertsPage } from '../pages/alerts/alerts';
+import { CompleteNotesPage } from '../pages/complete-notes/complete-notes';
+import { DrivingDirectionsPage } from '../pages/driving-directions/driving-directions';
+import { FeedbackPage } from '../pages/feedback/feedback';
+import { ForemanPage } from '../pages/foreman/foreman';
+import { HistoryFeedbackPage } from '../pages/history-feedback/history-feedback';
+import { HistoryPage } from '../pages/history/history';
+import { HistoryReviewPage } from '../pages/history-review/history-review';
+import { HomeKeysPipe, HomePage } from '../pages/home/home';
+import { KeysPipe, NextDayPage } from '../pages/next-day-tasks/next-day';
+import { LoginPage } from '../pages/login/login';
+import { RejectNotesPage } from '../pages/reject-notes/reject-notes';
+import { SingleForemanTaskPage } from "../pages/single-foreman-task/single-foreman-task";
+import { SingleHistoryTaskPage } from "../pages/single-history-task/single-history-task";
+import { SplashPage } from '../pages/splash/splash';
+import { TabsPage } from '../pages/tabs/tabs';
+import { TimecardKeysPipe, TimecardPage } from '../pages/timecard/timecard';
+import { TimecardSearchPage } from '../pages/timecard-search/timecard-search';
 //providers//
-var api_service_1 = require("../providers/api-service");
-var task_manager_1 = require("../providers/task-manager");
-var storage_service_1 = require("../providers/storage-service");
-var google_maps_manager_1 = require("../providers/google-maps-manager");
-var google_maps_service_1 = require("../providers/google-maps-service");
-var user_manager_1 = require("../providers/user-manager");
-var geolocation_service_1 = require("../providers/geolocation-service");
-var utils_1 = require("../utils/utils");
-function provideStorage() {
-    return new storage_1.Storage(['sqlite', 'indexeddb', 'websql'], { name: '_ctsdb' });
+import { ApiService } from '../providers/api-service';
+import { CalendarModule, CALENDAR_COMPONENTS } from '../components/ion2-calendar';
+import { ConversionManager } from "../providers/conversion-manager";
+import { Geolocation } from '@ionic-native/geolocation';
+import { GoogleMapsManager } from '../providers/google-maps-manager';
+import { GoogleMapsService } from '../providers/google-maps-service';
+import { HardwareBackButtonService } from '../providers/backbutton';
+import { StorageService } from '../providers/storage-service';
+import { TaskManager } from '../providers/task-manager';
+import { UserManager } from '../providers/user-manager';
+import { Utils } from '../utils/utils';
+import { Pro } from '@ionic/pro';
+var IonicPro = Pro.init('379d0062', {
+    appVersion: "1.3.116"
+});
+var MyErrorHandler = /** @class */ (function () {
+    function MyErrorHandler(injector) {
+        try {
+            this.ionicErrorHandler = injector.get(IonicErrorHandler);
+        }
+        catch (e) {
+            // Unable to get the IonicErrorHandler provider, ensure
+            // IonicErrorHandler has been added to the providers list below
+        }
+    }
+    MyErrorHandler.prototype.handleError = function (err) {
+        IonicPro.monitoring.handleNewError(err);
+        // Remove this if you want to disable Ionic's auto exception handling
+        // in development mode.
+        this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
+    };
+    return MyErrorHandler;
+}());
+export { MyErrorHandler };
+export function provideStorage() {
+    return new Storage({ name: '_ctsdb' });
 }
-exports.provideStorage = provideStorage;
-;
-var AppModule = (function () {
+var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     return AppModule;
 }());
-AppModule = __decorate([
-    core_1.NgModule({
-        declarations: [
-            app_component_1.MyApp,
-            alerts_1.AlertsPage,
-            history_1.HistoryPage,
-            home_1.HomePage,
-            tabs_1.TabsPage,
-            driving_directions_1.DrivingDirectionsPage,
-            login_1.LoginPage,
-            splash_1.SplashPage,
-            reject_notes_1.RejectNotesPage,
-            feedback_1.FeedbackPage
-        ],
-        imports: [
-            ionic_angular_1.IonicModule.forRoot(app_component_1.MyApp, {
-                scrollAssist: false,
-                autoFocusAssist: false,
-                tabsPlacement: 'bottom',
-                platforms: {
-                    android: {}
-                }
-            }, {}) //end IonicModule.forRoot()
-        ],
-        bootstrap: [ionic_angular_1.IonicApp],
-        entryComponents: [
-            app_component_1.MyApp,
-            history_1.HistoryPage,
-            alerts_1.AlertsPage,
-            home_1.HomePage,
-            tabs_1.TabsPage,
-            driving_directions_1.DrivingDirectionsPage,
-            login_1.LoginPage,
-            splash_1.SplashPage,
-            reject_notes_1.RejectNotesPage,
-            feedback_1.FeedbackPage
-        ],
-        /** NB: providers are singletons */
-        providers: [
-            { provide: core_1.ErrorHandler, useClass: ionic_angular_1.IonicErrorHandler },
-            { provide: storage_1.Storage, useFactory: provideStorage },
-            api_service_1.ApiService,
-            task_manager_1.TaskManager,
-            storage_service_1.StorageService,
-            google_maps_manager_1.GoogleMapsManager,
-            google_maps_service_1.GoogleMapsService,
-            user_manager_1.UserManager,
-            geolocation_service_1.GeolocationService,
-            utils_1.Utils
-        ]
-    })
-], AppModule);
-exports.AppModule = AppModule;
+export { AppModule };
+//# sourceMappingURL=app.module.js.map

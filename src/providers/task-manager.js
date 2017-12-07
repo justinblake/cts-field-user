@@ -1,264 +1,323 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var core_1 = require("@angular/core");
-require("rxjs/add/operator/map");
-var api_service_1 = require("./api-service");
-var utils_1 = require("../utils/utils");
-var TaskManager = (function () {
+import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
+import 'rxjs/add/operator/map';
+import { ApiService } from './api-service';
+//import {StorageService} from './storage-service';
+import { UserManager } from './user-manager';
+import { Utils } from '../utils/utils';
+var TaskManager = /** @class */ (function () {
     function TaskManager(userMgr, apiService, platform, utils) {
-        var _this = this;
         this.userMgr = userMgr;
         this.apiService = apiService;
         this.platform = platform;
         this.utils = utils;
-        this.useLocalData = false;
-        this.taskStatuses = {};
-        // helper method to make some of the promise code a little cleaner //
-        this.resolveAsPromise = function (obj) {
-            return new Promise(function (resolve, reject) {
-                resolve(obj);
-            });
-        };
-        /**
-         * just calls api.postTaskFeedback, no image uploading
-         */
-        this.updateTaskStatus = function (data) {
-            data.userId = _this.userMgr.getUser().userId;
-            data.taskId = _this.currentTask.job_tasks.id;
-            console.log("postFeedback feedback => " + utils_1.Utils.toJson(data));
-            return new Promise(function (resolve, reject) {
-                _this.apiService.postTaskFeedback(data).then(function (json) {
-                    console.log("postFeedback Response => " + utils_1.Utils.toJson(json));
-                    var response = JSON.parse(JSON.stringify(json));
-                    //console.log(r);
-                    if (response.code != 0) {
-                        //something happened, show a toast :)
-                        var msg = "Could not update task status: " + response.msg;
-                        _this.utils.presentToast(msg, true, 'X');
-                        //resolve(false);
-                        return _this.resolveAsPromise(false);
-                    }
-                    else if (data.statusId == 1) {
-                        // ACCEPTED //
-                        _this.currentTask.statusId = 1;
-                        // get current task and log //
-                        return _this.resolveAsPromise(_this.currentTask);
-                    }
-                    else if (data.statusId == 2 || data.statusId == 6) {
-                        // REJECTED //
-                        _this.currentTask.statusId = data.statusId;
-                        // return this.currentTask //
-                        return _this.resolveAsPromise(_this.currentTask);
-                    }
-                    else {
-                        // UNKNOWN statusId //
-                        var msg = "Could not update task status: " + response.msg;
-                        _this.utils.presentToast(msg, true, 'X');
-                        resolve(false);
-                    }
-                }).then(function (response) {
-                    console.log("postFeedbackImages Response => " + utils_1.Utils.toJson(response));
-                    resolve(response);
-                });
-            });
-        };
-        //console.log('Hello TaskManager Provider');
-        this.tmpData = new api_service_1.ApiData();
+        if (this.platform.is('android')) {
+            this.isAndroid = true;
+        }
+        if (this.platform.is('ios')) {
+            this.isIos = true;
+        }
+        if (this.platform.is('cordova')) {
+            this.isCordova = true;
+        }
     }
-    // workaround put in place when CORS wasn't setup on remote server
-    TaskManager.prototype.getCurrentTaskLocal = function () {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.currentUser = api_service_1.ApiData.data.authenticateUser.userdata;
-            _this.currentTask = api_service_1.ApiData.data.loadCurrentTask.data;
-            var response = {
-                user: _this.currentUser,
-                task: _this.currentTask
-            };
-            resolve(response);
-        });
+    TaskManager.prototype.returnPlatform = function () {
+        return { isIos: this.isIos, isAndroid: this.isAndroid, isCordova: this.isCordova };
     };
-    // get current task from remote api
-    // @deprecated
-    // XXgetCurrentTaskRemote(){
-    //
-    //  return new Promise( (resolve, reject)=> {
-    //    this.apiService.authenticate({}).then(user => {
-    //      console.log('TASK MGR user: ' + user);
-    //      return this.apiService.loadCurrentTask(this.userMgr.getUser(), this.userMgr.getToken());
-    //    }).then(task => {
-    //      console.log('TASK MGR task: ' + task);
-    //      resolve(task);
-    //    }).catch(error => {
-    //      console.log(`ERROR: ${Utils.toJson(error)}`)
-    //     // this.utils.toastError(error);
-    //    })
-    //  });
-    //};
-    /**
-     * method for creating a taskUserlog and handling response and errors
-     */
-    TaskManager.prototype.createTaskUserLog = function (postData) {
+    TaskManager.prototype.saveEmergencyInfo = function (taskId, projectId, crewsBool) {
+        this.crewsTab = crewsBool;
+        this.emergencyTaskId = taskId;
+        this.emergencyProjectId = projectId;
+        console.log('this.crewsTab in tskMgr ', JSON.stringify(this.crewsTab));
+        console.log('this.emergencyTaskId in tskMgr ', JSON.stringify(this.emergencyTaskId));
+        console.log('this.emergencyProjectId in tskMgr ', JSON.stringify(this.emergencyProjectId));
+    };
+    TaskManager.prototype.returnEmergencyInfo = function () {
+        return { taskId: this.emergencyTaskId, projectId: this.emergencyProjectId, crewEmergency: this.crewsTab };
+    };
+    //  * method for creating a taskUserlog and handling response and errors
+    //  * method for creating a taskUserlog and handling response and errors
+    TaskManager.prototype.createTaskUserLog = 
+    //  * method for creating a taskUserlog and handling response and errors
+    function (postData) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             _this.apiService.postTaskFeedback(postData).then(function (response) {
-                console.log("" + utils_1.Utils.toJson(postData, true));
-            })["catch"](function (error) {
+            }).catch(function (error) {
                 reject({ error: true, msg: 'An error has occurred submitting your information', raw: error });
             });
         });
     };
-    /**
-     * gets current task for logged in user
-     * then gets the taskUserLog for the task
-     * @Returns: Promise:any
-     */
-    TaskManager.prototype.getCurrentTaskRemote = function () {
+    TaskManager.prototype.setUser = function () {
+        this.currentUser = this.userMgr.getUser();
+        this.userId = this.userMgr.getUserId();
+        console.log('this.currentUser in Task Manager ', JSON.stringify(this.currentUser));
+        console.log('this.userId Task Manager ', JSON.stringify(this.userId));
+    };
+    TaskManager.prototype.updateEmployeeToken = function (newToken, userId) {
         var _this = this;
-        console.log('Getting current task');
+        return new Promise(function (resolve, reject) {
+            var data = {
+                userId: userId || _this.userId,
+                token: newToken
+            };
+            _this.apiService.updateEmployeeToken(data).then(function (response) {
+                _this.hasToken = response;
+                resolve(_this.hasToken);
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
+    };
+    //  * gets current task for logged in user
+    //  * then gets the taskUserLog for the task
+    //  * @Returns: Promise:any
+    //  * gets current task for logged in user
+    //  * then gets the taskUserLog for the task
+    //  * @Returns: Promise:any
+    TaskManager.prototype.getCurrentTaskRemote = 
+    //  * gets current task for logged in user
+    //  * then gets the taskUserLog for the task
+    //  * @Returns: Promise:any
+    function () {
+        var _this = this;
+        this.currentUser = this.userMgr.getUser();
+        this.userId = this.userMgr.getUserId();
         var currentTaskResponse;
         return new Promise(function (resolve, reject) {
-            var user = _this.userMgr.getUser();
-            //let token = this.userMgr.getToken();
-            var data = { userId: user.userId };
-            //console.log(`USER => ${Utils.toJson(user)}`)
+            var data = { userId: _this.userId };
             _this.apiService.loadCurrentTask(data).then(function (response) {
-                //console.log(`RESPONSE => ${Utils.toJson(response)}`)
                 var task = response;
                 currentTaskResponse = {
                     "task": task.data.hasOwnProperty('id') ? task.data : null,
-                    "user": user
+                    "user": _this.currentUser
                 };
                 _this.currentTask = task.data;
-                _this.currentUser = user;
+                if (_this.currentTask.job_tasks) {
+                    Number(_this.currentTask.job_tasks.task_start_time);
+                }
                 // have we received a task? //
                 if (task.data.hasOwnProperty('id')) {
                     // load the task user log
                     return _this.loadTaskUserLog();
                 }
                 else {
-                    //not task found
-                    reject({ msg: 'You do not have a current task' });
+                    //no task found
+                    reject();
                 }
             }).then(function (response) {
-                // taskuserLog resposne
                 var json = response;
                 currentTaskResponse.task.job_tasks.task_user_log = json.data;
                 resolve(currentTaskResponse);
-            })["catch"](function (error) {
+            }).catch(function (error) {
                 reject(error);
-                //console.log(`ERROR: ${Utils.toJson(error)}`);
             });
         });
     };
     ;
-    /**
-     * get current task based on the setting
-     * for this.userLocalData in the constructor
-     */
-    TaskManager.prototype.getCurrentTask = function () {
-        if (this.useLocalData === true) {
-            return this.getCurrentTaskLocal();
-        }
-        else {
-            return this.getCurrentTaskRemote();
-        }
-    };
-    /**
-     * call to loadTaskUserLog
-     */
-    TaskManager.prototype.loadTaskUserLog = function () {
-        //{"userId":135, "taskId":435}
+    //  * call to loadTaskUserLog
+    //  * call to loadTaskUserLog
+    TaskManager.prototype.loadTaskUserLog = 
+    //  * call to loadTaskUserLog
+    function () {
         var data = {
-            "userId": this.currentUser.userId,
+            "userId": this.userId,
             "taskId": this.currentTask.job_tasks.id
         };
-        console.log("" + utils_1.Utils.toJson(data));
         return this.apiService.loadTaskUserLog(data);
     };
-    /**
-     * call to get task history
-     * loads local or remote depending
-     */
-    TaskManager.prototype.getTaskHistory = function () {
-        if (this.useLocalData) {
-            return this.getTaskHistoryLocal();
-        }
-        else {
-            return this.getTaskHistoryRemote();
-        }
+    TaskManager.prototype.loadSpecificTaskUserLog = function (empId, taskId) {
+        var data = {
+            "userId": empId,
+            "taskId": taskId
+        };
+        return this.apiService.loadTaskUserLog(data);
     };
-    ;
-    /**
-     * gets the remote task history
-     * @Returns: Promise
-     */
-    TaskManager.prototype.getTaskHistoryRemote = function () {
+    //  * call to loadTaskUserLog
+    //  * call to loadTaskUserLog
+    TaskManager.prototype.loadTaskUserLogArray = 
+    //  * call to loadTaskUserLog
+    function (taskID, userId) {
+        var data = {
+            "userId": userId,
+            "taskId": taskID
+        };
+        return this.apiService.loadTaskUserNotes(data);
+    };
+    TaskManager.prototype.checkEmployeeAlerts = function () {
         var _this = this;
-        //console.log(`${Utils.toJson(data, true)}`)
+        console.log("Checked Alerts again");
         return new Promise(function (resolve, reject) {
-            if (_this.currentUser && _this.currentUser.userId) {
-                //donothing
-                console.log('current user is undefined');
-            }
-            else {
-                reject({ msg: 'Unable to load history' });
-            }
-            // build the json body
-            // gets all history from the beginning of time
-            var data = {
-                "userId": _this.currentUser.userId,
-                "dateStart": new Date('January 1, 1970').getMilliseconds(),
-                "dateEnd": Date.now()
+            var demo = {
+                'userId': _this.userId,
             };
-            //resolve(this.tmpData.data.loadTaskHistory);
+            var num = 0;
             //make the api request
-            _this.apiService.loadTaskHistory(data).then(function (json) {
-                resolve(json);
-            })["catch"](function (error) {
+            //make the api request
+            _this.apiService.checkEmployeeAlerts(demo).then(function (response) {
+                _this.holdObject = response;
+                _this.badgeNumber = _this.holdObject.data.new_alert_count;
+                resolve(response);
+                return num;
+            }).catch(function (error) {
+                reject({ msg: 'Unable to load Alerts' });
+            });
+        });
+    };
+    TaskManager.prototype.numOfNewAlerts = function (alerts) {
+        var data = alerts.data;
+        var num = 0;
+        for (var i in data) {
+            if (data[i].viewed === 0) {
+                num += 1;
+            }
+        }
+        this.badgeNumber = num;
+        return num;
+    };
+    TaskManager.prototype.getEmployeeAlerts = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                'userId': _this.userId,
+                'dateStart': new Date((Date.now() - 259200000)),
+                'dateEnd': new Date((Date.now() + 86400000))
+            };
+            _this.apiService.loadEmployeeAlerts(data).then(function (response) {
+                _this.numOfNewAlerts(response);
+                resolve(response);
+            }).catch(function (error) {
+                reject({ msg: 'Unable to load Alerts' });
+            });
+        });
+    };
+    //  * gets the remote task history
+    //  * @Returns: Promise
+    //  * gets the remote task history
+    //  * @Returns: Promise
+    TaskManager.prototype.getTaskHistoryRemoteV2 = 
+    //  * gets the remote task history
+    //  * @Returns: Promise
+    function (userId, statusId) {
+        var _this = this;
+        var task;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                'userId': userId,
+                'statusId': statusId,
+                'dateStart': new Date((Date.now() - 432000000)),
+                'dateEnd': new Date(Date.now() + 86400000)
+            };
+            _this.apiService.loadTaskHistoryV2(data).then(function (response) {
+                task = response;
+            }).then(function (response) {
+                resolve(task);
+            }).catch(function (error) {
                 reject({ msg: 'Unable to load history' });
             });
         });
     };
-    // gets the task history from the cached object
-    TaskManager.prototype.getTaskHistoryLocal = function () {
+    TaskManager.prototype.getPausedTasks = function (userId, statusId) {
+        var _this = this;
+        var task;
         return new Promise(function (resolve, reject) {
-            var response = {
-                userdata: api_service_1.ApiData.data.authenticateUser.userdata,
-                taskHistory: api_service_1.ApiData.data.loadTaskHistory
+            var data = {
+                'userId': userId,
+                'statusId': statusId,
+                'dateStart': new Date(Date.now()),
+                'dateEnd': new Date(Date.now() + 86400000)
             };
-            resolve(response);
+            console.log("Date Check start " + data.dateStart);
+            console.log("Date Check end " + data.dateEnd);
+            _this.apiService.loadTaskHistoryV2(data).then(function (response) {
+                task = response;
+            }).then(function (response) {
+                resolve(task);
+            }).catch(function (error) {
+                reject({ msg: 'Unable to load history' });
+            });
+        });
+    };
+    TaskManager.prototype.loadNextDayTaskByDate = function (userId) {
+        var _this = this;
+        var task;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                'userId': userId
+            };
+            _this.apiService.loadNextDayTaskByDate(data).then(function (response) {
+                task = response;
+            }).then(function (response) {
+                resolve(task);
+            }).catch(function (error) {
+                reject({ msg: 'Unable to load history' });
+            });
+        });
+    };
+    TaskManager.prototype.loadLaborerTasks = function (userId) {
+        var _this = this;
+        var task;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                'userId': userId
+            };
+            _this.apiService.loadLaborerTasks(data).then(function (response) {
+                task = response;
+            }).then(function (response) {
+                resolve(task);
+            }).catch(function (error) {
+                reject({ msg: 'Unable to load history' });
+            });
+        });
+    };
+    TaskManager.prototype.loadForemanTasks = function (date) {
+        var _this = this;
+        var task;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                'userId': _this.userId,
+                'dateStart': date
+            };
+            console.log('data ', JSON.stringify(data));
+            _this.apiService.loadForemanTasks(data).then(function (response) {
+                task = response;
+            }).then(function (response) {
+                resolve(task);
+            }).catch(function (error) {
+                reject({ msg: 'Unable to load history' });
+            });
         });
     };
     // authenticate user and handles response //
-    TaskManager.prototype.authenticateUser = function () {
+    // authenticate user and handles response //
+    TaskManager.prototype.authenticateUser = 
+    // authenticate user and handles response //
+    function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             //resolve(this.tmpData.data.authenticateUser);
+            //resolve(this.tmpData.data.authenticateUser);
             _this.apiService.authenticate({}).then(function (json) {
                 resolve(json);
-            })["catch"](function (error) {
-                console.log("ERROR: " + utils_1.Utils.toJson(error));
+            }).catch(function (error) {
+                console.log("ERROR: " + Utils.toJson(error));
                 // this.utils.toastError(error);
                 reject(error);
             });
         });
     };
     // gets the task statuses //
-    TaskManager.prototype.getTaskStatuses = function (filterStatus, systemOnly) {
+    // gets the task statuses //
+    TaskManager.prototype.getTaskStatuses = 
+    // gets the task statuses //
+    function (filterStatus, systemOnly) {
         return this.taskStatuses;
     };
-    /**
-     * get the feedback statuses
-     *
-     */
-    TaskManager.prototype.getFeedbackStatuses = function () {
-        //let ids:number[] = [3, 4, 5, 7];
+    //  * get the feedback statuses
+    //  * get the feedback statuses
+    TaskManager.prototype.getFeedbackStatuses = 
+    //  * get the feedback statuses
+    function () {
         this.taskStatuses.filter(function (status) {
             return status.id;
         });
@@ -267,33 +326,44 @@ var TaskManager = (function () {
      * posts feedback with images
      * @Input: feedback object
      */
-    TaskManager.prototype.postFeedback = function (feedback) {
+    /**
+         * posts feedback with images
+         * @Input: feedback object
+         */
+    TaskManager.prototype.postFeedback = /**
+         * posts feedback with images
+         * @Input: feedback object
+         */
+    function (feedback) {
         var _this = this;
-        // add current user id and current task id to feedback object //
-        feedback.userId = this.userMgr.getUser().userId;
-        feedback.taskId = this.currentTask.job_tasks.id;
-        console.log("postFeedback feedback => " + utils_1.Utils.toJson(feedback));
-        //call the api //
         return new Promise(function (resolve, reject) {
             _this.apiService.postTaskFeedback(feedback).then(function (response) {
-                console.log("postFeedback Response => " + utils_1.Utils.toJson(response));
                 var r = response;
-                //console.log(r.msg);
-                // the response msg attribute contains the new record ID //
-                // use it for the feedbackImage request //
                 return _this.postFeedbackImages(r.msg, feedback.files);
-                //resolve(true);
             }).then(function (response) {
-                // postFeedbackImage response //
-                console.log("postFeedbackImages Response => " + utils_1.Utils.toJson(response));
                 resolve(true);
             });
         });
     };
-    /**
-     * calls the api to post feedback images
-     */
-    TaskManager.prototype.postFeedbackImages = function (feedbackId, images) {
+    TaskManager.prototype.postHistoryFeedback = function (feedback) {
+        var _this = this;
+        // add current user id and current task id to feedback object //
+        feedback.userId = this.userId;
+        //call the api //
+        return new Promise(function (resolve, reject) {
+            _this.apiService.postTaskFeedback(feedback).then(function (response) {
+                var r = response;
+                return _this.postFeedbackImages(r.msg, feedback.files);
+            }).then(function (response) {
+                resolve(true);
+            });
+        });
+    };
+    // * calls the api to post feedback images
+    // * calls the api to post feedback images
+    TaskManager.prototype.postFeedbackImages = 
+    // * calls the api to post feedback images
+    function (feedbackId, images) {
         var promises = [];
         if (images.length == 0) {
             return new Promise(function (resolve, reject) {
@@ -301,8 +371,6 @@ var TaskManager = (function () {
             });
         }
         else {
-            //let promises = [];
-            // build the array of promises, native or html5 depending on device //
             for (var i = 0; i < images.length; i++) {
                 if (this.platform.is('cordova')) {
                     promises.push(this.apiService.postTaskFeedbackImageNative(feedbackId, images[i]));
@@ -311,52 +379,199 @@ var TaskManager = (function () {
                     promises.push(this.apiService.postTaskFeedbackImage(feedbackId, images[i]));
                 }
             }
-            // now resolve all promises that we've created //
             return Promise.all(promises);
         }
     };
+    TaskManager.prototype.resetPassword = function (userEmail) {
+        var _this = this;
+        this.apiService.sendPasswordReset({ email: userEmail }).then(function (response) {
+            if (response.code === 0) {
+                var msg = "An email has been sent to " + userEmail;
+                _this.utils.presentToast(msg, true, 'OK');
+                _this.utils.dismissLoading();
+            }
+            else {
+                var msg = " " + userEmail + " is not a valid email address ";
+                _this.utils.presentToast(msg, true, 'OK');
+                _this.utils.dismissLoading();
+            }
+        });
+    };
+    TaskManager.prototype.createTimecardEntry = function (empId, inLat, inLon, myStatus, inNotes) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                employee_id: empId,
+                lat: inLat,
+                lon: inLon,
+                status: myStatus,
+                notes: inNotes
+            };
+            _this.apiService.createTimecardEntry(data).then(function (response) {
+                resolve(response);
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
+    };
+    TaskManager.prototype.loadTodaysTime = function (empId) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                employee_id: empId,
+                'dateStart': new Date(Date.now()),
+                'dateEnd': new Date(Date.now() + 86400000)
+            };
+            _this.apiService.loadTimecardData(data).then(function (response) {
+                resolve(response);
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
+    };
+    TaskManager.prototype.updateTimecard = function (empId, timecardId, updatedTime, notes) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                'employee_id': empId,
+                'id': timecardId,
+                'alt_timestamp': updatedTime,
+                'notes': notes || null
+            };
+            console.log('data ', JSON.stringify(data));
+            _this.apiService.updateTimecard(data).then(function (response) {
+                resolve(response);
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
+    };
+    TaskManager.prototype.timecardSearch = function (empId, start, end) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                employee_id: empId,
+                'dateStart': start,
+                'dateEnd': end
+            };
+            _this.apiService.loadTimecardData(data).then(function (response) {
+                resolve(response);
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
+    };
+    TaskManager.prototype.loadTimeCardTotal = function (empId, start, end) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                employee_id: empId,
+                'dateStart': start,
+                'dateEnd': end
+            };
+            _this.apiService.loadTimeCardTotal(data).then(function (response) {
+                resolve(response);
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
+    };
+    TaskManager.prototype.getLastTimecardEntry = function (empId) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var data = {
+                employee_id: empId
+            };
+            _this.apiService.getLastTimecardEntry(data).then(function (response) {
+                console.log('Timecard response ', JSON.stringify(response));
+                resolve(response);
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
+    };
+    TaskManager.prototype.validateEmail = function (data) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this.apiService.validateEmail(data).then(function (response) {
+                console.log("valid email");
+                resolve(response);
+            }).catch(function (error) {
+                console.log('error updating timecard');
+                reject(error);
+            });
+        });
+    };
+    TaskManager.prototype.loadHomePage = function (input) {
+        this.homePage = input;
+        console.log('this.homePage ', JSON.stringify(this.homePage));
+    };
+    TaskManager.prototype.reportHomePage = function () {
+        return this.homePage;
+    };
     return TaskManager;
 }());
-TaskManager = __decorate([
-    core_1.Injectable()
-], TaskManager);
-exports.TaskManager = TaskManager;
-/*
-
-// //
-
-{
-    "apiTokenErrors": [{
-        "err": 98,
-        "data": "Not Authorized"
-    }, {
-        "err": 99,
-        "data": "Expired token "
-    }]
-}
-
-{
-    "taskCrewStatuses": [
-        [{
-            "id": 1,
-            "status": "Accepted"
-        }, {
-            "id": 2,
-            "status": "Rejected"
-        }, {
-            "id": 3,
-            "status": "Problem Low"
-        }, {
-            "id": 4,
-            "status": "Problem Medium"
-        }, {
-            "id": 5,
-            "status": "Problem High"
-        }, {
-            "id": 6,
-            "status": "Completed"
-        }]
-    ]
-}
-
-*/ 
+export { TaskManager };
+// loadNextDayTask() {
+//     let nextDayTaskResponse: any;
+//     return new Promise((resolve, reject) => {
+//         let user = this.userMgr.getUser();
+//         //let token = this.userMgr.getToken();
+//         let data = {userId: user.userId};
+//         this.apiService.loadNextDayTask(data).then(response => {
+//             let task: any = response;
+//             nextDayTaskResponse = {
+//                 "task": task.data,
+//                 "user": user
+//             };
+//             this.tomorrowsTask = task;
+//             if (this.tomorrowsTask.job_tasks) {
+//                 Number(this.tomorrowsTask.job_tasks.task_start_time);
+//             }
+//             this.currentUser = user;
+//         })
+//             .then(response => {
+//                 resolve(nextDayTaskResponse);
+//             }).catch(error => {
+//             reject(error);
+//         })
+//     })
+// };
+// createNewTimecardEntry(empId, myStatus, altTime, inNotes?: any) {
+//     return new Promise((resolve, reject) => {
+//         let data = {
+//             employee_id: empId,
+//             alt_timestamp: altTime,
+//             status: myStatus,
+//             notes: inNotes || "NULL"
+//         };
+//
+//         this.apiService.createTimecardEntry(data).then(response => {
+//             console.log("a new entry has been created");
+//             resolve(response)
+//         }).catch(error => {
+//             console.log('error updating timecard');
+//             reject(error);
+//         })
+//     })
+// }
+// deleteTimecardEntry(empId, entryId) {
+//     return new Promise((resolve, reject) => {
+//         let data = {
+//             employee_id: empId,
+//             id: entryId
+//
+//         };
+//
+//         console.log('data in task manager ', JSON.stringify(data));
+//
+//         this.apiService.makeTimecardEntryInactive(data).then(response => {
+//             console.log("That is now inactive");
+//             resolve(response)
+//         }).catch(error => {
+//             console.log('error updating timecard');
+//             reject(error);
+//         })
+//     })
+// }
+//# sourceMappingURL=task-manager.js.map

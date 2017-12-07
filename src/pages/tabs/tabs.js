@@ -1,28 +1,27 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var core_1 = require("@angular/core");
-var home_1 = require("../home/home");
-var history_1 = require("../history/history");
-var alerts_1 = require("../alerts/alerts");
-var TabsPage = (function () {
-    function TabsPage() {
-        // this tells the tabs component which Pages
-        // should be each tab's root Page
-        // starting tab is set in tabs.html (selectedIndex)
-        this.tab1Root = home_1.HomePage;
-        this.tab2Root = history_1.HistoryPage;
-        this.tab3Root = alerts_1.AlertsPage;
+import { Component } from '@angular/core';
+import { HomePage } from '../home/home';
+import { HistoryPage } from '../history/history';
+import { AlertsPage } from '../alerts/alerts';
+import { TaskManager } from "../../providers/task-manager";
+import { UserManager } from '../../providers/user-manager';
+import { ForemanPage } from "../foreman/foreman";
+import { TimecardPage } from "../timecard/timecard";
+var TabsPage = /** @class */ (function () {
+    function TabsPage(taskManager, userMgr) {
+        this.taskManager = taskManager;
+        this.userMgr = userMgr;
+        this.currentUser = this.userMgr.getUser();
+        if (this.currentUser.role_id === 6) {
+            this.disableTabs = true;
+        }
+        if (this.currentUser.role_id === 5 || this.currentUser.role_id === 2 || this.currentUser.role_id === 4) {
+            this.foremanTab = true;
+        }
+        if (this.currentUser.is_lessor === 1) {
+            this.isLessor = true;
+        }
     }
     return TabsPage;
 }());
-TabsPage = __decorate([
-    core_1.Component({
-        templateUrl: 'tabs.html'
-    })
-], TabsPage);
-exports.TabsPage = TabsPage;
+export { TabsPage };
+//# sourceMappingURL=tabs.js.map

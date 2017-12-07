@@ -153,18 +153,18 @@ export class HistoryFeedbackPage {
     }
 
     /** when cordova, present an action sheet to take a pic or import from gallery */
-    presentActionSheet() {
+    presentActionSheet(editable: boolean) {
         let buttons: any = [];
         if (this.platform.is('cordova')) {
             buttons.push({
                 text: 'Choose Photo',
                 handler: () => {
-                    this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY); // 0 == Library
+                    this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY, editable); // 0 == Library
                 }
             }, {
                 text: 'Take Photo',
                 handler: () => {
-                    this.getPicture(this.camera.PictureSourceType.CAMERA); // 1 == Camera
+                    this.getPicture(this.camera.PictureSourceType.CAMERA, editable); // 1 == Camera
                 }
             })
         }
@@ -185,7 +185,7 @@ export class HistoryFeedbackPage {
      * get picture from gallery or camera
      * @Param sourceType:number camera or gallery
      */
-    getPicture(sourceType: number) {
+    getPicture(sourceType: number,  editable: boolean) {
         this.utils.presentLoading();
         this.camera.getPicture({
             quality: 50,

@@ -1,40 +1,31 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var core_1 = require("@angular/core");
-var md5_1 = require("ts-md5/dist/md5");
-var reject_notes_1 = require("../pages/reject-notes/reject-notes");
-var Utils = (function () {
-    function Utils(loadingCtrl, alertCtrl, toastCtrl, modalCtrl) {
-        var _this = this;
+import { Injectable } from '@angular/core';
+import { LoadingController, Loading, AlertController, ToastController, Modal, ModalController, Platform } from 'ionic-angular';
+import { Md5 } from 'ts-md5/dist/md5';
+import { RejectNotesPage } from '../pages/reject-notes/reject-notes';
+var Utils = /** @class */ (function () {
+    function Utils(loadingCtrl, alertCtrl, plt, toastCtrl, modalCtrl) {
         this.loadingCtrl = loadingCtrl;
         this.alertCtrl = alertCtrl;
+        this.plt = plt;
         this.toastCtrl = toastCtrl;
         this.modalCtrl = modalCtrl;
-        this.loadingIsPresent = false;
-        /**
-         * display a toast error
-         * @Param error:string the error message
-         * @Return: void
-         */
-        this.toastError = function (error) {
-            var msg = 'An unknown error has occurred';
-            if (error.msg) {
-                msg = error.msg;
-            }
-            _this.presentToast(msg, true, 'OK');
-        };
     }
     /**
      * utility function for JSON.stringify
      * @Param o:jsonObject the obj you want to stringify
      * @Param pretty:boolean pretty print y/n
      */
-    Utils.toJson = function (o, pretty) {
+    /**
+         * utility function for JSON.stringify
+         * @Param o:jsonObject the obj you want to stringify
+         * @Param pretty:boolean pretty print y/n
+         */
+    Utils.toJson = /**
+         * utility function for JSON.stringify
+         * @Param o:jsonObject the obj you want to stringify
+         * @Param pretty:boolean pretty print y/n
+         */
+    function (o, pretty) {
         pretty = pretty || false;
         return pretty ? JSON.stringify(o, null, '\t') : JSON.stringify(o);
         //return JSON.stringify(o, )
@@ -43,12 +34,16 @@ var Utils = (function () {
      * utility function to md5 hash a string
      * @Param str:string the string you want to hash
      */
-    Utils.md5hashStr = function (str) {
-        var md5str = md5_1.Md5.hashStr(str, false);
-        //console.log(str);
-        //console.log(md5str);
-        console.log(md5str === '098f6bcd4621d373cade4e832627b4f6');
-        console.log(str + " => " + md5str);
+    /**
+         * utility function to md5 hash a string
+         * @Param str:string the string you want to hash
+         */
+    Utils.md5hashStr = /**
+         * utility function to md5 hash a string
+         * @Param str:string the string you want to hash
+         */
+    function (str) {
+        var md5str = Md5.hashStr(str, false);
         return md5str;
     };
     /**
@@ -56,25 +51,41 @@ var Utils = (function () {
      * @Param content:string the spinner caption
      * @Return: void
      */
-    Utils.prototype.presentLoading = function (content) {
+    /**
+         * presents a loading spinner
+         * @Param content:string the spinner caption
+         * @Return: void
+         */
+    Utils.prototype.presentLoading = /**
+         * presents a loading spinner
+         * @Param content:string the spinner caption
+         * @Return: void
+         */
+    function (content) {
         var _this = this;
         var opts = {
-            content: content || ''
+            content: content || 'Tap the background to dismiss loading',
+            enableBackdropDismiss: true,
+            spinner: 'dots',
         };
         this.loading = this.loadingCtrl.create(opts);
         this.loading.present().then(function (response) {
             _this.loadingIsPresent = true;
-            console.log("Loading is present I think: " + response);
         });
     };
     /**
      * dismiss a loading spinner
      * @Return: void
      */
-    Utils.prototype.dismissLoading = function () {
-        //console.log('Dismiss Loading called')
-        //console.log(`${this.loading}`);
-        //console.log(`${this.loadingCtrl}`);
+    /**
+         * dismiss a loading spinner
+         * @Return: void
+         */
+    Utils.prototype.dismissLoading = /**
+         * dismiss a loading spinner
+         * @Return: void
+         */
+    function () {
         this.loading.dismissAll() || console.log('Unable to dismiss loading...');
     };
     /**
@@ -84,12 +95,27 @@ var Utils = (function () {
      * @Param closeButtonTest:string optional the close button text, usually 'X' or 'OK'
      * @Return: void
      */
-    Utils.prototype.presentToast = function (message, showCloseButton, closeButtonText) {
+    /**
+         * presents a toast
+         * @Param message:string the toast msg
+         * @Param showCloseButton:boolean optional show the closed button display
+         * @Param closeButtonTest:string optional the close button text, usually 'X' or 'OK'
+         * @Return: void
+         */
+    Utils.prototype.presentToast = /**
+         * presents a toast
+         * @Param message:string the toast msg
+         * @Param showCloseButton:boolean optional show the closed button display
+         * @Param closeButtonTest:string optional the close button text, usually 'X' or 'OK'
+         * @Return: void
+         */
+    function (message, showCloseButton, closeButtonText, dur) {
         var options = {
             message: message,
             position: 'bottom',
             showCloseButton: (showCloseButton || false),
-            closeButtonText: (closeButtonText || 'OK')
+            closeButtonText: (closeButtonText || 'OK'),
+            duration: (dur || 5000)
         };
         var toast = this.toastCtrl.create(options);
         toast.present();
@@ -99,18 +125,41 @@ var Utils = (function () {
      * put it here b/c for modularity and code reuse
      * @Return: void
      */
-    Utils.prototype.presentRejectNotesModal = function () {
-        this.modal = this.modalCtrl.create(reject_notes_1.RejectNotesPage);
+    /**
+         * presents rejects notes modal
+         * put it here b/c for modularity and code reuse
+         * @Return: void
+         */
+    Utils.prototype.presentRejectNotesModal = /**
+         * presents rejects notes modal
+         * put it here b/c for modularity and code reuse
+         * @Return: void
+         */
+    function () {
+        this.modal = this.modalCtrl.create(RejectNotesPage);
         this.modal.present();
         return this.modal;
     };
     /** dismiss whatever modal we've presented */
-    Utils.prototype.dismissModal = function () {
+    /** dismiss whatever modal we've presented */
+    Utils.prototype.dismissModal = /** dismiss whatever modal we've presented */
+    function () {
         this.modal.dismiss();
+    };
+    //Return false when testing on a browser
+    //Return true when building for iOS or Android
+    //Return false when testing on a browser
+    //Return true when building for iOS or Android
+    Utils.prototype.FCMFlagDebug = 
+    //Return false when testing on a browser
+    //Return true when building for iOS or Android
+    function () {
+        return this.plt.is('cordova');
+    };
+    Utils.prototype.returnAppVersion = function () {
+        return this.appVersion;
     };
     return Utils;
 }());
-Utils = __decorate([
-    core_1.Injectable()
-], Utils);
-exports.Utils = Utils;
+export { Utils };
+//# sourceMappingURL=utils.js.map

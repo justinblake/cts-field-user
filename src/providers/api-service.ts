@@ -1,16 +1,13 @@
 import {Injectable, NgZone} from '@angular/core';
 import {Http, Request, RequestMethod, RequestOptions, Headers} from '@angular/http';
-import {Transfer} from 'ionic-native';
+import {FileTransfer, FileUploadOptions, FileTransferObject} from '@ionic-native/file-transfer';
+import {File} from '@ionic-native/file';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/delay';
 import {Utils} from '../utils/utils';
 
 @Injectable()
-
-/**
- * Data Access Service for the ctsApi and utilApi
- */
 
 export class ApiService {
 
@@ -26,7 +23,10 @@ export class ApiService {
     progress: number;
 
 
-    constructor(public http: Http, private ngZone: NgZone) {
+    constructor(public http: Http,
+                private ngZone: NgZone,
+                private transfer: FileTransfer,
+                private file: File) {
 
 
         // settings for api endpoints //
@@ -36,7 +36,7 @@ export class ApiService {
         this.crudApi = `${this.apiBase}/crudApi.php`;
         this.apiUrls = {
 
-            "md5": `${this.utilApi}/md5`,
+            "getMd5": `${this.utilApi}/getMobileMd5`,
             "authenticateUser": `${this.utilApi}/authenticate_user`,
             "sendPasswordReset": `${this.ctsApi}/sendPasswordReset`,
             "loadCurrentTask": `${this.ctsApi}/loadCurrentTask`,
@@ -114,10 +114,10 @@ export class ApiService {
         });
     }
 
-     // * utility method for generating requestOptions for the utilApi
-     // * @Param endpoint:string the endpoint
-     // * @Param bodyData:object the body of the request
-     // * @Return RequestOptions
+    // * utility method for generating requestOptions for the utilApi
+    // * @Param endpoint:string the endpoint
+    // * @Param bodyData:object the body of the request
+    // * @Return RequestOptions
     utilApiPostRequestOptions = (endpoint, bodyData) => {
         let requestOptions = new RequestOptions({
             'method': RequestMethod.Post,
@@ -149,6 +149,17 @@ export class ApiService {
         return requestOptions;
     };
 
+    // * md5 user
+    // *  creates a request for the md5 endpoint
+    // *  @Param string:string
+    // *  @Note: app does not use this endpoint
+    // *  @Return Promise
+    md5 = (string) => {
+        console.log('string in api-service ', JSON.stringify(string));
+        let requestOptions = this.utilApiPostRequestOptions(this.apiUrls.getMd5, string);
+        return this.request(requestOptions);
+    };
+
     // * Authenticate user
     // * creates a request for authenticate endpoint
     // * @Param data:any = { email: string, password: md5-String }
@@ -165,15 +176,6 @@ export class ApiService {
         return this.request(requestOptions);
     }
 
-    // * md5 user
-    // *  creates a request for the md5 endpoint
-    // *  @Param string:string
-    // *  @Note: app does not use this endpoint
-    // *  @Return Promise
-    md5 = (string) => {
-        let requestOptions = this.utilApiPostRequestOptions(this.apiUrls.md5, string);
-        return this.request(requestOptions);
-    };
 
     updateEmployeeToken = (data) => {
         let endpoint = this.apiUrls.updateEmployeeToken;
@@ -256,16 +258,16 @@ export class ApiService {
     };
 
     loadForemanTasks = (data) => {
-		let endpoint = this.apiUrls.loadForemanTasks;
-		let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
-		return this.request(requestOptions)
-	};
+        let endpoint = this.apiUrls.loadForemanTasks;
+        let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
+        return this.request(requestOptions)
+    };
 
     loadLaborerTasks = (data) => {
-		let endpoint = this.apiUrls.loadLaborerTasks;
-		let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
-		return this.request(requestOptions)
-	};
+        let endpoint = this.apiUrls.loadLaborerTasks;
+        let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
+        return this.request(requestOptions)
+    };
 
     loadEmployeeAlerts = (data) => {
         let endpoint = this.apiUrls.loadEmployeeAlerts;
@@ -331,15 +333,14 @@ export class ApiService {
                 debug: true
             }
         };
-        const transfer = new Transfer();
+        const fileTransfer: FileTransferObject = this.transfer.create();
         return new Promise((resolve, reject) => {
-            transfer.upload(image.path, url, options, true).then((data) => {
+            fileTransfer.upload(image.path, url, options, true).then((data) => {
                 resolve(data)
             }).catch(error => {
-                reject(error);
+                reject(error)
             })
         })
-
     };
 
     // /* show progress of upload -- not implemented */

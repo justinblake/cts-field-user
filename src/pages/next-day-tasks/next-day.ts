@@ -43,7 +43,7 @@ export class NextDayPage {
     expandTaskId: number = -1;
     taskId: number = -1;
     userId: any = '';
-    role_id: number;
+    role_id: number = -1;
 
     constructor(public navCtrl: NavController,
                 private userMgr: UserManager,

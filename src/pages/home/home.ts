@@ -867,19 +867,19 @@ export class HomePage {
         });
     }
 
-    checkVersions() {
-        checkVersions().then((response:any)=>{
-            console.log('response in check version home ', JSON.stringify(response));
-        });
-        checkVersionInfo().then((res:any) => {
-            console.log('res in check version home ', JSON.stringify(res));
-        })
-    }
-
-    deleteOldBuilds() {
-        deleteOldVersions().then((res:any) =>{
-            console.log('res in delete ', JSON.stringify(res));
-        });
-    }
+    // checkVersions() {
+    //     checkVersions().then((response:any)=>{
+    //         console.log('response in check version home ', JSON.stringify(response));
+    //     });
+    //     checkVersionInfo().then((res:any) => {
+    //         console.log('res in check version home ', JSON.stringify(res));
+    //     })
+    // }
+    //
+    // deleteOldBuilds() {
+    //     deleteOldVersions().then((res:any) =>{
+    //         console.log('res in delete ', JSON.stringify(res));
+    //     });
+    // }
 }
 

@@ -1,33 +1,30 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var core_1 = require("@angular/core");
-var ionic_native_1 = require("ionic-native");
-//import { UserManager } from '../../providers/user-manager';
-var utils_1 = require("../../utils/utils");
-/*
-  Generated class for the Feedback page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
-var FeedbackPage = (function () {
-    function FeedbackPage(navCtrl, navParams, viewCtrl, taskMgr, actionSheetCtrl, platform, utils) {
+import { Component } from '@angular/core';
+import { NavController, NavParams, ActionSheetController, Platform, AlertController } from 'ionic-angular';
+import { Camera } from '@ionic-native/camera';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { TaskManager } from '../../providers/task-manager';
+import { Utils } from '../../utils/utils';
+import { Geolocation } from '@ionic-native/geolocation';
+var FeedbackPage = /** @class */ (function () {
+    function FeedbackPage(navCtrl, navParams, taskMgr, geolocation, actionSheetCtrl, platform, utils, camera, diagnostic, alertCtrl) {
+        var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
-        this.viewCtrl = viewCtrl;
         this.taskMgr = taskMgr;
+        this.geolocation = geolocation;
         this.actionSheetCtrl = actionSheetCtrl;
         this.platform = platform;
         this.utils = utils;
-        //files:Array<File>=[];
-        this.files = [];
-        this.type = { options: '' };
+        this.camera = camera;
+        this.diagnostic = diagnostic;
+        this.alertCtrl = alertCtrl;
+        this.taskId = navParams.get('task_id');
+        this.userId = navParams.get('user_id');
+        this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
+        this.isIos = this.taskMgr.returnPlatform().isIos;
         this.data = {
+            userId: this.userId,
+            taskId: this.taskId,
             notes: '',
             statusId: 0,
             files: this.files,
@@ -35,31 +32,31 @@ var FeedbackPage = (function () {
         };
         this.type.options = [
             {
-                "id": 1,
+                "id": 3,
                 "status": "Accepted",
                 "system_only": 1
             }, {
-                "id": 2,
+                "id": 4,
                 "status": "Rejected",
                 "system_only": 1
             }, {
-                "id": 3,
-                "status": "Problem Low",
-                "system_only": 0
-            }, {
-                "id": 4,
-                "status": "Problem Medium",
+                "id": 12,
+                "status": "Temporary Hold",
                 "system_only": 0
             }, {
                 "id": 5,
-                "status": "Problem High",
+                "status": "Delayed",
                 "system_only": 0
             }, {
-                "id": 6,
+                "id": 7,
+                "status": "Emergency",
+                "system_only": 0
+            }, {
+                "id": 9,
                 "status": "Completed",
                 "system_only": 1
             }, {
-                "id": 7,
+                "id": 10,
                 "status": "General Notes",
                 "system_only": 0
             }
@@ -67,48 +64,141 @@ var FeedbackPage = (function () {
         this.type.options = this.type.options.filter(function (value) {
             return value.system_only == 0;
         });
+        var successCallback = function (isAvailable) {
+            console.log('Is available? ' + isAvailable);
+        };
+        var errorCallback = function (e) {
+            _this.diagnostic.requestCameraAuthorization().then(successCallback);
+        };
+        this.diagnostic.isCameraAvailable().then(successCallback).catch(errorCallback);
     }
     FeedbackPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad FeedbackPage');
+    };
+    FeedbackPage.prototype.ionViewDidEnter = function () {
+        var _this = this;
+        setTimeout(function () { return _this.getLocation(); }, 500);
+    };
+    FeedbackPage.prototype.loadTaskInfo = function () {
+        var _this = this;
+        this.taskMgr.getCurrentTaskRemote().then(function (response) {
+            _this.currentTask = response;
+        });
+    };
+    FeedbackPage.prototype.getLocation = function () {
+        var _this = this;
+        var locEnabled = false;
+        var successCallback = function (isAvailable) {
+            if (isAvailable) {
+                locEnabled = true;
+                return locEnabled;
+            }
+            else {
+                _this.presentLocationAlert();
+                return;
+            }
+        };
+        var errorCallback = function (e) {
+            _this.utils.presentToast("Please verify that your location settings are turned on", true);
+        };
+        this.diagnostic.isLocationEnabled().then(successCallback).then(function (resp) {
+            if (locEnabled) {
+                _this.geolocation.getCurrentPosition({ timeout: 20000 }).then(function (position) {
+                    _this.lat = position.coords.latitude;
+                    _this.lon = position.coords.longitude;
+                }).catch(function (error) {
+                    _this.presentLocationAlert();
+                    // this.utils.presentToast('Unable to get a precise location. Some functionality will be limited until device location is available', true, '', 10000);
+                });
+            }
+        }).catch(errorCallback);
+    };
+    FeedbackPage.prototype.presentLocationAlert = function () {
+        var _this = this;
+        var alertText = '';
+        if (this.isAndroid) {
+            alertText = 'Select OK to enable location on your device';
+        }
+        else if (this.isIos) {
+            alertText = 'Location Services is enabled on your device but not for this app. Please open your device settings, scroll down and select clear-task-solutions-mobile, select Location, and then select the While Using the App option';
+        }
+        else {
+            alertText = 'Select OK to enable location on your device';
+        }
+        var alert = this.alertCtrl.create({
+            title: 'Location Required',
+            message: alertText,
+            cssClass: 'myAlerts',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: function () {
+                        if (_this.isAndroid) {
+                            _this.diagnostic.switchToLocationSettings();
+                        }
+                        if (_this.isIos) {
+                            console.log("inside the ios handler ");
+                            _this.diagnostic.isLocationAuthorized().then(function (res) {
+                                console.log('res isLocationAuthorized ', JSON.stringify(res));
+                            });
+                            _this.diagnostic.getLocationAuthorizationStatus().then(function (response) {
+                                if (response === 'denied') {
+                                    _this.getLocation();
+                                }
+                                console.log('response getLocationAuthorizationStatus ', JSON.stringify(response));
+                            });
+                            _this.diagnostic.requestLocationAuthorization('when_in_use').then(function (res) {
+                                console.log('res requestLocationAuthorization ', JSON.stringify(res));
+                            });
+                        }
+                    }
+                }
+            ]
+        });
+        alert.present();
     };
     /** delete image button clicked, remove from files array */
-    FeedbackPage.prototype.deleteImage = function (index) {
-        //console.log('deleting file ' + index)
+    /** delete image button clicked, remove from files array */
+    FeedbackPage.prototype.deleteImage = /** delete image button clicked, remove from files array */
+    function (index) {
         this.data.files.splice(index, 1);
     };
     /** used for HTML file upload only */
-    FeedbackPage.prototype.showFiles = function (event) {
-        console.log("" + utils_1.Utils.toJson(this.data.files, true));
-        //console.log(`${Utils.toJson(event.srcElement, true)}`)
+    /** used for HTML file upload only */
+    FeedbackPage.prototype.showFiles = /** used for HTML file upload only */
+    function (event) {
         var eventObj = event;
         var target = eventObj.target;
         var files = target.files;
         var file = files[0];
-        //console.log(file.webkitRelativePath());
         var fileData = {
             name: file.name,
             caption: '',
-            //notes : '',
             path: '',
             file: file
         };
         this.data.files.push(fileData);
-        console.log("" + utils_1.Utils.toJson(this.data.files, true));
     };
     /** save button clicked */
-    FeedbackPage.prototype.save = function () {
+    /** save button clicked */
+    FeedbackPage.prototype.save = /** save button clicked */
+    function () {
         var _this = this;
         this.data.save = true;
         this.data.notes = this.data.notes.trim();
-        //this.viewCtrl.dismiss(this.data)
-        //this.viewCtrl.
+        this.data.lat = this.lat;
+        this.data.lon = this.lon;
         this.utils.presentLoading();
         this.taskMgr.postFeedback(this.data).then(function (response) {
-            //console.log(`${Utils.toJson(response, true)}`);
-            ionic_native_1.Camera.cleanup();
+            if (_this.isIos) {
+                _this.camera.cleanup().then(function (response) {
+                    //
+                }).catch(function (error) {
+                    console.error("There was an error calling Camera.cleanup: " + Utils.toJson(error));
+                });
+            }
             _this.utils.dismissLoading();
             setTimeout(function () {
-                //let o:any = response
                 if (response === true) {
                     _this.navCtrl.pop();
                 }
@@ -116,49 +206,54 @@ var FeedbackPage = (function () {
                     _this.utils.toastError({ msg: 'There was an error posting feedback' });
                 }
             }, 500);
-        })["catch"](function (error) {
+        }).catch(function (error) {
             _this.utils.toastError({ msg: 'There was an error posting feedback' });
-            ionic_native_1.Camera.cleanup().then(function (response) {
-                //
-            })["catch"](function (error) {
-                console.error("There was an error calling Camera.cleanup: " + utils_1.Utils.toJson(error));
-            });
+            if (_this.isIos) {
+                _this.camera.cleanup().then(function (response) {
+                    //
+                }).catch(function (error) {
+                    console.error("There was an error calling Camera.cleanup: " + Utils.toJson(error));
+                });
+            }
             _this.utils.dismissLoading();
         });
     };
     /** cancel button clicked, used when page was a modal */
-    FeedbackPage.prototype.cancel = function () {
+    /** cancel button clicked, used when page was a modal */
+    FeedbackPage.prototype.cancel = /** cancel button clicked, used when page was a modal */
+    function () {
         this.data.save = false;
-        //this.viewCtrl.dismiss(this.data)
     };
     FeedbackPage.prototype.disableFormSubmit = function () {
         /**
-         *  Used to disable a form button. So :
-         *  if false OR false, then disable (true) OR
-         *  if true AND true, the don't disable (false)
-         */
-        return !((this.data.notes.trim().length > 10) && (this.data.statusId > 0));
+                 *  Used to disable a form button. So :
+                 *  if false OR false, then disable (true) OR
+                 *  if true AND true, the don't disable (false)
+                 */
+        return !((this.data.notes.trim().length > 4) && (this.data.statusId > 0));
     };
     /** trim notes  */
-    FeedbackPage.prototype.trimNotes = function () {
+    /** trim notes  */
+    FeedbackPage.prototype.trimNotes = /** trim notes  */
+    function () {
         this.data.notes = this.data.notes.trim();
     };
     /** when cordova, present an action sheet to take a pic or import from gallery */
-    FeedbackPage.prototype.presentActionSheet = function () {
+    /** when cordova, present an action sheet to take a pic or import from gallery */
+    FeedbackPage.prototype.presentActionSheet = /** when cordova, present an action sheet to take a pic or import from gallery */
+    function () {
         var _this = this;
         var buttons = [];
-        //this.resetImages();
-        //console.debug(`Platforms: ${this.platform.platforms()}`);
         if (this.platform.is('cordova')) {
             buttons.push({
                 text: 'Choose Photo',
                 handler: function () {
-                    _this.getPicture(ionic_native_1.Camera.PictureSourceType.PHOTOLIBRARY); // 0 == Library
+                    _this.getPicture(_this.camera.PictureSourceType.PHOTOLIBRARY); // 0 == Library
                 }
             }, {
                 text: 'Take Photo',
                 handler: function () {
-                    _this.getPicture(ionic_native_1.Camera.PictureSourceType.CAMERA); // 1 == Camera
+                    _this.getPicture(_this.camera.PictureSourceType.CAMERA); // 1 == Camera
                 }
             });
         }
@@ -175,45 +270,66 @@ var FeedbackPage = (function () {
      * get picture from gallery or camera
      * @Param sourceType:number camera or gallery
      */
-    FeedbackPage.prototype.getPicture = function (sourceType) {
+    /**
+         * get picture from gallery or camera
+         * @Param sourceType:number camera or gallery
+         */
+    FeedbackPage.prototype.getPicture = /**
+         * get picture from gallery or camera
+         * @Param sourceType:number camera or gallery
+         */
+    function (sourceType) {
         var _this = this;
-        // You can check the values here:
-        // https://github.com/driftyco/ionic-native/blob/master/src/plugins/camera.ts
         this.utils.presentLoading();
-        ionic_native_1.Camera.getPicture({
+        this.camera.getPicture({
             quality: 50,
-            //destinationType: Camera.DestinationType.FILE_URI, 
             destinationType: 1,
             sourceType: sourceType,
-            allowEdit: false,
+            allowEdit: true,
             saveToPhotoAlbum: false,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then(function (imageData) {
-            //this.processImage(`data:image/jpeg;base64,${imageData}`);
-            console.log("IMAGEDATA: " + utils_1.Utils.toJson(imageData, true));
+            console.log("IMAGEDATA: " + Utils.toJson(imageData, true));
             //fix for android, remove query string from end of file_uri or crashes android //
             imageData = imageData.split('?')[0];
-            console.log("IMAGEDATA: " + utils_1.Utils.toJson(imageData, true));
             var filename = imageData.replace(/^.*[\\\/]/, '');
             var fileData = {
                 name: filename,
                 caption: '',
                 //notes : '',
-                path: imageData
+                path: imageData,
             };
             _this.data.files.push(fileData);
             _this.utils.dismissLoading();
         }, function (err) {
+            var alert = _this.alertCtrl.create({
+                title: 'Image Error',
+                message: 'Unable to upload image. Please choose a different image or take an new picture',
+                cssClass: 'myAlerts',
+                buttons: ['OK']
+            });
+            alert.present();
             console.log("ERROR -> " + JSON.stringify(err));
             _this.utils.dismissLoading();
         });
     };
+    FeedbackPage.prototype.selectedStatus = function (selection) {
+        this.data.statusId = selection;
+        this.hasSelected = false;
+        this.hasStatus = true;
+    };
+    FeedbackPage.prototype.showNotes = function () {
+        this.hasStatus = true;
+        this.hasSelected = false;
+    };
+    FeedbackPage.prototype.backToSelection = function () {
+        this.hasStatus = false;
+        this.hasSelected = false;
+    };
+    FeedbackPage.prototype.createLoading = function () {
+        this.utils.presentLoading();
+    };
     return FeedbackPage;
 }());
-FeedbackPage = __decorate([
-    core_1.Component({
-        selector: 'page-feedback',
-        templateUrl: 'feedback.html'
-    })
-], FeedbackPage);
-exports.FeedbackPage = FeedbackPage;
+export { FeedbackPage };
+//# sourceMappingURL=feedback.js.map

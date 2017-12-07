@@ -15,6 +15,7 @@ import {CallNumber} from '@ionic-native/call-number';
 import {Camera} from '@ionic-native/camera';
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {FCM} from '@ionic-native/fcm';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import {File} from '@ionic-native/file';
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {Keyboard} from '@ionic-native/keyboard';
@@ -60,7 +61,7 @@ import {Utils} from '../utils/utils';
 import { Pro } from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-  appVersion: "1.3.116"
+  appVersion: "1.3.117"
 });
 
 @Injectable()
@@ -169,6 +170,7 @@ export function provideStorage() {
         Diagnostic,
         FCM,
         File,
+        FileTransfer,
         Geolocation,
         GoogleMapsManager,
         GoogleMapsService,

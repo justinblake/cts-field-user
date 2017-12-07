@@ -1,14 +1,12 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var core_1 = require("@angular/core");
-require("rxjs/add/operator/map");
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+//import { GeolocationService } from '../geolocation-service/geolocation-service';
+import { GoogleMapsService } from './google-maps-service';
 //import { Utils } from '../../utils/utils';
-var GoogleMapsManager = (function () {
+var 
+//import { Utils } from '../../utils/utils';
+GoogleMapsManager = /** @class */ (function () {
     function GoogleMapsManager(http, mapsService) {
         this.http = http;
         this.mapsService = mapsService;
@@ -21,7 +19,6 @@ var GoogleMapsManager = (function () {
     };
     return GoogleMapsManager;
 }());
-GoogleMapsManager = __decorate([
-    core_1.Injectable()
-], GoogleMapsManager);
-exports.GoogleMapsManager = GoogleMapsManager;
+//import { Utils } from '../../utils/utils';
+export { GoogleMapsManager };
+//# sourceMappingURL=google-maps-manager.js.map
