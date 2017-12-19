@@ -1,9 +1,14 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
+
 import {CallNumber} from '@ionic-native/call-number';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
 import {ConversionManager} from "../../providers/conversion-manager";
+import {Diagnostic} from "@ionic-native/diagnostic";
+import {Geolocation} from '@ionic-native/geolocation';
+import {DrivingDirectionsPage} from '../driving-directions/driving-directions';
+import {GoogleMapsManager} from "../../providers/google-maps-manager";
 
 
 
@@ -43,7 +48,10 @@ export class SingleForemanTaskPage {
                 public taskMgr: TaskManager,
                 private callNumber: CallNumber,
                 private conMgr: ConversionManager,
-                private utils: Utils) {
+                private utils: Utils,
+                private diagnostic: Diagnostic,
+                private geolocation: Geolocation,
+                private mapsManager: GoogleMapsManager) {
 
         this.taskId = navParams.get('id');
         this.updatedTime = navParams.get('updatedTime');
@@ -173,5 +181,47 @@ export class SingleForemanTaskPage {
             }
         }
         return equip.name;
+    }
+
+     showDrivingDirections(lat, lon) {
+        this.utils.presentLoading();
+        let locEnabled: boolean = false;
+        let successCallback = (isAvailable) => {
+            if (isAvailable) {
+                locEnabled = true;
+                return locEnabled;
+            } else {
+                this.utils.presentToast("Please enable your location in device settings", true);
+                return;
+            }
+        };
+        let errorCallback = (e) => {
+            this.utils.presentToast("Please enable your location in device settings", true);
+            this.utils.dismissLoading();
+        };
+
+        this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
+            if (locEnabled) {
+                let destination = `${lat},${lon}`;
+                this.geolocation.getCurrentPosition({timeout: 15000}).then((position) => {
+                    let origin = `${position.coords.latitude},${position.coords.longitude}`;
+                    return this.mapsManager.getDirections(origin, destination);
+                }).then((response) => {
+                    let params = {
+                        directions: response
+                    };
+                    setTimeout(() => {
+                        this.navCtrl.push(DrivingDirectionsPage, params);
+                        this.utils.dismissLoading();
+                    }, 2000)
+                }).catch((error) => {
+                    this.utils.dismissLoading();
+                    this.utils.presentToast("Please enable your location in device settings", true);
+                })
+            }
+            if (locEnabled === false) {
+                this.utils.dismissLoading();
+            }
+        }).catch(errorCallback);
     }
 }
