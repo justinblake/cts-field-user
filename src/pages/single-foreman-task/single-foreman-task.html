@@ -327,51 +327,50 @@
         <ion-card-header class="task-card-header">
             Materials/Supplier
         </ion-card-header>
-        <div  *ngIf="task_materials.length > 0">
-            <ion-card-content class="task-card-content material-padding"
-                              *ngFor="let material of task_materials; let m = index">
-                <h3 class="text-info">{{material.material_name}}</h3>
+        <div *ngIf="task_materials.length > 0">
+            <div *ngFor="let material of task_materials; let m = index">
+                <ion-card-content class="task-card-content material-padding">
+                    <h3 class="text-info">{{material.material_name}}</h3>
 
-                <ion-list no-padding text-wrap>
-                    <ion-item no-padding text-wrap>
-                        <h4 class="contractor-main">
-                            {{material.supplier.name}}
-                        </h4>
-                        <h4 class="contractor-sub">
-                            {{material.supplier.address}}
-                        </h4>
-                        <h4 class="contractor-sub">
-                            {{material.supplier.city}}, {{material.supplier.state}} &nbsp;{{material.supplier.zip}}
-                        </h4>
+                    <ion-list no-padding text-wrap>
+                        <ion-item no-padding text-wrap>
+                            <h4 class="contractor-main">
+                                {{material.supplier.name}}
+                            </h4>
+                            <h4 class="contractor-sub">
+                                {{material.supplier.address}}
+                            </h4>
+                            <h4 class="contractor-sub">
+                                {{material.supplier.city}}, {{material.supplier.state}} &nbsp;{{material.supplier.zip}}
+                            </h4>
 
-                        <h4>
+                            <h4>
+                                <button ion-button icon-left clear medium
+                                        class="call-contractor"
+                                        (click)="callPhone(material.supplier.phone)">
+                                    <span class="contractor-phone">Office: </span> <span
+                                        class="contractor-underline">{{material.supplier.phone}}</span>
+                                </button>
+                            </h4>
+
+
+                        </ion-item>
+                    </ion-list>
+                </ion-card-content>
+                <div class="more-back">
+                    <ion-row>
+                        <ion-col>
                             <button ion-button icon-left clear medium
-                                    class="call-contractor"
-                                    (click)="callPhone(material.supplier.phone)">
-                                <span class="contractor-phone">Office: </span> <span
-                                    class="contractor-underline">{{material.supplier.phone}}</span>
+                                    (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
+                                <ion-icon name="navigate"></ion-icon>
+                                Get Directions
                             </button>
-                        </h4>
-
-
-                    </ion-item>
-                </ion-list>
-            </ion-card-content>
-            <div class="more-back">
-                <ion-row>
-                    <ion-col>
-                        <button ion-button icon-left clear medium
-                                (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
-                            <ion-icon name="navigate"></ion-icon>
-                            Get Directions
-                        </button>
-                    </ion-col>
-                </ion-row>
+                        </ion-col>
+                    </ion-row>
+                </div>
             </div>
         </div>
-        <div >
 
-        </div>
     </ion-card>
 </ion-content>
 

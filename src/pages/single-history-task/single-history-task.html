@@ -169,15 +169,16 @@
         </ion-card-content>
     </ion-card>
 
-    <ion-card class="card-border">
-        <ion-card-header class="task-card-header">
-            Materials/Supplier
-        </ion-card-header>
-        <div *ngIf="task_materials?.length > 0">
-            <ion-card-content>
+    <div *ngIf="task_materials?.length > 0">
+        <ion-card class="card-border">
+            <ion-card-header class="task-card-header">
+                Materials/Supplier
+            </ion-card-header>
 
+            <div *ngFor="let material of task_materials; let m = index">
 
-                <div *ngFor="let material of task_materials; let m = index">
+                <ion-card-content>
+
 
                     <h3 class="text-info">{{material.material_name}}</h3>
                     <ion-list no-padding text-wrap>
@@ -202,27 +203,33 @@
                         </ion-item>
                     </ion-list>
 
+
+                </ion-card-content>
+                <div class="more-back">
+                    <ion-row>
+                        <ion-col>
+                            <button ion-button icon-left clear medium
+                                    (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
+                                <ion-icon name="navigate"></ion-icon>
+                                Get Directions
+                            </button>
+                        </ion-col>
+                    </ion-row>
                 </div>
-            </ion-card-content>
-            <div class="more-back">
-                <ion-row>
-                    <ion-col>
-                        <button ion-button icon-left clear medium
-                                (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
-                            <ion-icon name="navigate"></ion-icon>
-                            Get Directions
-                        </button>
-                    </ion-col>
-                </ion-row>
             </div>
-        </div>
-        <div class="task-card-content equip-center"
-             *ngIf="task_materials.length === 0">
+        </ion-card>
+    </div>
+
+    <div *ngIf="task_materials.length === 0">
+        <ion-card>
+            <ion-card-header class="task-card-header">
+                Materials/Supplier
+            </ion-card-header>
             <ion-card-content>
                 No Materials Specified
             </ion-card-content>
-        </div>
-    </ion-card>
+        </ion-card>
+    </div>
 </ion-content>
 
 
