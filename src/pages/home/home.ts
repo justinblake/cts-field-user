@@ -886,6 +886,7 @@ export class HomePage {
     checkUpdates() {
         checkForUpdate().then((res: any) => {
             console.log('res in home ', JSON.stringify(res));
+            console.log('here we go');
             if (res === 'true') {
                 this.utils.dismissLoading();
                 this.utils.loadNewVersion();
