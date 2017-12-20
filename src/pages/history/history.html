@@ -100,8 +100,7 @@
                     <div class="task-card-content">
                         <h3 class="text-info">{{b + 1}}: {{jobTasks.task_description}} </h3>
                         <h4 class="date-info mar-top10">Date:
-                            <span *ngIf="isIos">{{jobTasks.updatedTime | date:'mediumDate'}}</span>
-                            <span *ngIf="!isIos">{{jobTasks.updatedTime | date:'mediumDate'}}</span>
+                            {{jobTasks.strDate}}
                         </h4>
                         <div *ngIf="jobTasks.additional_notes?.length > 0">
                             <h5 class="text-info">Additional Task Notes</h5>
@@ -109,8 +108,7 @@
                                 <li class="more-notes">{{newNotes.notes}}</li>
                                 <li class="notes-by">Added By: <strong>{{newNotes.employee.first_name}}
                                     {{newNotes.employee.last_name}}</strong> at <strong>
-                                    <span *ngIf="isIos">{{adjustTime(newNotes.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{newNotes.updatedTime | date:'shortTime'}}</span>
+                                    {{newNotes.strTime}}
                                 </strong></li>
                             </ul>
                         </div>

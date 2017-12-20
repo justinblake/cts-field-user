@@ -169,8 +169,7 @@
                                         <span>{{task.task_description}}</span>
                                     </ion-col>
                                     <ion-col width-30 class="newTime" text-right>
-                                        <span *ngIf="isIos">{{adjustTime(task.updatedTime) }}</span>
-                                        <span *ngIf="!isIos">{{task.updatedTime | date:'shortTime'}}</span>
+                                        {{task.strTime}}
                                     </ion-col>
                                 </ion-row>
                             </ion-grid>
