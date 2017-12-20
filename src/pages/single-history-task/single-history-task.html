@@ -45,7 +45,7 @@
                             <h5 class="add_notes">{{u + 1}}: {{newNotes.notes}}</h5>
                             <h5 class="add_by">Added By: <strong>{{newNotes.employee.first_name}}
                                 {{newNotes.employee.last_name}}</strong> at
-                                <span>{{newNotes.updatedTime}}</span>
+                                <span>{{newNotes.strTime}}</span>
                             </h5>
                         </ion-item>
                     </div>
@@ -142,7 +142,7 @@
                 <div class="equip-div" *ngFor="let note of task_user_log; let l = index">
                     <h5 class="add_notes">{{l + 1}}: {{note.notes}}</h5>
                     <h5 class="add_by">Added At:
-                        <span>{{note.updatedTime}}</span>
+                        <span>{{note.strTime}}</span>
                     </h5>
                 </div>
             </div>
