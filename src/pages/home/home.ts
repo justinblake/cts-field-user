@@ -435,9 +435,12 @@ export class HomePage {
         };
         this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
             if (locEnabled) {
-                this.geolocation.getCurrentPosition({timeout: 40000}).then(position => {
+                this.geolocation.getCurrentPosition({timeout: 40000,  enableHighAccuracy: true}).then(position => {
                     this.lat = position.coords.latitude;
+                    console.log('this.lat ', JSON.stringify(this.lat));
                     this.lon = position.coords.longitude;
+                    console.log('this.lon ', JSON.stringify(this.lon));
+                    console.log('This.lon type ', typeof this.lon);
                 }).catch((error) => {
                     if (this.debug) {
                         console.log('geo error ')
