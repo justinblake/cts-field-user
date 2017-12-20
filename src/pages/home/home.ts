@@ -851,6 +851,7 @@ export class HomePage {
         checkForUpdate().then((res: any) => {
             console.log('res in home ', JSON.stringify(res));
             if (res === 'true') {
+                this.utils.presentLoading();
                 downloadUpdate().then((result: any) => {
                     console.log('result ', JSON.stringify(result));
                     if (result === 'true') {
@@ -858,6 +859,7 @@ export class HomePage {
                             console.log('extract ', JSON.stringify(extract));
                             if (extract === 'done') {
                                 console.log('done in home');
+                                this.utils.dismissLoading();
                                 loadNewVersion();
                             }
                         })
