@@ -327,7 +327,7 @@ export class ForemanPage {
 
             let params = {
                 id: currentTask.id,
-                updatedTime: currentTask.updatedTime,
+                updatedTime: currentTask.strTime,
                 task_description: currentTask.task_description,
                 status_id: currentTask.status_id,
                 task_crew: currentTask.task_crew,
@@ -352,7 +352,7 @@ export class ForemanPage {
 
             let params = {
                 id: currentTask.id,
-                updatedTime: currentTask.updatedTime,
+                updatedTime: currentTask.strTime,
                 task_description: currentTask.task_description,
                 status_id: currentTask.status_id,
                 task_crew: currentTask.task_crew,

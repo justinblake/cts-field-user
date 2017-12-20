@@ -41,8 +41,7 @@
                         <h4 class="text-info capitalize">
                             {{task_description}}</h4>
                         <h5 class="s-time">
-                            Start Time:
-                            <span>{{updatedTime | date: 'shortTime'}}</span>
+                            Start Time: {{updatedTime}}
                         </h5>
                     </ion-item>
 
@@ -53,8 +52,7 @@
                             <h5 class="add_notes">{{u + 1}}: {{newNotes.notes}}</h5>
                             <h5 class="add_by">Added By: <strong>{{newNotes.employee.first_name}}
                                 {{newNotes.employee.last_name}}</strong> at
-                                <span *ngIf="isIos">{{adjustTime(newNotes.updatedTime) }}</span>
-                                <span *ngIf="!isIos">{{newNotes.updatedTime | date: 'shortTime'}}</span>
+                                <span>{{newNotes.updatedTime}}</span>
                             </h5>
                         </ion-item>
                     </div>
@@ -369,6 +367,16 @@
                     </ion-row>
                 </div>
             </div>
+        </div>
+        <div *ngIf="task_materials.length === 0">
+            <ion-card>
+                <ion-card-header class="task-card-header">
+                    Materials/Supplier
+                </ion-card-header>
+                <ion-card-content class="crew-font" padding>
+                    No Materials Specified
+                </ion-card-content>
+            </ion-card>
         </div>
 
     </ion-card>

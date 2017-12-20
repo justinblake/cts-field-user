@@ -34,8 +34,7 @@
                         <h4 class="text-info capitalize">
                             {{task_description}}</h4>
                         <h5 class="s-time">
-                            Start Time:
-                            <span>{{updatedTime | date: 'shortTime'}}</span>
+                            Start Time: {{updatedTime}}
                         </h5>
                     </ion-item>
 
@@ -46,8 +45,7 @@
                             <h5 class="add_notes">{{u + 1}}: {{newNotes.notes}}</h5>
                             <h5 class="add_by">Added By: <strong>{{newNotes.employee.first_name}}
                                 {{newNotes.employee.last_name}}</strong> at
-                                <span *ngIf="isIos">{{adjustTime(newNotes.updatedTime) }}</span>
-                                <span *ngIf="!isIos">{{newNotes.updatedTime | date: 'shortTime'}}</span>
+                                <span>{{newNotes.updatedTime}}</span>
                             </h5>
                         </ion-item>
                     </div>
@@ -144,8 +142,7 @@
                 <div class="equip-div" *ngFor="let note of task_user_log; let l = index">
                     <h5 class="add_notes">{{l + 1}}: {{note.notes}}</h5>
                     <h5 class="add_by">Added At:
-                        <span *ngIf="isIos">{{adjustTime(note.updatedTime) }}</span>
-                        <span *ngIf="!isIos">{{note.updatedTime | date: 'shortTime'}}</span>
+                        <span>{{note.updatedTime}}</span>
                     </h5>
                 </div>
             </div>
