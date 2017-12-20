@@ -691,13 +691,18 @@ export class HomePage {
 
     openCompletePage() {
         this.complete = true;
-        let params = {
-            'task_id': this.currentTask.job_tasks.id,
-            'user_id': this.currentUser.userId
-        };
-        this.navCtrl.push(CompleteNotesPage, params).then(res => {
-        });
-        return true;
+        this.setLocation().then((res: any) => {
+            let params = {
+                'lat': this.lat,
+                'lon': this.lon,
+                'task_id': this.currentTask.job_tasks.id,
+                'user_id': this.currentUser.userId
+            };
+            this.navCtrl.push(CompleteNotesPage, params).then(res => {
+            });
+            return true;
+        })
+
     }
 
 // does not open a modal as the name might suggest.

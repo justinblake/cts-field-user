@@ -4,17 +4,16 @@ import {Camera} from '@ionic-native/camera';
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
-import {Geolocation} from '@ionic-native/geolocation';
 
 @Component({
     selector: 'page-complete-notes',
     templateUrl: 'complete-notes.html'
 })
 export class CompleteNotesPage {
+
     data: any;
     files: Array<any> = [];
     type: any = {options: ''};
-    currentTask: any;
     isIos: boolean = false;
     lat: any;
     lon: any;
@@ -22,11 +21,9 @@ export class CompleteNotesPage {
     public userId;
     isCordova: boolean = false;
 
-
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
                 private taskMgr: TaskManager,
-                private geolocation: Geolocation,
                 private actionSheetCtrl: ActionSheetController,
                 private platform: Platform,
                 private utils: Utils,
@@ -35,6 +32,8 @@ export class CompleteNotesPage {
                 private alertCtrl: AlertController) {
 
         this.taskId = navParams.get('task_id');
+        this.lat = navParams.get('lat');
+        this.lon = navParams.get('lat');
         this.userId = navParams.get('user_id');
         console.log('this.taskId ', JSON.stringify(this.taskId));
         console.log('this.userId ', JSON.stringify(this.userId));
@@ -46,9 +45,11 @@ export class CompleteNotesPage {
             notes: '',
             statusId: 9,
             files: this.files,
-            save: false
+            save: false,
+            lat: this.lat,
+            lon: this.lon
         };
-        console.log('this.data ', JSON.stringify(this.data));
+
 
         if (this.platform.is('ios')) {
             // This will only print when on iOS
@@ -69,36 +70,7 @@ export class CompleteNotesPage {
 
     }
 
-    ionViewDidLoad() {
-        console.log('ionViewDidLoad FeedbackPage');
-        setTimeout(() => this.getLocation(), 500);
-    }
-
-    ionViewDidEnter() {
-        console.log('ionView stuff');
-        // this.loadTaskInfo();
-        setTimeout(() => this.getLocation(), 500);
-    }
-
-    loadTaskInfo() {
-        this.taskMgr.getCurrentTaskRemote().then(response => {
-            this.currentTask = response;
-            console.log('this.currentTask', JSON.stringify(this.currentTask));
-        });
-
-    }
-
-    getLocation() {
-        if (this.isCordova) {
-            this.geolocation.getCurrentPosition().then((resp) => {
-                this.lat = resp.coords.latitude;
-                this.lon = resp.coords.longitude;
-            }).catch((error) => {
-                console.log('Error getting location', error);
-            });
-        }
-
-    }
+    //Nothing is loaded, everything is passed from the home page
 
     deleteImage(index) {
         this.data.files.splice(index, 1);
@@ -115,7 +87,7 @@ export class CompleteNotesPage {
             caption: '',
             path: '',
             file: file
-        }
+        };
 
         this.data.files.push(fileData);
     }
@@ -124,8 +96,6 @@ export class CompleteNotesPage {
     save() {
         this.data.save = true;
         this.data.notes = this.data.notes.trim();
-        this.data.lat = this.lat;
-        this.data.lon = this.lon;
         this.utils.presentLoading();
         this.taskMgr.postFeedback(this.data).then(response => {
             if (this.isIos) {
@@ -234,7 +204,7 @@ export class CompleteNotesPage {
                 //notes : '',
                 path: imageData,
                 //file : file
-            }
+            };
 
             this.data.files.push(fileData);
             this.utils.dismissLoading();
