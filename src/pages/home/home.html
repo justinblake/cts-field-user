@@ -239,9 +239,7 @@
                                     <h5 class="add_notes">{{u + 1}}: {{newNotes.notes}}</h5>
                                     <h5 class="add_by">Added By: <strong>{{newNotes.employee.first_name}}
                                         {{newNotes.employee.last_name}}</strong>
-                                        at
-                                        <span *ngIf="isIos">{{adjustTime(newNotes.updatedTime) }}</span>
-                                        <span *ngIf="!isIos">{{newNotes.updatedTime | date:'shortTime'}}</span>
+                                        at {{newNotes.strTime}}
                                     </h5>
 
 
@@ -371,10 +369,10 @@
 
                     <!--<ion-row>-->
 
-                        <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                                <!--(click)="checkVersions()">-->
-                            <!--Check Versions-->
-                        <!--</button>-->
+                    <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+                    <!--(click)="checkVersions()">-->
+                    <!--Check Versions-->
+                    <!--</button>-->
 
                     <!--</ion-row>-->
 
@@ -442,8 +440,7 @@
                                     </ion-col>
                                     <ion-col text-right width-30 class="newTime"
                                              *ngIf="expandTaskId !== task.id || taskId !== j">
-                                        <span *ngIf="isIos">{{adjustTime(task.updatedTime) }}</span>
-                                        <span *ngIf="!isIos">{{task.updatedTime | date:'shortTime'}}</span>
+                                        {{task.strTime}}
                                     </ion-col>
                                     <ion-col class="task-icon" width-10>
                                         <ion-icon *ngIf="expandTaskId !== task.id && taskId !== j"
@@ -531,8 +528,7 @@
                                                     <h4 class="text-info capitalize">
                                                         {{task.task_description}}</h4>
                                                     <h5 class="s-time">
-                                                        <span *ngIf="isIos">Start Time: {{adjustTime(task.updatedTime) }}</span>
-                                                        <span *ngIf="!isIos">Start Time: {{task.updatedTime | date:'shortTime'}}</span>
+                                                        Start Time: {{task.strTime}}
                                                     </h5>
 
                                                 </ion-item>
