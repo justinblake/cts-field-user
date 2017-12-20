@@ -19,7 +19,7 @@ import {Geolocation} from '@ionic-native/geolocation';
 export class SingleHistoryTaskPage {
     @ViewChild(Content) content: Content;
 
-    updatedTime: any;
+    strTime: any;
     task_description: any;
     status: any;
     task_crew: any;
@@ -45,7 +45,7 @@ export class SingleHistoryTaskPage {
                 private mapsManager: GoogleMapsManager) {
 
         this.taskId = navParams.get('id');
-        this.updatedTime = navParams.get('updatedTime');
+        this.strTime = navParams.get('strTime');
         this.task_description = navParams.get('task_description');
         this.status = navParams.get('status');
         this.task_crew = navParams.get('task_crew');
@@ -57,7 +57,7 @@ export class SingleHistoryTaskPage {
         this.contractor_name = navParams.get('contractor_name');
         this.contractor_phone = navParams.get('contractor_phone');
 
-        console.log('this.updatedTime ', JSON.stringify(this.updatedTime));
+        console.log('this.strTime ', JSON.stringify(this.strTime));
         console.log('this.task_description ', JSON.stringify(this.task_description));
         console.log('this.status ', JSON.stringify(this.status));
         console.log('this.task_crew ', JSON.stringify(this.task_crew));

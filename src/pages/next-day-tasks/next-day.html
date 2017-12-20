@@ -89,8 +89,7 @@
                                     </ion-col>
                                     <ion-col width-30 text-right class="newTime"
                                              *ngIf="expandTaskId !== task.id || taskId !== j">
-                                        <span *ngIf="isIos">{{adjustTime(task.updatedTime) }}</span>
-                                        <span *ngIf="!isIos">{{task.updatedTime | date:'shortTime'}}</span>
+                                        {{task.strTime}}
                                     </ion-col>
                                     <ion-col class="task-icon" width-10>
                                         <ion-icon *ngIf="expandTaskId !== task.id || taskId !== j"
@@ -179,9 +178,7 @@
                                                     <h4 class="text-info capitalize">
                                                         {{task.task_description}}</h4>
                                                     <h5 class="s-time">
-                                                        Start Time:
-                                                        <span *ngIf="isIos">{{adjustTime(task.updatedTime) }}</span>
-                                                        <span *ngIf="!isIos">{{task.updatedTime | date:'shortTime'}}</span>
+                                                        Start Time: {{task.strTime}}
                                                     </h5>
 
                                                 </ion-item>

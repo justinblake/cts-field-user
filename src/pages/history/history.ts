@@ -253,7 +253,7 @@ export class HistoryPage {
 
                 let params = {
                     id: currentTask.id,
-                    updatedTime: currentTask.strTime,
+                    strTime: currentTask.strTime,
                     task_description: currentTask.task_description,
                     status: currentTask.status,
                     task_crew: currentTask.task_crew,
@@ -307,7 +307,7 @@ export class HistoryPage {
 
                 let params = {
                     id: currentTask.id,
-                    updatedTime: currentTask.strTime,
+                    strTime: currentTask.strTime,
                     task_description: currentTask.task_description,
                     status: currentTask.status,
                     task_crew: currentTask.task_crew,

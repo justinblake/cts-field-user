@@ -78,14 +78,12 @@
                 </ion-row>
                 <ion-row>
                     <h6 class="important">Sent:
-                        <span class="less-important" *ngIf="isIos">{{adjustTime(alert.updatedTimeSent) }} - {{alert.updatedTimeSent | date:'mediumDate'}}</span>
-                        <span class="less-important" *ngIf="!isIos">{{alert.updatedTimeSent | date:'shortTime'}} - {{alert.updatedTimeSent | date:'mediumDate'}}</span>
+                        <span class="less-important">{{alert.strTimeSent}} - {{alert.strDateSent}}</span>
                     </h6>
                 </ion-row>
                 <ion-row *ngIf="alert.updatedTimeView !== null">
                     <h6 class="important">Read:
-                        <span class="less-important" *ngIf="isIos">{{adjustTime(alert.updatedTimeView) }} - {{alert.updatedTimeView | date:'mediumDate'}}</span>
-                        <span class="less-important" *ngIf="!isIos">{{alert.updatedTimeView | date:'shortTime'}} - {{alert.updatedTimeView | date:'mediumDate'}}</span>
+                        <span class="less-important">{{alert.strTimeViewed}} - {{alert.strDateSent}}</span>
                     </h6>
 
                 </ion-row>
