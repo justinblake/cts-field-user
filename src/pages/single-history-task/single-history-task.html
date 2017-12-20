@@ -162,7 +162,7 @@
                 <div class="equip-div" *ngFor="let item of task_equipment">
                     <h4 class="equip-name">{{item.equipment_name}}</h4>
                 </div>
-                <div class="equip-center" *ngIf="task_equipment.length === 0">
+                <div class="equip-center crew-font" *ngIf="task_equipment.length === 0">
                     No Equipment Specified
                 </div>
             </div>
@@ -225,7 +225,7 @@
             <ion-card-header class="task-card-header">
                 Materials/Supplier
             </ion-card-header>
-            <ion-card-content>
+            <ion-card-content class="crew-font" padding>
                 No Materials Specified
             </ion-card-content>
         </ion-card>

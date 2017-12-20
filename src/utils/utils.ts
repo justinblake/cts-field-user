@@ -11,7 +11,7 @@ export class Utils {
     modal: Modal;
     loadingIsPresent: boolean = false;
     homePage: number = 0;
-    appVersion: string = '1.3.118';
+    appVersion: string = '1.3.119';
 
     constructor(public loadingCtrl: LoadingController,
                 public alertCtrl: AlertController,
