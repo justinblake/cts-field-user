@@ -22,7 +22,7 @@ export class SingleForemanTaskPage {
     @ViewChild(Content) content: Content;
 
     currentTask: any;
-    updatedTime: any;
+    strTime: any;
     task_description: any;
     status_id: any;
     task_crew: any;
@@ -54,7 +54,7 @@ export class SingleForemanTaskPage {
                 private mapsManager: GoogleMapsManager) {
 
         this.taskId = navParams.get('id');
-        this.updatedTime = navParams.get('updatedTime');
+        this.strTime = navParams.get('strTime');
         this.task_description = navParams.get('task_description');
         this.status_id = navParams.get('status_id');
         this.task_crew = navParams.get('task_crew');

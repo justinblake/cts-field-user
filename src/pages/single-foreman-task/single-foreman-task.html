@@ -41,7 +41,7 @@
                         <h4 class="text-info capitalize">
                             {{task_description}}</h4>
                         <h5 class="s-time">
-                            Start Time: {{updatedTime}}
+                            Start Time: {{strTime}}
                         </h5>
                     </ion-item>
 
@@ -52,7 +52,7 @@
                             <h5 class="add_notes">{{u + 1}}: {{newNotes.notes}}</h5>
                             <h5 class="add_by">Added By: <strong>{{newNotes.employee.first_name}}
                                 {{newNotes.employee.last_name}}</strong> at
-                                <span>{{newNotes.updatedTime}}</span>
+                                <span>{{newNotes.strTime}}</span>
                             </h5>
                         </ion-item>
                     </div>
@@ -150,67 +150,53 @@
                                 <h4 class="job-status"
                                     *ngIf="status.status_id === 3">
                                     <span ion-text color="accepted">Accepted</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
-
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
                                 <h4 class="job-status"
                                     *ngIf="status.status_id === 4">
                                     <span ion-text color="started">Started</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
                                 <h4 class="job-status"
                                     *ngIf="status.status_id === 5">
                                     <span ion-text color="on-hold">Delayed</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
                                 <h4 class="job-status"
                                     *ngIf="status.status_id === 6">
                                     <span ion-text color="on-hold">On Hold</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
                                 <h4 class="job-status"
                                     *ngIf="status.status_id === 7">
                                     <span ion-text color="on-hold">Emergency</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
-                                <h4 class="job-status"
-                                    *ngIf="status.status_id === 12">
-                                                                <span ion-text
-                                                                      color="on-hold">Temporary Hold</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                <h4 class="job-status" *ngIf="status.status_id === 12">
+                                    <span ion-text color="on-hold">Temporary Hold</span> at
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
-                                <h4 class="job-status"
-                                    *ngIf="status.status_id === 13">
-                                                                <span ion-text
-                                                                      color="on-hold">Timecard Pause</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                <h4 class="job-status" *ngIf="status.status_id === 13">
+                                    <span ion-text color="on-hold">Timecard Pause</span> at
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
                                 <h4 class="job-status"
                                     *ngIf="status.status_id === 8">
                                     <span ion-text color="on-hold">Rejected</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
                                 <h4 class="job-status"
                                     *ngIf="status.status_id === 9">
                                     <span ion-text color="complete">Completed</span> at
-                                    <span *ngIf="isIos">{{adjustTime(status.updatedTime) }}</span>
-                                    <span *ngIf="!isIos">{{status.updatedTime | date:'shortTime'}}</span>
+                                    {{status.strTime}}
                                     <span *ngIf="status.notes"><br>Notes: {{status.notes}}</span>
                                 </h4>
                             </div>
