@@ -873,7 +873,7 @@ export class HomePage {
         checkForUpdate().then((res: any) => {
             console.log('res in home ', JSON.stringify(res));
             if (res === 'true') {
-                this.utils.presentLoading();
+                this.utils.loadNewVersion();
                 downloadUpdate().then((result: any) => {
                     console.log('result ', JSON.stringify(result));
                     if (result === 'true') {

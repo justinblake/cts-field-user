@@ -59,6 +59,18 @@ export class Utils {
         });
     }
 
+    loadNewVersion(content?: string) {
+        let opts: any = {
+            content: content || 'Updating App. Thank You For Your Patience',
+            enableBackdropDismiss: false,
+            spinner: 'dots',
+        };
+        this.loading = this.loadingCtrl.create(opts);
+        this.loading.present().then(response => {
+            this.loadingIsPresent = true;
+        });
+    }
+
 
 
     /**
