@@ -420,34 +420,41 @@ export class HomePage {
     }
 
     setLocation() {
-        let locEnabled: boolean = false;
-        let successCallback = (isAvailable) => {
-            if (isAvailable) {
-                locEnabled = true;
-                return locEnabled;
-            } else {
-                this.presentLocationAlert();
-                return;
-            }
-        };
-        let errorCallback = (e) => {
-            this.utils.presentToast("Please verify that your location settings are turned on", true);
-        };
-        this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
-            if (locEnabled) {
-                this.geolocation.getCurrentPosition({timeout: 40000,  enableHighAccuracy: true}).then(position => {
-                    this.lat = position.coords.latitude;
-                    console.log('this.lat ', JSON.stringify(this.lat));
-                    this.lon = position.coords.longitude;
-                    console.log('this.lon ', JSON.stringify(this.lon));
-                    console.log('This.lon type ', typeof this.lon);
-                }).catch((error) => {
-                    if (this.debug) {
-                        console.log('geo error ')
-                    }
-                });
-            }
-        }).catch(errorCallback);
+        return new Promise((resolve, reject) => {
+            let locEnabled: boolean = false;
+            let successCallback = (isAvailable) => {
+                if (isAvailable) {
+                    locEnabled = true;
+                    return locEnabled;
+                } else {
+                    this.presentLocationAlert();
+                    return;
+                }
+            };
+            let errorCallback = (e) => {
+                this.utils.presentToast("Please verify that your location settings are turned on", true);
+            };
+            this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
+                if (locEnabled) {
+
+                    this.geolocation.getCurrentPosition({timeout: 40000, enableHighAccuracy: true}).then(position => {
+                        this.lat = position.coords.latitude;
+                        console.log('this.lat ', JSON.stringify(this.lat));
+                        this.lon = position.coords.longitude;
+                        console.log('this.lon ', JSON.stringify(this.lon));
+                        console.log('This.lon type ', typeof this.lon);
+                        resolve(`${this.lat},${this.lon}`);
+                    }).catch((error) => {
+                        if (this.debug) {
+                            console.log('geo error ');
+                            reject("error");
+                        }
+                    });
+
+
+                }
+            }).catch(errorCallback);
+        })
     }
 
 // sets the status of the task using TaskManager
@@ -836,10 +843,15 @@ export class HomePage {
                 this.setStatus(4, newNotes, false)
             }
         }
-        this.taskMgr.createTimecardEntry(this.currentUser.userId, this.lat, this.lon, status).then(res => {
-            this.timecardStatus = status;
-            this.showTimecard = false;
+
+        this.setLocation().then((res: any) => {
+            this.taskMgr.createTimecardEntry(this.currentUser.userId, this.lat, this.lon, status).then(res => {
+                console.log("inside create timecard entry");
+                this.timecardStatus = status;
+                this.showTimecard = false;
+            })
         })
+
     }
 
     showClockInOut() {
