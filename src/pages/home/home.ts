@@ -443,11 +443,25 @@ export class HomePage {
                         this.lon = position.coords.longitude;
                         console.log('this.lon ', JSON.stringify(this.lon));
                         console.log('This.lon type ', typeof this.lon);
+                        console.log("this.location");
                         resolve(`${this.lat},${this.lon}`);
                     }).catch((error) => {
                         if (this.debug) {
                             console.log('geo error ');
-                            reject("error");
+                            this.geolocation.getCurrentPosition({
+                                timeout: 40000,
+                                enableHighAccuracy: false
+                            }).then(position => {
+                                this.lat = position.coords.latitude;
+                                console.log('this.lat in error of get current position', JSON.stringify(this.lat));
+                                this.lon = position.coords.longitude;
+                                console.log('this.lon in error of get current position', JSON.stringify(this.lon));
+                                console.log('This.lon type ', typeof this.lon);
+                                resolve(`${this.lat},${this.lon}`);
+                            }).catch((error) => {
+                                reject("error");
+                            })
+
                         }
                     });
 
