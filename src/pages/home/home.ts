@@ -510,26 +510,28 @@ export class HomePage {
                 }
             }
             else {
-                let data = this.dataFunction(notes, statusId, this.lat, this.lon);
-                if (data.statusId === 6 || data.statusId === 9) {
-                    this.showTasks = false;
-                    this.taskMgr.updateTaskStatus(data).then((response) => {
-                        this.setCurrentTask(false);
-                    }).catch(error => {
-                        if (this.debug) {
-                            console.log("error " + error);
-                        }
-                    });
-                }
-                else if (data.statusId < 8 || data.statusId === 10 || data.statusId === 13) {
-                    this.taskMgr.updateTaskStatus(data).then((response) => {
-                        this.setCurrentTask(false);
-                    }).catch(error => {
-                        if (this.debug) {
-                            console.log("error " + error);
-                        }
-                    });
-                }
+                this.setLocation().then((res: any) => {
+                    let data = this.dataFunction(notes, statusId, this.lat, this.lon);
+                    if (data.statusId === 6 || data.statusId === 9) {
+                        this.showTasks = false;
+                        this.taskMgr.updateTaskStatus(data).then((response) => {
+                            this.setCurrentTask(false);
+                        }).catch(error => {
+                            if (this.debug) {
+                                console.log("error " + error);
+                            }
+                        });
+                    }
+                    else if (data.statusId < 8 || data.statusId === 10 || data.statusId === 13) {
+                        this.taskMgr.updateTaskStatus(data).then((response) => {
+                            this.setCurrentTask(false);
+                        }).catch(error => {
+                            if (this.debug) {
+                                console.log("error " + error);
+                            }
+                        });
+                    }
+                });
             }
         }
         else if (statusId === 8) {
