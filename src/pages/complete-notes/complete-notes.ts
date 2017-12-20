@@ -33,7 +33,7 @@ export class CompleteNotesPage {
 
         this.taskId = navParams.get('task_id');
         this.lat = navParams.get('lat');
-        this.lon = navParams.get('lat');
+        this.lon = navParams.get('lon');
         this.userId = navParams.get('user_id');
         console.log('this.taskId ', JSON.stringify(this.taskId));
         console.log('this.userId ', JSON.stringify(this.userId));
