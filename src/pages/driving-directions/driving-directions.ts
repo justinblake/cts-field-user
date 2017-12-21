@@ -69,6 +69,7 @@ export class DrivingDirectionsPage {
                 let lat = position.coords.latitude;
                 let lon = position.coords.longitude;
 
+
                 let newStart = [];
                 newStart.push(lat);
                 newStart.push(lon);
@@ -76,13 +77,14 @@ export class DrivingDirectionsPage {
                 this.destination = `${endLat},${endLng}`;
 
 
-                let options = {
+                let options: LaunchNavigatorOptions = {
                     start: newStart
                 };
 
+                console.log('options ', JSON.stringify(options));
+                console.log('newStart ', JSON.stringify(newStart));
 
-
-                this.launchNavigator.navigate(this.destination)
+                this.launchNavigator.navigate(this.destination, options)
                     .then(
                         success => console.log("Launched Navigator"),
                         error => console.log('Error launching navigator: ' + error)
