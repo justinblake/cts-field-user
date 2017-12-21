@@ -51,10 +51,13 @@ export class ForemanPage {
     hasEmergency: boolean = false;
     emergencyWhileOpen: number = 0;
 
-    taskLocation: any =[];
+    taskLocation: any = [];
     iHolder: number = -2;
     jHolder: number = -2;
-
+    month: Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    displayMonth: string = '';
+    displayDay: any;
+    displayYear: any;
 
     constructor(public navCtrl: NavController,
                 public taskMgr: TaskManager,
@@ -162,10 +165,10 @@ export class ForemanPage {
             .catch(() => console.log('Error launching dialer'));
     }
 
-    getForemanTasks(showLoading?: boolean, refreshDate?) {
+    getForemanTasks(showLoading?: boolean, refreshDate?: boolean) {
         this.search = false;
-
-        if(refreshDate) {
+        console.log('refreshDate ', JSON.stringify(refreshDate));
+        if (refreshDate === true) {
             this.currentDate = '-1';
         }
 
@@ -181,10 +184,19 @@ export class ForemanPage {
             let adjustTimezone = new Date(Date.UTC(year, month, day, hour, minute, seconds));
             let timeZero = adjustTimezone.setHours(0, 0, 0, 0);
             this.currentDate = new Date(timeZero).toISOString().slice(0, 10);
-            console.log('this.currentDate in get foreman tasks ', JSON.stringify(this.currentDate));
+
+            this.displayDay = this.deleteLeadingZero(this.currentDate.slice(8, 9), this.currentDate.slice(9, 10));
+            this.displayMonth = this.month[(parseInt(this.currentDate.slice(5, 7))) - 1];
+            this.displayYear = this.currentDate.slice(0, 4);
         }
         if (showLoading) {
             this.utils.presentLoading();
+        }
+
+        if (this.currentDate !== '-1') {
+            this.displayDay = this.deleteLeadingZero(this.currentDate.slice(8, 9), this.currentDate.slice(9, 10));
+            this.displayMonth = this.month[(parseInt(this.currentDate.slice(5, 7))) - 1];
+            this.displayYear = this.currentDate.slice(0, 4);
         }
 
         this.taskMgr.loadForemanTasks(this.currentDate).then((response: any) => {
@@ -212,7 +224,7 @@ export class ForemanPage {
 
                     for (let k = 0; k < projectTasks[j].task_crew.length; k++) {
                         //Loop through and push all crew status to status array, skip supervisors
-                        if(projectTasks[j].task_crew[k].is_supervisor !== 1) {
+                        if (projectTasks[j].task_crew[k].is_supervisor !== 1) {
                             projectTasks[j].statusArray.push(projectTasks[j].task_crew[k].status_id);
                         }
                         let myfilter = projectTasks[j].task_crew_status.filter(function (myfilter) {
@@ -221,23 +233,23 @@ export class ForemanPage {
                         projectTasks[j].task_crew[k].statusLog = myfilter;
                     }
                     //Status 7 is Emergency
-                    if(projectTasks[j].statusArray.indexOf(7) !== -1 || projectTasks[j].statusArray.indexOf(8) !== -1) {
+                    if (projectTasks[j].statusArray.indexOf(7) !== -1 || projectTasks[j].statusArray.indexOf(8) !== -1) {
                         projectTasks[j].importantStatus = 7;
                     }
                     //Status 5 is Delay
-                    else if ( projectTasks[j].statusArray.indexOf(5) !== -1 || projectTasks[j].statusArray.indexOf(6) !== -1 || projectTasks[j].statusArray.indexOf(12) !== -1){
+                    else if (projectTasks[j].statusArray.indexOf(5) !== -1 || projectTasks[j].statusArray.indexOf(6) !== -1 || projectTasks[j].statusArray.indexOf(12) !== -1) {
                         projectTasks[j].importantStatus = 5;
                     }
                     //Status 4 is in progress
-                    else if( projectTasks[j].statusArray.indexOf(3) !== -1 || projectTasks[j].statusArray.indexOf(4) !== -1 ) {
+                    else if (projectTasks[j].statusArray.indexOf(3) !== -1 || projectTasks[j].statusArray.indexOf(4) !== -1) {
                         projectTasks[j].importantStatus = 4;
                     }
                     //Status 9 is complete
-                    else if( projectTasks[j].statusArray.indexOf(9) !== -1 ) {
+                    else if (projectTasks[j].statusArray.indexOf(9) !== -1) {
                         projectTasks[j].importantStatus = 9;
                     }
                     //Status 11 is cancelled
-                    else if( projectTasks[j].statusArray.indexOf(11) !== -1 ) {
+                    else if (projectTasks[j].statusArray.indexOf(11) !== -1) {
                         projectTasks[j].importantStatus = 11;
                     }
                     //Status 0 is no work
@@ -253,21 +265,35 @@ export class ForemanPage {
                 this.utils.dismissLoading();
             }
         }).then(() => {
-            console.log('this.tasks ', JSON.stringify(this.tasks));
-            console.log('this.taskLocation ', JSON.stringify(this.taskLocation));
+            // console.log('this.tasks ', JSON.stringify(this.tasks));
+            // console.log('this.taskLocation ', JSON.stringify(this.taskLocation));
         });
+    }
+
+
+    //quick function to delete the zero if the date is 1 thru 9
+    deleteLeadingZero(a, b) {
+        if (a === '0') {
+            parseInt(b);
+            return b
+        }
+        else {
+            parseInt(a);
+            parseInt(b);
+            return a + '' + b;
+        }
     }
 
     loadCurrentDay() {
         this.currentDate = '-1';
         this.hasEmergency = false;
-        this.getForemanTasks(true);
+        this.getForemanTasks(true, true);
     }
 
 
     refreshCrews() {
         this.hasEmergency = false;
-        this.getForemanTasks(true);
+        this.getForemanTasks(true, true);
     }
 
     refreshView() {
@@ -340,10 +366,11 @@ export class ForemanPage {
                 contractor_phone: this.tasks[i].contractor[0].office_phone
             };
 
-            this.navCtrl.push(SingleForemanTaskPage, params).then(() => {})
+            this.navCtrl.push(SingleForemanTaskPage, params).then(() => {
+            })
         }
 
-        if(i === -2 && j === -2) {
+        if (i === -2 && j === -2) {
             let obj = this.taskLocation.find(o => o.taskId === task);
 
             let projectIndex = obj.proj;
@@ -363,14 +390,14 @@ export class ForemanPage {
                 contractor_contacts: currentTask.contractor_contacts
             };
 
-            this.navCtrl.push(SingleForemanTaskPage, params).then(() => {})
+            this.navCtrl.push(SingleForemanTaskPage, params).then(() => {
+            })
         }
     }
 
     adjustTime(time) {
         return this.conMgr.adjustTime(time);
     }
-
 
 
 }

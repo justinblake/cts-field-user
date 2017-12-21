@@ -4,7 +4,7 @@
             <ion-col width-50>
                 <div text-center>
                     <div class="ios-title">
-                        Crews <span *ngIf="!search">- {{currentDate | date: 'MMM dd, yyyy'}}</span>
+                        Crews <span *ngIf="!search">- {{this.displayMonth}} {{this.displayDay}}, {{displayYear}}</span>
                     </div>
                 </div>
             </ion-col>
@@ -12,7 +12,7 @@
             <ion-col width-25>
                 <ion-buttons class="mar-right6" end>
                     <button class="refresh" ion-button round icon-right color="secondary"
-                            (click)="refreshCrews(true, true)"> Refresh
+                            (click)="refreshCrews()"> Refresh
                         <ion-icon class="logout-hide" name="refresh"></ion-icon>
                     </button>
                 </ion-buttons>
@@ -22,11 +22,11 @@
     <ion-navbar *ngIf="!isIos">
         <ion-buttons class="mar-right6" end>
             <button class="refresh" ion-button round icon-right color="secondary"
-                    (click)="refreshCrews(true, true)"> Refresh
+                    (click)="refreshCrews()"> Refresh
                 <ion-icon name="refresh"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-title>Crews <span *ngIf="!search">- {{currentDate | date: 'MMM dd, yyyy'}}</span></ion-title>
+        <ion-title>Crews <span *ngIf="!search">- {{this.displayMonth}} {{this.displayDay}}, {{displayYear}}</span></ion-title>
     </ion-navbar>
 </ion-header>
 
