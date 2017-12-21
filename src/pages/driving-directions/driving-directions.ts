@@ -78,7 +78,8 @@ export class DrivingDirectionsPage {
 
 
                 let options: LaunchNavigatorOptions = {
-                    start: newStart
+                    start: newStart,
+                    transportMode: 'driving'
                 };
 
                 console.log('options ', JSON.stringify(options));

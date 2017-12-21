@@ -181,6 +181,7 @@ export class ForemanPage {
             let adjustTimezone = new Date(Date.UTC(year, month, day, hour, minute, seconds));
             let timeZero = adjustTimezone.setHours(0, 0, 0, 0);
             this.currentDate = new Date(timeZero).toISOString().slice(0, 10);
+            console.log('this.currentDate in get foreman tasks ', JSON.stringify(this.currentDate));
         }
         if (showLoading) {
             this.utils.presentLoading();
