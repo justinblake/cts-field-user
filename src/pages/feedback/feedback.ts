@@ -2,14 +2,9 @@ import {Component} from '@angular/core';
 import {NavController, NavParams, ActionSheetController, Platform, AlertController} from 'ionic-angular';
 import {Camera} from '@ionic-native/camera';
 import {Diagnostic} from '@ionic-native/diagnostic';
-
-
 import {TaskManager} from '../../providers/task-manager';
-
-
 import {Utils} from '../../utils/utils';
 
-import {Geolocation} from '@ionic-native/geolocation';
 
 @Component({
     selector: 'page-feedback',
@@ -19,7 +14,6 @@ export class FeedbackPage {
     data: any;
     files: Array<any> = [];
     type: any = {options: ''};
-    currentTask: any;
     origin: any;
     isIos: boolean = false;
     isAndroid: boolean = false;
@@ -30,20 +24,21 @@ export class FeedbackPage {
     hasStatus: boolean = false;
     hasSelected: boolean = false;
 
-    test: any;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
                 private taskMgr: TaskManager,
-                private geolocation: Geolocation,
                 private actionSheetCtrl: ActionSheetController,
                 private platform: Platform,
                 private utils: Utils,
                 private camera: Camera,
                 private diagnostic: Diagnostic,
                 private alertCtrl: AlertController) {
+
         this.taskId = navParams.get('task_id');
         this.userId = navParams.get('user_id');
+        this.lat = navParams.get('lat');
+        this.lon = navParams.get('lon');
 
 
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
@@ -57,8 +52,11 @@ export class FeedbackPage {
             notes: '',
             statusId: 0,
             files: this.files,
-            save: false
+            save: false,
+            lat: this.lat,
+            lon: this.lon
         };
+
         this.type.options = [
             {
                 "id": 3,
@@ -94,7 +92,6 @@ export class FeedbackPage {
             return value.system_only == 0;
         });
 
-
         let successCallback = (isAvailable) => {
             console.log('Is available? ' + isAvailable);
         };
@@ -102,94 +99,6 @@ export class FeedbackPage {
             this.diagnostic.requestCameraAuthorization().then(successCallback)
         };
         this.diagnostic.isCameraAvailable().then(successCallback).catch(errorCallback);
-    }
-
-    ionViewDidLoad() {
-    }
-
-    ionViewDidEnter() {
-        setTimeout(() => this.getLocation(), 500);
-    }
-
-    loadTaskInfo() {
-        this.taskMgr.getCurrentTaskRemote().then(response => {
-            this.currentTask = response;
-        });
-
-    }
-
-    getLocation() {
-        let locEnabled: boolean = false;
-        let successCallback = (isAvailable) => {
-            if (isAvailable) {
-                locEnabled = true;
-                return locEnabled;
-            } else {
-                this.presentLocationAlert();
-                return;
-            }
-        };
-        let errorCallback = (e) => {
-            this.utils.presentToast("Please verify that your location settings are turned on", true);
-        };
-        this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
-            if (locEnabled) {
-                this.geolocation.getCurrentPosition({timeout: 20000}).then(position => {
-                    this.lat = position.coords.latitude;
-                    this.lon = position.coords.longitude;
-                }).catch((error) => {
-                    this.presentLocationAlert();
-                    // this.utils.presentToast('Unable to get a precise location. Some functionality will be limited until device location is available', true, '', 10000);
-                });
-            }
-        }).catch(errorCallback);
-    }
-
-    presentLocationAlert() {
-
-        let alertText = '';
-
-        if (this.isAndroid) {
-            alertText = 'Select OK to enable location on your device';
-        } else if (this.isIos) {
-            alertText = 'Location Services is enabled on your device but not for this app. Please open your device settings, scroll down and select clear-task-solutions-mobile, select Location, and then select the While Using the App option'
-        } else {
-            alertText = 'Select OK to enable location on your device';
-        }
-
-        let alert = this.alertCtrl.create({
-            title: 'Location Required',
-            message: alertText,
-            cssClass: 'myAlerts',
-            buttons: [
-                {
-                    text: 'OK',
-                    role: 'cancel',
-                    handler: () => {
-                        if (this.isAndroid) {
-                            this.diagnostic.switchToLocationSettings();
-                        }
-                        if (this.isIos) {
-                            console.log("inside the ios handler ");
-                            this.diagnostic.isLocationAuthorized().then(res => {
-                                console.log('res isLocationAuthorized ', JSON.stringify(res));
-                            });
-                            this.diagnostic.getLocationAuthorizationStatus().then(response => {
-                                if (response === 'denied') {
-                                    this.getLocation();
-                                }
-                                console.log('response getLocationAuthorizationStatus ', JSON.stringify(response));
-                            });
-                            this.diagnostic.requestLocationAuthorization('when_in_use').then(res => {
-                                console.log('res requestLocationAuthorization ', JSON.stringify(res));
-                            })
-                        }
-
-                    }
-                }
-            ]
-        });
-        alert.present()
     }
 
     /** delete image button clicked, remove from files array */
@@ -208,8 +117,7 @@ export class FeedbackPage {
             caption: '',
             path: '',
             file: file
-        }
-
+        };
         this.data.files.push(fileData);
     }
 
@@ -217,8 +125,6 @@ export class FeedbackPage {
     save() {
         this.data.save = true;
         this.data.notes = this.data.notes.trim();
-        this.data.lat = this.lat;
-        this.data.lon = this.lon;
         this.utils.presentLoading();
         this.taskMgr.postFeedback(this.data).then(response => {
             if (this.isIos) {

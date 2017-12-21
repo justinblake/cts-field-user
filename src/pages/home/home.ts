@@ -723,13 +723,17 @@ export class HomePage {
 // Instead it navigates to a page
     openFeedbackModal() {
         this.complete = true;
-        let params = {
-            'task_id': this.currentTask.job_tasks.id,
-            'user_id': this.currentUser.userId
-        };
-        this.navCtrl.push(FeedbackPage, params).then(res => {
-        });
-        return true;
+        this.setLocation().then((res: any) => {
+            let params = {
+                'lat': this.lat,
+                'lon': this.lon,
+                'task_id': this.currentTask.job_tasks.id,
+                'user_id': this.currentUser.userId
+            };
+            this.navCtrl.push(FeedbackPage, params).then(res => {
+            });
+            return true;
+        })
     }
 
     openNextDayTasks() {
@@ -885,19 +889,11 @@ export class HomePage {
 
     checkUpdates() {
         checkForUpdate().then((res: any) => {
-            console.log('res in home ', JSON.stringify(res));
-            console.log('here we go 2');
             if (res === 'true') {
-                this.utils.dismissLoading();
-                this.utils.loadNewVersion();
                 downloadUpdate().then((result: any) => {
-                    console.log('result ', JSON.stringify(result));
                     if (result === 'true') {
                         extractUpdate().then((extract: any) => {
-                            console.log('extract ', JSON.stringify(extract));
                             if (extract === 'done') {
-                                console.log('done in home');
-                                this.utils.dismissLoading();
                                 loadNewVersion();
                             }
                         })
