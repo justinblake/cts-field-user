@@ -896,6 +896,7 @@ export class HomePage {
                             if (extract === 'done') {
                                 loadNewVersion();
                                 this.deleteOldBuilds();
+                                console.log("deleted");
                             }
                         })
                     }
