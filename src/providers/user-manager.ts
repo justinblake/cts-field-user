@@ -1,19 +1,22 @@
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
-// import {Utils} from '../utils/utils';
+import {Utils} from '../utils/utils';
 import {StorageService} from './storage-service';
 import {ApiService} from './api-service';
 
 @Injectable()
 export class UserManager {
 
+    debug: boolean;
     private authenticated: boolean = false;
     private token: string = null;
     private credentials: any = null;
     private user: any = null;
 
-    constructor(private storage: StorageService, private api: ApiService) {
-        console.log('Hello UserManager Provider');
+    constructor(private storage: StorageService,
+                private api: ApiService,
+                private utils: Utils) {
+        this.debug = this.utils.returnDebug();
     }
 
     isLoggedIn() {
@@ -48,10 +51,11 @@ export class UserManager {
     }
 
     md5Password(credentials) {
-        console.log('credentials in user manager ', JSON.stringify(credentials));
         return new Promise((resolve, reject) => {
             this.api.md5(credentials.password).then(response => {
-                console.log('response in md5Password', JSON.stringify(response));
+                if (this.debug) {
+                    console.log('response in md5Password', JSON.stringify(response));
+                }
                 resolve(response);
             })
         })
@@ -129,7 +133,7 @@ export class UserManager {
     }
 
     deleteStorageKey(key) {
-        return this.storage.delete(key);
+        return this.storage.deleteKey(key);
     }
 
     getAllStorage() {

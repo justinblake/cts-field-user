@@ -11,6 +11,8 @@ import {Utils} from '../../utils/utils';
     templateUrl: 'feedback.html'
 })
 export class FeedbackPage {
+
+    debug: boolean;
     data: any;
     files: Array<any> = [];
     type: any = {options: ''};
@@ -34,7 +36,7 @@ export class FeedbackPage {
                 private camera: Camera,
                 private diagnostic: Diagnostic,
                 private alertCtrl: AlertController) {
-
+        this.debug = this.utils.returnDebug();
         this.taskId = navParams.get('task_id');
         this.userId = navParams.get('user_id');
         this.lat = navParams.get('lat');
@@ -43,7 +45,6 @@ export class FeedbackPage {
 
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
         this.isIos = this.taskMgr.returnPlatform().isIos;
-
 
 
         this.data = {
@@ -93,7 +94,10 @@ export class FeedbackPage {
         });
 
         let successCallback = (isAvailable) => {
-            console.log('Is available? ' + isAvailable);
+
+            if (this.debug) {
+                console.log('Is available? ' + isAvailable);
+            }
         };
         let errorCallback = (e) => {
             this.diagnostic.requestCameraAuthorization().then(successCallback)
@@ -131,7 +135,10 @@ export class FeedbackPage {
                 this.camera.cleanup().then(response => {
                     //
                 }).catch(error => {
-                    console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+
+                    if (this.debug) {
+                        console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+                    }
                 });
             }
             this.utils.dismissLoading();
@@ -148,7 +155,10 @@ export class FeedbackPage {
                 this.camera.cleanup().then(response => {
                     //
                 }).catch(error => {
-                    console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+
+                    if (this.debug) {
+                        console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+                    }
                 });
             }
             this.utils.dismissLoading();
@@ -217,7 +227,10 @@ export class FeedbackPage {
             saveToPhotoAlbum: false,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then((imageData) => {
-            console.log(`IMAGEDATA: ${Utils.toJson(imageData, true)}`)
+
+            if (this.debug) {
+                console.log(`IMAGEDATA: ${Utils.toJson(imageData, true)}`);
+            }
             //fix for android, remove query string from end of file_uri or crashes android //
             imageData = imageData.split('?')[0];
             let filename = imageData.replace(/^.*[\\\/]/, '');
@@ -227,7 +240,7 @@ export class FeedbackPage {
                 //notes : '',
                 path: imageData,
                 //file : file
-            }
+            };
 
             this.data.files.push(fileData);
             this.utils.dismissLoading();
@@ -239,18 +252,21 @@ export class FeedbackPage {
                 buttons: ['OK']
             });
             alert.present();
-            console.log(`ERROR -> ${JSON.stringify(err)}`);
+
+            if (this.debug) {
+                console.log(`ERROR -> ${JSON.stringify(err)}`);
+            }
             this.utils.dismissLoading();
         });
     }
 
-    selectedStatus(selection){
+    selectedStatus(selection) {
         this.data.statusId = selection;
         this.hasSelected = false;
         this.hasStatus = true;
     }
 
-    showNotes(){
+    showNotes() {
         this.hasStatus = true;
         this.hasSelected = false;
     }

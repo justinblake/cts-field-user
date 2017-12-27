@@ -15,7 +15,7 @@ import {Utils} from '../../utils/utils';
 })
 export class LoginPage {
 
-    debug: boolean = false;
+    debug: boolean;
     isLoggedIn: boolean = false;
     platform: Platform;
     showEmail: boolean = false;
@@ -38,6 +38,7 @@ export class LoginPage {
                 private utils: Utils,
                 private alertCtrl: AlertController,
                 private iab: InAppBrowser) {
+        this.debug = this.utils.returnDebug();
         this.platform = platform;
         this.platform.ready().then(() => {
             Keyboard.disableScroll(true);
@@ -136,10 +137,10 @@ export class LoginPage {
         let credentials: any = {};
         Object.assign(credentials, this.credentials);
 
-        console.log('credentials ', JSON.stringify(credentials));
+
 
         this.userMgr.md5Password(credentials).then((res: any) => {
-            console.log('res ', JSON.stringify(res));
+            if (this.debug) {}
             credentials.password = res.md5Pass;
 
             this.userMgr.authenticate(credentials).then(valid => {

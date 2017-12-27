@@ -24,6 +24,7 @@ import {DrivingDirectionsPage} from "../driving-directions/driving-directions";
 })
 export class HistoryPage {
 
+    debug: boolean;
     hasHistory: boolean = true;
     hasPaused: boolean = true;
     history: any;
@@ -73,6 +74,7 @@ export class HistoryPage {
                 private geolocation: Geolocation,
                 private diagnostic: Diagnostic) {
 
+        this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
         this.userId = this.currentUser.userId;
         this.divState = 'collapse';
@@ -127,7 +129,10 @@ export class HistoryPage {
         this.historyLoaded = false;
         this.taskMgr.getTaskHistoryRemoteV2(this.userId, "9").then((response: any) => {
             this.history = response;
-            console.log('this.history ', JSON.stringify(this.history));
+
+            if (this.debug) {
+                console.log('this.history ', JSON.stringify(this.history));
+            }
             this.user = response.userdata;
             this.historyLoaded = true;
             let myHistory = response.data;
@@ -155,8 +160,11 @@ export class HistoryPage {
             setTimeout(() => {
                 this.utils.toastError(error);
             }, 500)
-        }).then(()=> {
-            console.log('this.history in then  ', JSON.stringify(this.history));
+        }).then(() => {
+
+            if (this.debug) {
+                console.log('this.history in then  ', JSON.stringify(this.history));
+            }
         });
 
         this.taskMgr.getPausedTasks(this.userId, "12").then((res: any) => {
@@ -301,7 +309,7 @@ export class HistoryPage {
                         }
                     }
                 }
-            }).then(()=> {
+            }).then(() => {
                 let contractor = this.history.data[a].contractor;
                 let currentTask = this.history.data[a].job_tasks[b];
 
@@ -337,8 +345,16 @@ export class HistoryPage {
 
     callPhone(number) {
         this.callNumber.callNumber(number, false)
-            .then(() => console.log('Launched dialer!'))
-            .catch(() => console.log('Error launching dialer'));
+            .then(() => {
+                if (this.debug) {
+                    console.log('Launched dialer!')
+                }
+            })
+            .catch(() => {
+                if (this.debug) {
+                    console.log('Error launching dialer')
+                }
+            });
     }
 
     adjustTime(time) {

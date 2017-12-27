@@ -24,6 +24,7 @@ export class TimecardPage {
     @ViewChild(Content) content: Content;
 
 
+    debug: boolean;
     isIos: boolean = false;
     userId: any = '';
     currentUser: any = '';
@@ -46,6 +47,7 @@ export class TimecardPage {
                 private conMgr: ConversionManager,
                 private fcm: FCM) {
 
+        this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
         this.userId = this.currentUser.userId;
         this.isIos = this.taskMgr.returnPlatform().isIos;
@@ -152,7 +154,10 @@ export class TimecardPage {
 
 
         this.taskMgr.updateTimecard(this.userId, id, alt_timestamp, notes).then(res => {
-            console.log('Timecard res ', JSON.stringify(res));
+            if (this.debug) {
+                console.log('Timecard res ', JSON.stringify(res));
+            }
+
 
             this.todaysTime[repeatIndex].alt_timestamp = newTime;
             this.todaysTime[repeatIndex].timestamp = newTime;
@@ -179,7 +184,10 @@ export class TimecardPage {
 
     goToSearch() {
         this.navCtrl.push(TimecardSearchPage).then(response => {
-            console.log('response', JSON.stringify(response));
+            if (this.debug) {
+                console.log('response', JSON.stringify(response));
+            }
+
         });
     }
 

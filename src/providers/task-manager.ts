@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Platform} from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import {ApiService} from './api-service';
-//import {StorageService} from './storage-service';
 import {UserManager} from './user-manager';
 import {Utils} from '../utils/utils';
 
@@ -11,10 +10,11 @@ import {Utils} from '../utils/utils';
 export class TaskManager {
 
 
+    debug: boolean;
+
     currentUser: any;
     userId: any;
     currentTask: any;
-    tomorrowsTask: any;
     taskStatuses: any = {};
     badgeNumber: any = 0;
     holdObject: any = {};
@@ -32,6 +32,8 @@ export class TaskManager {
                 public apiService: ApiService,
                 private platform: Platform,
                 private utils: Utils) {
+
+        this.debug = this.utils.returnDebug();
 
         if (this.platform.is('android')) {
             this.isAndroid = true;
@@ -55,9 +57,12 @@ export class TaskManager {
         this.crewsTab = crewsBool;
         this.emergencyTaskId = taskId;
         this.emergencyProjectId = projectId;
-        console.log('this.crewsTab in tskMgr ', JSON.stringify(this.crewsTab));
-        console.log('this.emergencyTaskId in tskMgr ', JSON.stringify(this.emergencyTaskId));
-        console.log('this.emergencyProjectId in tskMgr ', JSON.stringify(this.emergencyProjectId));
+        if (this.debug) {
+            console.log('this.crewsTab in tskMgr ', JSON.stringify(this.crewsTab));
+            console.log('this.emergencyTaskId in tskMgr ', JSON.stringify(this.emergencyTaskId));
+            console.log('this.emergencyProjectId in tskMgr ', JSON.stringify(this.emergencyProjectId));
+        }
+
     }
 
     returnEmergencyInfo() {
@@ -77,15 +82,18 @@ export class TaskManager {
     setUser() {
         this.currentUser = this.userMgr.getUser();
         this.userId = this.userMgr.getUserId();
-        console.log('this.currentUser in Task Manager ', JSON.stringify(this.currentUser));
-        console.log('this.userId Task Manager ', JSON.stringify(this.userId));
+        if (this.debug) {
+            console.log('this.currentUser in Task Manager ', JSON.stringify(this.currentUser));
+            console.log('this.userId Task Manager ', JSON.stringify(this.userId));
+        }
+
     }
 
     updateEmployeeToken(newToken, userId?) {
         return new Promise((resolve, reject) => {
 
             let data = {
-                userId: userId|| this.userId,
+                userId: userId || this.userId,
                 token: newToken
             };
             this.apiService.updateEmployeeToken(data).then(response => {
@@ -162,7 +170,10 @@ export class TaskManager {
     }
 
     checkEmployeeAlerts() {
-        console.log("Checked Alerts again");
+
+        if (this.debug) {
+            console.log("Checked Alerts again");
+        }
         return new Promise((resolve, reject) => {
             let demo = {
                 'userId': this.userId,
@@ -253,9 +264,11 @@ export class TaskManager {
                 'dateEnd': new Date(Date.now() + 86400000)
             };
 
-            console.log("Date Check start " + data.dateStart);
-            console.log("Date Check end " + data.dateEnd);
 
+            if (this.debug) {
+                console.log("Date Check start " + data.dateStart);
+                console.log("Date Check end " + data.dateEnd);
+            }
             this.apiService.loadTaskHistoryV2(data).then(response => {
                 task = response;
             }).then(response => {
@@ -308,8 +321,10 @@ export class TaskManager {
                 'userId': this.userId,
                 'dateStart': date
             };
-            console.log('data ', JSON.stringify(data));
 
+            if (this.debug) {
+                console.log('data ', JSON.stringify(data));
+            }
             this.apiService.loadForemanTasks(data).then(response => {
                 task = response;
             }).then(response => {
@@ -327,7 +342,10 @@ export class TaskManager {
             this.apiService.authenticate({}).then(json => {
                 resolve(json);
             }).catch(error => {
-                console.log(`ERROR: ${Utils.toJson(error)}`);
+                if (this.debug) {
+                    console.log(`ERROR: ${Utils.toJson(error)}`);
+                }
+
                 // this.utils.toastError(error);
                 reject(error);
             })
@@ -575,8 +593,10 @@ export class TaskManager {
                 'notes': notes || null
             };
 
-            console.log('data ', JSON.stringify(data));
 
+            if (this.debug) {
+                console.log('data ', JSON.stringify(data));
+            }
             this.apiService.updateTimecard(data).then(response => {
                 resolve(response)
             }).catch(error => {
@@ -622,7 +642,10 @@ export class TaskManager {
                 employee_id: empId
             };
             this.apiService.getLastTimecardEntry(data).then(response => {
-                console.log('Timecard response ', JSON.stringify(response));
+
+                if (this.debug) {
+                    console.log('Timecard response ', JSON.stringify(response));
+                }
                 resolve(response)
             }).catch(error => {
                 reject(error);
@@ -635,10 +658,16 @@ export class TaskManager {
 
 
             this.apiService.validateEmail(data).then(response => {
-                console.log("valid email");
+
+                if (this.debug) {
+                    console.log("valid email");
+                }
                 resolve(response)
             }).catch(error => {
-                console.log('error updating timecard');
+
+                if (this.debug) {
+                    console.log('error updating timecard');
+                }
                 reject(error);
             })
         })
@@ -646,7 +675,10 @@ export class TaskManager {
 
     loadHomePage(input) {
         this.homePage = input;
-        console.log('this.homePage ', JSON.stringify(this.homePage));
+
+        if (this.debug) {
+            console.log('this.homePage ', JSON.stringify(this.homePage));
+        }
     }
 
     reportHomePage() {

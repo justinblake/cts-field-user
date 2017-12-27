@@ -10,6 +10,8 @@ import {Utils} from '../../utils/utils';
     templateUrl: 'history-feedback.html'
 })
 export class HistoryFeedbackPage {
+
+    debug: boolean;
     data: any;
     files: Array<any> = [];
     type: any = {options: ''};
@@ -18,8 +20,6 @@ export class HistoryFeedbackPage {
     isIos: boolean = false;
     lat: any;
     lon: any;
-    mySelection: number = 0;
-    lastCheck: number = null;
     public id;
 
 
@@ -32,9 +32,13 @@ export class HistoryFeedbackPage {
                 private camera: Camera,
                 private diagnostic: Diagnostic,
                 private alertCtrl: AlertController) {
+        this.debug = this.utils.returnDebug();
 
         this.id = navParams.get("id");
-        console.log("this.id " + this.id);
+
+        if (this.debug) {
+            console.log("this.id " + this.id);
+        }
 
 
         this.data = {
@@ -51,7 +55,10 @@ export class HistoryFeedbackPage {
         }
 
         let successCallback = (isAvailable) => {
-            console.log('Is available? ' + isAvailable);
+
+            if (this.debug) {
+                console.log('Is available? ' + isAvailable);
+            }
         };
         let errorCallback = (e) => {
             this.diagnostic.requestCameraAuthorization().then(successCallback)
@@ -59,15 +66,6 @@ export class HistoryFeedbackPage {
 
         this.diagnostic.isCameraAvailable().then(successCallback).catch(errorCallback);
 
-    }
-
-    ionViewDidLoad() {
-        console.log('ionViewDidLoad FeedbackPage');
-        // setTimeout(() => this.getLocation(), 500);
-    }
-
-    ionViewDidEnter() {
-        console.log('ionView stuff');
     }
 
 
@@ -86,7 +84,7 @@ export class HistoryFeedbackPage {
             caption: '',
             path: '',
             file: file
-        }
+        };
 
         this.data.files.push(fileData);
     }
@@ -94,8 +92,11 @@ export class HistoryFeedbackPage {
     /** save button clicked */
     save() {
         this.data.save = true;
-        console.log('this.data.notes', JSON.stringify(this.data.notes));
-        if(this.data.notes === '') {
+
+        if (this.debug) {
+            console.log('this.data.notes', JSON.stringify(this.data.notes));
+        }
+        if (this.data.notes === '') {
             this.data.notes = "New Image"
         }
         this.data.notes = this.data.notes.trim();
@@ -107,7 +108,10 @@ export class HistoryFeedbackPage {
                 this.camera.cleanup().then(response => {
                     //
                 }).catch(error => {
-                    console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+
+                    if (this.debug) {
+                        console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+                    }
                 });
             }
             this.utils.dismissLoading();
@@ -125,7 +129,10 @@ export class HistoryFeedbackPage {
                 this.camera.cleanup().then(response => {
                     //
                 }).catch(error => {
-                    console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+
+                    if (this.debug) {
+                        console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+                    }
                 });
             }
             this.utils.dismissLoading();
@@ -185,7 +192,7 @@ export class HistoryFeedbackPage {
      * get picture from gallery or camera
      * @Param sourceType:number camera or gallery
      */
-    getPicture(sourceType: number,  editable: boolean) {
+    getPicture(sourceType: number, editable: boolean) {
         this.utils.presentLoading();
         this.camera.getPicture({
             quality: 50,
@@ -195,7 +202,10 @@ export class HistoryFeedbackPage {
             saveToPhotoAlbum: false,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then((imageData) => {
-            console.log(`IMAGEDATA: ${Utils.toJson(imageData, true)}`)
+
+            if (this.debug) {
+                console.log(`IMAGEDATA: ${Utils.toJson(imageData, true)}`);
+            }
             //fix for android, remove query string from end of file_uri or crashes android //
             imageData = imageData.split('?')[0];
             let filename = imageData.replace(/^.*[\\\/]/, '');
@@ -205,19 +215,22 @@ export class HistoryFeedbackPage {
                 //notes : '',
                 path: imageData,
                 //file : file
-            }
+            };
 
             this.data.files.push(fileData);
             this.utils.dismissLoading();
         }, (err) => {
             let alert = this.alertCtrl.create({
-                    title: 'Image Error',
-                    message: 'Unable to upload image. Please choose a different image or take an new picture',
-                    cssClass: 'myAlerts',
-                    buttons: ['OK']
-                });
-                alert.present();
-            console.log(`ERROR -> ${JSON.stringify(err)}`);
+                title: 'Image Error',
+                message: 'Unable to upload image. Please choose a different image or take an new picture',
+                cssClass: 'myAlerts',
+                buttons: ['OK']
+            });
+            alert.present();
+
+            if (this.debug) {
+                console.log(`ERROR -> ${JSON.stringify(err)}`);
+            }
             this.utils.dismissLoading();
         });
     }

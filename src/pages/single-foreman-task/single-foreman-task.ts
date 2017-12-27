@@ -11,7 +11,6 @@ import {DrivingDirectionsPage} from '../driving-directions/driving-directions';
 import {GoogleMapsManager} from "../../providers/google-maps-manager";
 
 
-
 @Component({
     selector: 'page-single-foreman-task',
     templateUrl: 'single-foreman-task.html',
@@ -21,6 +20,7 @@ import {GoogleMapsManager} from "../../providers/google-maps-manager";
 export class SingleForemanTaskPage {
     @ViewChild(Content) content: Content;
 
+    debug: boolean;
     currentTask: any;
     strTime: any;
     task_description: any;
@@ -52,6 +52,8 @@ export class SingleForemanTaskPage {
                 private diagnostic: Diagnostic,
                 private geolocation: Geolocation,
                 private mapsManager: GoogleMapsManager) {
+
+        this.debug = this.utils.returnDebug();
 
         this.taskId = navParams.get('id');
         this.strTime = navParams.get('strTime');
@@ -112,11 +114,19 @@ export class SingleForemanTaskPage {
 
     callPhone(number) {
         this.callNumber.callNumber(number, false)
-            .then(() => console.log('Launched dialer!'))
-            .catch(() => console.log('Error launching dialer'));
+            .then(() => {
+                if (this.debug) {
+                    console.log('Launched dialer!')
+                }
+            })
+            .catch(() => {
+                if (this.debug) {
+                    console.log('Error launching dialer')
+                }
+            });
     }
 
-     detailedStatus(emp) {
+    detailedStatus(emp) {
         this.imageLength = 0;
 
         if (this.detailedStats.emp === -1) {
@@ -125,13 +135,13 @@ export class SingleForemanTaskPage {
         else if (this.detailedStats.emp === emp) {
             this.detailedStats.emp = -1;
         }
-        else if (this.detailedStats.emp !== emp && this.detailedStats.emp !== -1 ) {
+        else if (this.detailedStats.emp !== emp && this.detailedStats.emp !== -1) {
             this.detailedStats.emp = emp;
         }
 
     }
 
-     adjustTime(time) {
+    adjustTime(time) {
         return this.conMgr.adjustTime(time);
     }
 
@@ -183,7 +193,7 @@ export class SingleForemanTaskPage {
         return equip.name;
     }
 
-     showDrivingDirections(lat, lon) {
+    showDrivingDirections(lat, lon) {
         this.utils.presentLoading();
         let locEnabled: boolean = false;
         let successCallback = (isAvailable) => {

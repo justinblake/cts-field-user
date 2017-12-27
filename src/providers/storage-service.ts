@@ -20,7 +20,7 @@ export class StorageService {
   get(key:string):Promise<any>{
     return this.storage.get(key);
   }
-  delete(key:string):Promise<any>{
+  deleteKey(key:string):Promise<any>{
     return this.storage.remove(key);
   }
   getAllKeys():any{

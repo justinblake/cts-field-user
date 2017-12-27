@@ -154,7 +154,6 @@ export class ApiService {
     // *  @Note: app does not use this endpoint
     // *  @Return Promise
     md5 = (string) => {
-        console.log('string in api-service ', JSON.stringify(string));
         let requestOptions = this.utilApiPostRequestOptions(this.apiUrls.getMd5, string);
         return this.request(requestOptions);
     };
@@ -305,7 +304,6 @@ export class ApiService {
     // * creates a postTaskFeedback request
     // * @Return Promise
     postTaskFeedback = (feedback) => {
-        console.log("step 6 api service  ");
         let endpoint = this.apiUrls.createTaskUserLog;
         let requestOptions = this.ctsApiPostRequestOptions(endpoint, feedback);
         return this.request(requestOptions)
@@ -368,7 +366,6 @@ export class ApiService {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     if (xhr.status == 200) {
-                        console.log(`${Utils.toJson(xhr.response, true)}`);
                         resolve(JSON.parse(xhr.response));
                     } else {
                         reject(xhr.response);

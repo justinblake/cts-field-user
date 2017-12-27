@@ -14,7 +14,7 @@ import {FCM} from "@ionic-native/fcm";
 })
 export class AlertsPage {
 
-    debug: boolean = false;
+    debug: boolean;
     hasAlerts: boolean = true;
     alerts: any = '';
     user: any = '';
@@ -35,6 +35,8 @@ export class AlertsPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM) {
+
+        this.debug = this.utils.returnDebug();
 
         this.pushAlert = navParams.get('message');
         this.isIos = this.taskMgr.returnPlatform().isIos;
@@ -129,17 +131,19 @@ export class AlertsPage {
     callPhone(number) {
         if (this.isCordova) {
             this.callNumber.callNumber(number, false)
-                .then(() => console.log('Launched dialer!'))
-                .catch(() => console.log('Error launching dialer'));
+                .then(() => {
+                    if (this.debug) {
+                        console.log('Launched dialer!')
+                    }
+                })
+                .catch(() => {
+                    if (this.debug) {
+                        console.log('Error launching dialer')
+                    }
+                });
         }
 
     }
-
-    // demoUpdate() {
-    //     console.log("I have received the update");
-    //     this.presentDemoAlert();
-    // }
-
 
     readMessage(i) {
         let holdObj = {

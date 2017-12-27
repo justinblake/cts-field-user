@@ -82,13 +82,11 @@ export class DrivingDirectionsPage {
                     transportMode: 'driving'
                 };
 
-                console.log('options ', JSON.stringify(options));
-                console.log('newStart ', JSON.stringify(newStart));
 
                 this.launchNavigator.navigate(this.destination, options)
                     .then(
-                        success => console.log("Launched Navigator"),
-                        error => console.log('Error launching navigator: ' + error)
+                        success => {console.log("Launched Navigator")},
+                        error => {console.log('Error launching navigator: ' + error)}
                     );
 
 

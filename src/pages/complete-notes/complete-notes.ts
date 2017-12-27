@@ -11,6 +11,7 @@ import {Utils} from '../../utils/utils';
 })
 export class CompleteNotesPage {
 
+    debug: boolean;
     data: any;
     files: Array<any> = [];
     type: any = {options: ''};
@@ -31,12 +32,17 @@ export class CompleteNotesPage {
                 private diagnostic: Diagnostic,
                 private alertCtrl: AlertController) {
 
+        this.debug = this.utils.returnDebug();
         this.taskId = navParams.get('task_id');
         this.lat = navParams.get('lat');
         this.lon = navParams.get('lon');
         this.userId = navParams.get('user_id');
-        console.log('this.taskId ', JSON.stringify(this.taskId));
-        console.log('this.userId ', JSON.stringify(this.userId));
+
+
+        if (this.debug) {
+            console.log('this.taskId ', JSON.stringify(this.taskId));
+            console.log('this.userId ', JSON.stringify(this.userId));
+        }
         this.isCordova = this.taskMgr.returnPlatform().isCordova;
 
         this.data = {
@@ -57,7 +63,10 @@ export class CompleteNotesPage {
         }
 
         let successCallback = (isAvailable) => {
-            console.log('Is available? ' + isAvailable);
+
+            if (this.debug) {
+                console.log('Is available? ' + isAvailable);
+            }
         };
         let errorCallback = (e) => {
             this.diagnostic.requestCameraAuthorization().then(successCallback)
@@ -102,14 +111,19 @@ export class CompleteNotesPage {
                 this.camera.cleanup().then(response => {
                     //
                 }).catch(error => {
-                    console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+
+                    if (this.debug) {
+                        console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+                    }
                 });
             }
             this.utils.dismissLoading();
             setTimeout(() => {
                 if (response === true) {
                     this.navCtrl.pop().then(res => {
-                        console.log('res in complete pages  ', JSON.stringify(res));
+                        if (this.debug) {
+                            console.log('res in complete pages  ', JSON.stringify(res));
+                        }
                     });
                 } else {
                     this.utils.toastError({msg: 'There was an error posting feedback'});
@@ -121,7 +135,10 @@ export class CompleteNotesPage {
                 this.camera.cleanup().then(response => {
                     //
                 }).catch(error => {
-                    console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+
+                    if (this.debug) {
+                        console.error(`There was an error calling Camera.cleanup: ${Utils.toJson(error)}`);
+                    }
                 });
             }
             this.utils.dismissLoading();
@@ -194,7 +211,10 @@ export class CompleteNotesPage {
             saveToPhotoAlbum: false,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then((imageData) => {
-            console.log(`IMAGEDATA: ${Utils.toJson(imageData, true)}`);
+
+            if (this.debug) {
+                console.log(`IMAGEDATA: ${Utils.toJson(imageData, true)}`);
+            }
             //fix for android, remove query string from end of file_uri or crashes android //
             imageData = imageData.split('?')[0];
             let filename = imageData.replace(/^.*[\\\/]/, '');
@@ -216,7 +236,10 @@ export class CompleteNotesPage {
                 buttons: ['OK']
             });
             alert.present();
-            console.log(`ERROR -> ${JSON.stringify(err)}`);
+
+            if (this.debug) {
+                console.log(`ERROR -> ${JSON.stringify(err)}`);
+            }
             this.utils.dismissLoading();
         });
     }
