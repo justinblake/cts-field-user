@@ -895,6 +895,7 @@ export class HomePage {
                         extractUpdate().then((extract: any) => {
                             if (extract === 'done') {
                                 loadNewVersion();
+                                this.deleteOldBuilds();
                             }
                         })
                     }
@@ -912,10 +913,10 @@ export class HomePage {
     //     })
     // }
     //
-    // deleteOldBuilds() {
-    //     deleteOldVersions().then((res:any) =>{
-    //         console.log('res in delete ', JSON.stringify(res));
-    //     });
-    // }
+    deleteOldBuilds() {
+        deleteOldVersions().then((res:any) =>{
+            console.log('res in delete ', JSON.stringify(res));
+        });
+    }
 }
 
