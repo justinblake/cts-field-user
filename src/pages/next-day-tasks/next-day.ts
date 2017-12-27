@@ -31,7 +31,7 @@ export class KeysPipe implements PipeTransform {
 export class NextDayPage {
     @ViewChild(Content) content: Content;
 
-    debug: boolean = false;
+    debug: boolean;
     nextDayTask: any = '';
     user: any;
     divState: string = 'hide';
@@ -57,6 +57,8 @@ export class NextDayPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM) {
+
+        this.debug = this.utils.returnDebug();
         this.user = this.userMgr.getUser();
         this.userId = this.user.userId;
         this.role_id = this.user.role_id;
@@ -288,8 +290,16 @@ export class NextDayPage {
 
     callPhone(number) {
         this.callNumber.callNumber(number, false)
-            .then(() => console.log('Launched dialer!'))
-            .catch(() => console.log('Error launching dialer'));
+            .then(() => {
+                if (this.debug) {
+                    console.log('Launched dialer!')
+                }
+            })
+            .catch(() => {
+                if (this.debug) {
+                    console.log('Error launching dialer')
+                }
+            });
     }
 
     adjustTime(time) {

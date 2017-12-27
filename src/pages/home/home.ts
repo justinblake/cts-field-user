@@ -48,7 +48,7 @@ export class HomePage {
     @ViewChild('ctsNav') nav: NavController;
     @ViewChild(Content) content: Content;
 
-    debug: boolean = false;
+    debug: boolean;
 
     currentTask: any = '';
     currentUser: any = '';
@@ -105,6 +105,8 @@ export class HomePage {
                 private conMgr: ConversionManager,
                 private fcm: FCM,
                 private sim: Sim) {
+
+        this.debug = this.utils.returnDebug();
 
         plt.ready().then(() => {
             this.plt.pause.subscribe(() => {

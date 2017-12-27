@@ -24,6 +24,8 @@ import {SingleForemanTaskPage} from "../single-foreman-task/single-foreman-task"
 export class ForemanPage {
     @ViewChild(Content) content: Content;
 
+    debug: boolean;
+
     tasks: any;
     showTasks: boolean = true;
     divState: string = 'hide';
@@ -71,6 +73,7 @@ export class ForemanPage {
                 private fcm: FCM) {
 
         this.isIos = this.taskMgr.returnPlatform().isIos;
+        this.debug = this.utils.returnDebug();
     }
 
     ionViewWillEnter() {
@@ -161,13 +164,24 @@ export class ForemanPage {
 
     callPhone(number) {
         this.callNumber.callNumber(number, false)
-            .then(() => console.log('Launched dialer!'))
-            .catch(() => console.log('Error launching dialer'));
+            .then(() => {
+                if (this.debug) {
+                    console.log('Launched dialer!')
+                }
+            })
+            .catch(() => {
+                if (this.debug) {
+                    console.log('Error launching dialer')
+                }
+            });
     }
 
     getForemanTasks(showLoading?: boolean, refreshDate?: boolean) {
         this.search = false;
-        console.log('refreshDate ', JSON.stringify(refreshDate));
+        if (this.debug) {
+            console.log('refreshDate ', JSON.stringify(refreshDate));
+        }
+
         if (refreshDate === true) {
             this.currentDate = '-1';
         }
@@ -264,10 +278,7 @@ export class ForemanPage {
             if (showLoading) {
                 this.utils.dismissLoading();
             }
-        }).then(() => {
-            // console.log('this.tasks ', JSON.stringify(this.tasks));
-            // console.log('this.taskLocation ', JSON.stringify(this.taskLocation));
-        });
+        })
     }
 
 
@@ -347,8 +358,10 @@ export class ForemanPage {
     expandTask(i?, j?, task?) {
 
         if (i !== -2 && j !== -2) {
+            if (this.debug) {
+                console.log('this.tasks[i] ', JSON.stringify(this.tasks[i]));
+            }
 
-            console.log('this.tasks[i] ', JSON.stringify(this.tasks[i]));
 
             let currentTask = this.tasks[i].job_tasks[j];
 
