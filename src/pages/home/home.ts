@@ -48,7 +48,7 @@ export class HomePage {
     @ViewChild('ctsNav') nav: NavController;
     @ViewChild(Content) content: Content;
 
-    debug: boolean = true;
+    debug: boolean = false;
 
     currentTask: any = '';
     currentUser: any = '';
@@ -182,9 +182,12 @@ export class HomePage {
         this.empData.app_version = this.utils.returnAppVersion();
 
         let userPlatform = this.plt.versions();
-        console.log('userPlatform ', JSON.stringify(userPlatform));
         let stringPlatform = this.plt.platforms();
-        console.log('stringPlatform ', JSON.stringify(stringPlatform));
+        if (this.debug) {
+            console.log('userPlatform ', JSON.stringify(userPlatform));
+            console.log('stringPlatform ', JSON.stringify(stringPlatform));
+        }
+
 
         if (this.isIos) {
             let software = 'ios';
@@ -245,7 +248,9 @@ export class HomePage {
                         this.empData.cell_carrier = info.carrierName;
                         this.empData.cell_number = info.phoneNumber;
                         this.empData.emp_device_id = info.deviceId;
-                        console.log('this.empData ', JSON.stringify(this.empData));
+                        if (this.debug) {
+                            console.log('this.empData ', JSON.stringify(this.empData));
+                        }
                     },
                     (err) => {
                         if (this.debug) {
@@ -439,30 +444,38 @@ export class HomePage {
 
                     this.geolocation.getCurrentPosition({timeout: 40000, enableHighAccuracy: true}).then(position => {
                         this.lat = position.coords.latitude;
-                        console.log('this.lat ', JSON.stringify(this.lat));
                         this.lon = position.coords.longitude;
-                        console.log('this.lon ', JSON.stringify(this.lon));
-                        console.log('This.lon type ', typeof this.lon);
-                        console.log("this.location");
+
+                        if (this.debug) {
+                            console.log('this.lat ', JSON.stringify(this.lat));
+                            console.log('this.lon ', JSON.stringify(this.lon));
+                            console.log('This.lon type ', typeof this.lon);
+                        }
+
                         resolve(`${this.lat},${this.lon}`);
                     }).catch((error) => {
                         if (this.debug) {
                             console.log('geo error ');
-                            this.geolocation.getCurrentPosition({
-                                timeout: 40000,
-                                enableHighAccuracy: false
-                            }).then(position => {
-                                this.lat = position.coords.latitude;
-                                console.log('this.lat in error of get current position', JSON.stringify(this.lat));
-                                this.lon = position.coords.longitude;
+                        }
+                        this.geolocation.getCurrentPosition({
+                            timeout: 40000,
+                            enableHighAccuracy: false
+                        }).then(position => {
+                            this.lat = position.coords.latitude;
+
+                            this.lon = position.coords.longitude;
+
+                            if (this.debug) {
                                 console.log('this.lon in error of get current position', JSON.stringify(this.lon));
                                 console.log('This.lon type ', typeof this.lon);
-                                resolve(`${this.lat},${this.lon}`);
-                            }).catch((error) => {
-                                reject("error");
-                            })
+                                console.log('this.lat in error of get current position', JSON.stringify(this.lat));
+                            }
+                            resolve(`${this.lat},${this.lon}`);
+                        }).catch((error) => {
+                            reject("error");
+                        })
 
-                        }
+
                     });
 
 
@@ -871,7 +884,10 @@ export class HomePage {
 
         this.setLocation().then((res: any) => {
             this.taskMgr.createTimecardEntry(this.currentUser.userId, this.lat, this.lon, status).then(res => {
-                console.log("inside create timecard entry");
+                if (this.debug) {
+                    console.log("inside create timecard entry");
+                }
+
                 this.timecardStatus = status;
                 this.showTimecard = false;
             })
@@ -894,8 +910,6 @@ export class HomePage {
                     if (result === 'true') {
                         extractUpdate().then((extract: any) => {
                             if (extract === 'done') {
-                                this.deleteOldBuilds();
-                                console.log("deleted");
                                 loadNewVersion();
                             }
                         })
@@ -914,10 +928,10 @@ export class HomePage {
     //     })
     // }
     //
-    deleteOldBuilds() {
-        deleteOldVersions().then((res:any) =>{
-            console.log('res in delete ', JSON.stringify(res));
-        });
-    }
+    // deleteOldBuilds() {
+    //     deleteOldVersions().then((res:any) =>{
+    //         console.log('res in delete ', JSON.stringify(res));
+    //     });
+    // }
 }
 
