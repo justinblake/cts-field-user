@@ -894,9 +894,9 @@ export class HomePage {
                     if (result === 'true') {
                         extractUpdate().then((extract: any) => {
                             if (extract === 'done') {
-                                loadNewVersion();
                                 this.deleteOldBuilds();
                                 console.log("deleted");
+                                loadNewVersion();
                             }
                         })
                     }
