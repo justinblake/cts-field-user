@@ -908,19 +908,19 @@ export class HomePage {
     }
 
     checkUpdates() {
-        // checkForUpdate().then((res: any) => {
-        //     if (res === 'true') {
-        //         downloadUpdate().then((result: any) => {
-        //             if (result === 'true') {
-        //                 extractUpdate().then((extract: any) => {
-        //                     if (extract === 'done') {
-        //                         loadNewVersion();
-        //                     }
-        //                 })
-        //             }
-        //         })
-        //     }
-        // });
+        checkForUpdate().then((res: any) => {
+            if (res === 'true') {
+                downloadUpdate().then((result: any) => {
+                    if (result === 'true') {
+                        extractUpdate().then((extract: any) => {
+                            if (extract === 'done') {
+                                loadNewVersion();
+                            }
+                        })
+                    }
+                })
+            }
+        });
     }
 
     // checkVersions() {
