@@ -15,7 +15,7 @@ import {Utils} from '../../utils/utils';
 })
 export class LoginPage {
 
-    debug: boolean;
+    debug: boolean = true;
     isLoggedIn: boolean = false;
     platform: Platform;
     showEmail: boolean = false;
@@ -38,7 +38,6 @@ export class LoginPage {
                 private utils: Utils,
                 private alertCtrl: AlertController,
                 private iab: InAppBrowser) {
-        this.debug = this.utils.returnDebug();
         this.platform = platform;
         this.platform.ready().then(() => {
             Keyboard.disableScroll(true);
@@ -47,9 +46,9 @@ export class LoginPage {
     }
 
     ionViewDidLoad() {
-        if (this.debug) {
-            console.log('ionViewDidLoad LoginPage');
-        }
+
+        console.log('ionViewDidLoad LoginPage');
+
     }
 
     ionViewDidEnter() {
@@ -65,9 +64,9 @@ export class LoginPage {
             //do nothing....
         });
         this.isLoggedIn = this.userMgr.isLoggedIn();
-        if (this.debug) {
-            console.log('ionViewDidEnter LoginPage');
-        }
+
+        console.log('ionViewDidEnter LoginPage');
+
     }
 
     ionViewWillLeave() {
@@ -137,10 +136,10 @@ export class LoginPage {
         let credentials: any = {};
         Object.assign(credentials, this.credentials);
 
-
+        console.log('credentials ', JSON.stringify(credentials));
 
         this.userMgr.md5Password(credentials).then((res: any) => {
-            if (this.debug) {}
+            console.log('res ', JSON.stringify(res));
             credentials.password = res.md5Pass;
 
             this.userMgr.authenticate(credentials).then(valid => {

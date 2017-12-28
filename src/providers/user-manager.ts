@@ -7,7 +7,7 @@ import {ApiService} from './api-service';
 @Injectable()
 export class UserManager {
 
-    debug: boolean;
+
     private authenticated: boolean = false;
     private token: string = null;
     private credentials: any = null;
@@ -16,7 +16,7 @@ export class UserManager {
     constructor(private storage: StorageService,
                 private api: ApiService,
                 private utils: Utils) {
-        this.debug = this.utils.returnDebug();
+
     }
 
     isLoggedIn() {
@@ -53,9 +53,7 @@ export class UserManager {
     md5Password(credentials) {
         return new Promise((resolve, reject) => {
             this.api.md5(credentials.password).then(response => {
-                if (this.debug) {
                     console.log('response in md5Password', JSON.stringify(response));
-                }
                 resolve(response);
             })
         })

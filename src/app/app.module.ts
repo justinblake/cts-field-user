@@ -50,6 +50,7 @@ import {ApiService} from '../providers/api-service';
 import {CalendarModule, CALENDAR_COMPONENTS} from '../components/ion2-calendar';
 import {ConversionManager} from "../providers/conversion-manager";
 import {Geolocation} from '@ionic-native/geolocation';
+import {GeolocationService} from '../providers/geolocation-service'
 import {GoogleMapsManager} from '../providers/google-maps-manager';
 import {GoogleMapsService} from '../providers/google-maps-service';
 import {HardwareBackButtonService} from '../providers/backbutton';
@@ -172,6 +173,7 @@ export function provideStorage() {
         File,
         FileTransfer,
         Geolocation,
+        GeolocationService,
         GoogleMapsManager,
         GoogleMapsService,
         HardwareBackButtonService,
