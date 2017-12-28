@@ -8,6 +8,7 @@ import {LoginPage} from '../login/login';
 import {FeedbackPage} from '../feedback/feedback';
 import {GoogleMapsManager} from '../../providers/google-maps-manager';
 import {Geolocation} from '@ionic-native/geolocation';
+import {GeolocationService} from '../../providers/geolocation-service'
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
 import {checkForUpdate} from '../../providers/deploy-manager';
@@ -85,6 +86,7 @@ export class HomePage {
 
     constructor(public navCtrl: NavController,
                 public taskMgr: TaskManager,
+                public geoSrvc: GeolocationService,
                 public plt: Platform,
                 public navParams: NavParams,
                 private mapsManager: GoogleMapsManager,
@@ -424,63 +426,66 @@ export class HomePage {
     }
 
     setLocation() {
+
         return new Promise((resolve, reject) => {
-            let locEnabled: boolean = false;
-            let successCallback = (isAvailable) => {
-                if (isAvailable) {
-                    locEnabled = true;
-                    return locEnabled;
-                } else {
-                    this.presentLocationAlert();
-                    return;
-                }
-            };
-            let errorCallback = (e) => {
-                this.utils.presentToast("Please verify that your location settings are turned on", true);
-            };
-            this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
-                if (locEnabled) {
-
-                    this.geolocation.getCurrentPosition({timeout: 40000, enableHighAccuracy: true}).then(position => {
-                        this.lat = position.coords.latitude;
-                        this.lon = position.coords.longitude;
-
-                        if (this.debug) {
-                            console.log('this.lat ', JSON.stringify(this.lat));
-                            console.log('this.lon ', JSON.stringify(this.lon));
-                            console.log('This.lon type ', typeof this.lon);
-                        }
-
-                        resolve(`${this.lat},${this.lon}`);
-                    }).catch((error) => {
-                        if (this.debug) {
-                            console.log('geo error ');
-                        }
-                        this.geolocation.getCurrentPosition({
-                            timeout: 40000,
-                            enableHighAccuracy: false
-                        }).then(position => {
-                            this.lat = position.coords.latitude;
-
-                            this.lon = position.coords.longitude;
-
-                            if (this.debug) {
-                                console.log('this.lon in error of get current position', JSON.stringify(this.lon));
-                                console.log('This.lon type ', typeof this.lon);
-                                console.log('this.lat in error of get current position', JSON.stringify(this.lat));
-                            }
-                            resolve(`${this.lat},${this.lon}`);
-                        }).catch((error) => {
-                            reject("error");
-                        })
-
-
-                    });
-
-
-                }
-            }).catch(errorCallback);
+            if (this.isAndroid) {
+                let platform = 'android';
+                this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+                    console.log('res in new location service', JSON.stringify(res));
+                })
+            }
         })
+
+
+        // return new Promise((resolve, reject) => {
+        //     let locEnabled: boolean = false;
+        //     let successCallback = (isAvailable) => {
+        //         if (isAvailable) {
+        //             locEnabled = true;
+        //             return locEnabled;
+        //         } else {
+        //             this.presentLocationAlert();
+        //             return;
+        //         }
+        //     };
+        //     let errorCallback = (e) => {
+        //         this.utils.presentToast("Please verify that your location settings are turned on", true);
+        //     };
+        //     this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
+        //         if (locEnabled) {
+        //             this.geolocation.getCurrentPosition({timeout: 40000, enableHighAccuracy: true}).then(position => {
+        //                 this.lat = position.coords.latitude;
+        //                 this.lon = position.coords.longitude;
+        //
+        //                 if (this.debug) {
+        //                     console.log('this.lat ', JSON.stringify(this.lat));
+        //                     console.log('this.lon ', JSON.stringify(this.lon));
+        //                     console.log('This.lon type ', typeof this.lon);
+        //                 }
+        //                 resolve(`${this.lat},${this.lon}`);
+        //             }).catch((error) => {
+        //                 if (this.debug) {
+        //                     console.log('geo error ');
+        //                 }
+        //                 this.geolocation.getCurrentPosition({
+        //                     timeout: 40000,
+        //                     enableHighAccuracy: false
+        //                 }).then(position => {
+        //                     this.lat = position.coords.latitude;
+        //                     this.lon = position.coords.longitude;
+        //                     if (this.debug) {
+        //                         console.log('this.lon in error of get current position', JSON.stringify(this.lon));
+        //                         console.log('This.lon type ', typeof this.lon);
+        //                         console.log('this.lat in error of get current position', JSON.stringify(this.lat));
+        //                     }
+        //                     resolve(`${this.lat},${this.lon}`);
+        //                 }).catch((error) => {
+        //                     reject("error");
+        //                 })
+        //             });
+        //         }
+        //     }).catch(errorCallback);
+        // })
     }
 
 // sets the status of the task using TaskManager
@@ -903,19 +908,19 @@ export class HomePage {
     }
 
     checkUpdates() {
-        checkForUpdate().then((res: any) => {
-            if (res === 'true') {
-                downloadUpdate().then((result: any) => {
-                    if (result === 'true') {
-                        extractUpdate().then((extract: any) => {
-                            if (extract === 'done') {
-                                loadNewVersion();
-                            }
-                        })
-                    }
-                })
-            }
-        });
+        // checkForUpdate().then((res: any) => {
+        //     if (res === 'true') {
+        //         downloadUpdate().then((result: any) => {
+        //             if (result === 'true') {
+        //                 extractUpdate().then((extract: any) => {
+        //                     if (extract === 'done') {
+        //                         loadNewVersion();
+        //                     }
+        //                 })
+        //             }
+        //         })
+        //     }
+        // });
     }
 
     // checkVersions() {
