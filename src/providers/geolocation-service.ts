@@ -39,8 +39,9 @@ export class GeolocationService {
                     return
                 }
             }).then(() => {
+                console.log('new maximum age');
                 this.geolocation.getCurrentPosition({
-                    maximumAge: 3000,
+                    maximumAge: 15000,
                     timeout: 20000,
                     enableHighAccuracy: true
                 }).then(position => {
