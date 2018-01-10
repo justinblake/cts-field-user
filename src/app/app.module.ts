@@ -64,7 +64,7 @@ import {Utils} from '../utils/utils';
 import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-    appVersion: "1.3.151"
+    appVersion: "1.3.153"
 });
 
 @Injectable()
