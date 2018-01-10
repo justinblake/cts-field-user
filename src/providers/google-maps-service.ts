@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 //import { Utils } from '../utils/utils';
 
@@ -11,7 +10,7 @@ export class GoogleMapsService {
     endpoint: string = "https://maps.googleapis.com/maps/api/directions/json?callback=JSONP_CALLBACK";
     directionsService: any;
 
-    constructor(public http: Http) {
+    constructor() {
         console.log('Hello GoogleMapsService Provider');
     }
 

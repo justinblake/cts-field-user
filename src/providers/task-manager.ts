@@ -5,13 +5,10 @@ import {ApiService} from './api-service';
 import {UserManager} from './user-manager';
 import {Utils} from '../utils/utils';
 
-
 @Injectable()
 export class TaskManager {
 
-
     debug: boolean;
-
     currentUser: any;
     userId: any;
     currentTask: any;
@@ -26,7 +23,6 @@ export class TaskManager {
     emergencyProjectId: number;
     crewsTab: boolean = false;
     isCordova: boolean = false;
-
 
     constructor(public userMgr: UserManager,
                 public apiService: ApiService,
@@ -520,8 +516,9 @@ export class TaskManager {
 
     // * calls the api to post feedback images
     postFeedbackImages(feedbackId, images) {
+        console.log('images in task manager ', JSON.stringify(images));
         let promises = [];
-        if (images.length == 0) {
+        if (images.length === 0) {
             return new Promise((resolve, reject) => {
                 resolve(true);
             })

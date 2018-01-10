@@ -21,7 +21,10 @@ export class GeolocationService {
     getCurrentPosition(plat) {
         this.platform = plat;
 
+        console.log('step 1')
+
         return new Promise((resolve, reject) => {
+            console.log('step 2')
             this.verifyLocationEnabled().then(() => {
                 if (!this.locEnabled) {
                     if (this.platform === 'android') {
@@ -36,13 +39,33 @@ export class GeolocationService {
                     return
                 }
             }).then(() => {
-                this.geolocation.getCurrentPosition({timeout: 20000, enableHighAccuracy: true}).then(position => {
+                this.geolocation.getCurrentPosition({
+                    maximumAge: 3000,
+                    timeout: 20000,
+                    enableHighAccuracy: true
+                }).then(position => {
+                    console.log('position ', JSON.stringify(position));
                     this.lat = position.coords.latitude;
                     this.lon = position.coords.longitude;
+                    let accuracy = position.coords.accuracy;
+                    let timestamp = position.timestamp;
+
+                    console.log('timestamp ', JSON.stringify(timestamp));
+                    console.log('accuracy ', JSON.stringify(accuracy));
                     console.log('this.lat in high accuracy', JSON.stringify(this.lat));
                     console.log('this.lon in high accuracy', JSON.stringify(this.lon));
-                    resolve(`${this.lat},${this.lon}`);
+
+                    let locationObj = {
+                        lat: this.lat,
+                        lon: this.lon,
+                        timestamp: timestamp,
+                        accuracy: accuracy
+                    };
+
+
+                    resolve(locationObj);
                 }).catch((error) => {
+                    console.log('error ', JSON.stringify(error));
                     console.log('geo error catch');
 
                     this.geolocation.getCurrentPosition({
@@ -51,12 +74,24 @@ export class GeolocationService {
                     }).then(position => {
                         this.lat = position.coords.latitude;
                         this.lon = position.coords.longitude;
+                        let accuracy = position.coords.accuracy;
+                        let timestamp = position.timestamp;
 
                         console.log('this.lon in low accuracy', JSON.stringify(this.lon));
                         console.log('this.lat in low accuracy', JSON.stringify(this.lat));
+                        console.log('timestamp in low accuracy', JSON.stringify(timestamp));
+                        console.log('accuracy in low accuracy', JSON.stringify(accuracy));
 
-                        resolve(`${this.lat},${this.lon}`);
+                        let locationObj = {
+                            lat: this.lat,
+                            lon: this.lon,
+                            timestamp: timestamp,
+                            accuracy: accuracy
+                        };
+
+                        resolve(locationObj);
                     }).catch((error) => {
+                        console.log('error ', JSON.stringify(error));
                         reject("error");
                     })
                 });

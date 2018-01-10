@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
-import {Utils} from '../utils/utils';
 import {StorageService} from './storage-service';
 import {ApiService} from './api-service';
 
@@ -14,8 +13,7 @@ export class UserManager {
     private user: any = null;
 
     constructor(private storage: StorageService,
-                private api: ApiService,
-                private utils: Utils) {
+                private api: ApiService) {
 
     }
 

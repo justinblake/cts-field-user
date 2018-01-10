@@ -6,15 +6,9 @@ import {DrivingDirectionsPage} from '../driving-directions/driving-directions';
 import {AndroidFullScreen} from '@ionic-native/android-full-screen';
 import {LoginPage} from '../login/login';
 import {FeedbackPage} from '../feedback/feedback';
-import {GoogleMapsManager} from '../../providers/google-maps-manager';
-import {Geolocation} from '@ionic-native/geolocation';
 import {GeolocationService} from '../../providers/geolocation-service'
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
-import {checkForUpdate} from '../../providers/deploy-manager';
-import {downloadUpdate} from '../../providers/deploy-manager';
-import {extractUpdate} from '../../providers/deploy-manager';
-import {loadNewVersion} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {Diagnostic} from '@ionic-native/diagnostic';
@@ -25,6 +19,7 @@ import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
+import {DrivingDirectionsService} from "../../providers/driving-directions";
 
 
 @Pipe({name: 'keys', pure: false})
@@ -72,6 +67,8 @@ export class HomePage {
     isLessor: boolean = false;
     complete: boolean = false;
     fcmToken: any = '';
+    locationTimestamp: any;
+    locationAccuracy: any;
 
     empData: any = {};
 
@@ -89,10 +86,8 @@ export class HomePage {
                 public geoSrvc: GeolocationService,
                 public plt: Platform,
                 public navParams: NavParams,
-                private mapsManager: GoogleMapsManager,
                 private userMgr: UserManager,
                 private appCtrl: App,
-                private geolocation: Geolocation,
                 private utils: Utils,
                 private callNumber: CallNumber,
                 private androidFullScreen: AndroidFullScreen,
@@ -103,7 +98,8 @@ export class HomePage {
                 private alertCtrl: AlertController,
                 private conMgr: ConversionManager,
                 private fcm: FCM,
-                private sim: Sim) {
+                private sim: Sim,
+                private ddService: DrivingDirectionsService) {
 
         this.debug = this.utils.returnDebug();
 
@@ -426,66 +422,33 @@ export class HomePage {
     }
 
     testNewGeoService() {
-        return new Promise((resolve, reject) => {
-            if (this.isAndroid) {
-                let platform = 'android';
-                this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
-                    console.log('res in new location service', JSON.stringify(res));
-                })
-            }
-        })
+
+        if (this.isAndroid) {
+            let platform = 'android';
+            this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+                console.log('res in new location service', JSON.stringify(res));
+            }, (err: any) => {
+                console.log('err ', JSON.stringify(err));
+            })
+        }
     }
 
     setLocation() {
-
         return new Promise((resolve, reject) => {
-            let locEnabled: boolean = false;
-            let successCallback = (isAvailable) => {
-                if (isAvailable) {
-                    locEnabled = true;
-                    return locEnabled;
-                } else {
-                    this.presentLocationAlert();
-                    return;
-                }
-            };
-            let errorCallback = (e) => {
-                this.utils.presentToast("Please verify that your location settings are turned on", true);
-            };
-            this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
-                if (locEnabled) {
-                    this.geolocation.getCurrentPosition({timeout: 40000, enableHighAccuracy: true}).then(position => {
-                        this.lat = position.coords.latitude;
-                        this.lon = position.coords.longitude;
-
-                        if (this.debug) {
-                            console.log('this.lat ', JSON.stringify(this.lat));
-                            console.log('this.lon ', JSON.stringify(this.lon));
-                            console.log('This.lon type ', typeof this.lon);
-                        }
-                        resolve(`${this.lat},${this.lon}`);
-                    }).catch((error) => {
-                        if (this.debug) {
-                            console.log('geo error ');
-                        }
-                        this.geolocation.getCurrentPosition({
-                            timeout: 40000,
-                            enableHighAccuracy: false
-                        }).then(position => {
-                            this.lat = position.coords.latitude;
-                            this.lon = position.coords.longitude;
-                            if (this.debug) {
-                                console.log('this.lon in error of get current position', JSON.stringify(this.lon));
-                                console.log('This.lon type ', typeof this.lon);
-                                console.log('this.lat in error of get current position', JSON.stringify(this.lat));
-                            }
-                            resolve(`${this.lat},${this.lon}`);
-                        }).catch((error) => {
-                            reject("error");
-                        })
-                    });
-                }
-            }).catch(errorCallback);
+            let platform = 'ios';
+            if (this.isAndroid) {
+                platform = 'android'
+            }
+            this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+                this.lat = res.lat;
+                this.lon = res.lon;
+                this.locationTimestamp = res.timestamp;
+                this.locationAccuracy = res.accuracy;
+                console.log('res in new location service', JSON.stringify(res));
+                resolve(`${this.lat},${this.lon}`);
+            }, (err: any) => {
+                console.log('err ', JSON.stringify(err));
+            })
         })
     }
 
@@ -668,47 +631,19 @@ export class HomePage {
 // the driving directions page
     showDrivingDirections(lat, lon) {
         this.utils.presentLoading();
-        let locEnabled: boolean = false;
 
-        let successCallback = (isAvailable) => {
-            if (isAvailable) {
-                locEnabled = true;
-                return locEnabled;
-            } else {
-                this.utils.presentToast("Please verify that your location is turned on in your device settings", true);
-                return;
-            }
-        };
-        let errorCallback = (e) => {
-            this.utils.presentToast("Please verify that your location is turned on in your device settings", true);
-            this.utils.dismissLoading();
-        };
-        this.diagnostic.isLocationEnabled().then(successCallback).then(resp => {
-            if (locEnabled) {
-                let destination = `${lat},${lon}`;
-                this.geolocation.getCurrentPosition({timeout: 15000}).then((position) => {
-                    let origin = `${position.coords.latitude},${position.coords.longitude}`;
-                    return this.mapsManager.getDirections(origin, destination);
-                }).then((response) => {
-                    let params = {
-                        directions: response
-                    };
-                    setTimeout(() => {
-                        this.navCtrl.push(DrivingDirectionsPage, params);
-                        this.utils.dismissLoading();
-                    }, 2000)
-                }).catch((error) => {
-                    this.utils.dismissLoading();
-                    if (this.debug) {
-                        console.log(`ERROR: ${Utils.toJson(error)}`);
-                    }
-                    this.utils.presentToast("Please verify that your location is turned on in your device settings", true);
-                })
-            }
-            if (locEnabled === false) {
+        this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
+            let params = {
+                directions: response
+            };
+            setTimeout(() => {
+                this.navCtrl.push(DrivingDirectionsPage, params);
                 this.utils.dismissLoading();
-            }
-        }).catch(errorCallback);
+            }, 2000)
+        }).catch((error) => {
+            this.utils.dismissLoading();
+            this.utils.presentToast("Location currently unavailable", true);
+        })
     }
 
 // opens the reject task modal, handles the data passed back from the modal
@@ -722,6 +657,7 @@ export class HomePage {
     }
 
     openCompletePage() {
+        console.log('inside open complete ')
         this.complete = true;
         this.setLocation().then((res: any) => {
             let params = {

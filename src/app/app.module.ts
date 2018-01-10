@@ -2,6 +2,7 @@
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {IonicApp, IonicModule, IonicErrorHandler} from 'ionic-angular';
 import {NgModule, ErrorHandler, Injectable, Injector} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -15,8 +16,8 @@ import {CallNumber} from '@ionic-native/call-number';
 import {Camera} from '@ionic-native/camera';
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {FCM} from '@ionic-native/fcm';
-import {FileTransfer, FileUploadOptions, FileTransferObject} from '@ionic-native/file-transfer';
 import {File} from '@ionic-native/file';
+import {FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {Keyboard} from '@ionic-native/keyboard';
 import {LaunchNavigator} from '@ionic-native/launch-navigator';
@@ -49,15 +50,16 @@ import {TimecardSearchPage} from '../pages/timecard-search/timecard-search'
 import {ApiService} from '../providers/api-service';
 import {CalendarModule, CALENDAR_COMPONENTS} from '../components/ion2-calendar';
 import {ConversionManager} from "../providers/conversion-manager";
+import {DrivingDirectionsService} from "../providers/driving-directions"
 import {Geolocation} from '@ionic-native/geolocation';
-import {GeolocationService} from '../providers/geolocation-service'
-import {GoogleMapsManager} from '../providers/google-maps-manager';
+import {GeolocationService} from '../providers/geolocation-service';
 import {GoogleMapsService} from '../providers/google-maps-service';
 import {HardwareBackButtonService} from '../providers/backbutton';
 import {StorageService} from '../providers/storage-service';
 import {TaskManager} from '../providers/task-manager';
 import {UserManager} from '../providers/user-manager';
 import {Utils} from '../utils/utils';
+
 
 import {Pro} from '@ionic/pro';
 
@@ -119,6 +121,7 @@ export function provideStorage() {
         BrowserModule,
         ReactiveFormsModule,
         HttpModule,
+        HttpClientModule,
         CalendarModule,
         BrowserAnimationsModule,
         IonicModule.forRoot(MyApp, {
@@ -172,9 +175,9 @@ export function provideStorage() {
         FCM,
         File,
         FileTransfer,
+        DrivingDirectionsService,
         Geolocation,
         GeolocationService,
-        GoogleMapsManager,
         GoogleMapsService,
         HardwareBackButtonService,
         InAppBrowser,

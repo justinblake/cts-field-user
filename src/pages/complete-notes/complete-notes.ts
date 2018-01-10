@@ -106,6 +106,9 @@ export class CompleteNotesPage {
         this.data.save = true;
         this.data.notes = this.data.notes.trim();
         this.utils.presentLoading();
+
+
+
         this.taskMgr.postFeedback(this.data).then(response => {
             if (this.isIos) {
                 this.camera.cleanup().then(response => {
@@ -225,6 +228,8 @@ export class CompleteNotesPage {
                 path: imageData,
                 //file : file
             };
+            console.log("image log 1")
+            // this.createBlob(fileData.path);
 
             this.data.files.push(fileData);
             this.utils.dismissLoading();
@@ -243,5 +248,39 @@ export class CompleteNotesPage {
             this.utils.dismissLoading();
         });
     }
+
+    // createBlob(image) {
+    //     console.log('Image in create blob', image);
+    //     window.resolveLocalFileSystemURL(image, (entry: FileEntry) => {
+    //         console.log("image log 2")
+    //         entry.file(file => {
+    //             console.log("image log 3")
+    //             console.log('file', JSON.stringify(file));
+    //             let reader = new FileReader();
+    //             reader.onload = (ev) => console.log('onload', ev);
+    //
+    //             reader.onloadend = (ev) => {
+    //                 console.log("image log 6")
+    //                 console.log('ev ', JSON.stringify(ev));
+    //                 let blob = new Blob([new Uint8Array(reader.result)], {type: "image/png"});
+    //                 console.log('blob type ' + typeof blob + ' plus contents ' + JSON.stringify(blob))
+    //                 let oReq = new XMLHttpRequest();
+    //                 oReq.open("POST", "https://www.cleartasksolutions.com/api/ctsapi.php/createTaskUserLogFiles", true);
+    //                 oReq.onload = (oEvent) => {
+    //                     console.log('oEvent ', JSON.stringify(oEvent));
+    //                     console.log("image log 6")
+    //                     // all done!
+    //                 };
+    //                 // Pass the blob in to XHR's send method
+    //                 oReq.send(blob);
+    //                 console.log('onloadend', ev)
+    //             };
+    //             reader.onloadstart = (ev) => console.log('onloadstart', ev);
+    //             console.log("image log 4")
+    //             reader.readAsArrayBuffer(file)
+    //             console.log("image log 5")
+    //         })
+    //     })
+    // }
 
 }
