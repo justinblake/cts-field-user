@@ -9,6 +9,10 @@ import {FeedbackPage} from '../feedback/feedback';
 import {GeolocationService} from '../../providers/geolocation-service'
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
+import {checkForUpdate} from '../../providers/deploy-manager';
+import {downloadUpdate} from '../../providers/deploy-manager';
+import {extractUpdate} from '../../providers/deploy-manager';
+import {loadNewVersion} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {Diagnostic} from '@ionic-native/diagnostic';
@@ -845,19 +849,19 @@ export class HomePage {
     }
 
     checkUpdates() {
-        // checkForUpdate().then((res: any) => {
-        //     if (res === 'true') {
-        //         downloadUpdate().then((result: any) => {
-        //             if (result === 'true') {
-        //                 extractUpdate().then((extract: any) => {
-        //                     if (extract === 'done') {
-        //                         loadNewVersion();
-        //                     }
-        //                 })
-        //             }
-        //         })
-        //     }
-        // });
+        checkForUpdate().then((res: any) => {
+            if (res === 'true') {
+                downloadUpdate().then((result: any) => {
+                    if (result === 'true') {
+                        extractUpdate().then((extract: any) => {
+                            if (extract === 'done') {
+                                loadNewVersion();
+                            }
+                        })
+                    }
+                })
+            }
+        });
     }
 
     // checkVersions() {
