@@ -29,6 +29,8 @@ export class TaskManager {
                 private platform: Platform,
                 private utils: Utils) {
 
+        console.log("This is the Task Manager");
+
         this.debug = this.utils.returnDebug();
 
         if (this.platform.is('android')) {

@@ -91,7 +91,7 @@
                 </div>
 
                 <div *ngFor="let jobTasks of task.job_tasks; let b = index">
-                    <ion-card-content (click)="expandPausedTask(a, b)">
+                    <ion-card-content tappable (click)="expandPausedTask(a, b)">
                         <div class="task-card-content">
                             <h3 class="text-info">{{b + 1}}: {{jobTasks.task_description}} </h3>
                             <h4 class="date-info mar-top10">Date: {{jobTasks.strDate}}</h4>
@@ -197,7 +197,7 @@
             <div *ngFor="let jobTasks of task.job_tasks; let j = index">
 
 
-                <ion-card-content (click)="displayTask(i, j)">
+                <ion-card-content tappable (click)="displayTask(i, j)">
                     <div class="task-card-content">
 
 
