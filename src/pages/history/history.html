@@ -29,7 +29,6 @@
 </ion-header>
 
 <ion-content>
-
     <div *ngIf="hasPaused">
         <div *ngFor="let task of pausedTasks; let a = index">
             <ion-card *ngIf="task.job_tasks.length > 0">
@@ -38,7 +37,6 @@
                 </ion-card-header>
 
                 <ion-card-content *ngIf="pausedContractorDetails.proj === a">
-
                     <div class="task-card-content">
                         <ion-list no-padding>
                             <ion-item no-padding>
@@ -49,13 +47,10 @@
                                 <h4 class="contractor-sub">
                                     {{task.city}}, {{task.state}}&nbsp;{{task.zip}}
                                 </h4>
-
-
                             </ion-item>
                         </ion-list>
                     </div>
                     <div class="mar-bot25">
-
                         <ion-list no-padding text-wrap>
                             <ion-item no-padding text-wrap>
                                 <h4 class="contractor-main">Contractor:</h4>
@@ -73,7 +68,6 @@
 
                             </ion-item>
                         </ion-list>
-
                     </div>
                 </ion-card-content>
 
@@ -96,98 +90,41 @@
                     </ion-row>
                 </div>
 
-                <ion-card-content *ngFor="let jobTasks of task.job_tasks; let b = index">
-                    <div class="task-card-content">
-                        <h3 class="text-info">{{b + 1}}: {{jobTasks.task_description}} </h3>
-                        <h4 class="date-info mar-top10">Date:
-                            {{jobTasks.strDate}}
-                        </h4>
-                        <div *ngIf="jobTasks.additional_notes?.length > 0">
-                            <h5 class="text-info">Additional Task Notes</h5>
-                            <ul class="add-ul" *ngFor="let newNotes of jobTasks.additional_notes; let u = index">
-                                <li class="more-notes">{{newNotes.notes}}</li>
-                                <li class="notes-by">Added By: <strong>{{newNotes.employee.first_name}}
-                                    {{newNotes.employee.last_name}}</strong> at <strong>
-                                    {{newNotes.strTime}}
-                                </strong></li>
-                            </ul>
+                <div *ngFor="let jobTasks of task.job_tasks; let b = index">
+                    <ion-card-content (click)="expandPausedTask(a, b)">
+                        <div class="task-card-content">
+                            <h3 class="text-info">{{b + 1}}: {{jobTasks.task_description}} </h3>
+                            <h4 class="date-info mar-top10">Date: {{jobTasks.strDate}}</h4>
+                            <div *ngIf="jobTasks.additional_notes?.length > 0">
+                                <h5 class="text-info">Additional Task Notes</h5>
+                                <ul class="add-ul" *ngFor="let newNotes of jobTasks.additional_notes; let u = index">
+                                    <li class="more-notes">{{newNotes.notes}}</li>
+                                    <li class="notes-by">Added By: <strong>{{newNotes.employee.first_name}}
+                                        {{newNotes.employee.last_name}}</strong> at <strong>
+                                        {{newNotes.strTime}}
+                                    </strong></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
 
-                    <ion-row>
-                        <ion-col margin-bottom>
-                            <button *ngIf="pausedDisplayOptions.proj !== a || pausedDisplayOptions.task !== b"
-                                    class="details"
-                                    ion-button icon-left clear small (click)="expandPausedTask(a, b)">
-                                <ion-icon name="fa-chevron-circle-right"></ion-icon>
-                                <div>More Details</div>
-                            </button>
-                            <button *ngIf="pausedDisplayOptions.task === b && pausedDisplayOptions.proj === a"
-                                    class="details"
-                                    ion-button icon-left clear small
-                                    (click)="expandPausedTask(a, b)">
-                                <ion-icon name="fa-chevron-circle-down"></ion-icon>
-                                <div>Hide Details</div>
-                            </button>
-                        </ion-col>
-                    </ion-row>
-
-
-                    <div margin-vertical *ngIf="pausedDisplayOptions.proj === a && pausedDisplayOptions.task === b">
-                        <h4>Crew</h4>
-                        <ol>
-                            <li *ngFor="let taskCrew of jobTasks.task_crew">
-                                <div>{{taskCrew.first_name}} {{taskCrew.last_name}}</div>
-                                <div *ngIf="taskCrew.is_foreman === 1">-- Foreman --</div>
-                                <button ion-button icon-left clear medium
-                                        class="contractorPhoneNum"
-                                        (click)="callPhone(taskCrew.phone)">
-                                    {{taskCrew.phone}}
+                        <ion-row>
+                            <ion-col margin-bottom>
+                                <button class="details" ion-button icon-left clear small>
+                                    <ion-icon name="fa-chevron-circle-right"></ion-icon>
+                                    <span>More Details</span>
                                 </button>
-                            </li>
-                        </ol>
-                        <div *ngFor="let materials of jobTasks.task_materials; let c = index">
-                            <h4 *ngIf="c === 0">Materials</h4>
-                            <ol>
-                                <li>
-                                    <h5>{{materials.material_name}}</h5>
-                                    <h5>{{materials.supplier.name}}</h5>
-                                    <h5>{{materials.supplier.address}}</h5>
-                                    <h5>{{materials.supplier.city}} {{materials.supplier.state}},
-                                        {{materials.supplier.zip}}</h5>
-                                    <button ion-button icon-left clear medium
-                                            class="contractorPhoneNum"
-                                            (click)="callPhone(materials.supplier.phone)">
-                                        {{materials.supplier.phone}}
-                                    </button>
-                                </li>
-                            </ol>
-                        </div>
-                        <h4>Notes</h4>
-                        <ol>
-                            <li *ngFor="let notes of jobTasks.task_user_log">
-                                <h5>Time: {{notes.strTime }}
-                                </h5>
-                                <h5 class="mar-bot10">Notes: {{notes.notes}}</h5>
-                                <div *ngIf="notes.fileData.length > 0">
-                                    <h5 class="mar-bot5">Click On The Image To Review</h5>
-                                    <div *ngFor="let images of notes.fileData">
-                                        <img (click)="openImage(images)" src="{{images.file_name}}">
-                                        <h5 class="img-margin">Image Details: {{images.notes}}</h5>
-                                    </div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                </ion-card-content>
+                            </ion-col>
+                        </ion-row>
+                    </ion-card-content>
 
-                <div padding class="more-back move-up">
-                    <ion-row>
-                        <button class="btn-shadow" ion-button icon-left block color="secondary"
-                                (click)="resumeTask(a,b)">
-                            Resume Task
-                        </button>
-                    </ion-row>
+                    <div padding class="more-back move-up">
+                        <ion-row>
+                            <button class="btn-shadow" ion-button icon-left block color="secondary"
+                                    (click)="resumeTask(a,b)">
+                                Resume Task
+                            </button>
+                        </ion-row>
+                    </div>
                 </div>
             </ion-card>
         </div>
@@ -257,40 +194,40 @@
                 </ion-row>
             </div>
 
-            <ion-card-content *ngFor="let jobTasks of task.job_tasks; let j = index">
-                <div class="task-card-content">
-                    <h3 class="text-info">{{j + 1}}: {{jobTasks.task_description}} </h3>
-                    <h4 class="date-info mar-top10">Date: {{jobTasks.strDate}}
-                    </h4>
-                    <div *ngIf="jobTasks.additional_notes.length > 0">
-                        <h5 class="text-info">Additional Task Notes</h5>
-                        <ul class="add-ul" *ngFor="let newNotes of jobTasks.additional_notes; let u = index">
-                            <li class="more-notes">{{newNotes.notes}}</li>
-                            <li class="notes-by">Added By: <strong>{{newNotes.employee.first_name}}
-                                {{newNotes.employee.last_name}}</strong> at <strong>
-                                {{newNotes.strTime}}
-                            </strong></li>
-                        </ul>
+            <div *ngFor="let jobTasks of task.job_tasks; let j = index">
+
+
+                <ion-card-content (click)="displayTask(i, j)">
+                    <div class="task-card-content">
+
+
+                        <h3 class="text-info">{{j + 1}}: {{jobTasks.task_description}} </h3>
+                        <h4 class="date-info mar-top10">Date: {{jobTasks.strDate}}
+                        </h4>
+                        <div *ngIf="jobTasks.additional_notes.length > 0">
+                            <h5 class="text-info">Additional Task Notes</h5>
+                            <ul class="add-ul" *ngFor="let newNotes of jobTasks.additional_notes; let u = index">
+                                <li class="more-notes">{{newNotes.notes}}</li>
+                                <li class="notes-by">Added By: <strong>{{newNotes.employee.first_name}}
+                                    {{newNotes.employee.last_name}}</strong> at <strong>
+                                    {{newNotes.strTime}}
+                                </strong></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
 
-                <ion-row>
-                    <ion-col>
-                        <button *ngIf="displayOptions.proj !== i || displayOptions.task !== j" class="details"
-                                ion-button icon-left clear small (click)="displayTask(i, j)">
-                            <ion-icon name="fa-chevron-circle-right"></ion-icon>
-                            <div>More Details</div>
-                        </button>
-                        <button *ngIf="displayOptions.task === j && displayOptions.proj === i" class="details"
-                                ion-button icon-left clear small
-                                (click)="displayTask(i, j)">
-                            <ion-icon name="fa-chevron-circle-down"></ion-icon>
-                            <div>Hide Details</div>
-                        </button>
-                    </ion-col>
-                </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <button class="details"
+                                    ion-button icon-left clear small>
+                                <ion-icon name="fa-chevron-circle-right"></ion-icon>
+                                <span>More Details</span>
+                            </button>
+                        </ion-col>
+                    </ion-row>
 
-            </ion-card-content>
+                </ion-card-content>
+            </div>
         </ion-card>
     </div>
 

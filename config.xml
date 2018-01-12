@@ -150,6 +150,7 @@
         <variable name="APP_ID" value="379d0062" />
         <variable name="CHANNEL_NAME" value="Master" />
         <variable name="UPDATE_METHOD" value="none" />
+        <variable name="MAX_VERSIONS" value="1" />
         <variable name="UPDATE_API" value="https://api.ionicjs.com" />
         <variable name="MAX_STORE" value="2" />
     </plugin>

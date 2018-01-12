@@ -61,6 +61,10 @@ export class SingleForemanTaskPage {
         this.contractor_name = navParams.get('contractor_name');
         this.contractor_phone = navParams.get('contractor_phone');
         this.isIos = this.taskMgr.returnPlatform().isIos;
+
+        console.log('this.task_materials ', JSON.stringify(this.task_materials));
+        console.log("type of task materials " + typeof this.task_materials);
+        console.log("length " + this.task_materials.length)
     }
 
     setBackground(crew) {

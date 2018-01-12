@@ -243,28 +243,46 @@ export class HomePage {
     }
 
     getSimInfo() {
-        this.sim.requestReadPermission().then(
-            () => {
-                this.sim.getSimInfo().then((info: any) => {
-                        this.empData.cell_carrier = info.carrierName;
-                        this.empData.cell_number = info.phoneNumber;
-                        this.empData.emp_device_id = info.deviceId;
-                        if (this.debug) {
-                            console.log('this.empData ', JSON.stringify(this.empData));
-                        }
-                    },
-                    (err) => {
-                        if (this.debug) {
-                            console.log('Unable to get sim info: ', err)
-                        }
-                    })
-            },
-            () => {
-                if (this.debug) {
-                    console.log('Permission denied')
+        if (this.isAndroid) {
+            this.sim.requestReadPermission().then(
+                () => {
+                    this.sim.getSimInfo().then((info: any) => {
+                            this.empData.cell_carrier = info.carrierName;
+                            this.empData.cell_number = info.phoneNumber;
+                            this.empData.emp_device_id = info.deviceId;
+                            if (this.debug) {
+                                console.log('this.empData ', JSON.stringify(this.empData));
+                            }
+                        },
+                        (err) => {
+                            if (this.debug) {
+                                console.log('Unable to get sim info: ', err)
+                            }
+                        })
+                },
+                () => {
+                    if (this.debug) {
+                        console.log('Permission denied')
+                    }
                 }
-            }
-        );
+            );
+        }
+
+        if (this.isIos) {
+            this.sim.getSimInfo().then((info: any) => {
+                    this.empData.cell_carrier = info.carrierName;
+                    this.empData.emp_device_id = info.mcc;
+                    if (this.debug) {
+                        console.log('this.empData in ios', JSON.stringify(this.empData));
+                    }
+                },
+                (err) => {
+                    if (this.debug) {
+                        console.log('Unable to get sim info: ', err)
+                    }
+                })
+        }
+
     }
 
     //This sets the current user in the Task Manager so that when a user does not have a task the user ID is still available
@@ -425,17 +443,17 @@ export class HomePage {
         alert.present()
     }
 
-    testNewGeoService() {
-
-        if (this.isAndroid) {
-            let platform = 'android';
-            this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
-                console.log('res in new location service', JSON.stringify(res));
-            }, (err: any) => {
-                console.log('err ', JSON.stringify(err));
-            })
-        }
-    }
+    // testNewGeoService() {
+    //
+    //     if (this.isAndroid) {
+    //         let platform = 'android';
+    //         this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+    //             console.log('res in new location service', JSON.stringify(res));
+    //         }, (err: any) => {
+    //             console.log('err ', JSON.stringify(err));
+    //         })
+    //     }
+    // }
 
     setLocation() {
         return new Promise((resolve, reject) => {
@@ -840,6 +858,7 @@ export class HomePage {
 
     }
 
+
     showClockInOut() {
         this.showTimecard = !this.showTimecard;
     }
@@ -863,6 +882,10 @@ export class HomePage {
             }
         });
     }
+
+    // demo() {
+    //     console.log('   test');
+    // }
 
     // checkVersions() {
     //     checkVersions().then((response:any)=>{

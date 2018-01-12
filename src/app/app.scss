@@ -265,11 +265,11 @@
 .task-card-content {
   padding-top: 10px;
   .list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
-    border: 0px solid transparent;
+    border: 0 solid transparent;
   }
   .item, .item-ios, .list-ios {
     background-color: transparent;
-    border: 0px solid transparent;
+    border: 0 solid transparent;
   }
   ol {
     padding-left: 20px;
@@ -995,7 +995,6 @@ ion-item.contractor-label > div.item-inner > div.input-wrapper > ion-label.label
 //Material & Supplier css
 
 .material-padding {
-  padding-bottom: 0;
   padding-top: 10px !important;
 }
 
@@ -1009,6 +1008,10 @@ ion-item.contractor-label > div.item-inner > div.input-wrapper > ion-label.label
 
 .action-button {
   padding: 8px 6px !important;
+}
+
+ion-list.material-quantity > ion-item > .item-inner > .input-wrapper > ion-label {
+  margin: 0;
 }
 
 //ion-spinner {

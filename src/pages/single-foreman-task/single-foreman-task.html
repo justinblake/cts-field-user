@@ -307,7 +307,19 @@
                 <ion-card-content class="task-card-content material-padding">
                     <h3 class="text-info">{{material.material_name}}</h3>
 
-                    <ion-list no-padding text-wrap>
+                    <h4 *ngIf="material.material_price !== 0" class="contractor-sub">
+                        <strong>Price: </strong> ${{material.material_price}}
+                    </h4>
+                    <div *ngIf="(material.quantity > 0) || (material.quantity !== null && material.quantity !== 0)">
+                        <h4 class="contractor-sub">
+                            <strong>Quantity: </strong> {{material.quantity}}
+                        </h4>
+                        <h4 class="contractor-sub">
+                            <strong>Units: </strong> {{material.unit}}
+                        </h4>
+                    </div>
+
+                    <ion-list no-padding text-wrap *ngIf="material.supplier_id !== 0">
                         <ion-item no-padding text-wrap>
                             <h4 class="contractor-main">
                                 {{material.supplier.name}}
@@ -332,7 +344,7 @@
                         </ion-item>
                     </ion-list>
                 </ion-card-content>
-                <div class="more-back">
+                <div class="more-back" *ngIf="material.supplier_id !== 0">
                     <ion-row>
                         <ion-col>
                             <button ion-button icon-left clear medium
