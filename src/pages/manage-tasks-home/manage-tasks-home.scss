@@ -64,6 +64,12 @@ page-manage-tasks-home {
     .hide-chip {
       display: none;
     }
+    .show-all {
+      display: none;
+    }
+    .show-navigation-only {
+      display: inherit;
+    }
   }
 
   @media (max-width: 350px) {
@@ -80,12 +86,6 @@ page-manage-tasks-home {
     }
     .hide-task {
       display: none
-    }
-    .show-all {
-      display: none;
-    }
-    .show-navigation-only {
-      display: inherit;
     }
   }
 

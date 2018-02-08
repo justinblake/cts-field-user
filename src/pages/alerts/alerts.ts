@@ -56,7 +56,7 @@ export class AlertsPage {
             this.fcm.onNotification().subscribe(data => {
                 console.log('data ', JSON.stringify(data));
                 if (data.param1 === 'alert') {
-                    if (data.project !== null) {
+                    if (data.project !== 'null') {
                         let alertId = data.project;
                         this.taskMgr.saveAlertDispatch(data.task, alertId, true);
                         this.navCtrl.parent.select(0);

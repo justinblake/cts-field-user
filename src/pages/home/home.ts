@@ -306,7 +306,7 @@ export class HomePage {
             this.fcm.onNotification().subscribe(data => {
                 console.log('data from alert', JSON.stringify(data));
                 if (data.param1 === 'alert') {
-                    if (data.project !== null) {
+                    if (data.project !== 'null') {
                         this.openNextDayTasksAlert(data.task, data.project);
                     } else {
                         this.navCtrl.parent.select(3);
@@ -967,23 +967,23 @@ export class HomePage {
     }
 
     checkUpdates() {
-        // if (this.isCordova) {
-        //     checkForUpdate().then((res: any) => {
-        //         if (res === 'true') {
-        //             downloadUpdate().then((result: any) => {
-        //                 if (result === 'true') {
-        //                     extractUpdate().then((extract: any) => {
-        //                         if (extract === 'done') {
-        //                             loadNewVersion();
-        //                         }
-        //                     })
-        //                 }
-        //             })
-        //         }
-        //     });
-        // } else {
-        //     console.log('Not Cordova so no updates')
-        // }
+        if (this.isCordova) {
+            checkForUpdate().then((res: any) => {
+                if (res === 'true') {
+                    downloadUpdate().then((result: any) => {
+                        if (result === 'true') {
+                            extractUpdate().then((extract: any) => {
+                                if (extract === 'done') {
+                                    loadNewVersion();
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+        } else {
+            console.log('Not Cordova so no updates')
+        }
 
     }
 

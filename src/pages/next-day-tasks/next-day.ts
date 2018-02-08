@@ -92,10 +92,13 @@ export class NextDayPage {
 
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
+            console.log('this.alertTask pre ', JSON.stringify(this.alertTask));
+            console.log('this.alertId pre ', JSON.stringify(this.alertId));
             this.fcm.onNotification().subscribe(data => {
+                console.log('data ', JSON.stringify(data));
                 if (data.param1 === 'alert') {
 
-                    if (data.project !== null) {
+                    if (data.project !== 'null') {
                         this.alertTask = data.task;
                         this.alertId = data.project;
                         this.loadTomorrowsTasks(this.userId);

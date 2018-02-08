@@ -103,7 +103,7 @@ export class ForemanPage {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
                 if (data.param1 === 'alert') {
-                    if (data.project !== null) {
+                    if (data.project !== 'null') {
                         this.taskMgr.saveAlertDispatch(data.task, data.project, true);
                         this.navCtrl.parent.select(0);
                     } else {
@@ -188,17 +188,25 @@ export class ForemanPage {
         }
 
         if (this.currentDate === '-1') {
-            let interimTime = new Date(Date.now());
+            let interimTime = new Date();
+            console.log('interimTime ', JSON.stringify(interimTime));
             let myZone = interimTime.getTimezoneOffset();
+            console.log('myZone ', JSON.stringify(myZone));
             let year = interimTime.getFullYear();
+            console.log('year ', JSON.stringify(year));
             let month = interimTime.getMonth();
+            console.log('month ', JSON.stringify(month));
             let day = interimTime.getUTCDate();
+            console.log('day ', JSON.stringify(day));
             let hour = interimTime.getUTCHours() - (myZone / 60);
+            console.log('hour ', JSON.stringify(hour));
             let minute = interimTime.getUTCMinutes();
+            console.log('minute ', JSON.stringify(minute));
             let seconds = interimTime.getUTCSeconds();
+            console.log('seconds ', JSON.stringify(seconds));
             let adjustTimezone = new Date(Date.UTC(year, month, day, hour, minute, seconds));
-            let timeZero = adjustTimezone.setHours(0, 0, 0, 0);
-            this.currentDate = new Date(timeZero).toISOString().slice(0, 10);
+            this.currentDate = adjustTimezone.toISOString().slice(0,10);
+            console.log('this.currentDate ', JSON.stringify(this.currentDate));
 
             this.displayDay = this.deleteLeadingZero(this.currentDate.slice(8, 9), this.currentDate.slice(9, 10));
             this.displayMonth = this.month[(parseInt(this.currentDate.slice(5, 7))) - 1];

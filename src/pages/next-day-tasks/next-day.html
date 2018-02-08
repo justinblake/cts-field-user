@@ -331,6 +331,17 @@
                                     <div *ngFor="let material of task.task_materials; let m = index">
                                         <ion-card-content class="task-card-content material-padding">
                                             <h3 class="text-info">{{material.material_name}}</h3>
+                                            <h4 *ngIf="material.material_price !== 0" class="contractor-sub">
+                                                <strong>Price: </strong> ${{material.material_price}}
+                                            </h4>
+                                            <div *ngIf="(material.quantity > 0) || (material.quantity !== null && material.quantity !== 0)">
+                                                <h4 class="contractor-sub">
+                                                    <strong>Quantity: </strong> {{material.quantity}}
+                                                </h4>
+                                                <h4 class="contractor-sub">
+                                                    <strong>Units: </strong> {{material.unit}}
+                                                </h4>
+                                            </div>
                                             <ion-list no-padding>
                                                 <ion-item no-padding>
                                                     <h4 class="contractor-main">

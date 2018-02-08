@@ -67,6 +67,12 @@ page-next-day {
       width: 109%;
       margin-left: -5%;
     }
+    .show-all {
+      display: none;
+    }
+    .show-navigation-only {
+      display: inherit;
+    }
   }
 
   @media (max-width: 350px) {
@@ -82,12 +88,12 @@ page-next-day {
       margin-left: -6%;
     }
 
-    .show-all {
-      display: none;
-    }
-    .show-navigation-only {
-      display: inherit;
-    }
+    //.show-all {
+    //  display: none;
+    //}
+    //.show-navigation-only {
+    //  display: inherit;
+    //}
     .card-header {
       font-size: 2.3rem;
     }
