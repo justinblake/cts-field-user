@@ -24,6 +24,8 @@ export class AlertsPage {
     pushAlert: any;
     didLoad: boolean = false;
     isCordova: boolean = false;
+    currentDay: number;
+
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -46,13 +48,21 @@ export class AlertsPage {
     ionViewDidEnter() {
         this.loadAlerts();
         this.subscribeAgain();
+        this.taskMgr.clearDispatchAlert();
     }
 
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
+                console.log('data ', JSON.stringify(data));
                 if (data.param1 === 'alert') {
-                    this.loadAlerts();
+                    if (data.project !== null) {
+                        let alertId = data.project;
+                        this.taskMgr.saveAlertDispatch(data.task, alertId, true);
+                        this.navCtrl.parent.select(0);
+                    } else {
+                        this.loadAlerts();
+                    }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
                 } else if (data.param1 === "upcoming_task") {
@@ -83,21 +93,32 @@ export class AlertsPage {
         alert.present();
     }
 
-    // presentDemoAlert() {
-    //     let alert = this.alertCtrl.create({
-    //         title: 'I got the update',
-    //         message: 'I got the update',
-    //         cssClass: 'myAlerts',
-    //         buttons: ['OK']
-    //     });
-    //
-    //     alert.present();
-    // }
+    jumpToTask(task) {
+        console.log('taskId ', JSON.stringify(task.task_id));
+        console.log('step 1');
+
+        console.log('task ', JSON.stringify(task));
+
+        this.taskMgr.saveAlertDispatch(task.task_id, task.id,true);
+        this.taskMgr.passAlertMessage(task);
+
+        this.navCtrl.parent.select(0);
+
+
+    }
+
 
     loadAlerts() {
         this.utils.presentLoading();
         this.alertsLoaded = false;
         this.taskMgr.getEmployeeAlerts().then((response: any) => {
+
+            let interimTime = new Date(Date.now());
+
+            this.currentDay = interimTime.getDate();
+            console.log('this.currentDay ', JSON.stringify(this.currentDay));
+            console.log('this.currentDay ', typeof this.currentDay);
+
             if (this.debug) {
                 console.log('response ', JSON.stringify(response));
             }
@@ -109,6 +130,18 @@ export class AlertsPage {
             }
 
             this.alerts = response;
+
+            for (let i = 0; i < this.alerts.data.length; i++) {
+                this.alerts.data[i].same_day = false;
+                let alertDateString = this.alerts.data[i].time_stamp_sent[8] + '' + this.alerts.data[i].time_stamp_sent[9];
+                let alertDateNum = parseInt(alertDateString);
+                console.log('alertDateNum ', JSON.stringify(alertDateNum));
+                if (alertDateNum === this.currentDay) {
+                    this.alerts.data[i].same_day = true;
+                }
+            }
+
+
             this.user = response.userdata;
             this.alertsLoaded = true;
             if (this.debug) {
@@ -123,6 +156,7 @@ export class AlertsPage {
             }, 500)
         })
     }
+
 
     loadAgain() {
         this.didLoad = true;

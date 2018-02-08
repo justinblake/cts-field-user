@@ -39,21 +39,21 @@
     </div>
 
     <!--<ion-card>-->
-        <!--<ion-card-header class="task-card-header">-->
-            <!--Additional Options-->
-        <!--</ion-card-header>-->
-        <!--<ion-card-content padding>-->
+    <!--<ion-card-header class="task-card-header">-->
+    <!--Additional Options-->
+    <!--</ion-card-header>-->
+    <!--<ion-card-content padding>-->
 
-            <!--<ion-row>-->
+    <!--<ion-row>-->
 
-                <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                        <!--(click)="demoUpdate()">-->
-                    <!--Update Test-->
-                <!--</button>-->
+    <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+    <!--(click)="demoUpdate()">-->
+    <!--Update Test-->
+    <!--</button>-->
 
-            <!--</ion-row>-->
+    <!--</ion-row>-->
 
-        <!--</ion-card-content>-->
+    <!--</ion-card-content>-->
     <!--</ion-card>-->
 
 
@@ -76,6 +76,17 @@
                 <ion-row>
                     <h5 class="contractor-sub">{{alert.alert_description}}</h5>
                 </ion-row>
+
+                <ion-row *ngIf="alert.same_day && alert.task_id">
+                    <h4>
+                        <button ion-button icon-left clear medium
+                                class="call-contractor"
+                                (click)="jumpToTask(alert)"><span
+                                class="contractor-underline">Click Here To See This Task</span>
+                        </button>
+                    </h4>
+                </ion-row>
+
                 <ion-row>
                     <h6 class="important">Sent:
                         <span class="less-important">{{alert.strTimeSent}} - {{alert.strDateSent}}</span>

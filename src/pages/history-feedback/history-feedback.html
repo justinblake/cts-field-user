@@ -26,16 +26,14 @@
 
 
                 <ion-row class="mar-bot15">
-                    <ion-col width-50>
-                        <button class="btn-shadow width100" ion-button icon-left block color="secondary"
-                                (click)="presentActionSheet(false)">
+                   <ion-col>
+                        <button class="btn-shadow width100" ion-button icon-left block
+                                (click)="presentActionSheet()">
                             <ion-icon name="add-circle"></ion-icon>
                             Add Image
                         </button>
                     </ion-col>
-                    <ion-col width-50>
 
-                    </ion-col>
                 </ion-row>
 
                 <ion-list *ngFor="let file of data.files; let i = index">

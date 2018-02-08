@@ -1,7 +1,7 @@
 import {Component, ViewChild, Pipe, PipeTransform} from '@angular/core';
-import {NavController, App, Modal, Content, AlertController} from 'ionic-angular';
+import {NavController, NavParams, App, Modal, Content, AlertController} from 'ionic-angular';
 import {CallNumber} from '@ionic-native/call-number';
-import {DrivingDirectionsPage} from '../driving-directions/driving-directions';
+
 import {LoginPage} from '../login/login';
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
@@ -9,7 +9,8 @@ import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
-import {DrivingDirectionsService} from "../../providers/driving-directions";
+
+import {InAppBrowser} from '@ionic-native/in-app-browser';
 
 @Pipe({name: 'myKeys', pure: false})
 export class KeysPipe implements PipeTransform {
@@ -42,8 +43,15 @@ export class NextDayPage {
     taskId: number = -1;
     userId: any = '';
     role_id: number = -1;
+    dispatchAlert: any;
+
+    alertTask: any = 0;
+    alertId: number;
+
+    alertObject: any = {};
 
     constructor(public navCtrl: NavController,
+                public navParams: NavParams,
                 private userMgr: UserManager,
                 private appCtrl: App,
                 private taskMgr: TaskManager,
@@ -52,7 +60,7 @@ export class NextDayPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM,
-                private ddService: DrivingDirectionsService) {
+                private iab: InAppBrowser) {
 
         this.debug = this.utils.returnDebug();
         this.user = this.userMgr.getUser();
@@ -60,18 +68,42 @@ export class NextDayPage {
         this.role_id = this.user.role_id;
         this.isIos = this.taskMgr.returnPlatform().isIos;
         this.divState = 'collapse';
+
+        this.alertTask = navParams.get('task');
+        this.alertId = navParams.get('alert_id');
     }
 
     ionViewDidEnter() {
+        let alertDispatch = this.taskMgr.returnDispatchAlert();
+        if (alertDispatch.hasDispatchAlert === true) {
+            this.alertTask = alertDispatch.alertTaskId;
+            this.alertId = alertDispatch.alertId;
+        }
         this.loadTomorrowsTasks(this.userId);
         this.subscribeAgain();
     }
+
+    ionViewWillLeave() {
+        this.taskMgr.clearDispatchAlert();
+        this.taskMgr.clearAlertMessage();
+        console.log('test');
+    }
+
 
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
                 if (data.param1 === 'alert') {
-                    this.navCtrl.parent.select(3);
+
+                    if (data.project !== null) {
+                        this.alertTask = data.task;
+                        this.alertId = data.project;
+                        this.loadTomorrowsTasks(this.userId);
+                    } else {
+                        this.navCtrl.parent.select(3);
+                    }
+                    console.log('test');
+
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
                 } else if (data.param1 === "upcoming_task") {
@@ -133,6 +165,7 @@ export class NextDayPage {
     }
 
     loadTomorrowsTasks(userId) {
+        this.alertObject = {};
         this.utils.presentLoading();
         this.taskMgr.loadNextDayTaskByDate(userId).then((response: any) => {
             this.nextDayTask = response;
@@ -150,6 +183,32 @@ export class NextDayPage {
                     firstKey.sort(function (a, b) {
                         return (a.task_start_time > b.task_start_time) ? 1 : ((b.task_start_time > a.task_start_time) ? -1 : 0);
                     });
+                }
+                if (this.alertTask) {
+                    this.expandTaskId = parseInt(this.alertTask);
+                    this.dispatchAlert = parseInt(this.alertTask);
+                    let passedAlert = this.taskMgr.returnAlertMessage();
+                    if (passedAlert.hasAlertBody === true) {
+                        this.alertObject = passedAlert.alertObject;
+
+                        if(this.alertObject.viewed === 0) {
+                            this.alertObject.viewedBoolean = false;
+                        } else {
+                            this.alertObject.viewedBoolean = true;
+                        }
+
+
+                        this.taskMgr.clearDispatchAlert();
+                        this.taskMgr.clearAlertMessage();
+                    } else {
+                        this.taskMgr.getSingleAlert(userId, this.alertId).then((res: any) => {
+                            console.log('res ', JSON.stringify(res));
+                            this.alertObject = res.data[0];
+                            // this.alertBody = res.data[0].alert_description;
+                            this.taskMgr.clearDispatchAlert();
+                            this.taskMgr.clearAlertMessage();
+                        })
+                    }
                 }
                 this.utils.dismissLoading();
             }
@@ -214,20 +273,25 @@ export class NextDayPage {
     }
 
     showDrivingDirections(lat, lon) {
-        this.utils.presentLoading();
 
-        this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-            let params = {
-                directions: response
-            };
-            setTimeout(() => {
-                this.navCtrl.push(DrivingDirectionsPage, params);
-                this.utils.dismissLoading();
-            }, 2000)
-        }).catch((error) => {
-            this.utils.dismissLoading();
-            this.utils.presentToast("Location currently unavailable", true);
-        })
+        let options = "location=no";
+        this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
+
+
+        // this.utils.presentLoading();
+        //
+        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
+        //     let params = {
+        //         directions: response
+        //     };
+        //     setTimeout(() => {
+        //         this.navCtrl.push(DrivingDirectionsPage, params);
+        //         this.utils.dismissLoading();
+        //     }, 2000)
+        // }).catch((error) => {
+        //     this.utils.dismissLoading();
+        //     this.utils.presentToast("Location currently unavailable", true);
+        // })
     }
 
     expandDateTasks(index) {

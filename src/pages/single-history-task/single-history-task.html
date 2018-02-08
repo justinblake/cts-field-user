@@ -54,6 +54,56 @@
 
     <ion-card class="card-border">
         <ion-card-header class="task-card-header">
+            Notes
+        </ion-card-header>
+        <ion-card-content *ngIf="task_user_log?.length > 0">
+            <div class="task-card-content">
+                <div class="equip-div" *ngFor="let note of task_user_log; let l = index">
+                    <h5 class="add_notes">{{l + 1}}: {{note.notes}}</h5>
+                    <h5 class="add_by">Added At:
+                        <span>{{note.strTime}}</span>
+                    </h5>
+
+                    <figure *ngFor="let image of note.fileData">
+                        <h5 class="add_notes" text-center>Click Image To Enlarge <ion-icon name="fa-chevron-circle-down"></ion-icon></h5>
+                        <span (click)="reviewImage(image.file_name)">
+                        <img src="{{image.file_name}}">
+                        <figcaption padding-top *ngIf="image.notes !== ''">{{image.notes}}</figcaption>
+                            </span>
+                    </figure>
+
+                </div>
+            </div>
+        </ion-card-content>
+
+        <ion-card-content *ngIf="task_user_log?.length === 0">
+            <ion-row>
+                <ion-col class="open-history-feedback">
+
+                    <button class="btn-shadow" ion-button color="primary"
+                            (click)="openHistoryFeedback()">
+
+                        <span>Leave Feedback</span>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+
+        <div no-padding class="more-back move-up" *ngIf="task_user_log?.length > 0">
+            <ion-row>
+                <ion-col>
+                    <button class="more-left" ion-button icon-left clear medium
+                            (click)="openHistoryFeedback()">
+                        <span>Leave Task Feedback</span>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </div>
+
+    </ion-card>
+
+    <ion-card class="card-border">
+        <ion-card-header class="task-card-header">
             Crew
         </ion-card-header>
         <ion-card-content>
@@ -131,22 +181,6 @@
         </ion-card-content>
     </ion-card>
 
-    <ion-card class="card-border" *ngIf="task_user_log?.length > 0">
-        <ion-card-header class="task-card-header">
-            Notes
-        </ion-card-header>
-        <ion-card-content>
-            <div class="task-card-content">
-                <div class="equip-div" *ngFor="let note of task_user_log; let l = index">
-                    <h5 class="add_notes">{{l + 1}}: {{note.notes}}</h5>
-                    <h5 class="add_by">Added At:
-                        <span>{{note.strTime}}</span>
-                    </h5>
-                </div>
-            </div>
-        </ion-card-content>
-    </ion-card>
-
 
     <ion-card class="card-border" *ngIf="task_equipment?.length > 0">
         <ion-card-header class="task-card-header">
@@ -189,7 +223,7 @@
                         </h4>
                     </div>
 
-                    <ion-list no-padding text-wrap  *ngIf="material.supplier_id !== 0">
+                    <ion-list no-padding text-wrap *ngIf="material.supplier_id !== 0">
                         <ion-item no-padding text-wrap>
                             <h4 class="contractor-main">
                                 {{material.supplier.name}}
@@ -219,7 +253,7 @@
                             <button ion-button icon-left clear medium
                                     (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
                                 <ion-icon name="navigate"></ion-icon>
-                                Get Directions
+                                Launch Navigation
                             </button>
                         </ion-col>
                     </ion-row>

@@ -20,7 +20,6 @@ import {File} from '@ionic-native/file';
 import {FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {Keyboard} from '@ionic-native/keyboard';
-import {LaunchNavigator} from '@ionic-native/launch-navigator';
 import {Sim} from '@ionic-native/sim';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
@@ -29,7 +28,6 @@ import {Storage} from '@ionic/storage';
 //pages//
 import {AlertsPage} from '../pages/alerts/alerts';
 import {CompleteNotesPage} from '../pages/complete-notes/complete-notes';
-import {DrivingDirectionsPage} from '../pages/driving-directions/driving-directions';
 import {FeedbackPage} from '../pages/feedback/feedback';
 import {ForemanPage} from '../pages/foreman/foreman'
 import {HistoryFeedbackPage} from '../pages/history-feedback/history-feedback';
@@ -38,6 +36,7 @@ import {HistoryReviewPage} from '../pages/history-review/history-review';
 import {HomeKeysPipe, HomePage} from '../pages/home/home';
 import {KeysPipe, NextDayPage} from '../pages/next-day-tasks/next-day';
 import {LoginPage} from '../pages/login/login';
+import {ManageTasksHomePage} from "../pages/manage-tasks-home/manage-tasks-home";
 import {RejectNotesPage} from '../pages/reject-notes/reject-notes';
 import {SingleForemanTaskPage} from "../pages/single-foreman-task/single-foreman-task";
 import {SingleHistoryTaskPage} from "../pages/single-history-task/single-history-task";
@@ -50,7 +49,6 @@ import {TimecardSearchPage} from '../pages/timecard-search/timecard-search'
 import {ApiService} from '../providers/api-service';
 import {CalendarModule, CALENDAR_COMPONENTS} from '../components/ion2-calendar';
 import {ConversionManager} from "../providers/conversion-manager";
-import {DrivingDirectionsService} from "../providers/driving-directions"
 import {Geolocation} from '@ionic-native/geolocation';
 import {GeolocationService} from '../providers/geolocation-service';
 import {GoogleMapsService} from '../providers/google-maps-service';
@@ -64,7 +62,7 @@ import {Utils} from '../utils/utils';
 import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-    appVersion: "1.3.159"
+    appVersion: "1.4.0"
 });
 
 @Injectable()
@@ -97,7 +95,6 @@ export function provideStorage() {
         MyApp,
         AlertsPage,
         CompleteNotesPage,
-        DrivingDirectionsPage,
         FeedbackPage,
         ForemanPage,
         HistoryFeedbackPage,
@@ -107,6 +104,7 @@ export function provideStorage() {
         HomePage,
         KeysPipe,
         LoginPage,
+        ManageTasksHomePage,
         NextDayPage,
         RejectNotesPage,
         SplashPage,
@@ -142,7 +140,6 @@ export function provideStorage() {
         MyApp,
         AlertsPage,
         CompleteNotesPage,
-        DrivingDirectionsPage,
         FeedbackPage,
         ForemanPage,
         HistoryFeedbackPage,
@@ -150,6 +147,7 @@ export function provideStorage() {
         HistoryReviewPage,
         HomePage,
         LoginPage,
+        ManageTasksHomePage,
         NextDayPage,
         RejectNotesPage,
         SingleForemanTaskPage,
@@ -175,14 +173,11 @@ export function provideStorage() {
         FCM,
         File,
         FileTransfer,
-        DrivingDirectionsService,
         Geolocation,
         GeolocationService,
-        GoogleMapsService,
         HardwareBackButtonService,
         InAppBrowser,
         Keyboard,
-        LaunchNavigator,
         Sim,
         SplashScreen,
         StatusBar,

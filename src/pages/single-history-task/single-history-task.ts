@@ -4,8 +4,10 @@ import {CallNumber} from '@ionic-native/call-number';
 import {TaskManager} from '../../providers/task-manager';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {Utils} from "../../utils/utils";
-import {DrivingDirectionsPage} from '../driving-directions/driving-directions';
-import {DrivingDirectionsService} from "../../providers/driving-directions";
+import {InAppBrowser} from '@ionic-native/in-app-browser';
+import {HistoryFeedbackPage} from '../history-feedback/history-feedback';
+import {HistoryReviewPage} from "../history-review/history-review";
+
 
 
 @Component({
@@ -38,7 +40,7 @@ export class SingleHistoryTaskPage {
                 private callNumber: CallNumber,
                 private conMgr: ConversionManager,
                 private utils: Utils,
-                private ddService: DrivingDirectionsService) {
+                private iab: InAppBrowser) {
 
         this.taskId = navParams.get('id');
         this.strTime = navParams.get('strTime');
@@ -53,6 +55,7 @@ export class SingleHistoryTaskPage {
         this.contractor_name = navParams.get('contractor_name');
         this.contractor_phone = navParams.get('contractor_phone');
 
+        console.log('this.taskId ', JSON.stringify(this.taskId));
         console.log('this.strTime ', JSON.stringify(this.strTime));
         console.log('this.task_description ', JSON.stringify(this.task_description));
         console.log('this.status ', JSON.stringify(this.status));
@@ -84,19 +87,47 @@ export class SingleHistoryTaskPage {
     }
 
     showDrivingDirections(lat, lon) {
-        this.utils.presentLoading();
-        this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-            let params = {
-                directions: response
-            };
-            setTimeout(() => {
-                this.navCtrl.push(DrivingDirectionsPage, params);
-                this.utils.dismissLoading();
-            }, 2000)
-        }).catch((error) => {
-            this.utils.dismissLoading();
-            this.utils.presentToast("Location currently unavailable", true);
-        })
+
+        let options = "location=no";
+        this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
+
+
+        // this.utils.presentLoading();
+        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
+        //     let params = {
+        //         directions: response
+        //     };
+        //     setTimeout(() => {
+        //         this.navCtrl.push(DrivingDirectionsPage, params);
+        //         this.utils.dismissLoading();
+        //     }, 2000)
+        // }).catch((error) => {
+        //     this.utils.dismissLoading();
+        //     this.utils.presentToast("Location currently unavailable", true);
+        // })
+    }
+
+    openHistoryFeedback() {
+
+        let params ={
+            id: this.taskId
+        }
+
+        this.navCtrl.push(HistoryFeedbackPage, params).then(() => {
+
+                })
+
+    }
+
+    reviewImage(imageUrl) {
+
+        let params ={
+            file_name: imageUrl
+        }
+
+        this.navCtrl.push(HistoryReviewPage, params).then(() => {
+
+                })
     }
 
 

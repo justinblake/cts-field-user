@@ -4,8 +4,7 @@ import {CallNumber} from '@ionic-native/call-number';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
 import {ConversionManager} from "../../providers/conversion-manager";
-import {DrivingDirectionsPage} from '../driving-directions/driving-directions';
-import {DrivingDirectionsService} from "../../providers/driving-directions";
+import {InAppBrowser} from '@ionic-native/in-app-browser';
 
 @Component({
     selector: 'page-single-foreman-task',
@@ -45,7 +44,7 @@ export class SingleForemanTaskPage {
                 private callNumber: CallNumber,
                 private conMgr: ConversionManager,
                 private utils: Utils,
-                private ddService: DrivingDirectionsService) {
+                private iab: InAppBrowser) {
 
         this.debug = this.utils.returnDebug();
 
@@ -192,19 +191,24 @@ export class SingleForemanTaskPage {
     }
 
     showDrivingDirections(lat, lon) {
-        this.utils.presentLoading();
 
-        this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-            let params = {
-                directions: response
-            };
-            setTimeout(() => {
-                this.navCtrl.push(DrivingDirectionsPage, params);
-                this.utils.dismissLoading();
-            }, 2000)
-        }).catch((error) => {
-            this.utils.dismissLoading();
-            this.utils.presentToast("Location currently unavailable", true);
-        })
+        let options = "location=no";
+        this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
+        //
+        //
+        // this.utils.presentLoading();
+        //
+        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
+        //     let params = {
+        //         directions: response
+        //     };
+        //     setTimeout(() => {
+        //         this.navCtrl.push(DrivingDirectionsPage, params);
+        //         this.utils.dismissLoading();
+        //     }, 2000)
+        // }).catch((error) => {
+        //     this.utils.dismissLoading();
+        //     this.utils.presentToast("Location currently unavailable", true);
+        // })
     }
 }

@@ -350,7 +350,7 @@
                             <button ion-button icon-left clear medium
                                     (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
                                 <ion-icon name="navigate"></ion-icon>
-                                Get Directions
+                                Launch Navigation
                             </button>
                         </ion-col>
                     </ion-row>
@@ -358,11 +358,9 @@
             </div>
         </div>
         <div *ngIf="task_materials.length === 0">
-            <ion-card>
-                <ion-card-content class="crew-font" padding>
-                    No Materials Specified
-                </ion-card-content>
-            </ion-card>
+            <ion-card-content class="crew-font" padding>
+                No Materials Specified
+            </ion-card-content>
         </div>
 
     </ion-card>

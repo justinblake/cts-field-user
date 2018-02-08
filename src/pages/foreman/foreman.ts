@@ -1,14 +1,13 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, Content, AlertController} from 'ionic-angular';
 import {CallNumber} from '@ionic-native/call-number';
-import {DrivingDirectionsPage} from '../driving-directions/driving-directions';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {SingleForemanTaskPage} from "../single-foreman-task/single-foreman-task"
-import {DrivingDirectionsService} from "../../providers/driving-directions";
+import {InAppBrowser} from '@ionic-native/in-app-browser';
 
 
 @Component({
@@ -66,7 +65,7 @@ export class ForemanPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM,
-                private ddService: DrivingDirectionsService) {
+                private iab: InAppBrowser) {
 
         this.isIos = this.taskMgr.returnPlatform().isIos;
         this.debug = this.utils.returnDebug();
@@ -77,6 +76,7 @@ export class ForemanPage {
     }
 
     ionViewDidEnter() {
+
         this.subscribeAgain();
 
         if (this.taskMgr.returnEmergencyInfo().crewEmergency) {
@@ -103,7 +103,12 @@ export class ForemanPage {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
                 if (data.param1 === 'alert') {
-                    this.navCtrl.parent.select(3);
+                    if (data.project !== null) {
+                        this.taskMgr.saveAlertDispatch(data.task, data.project, true);
+                        this.navCtrl.parent.select(0);
+                    } else {
+                        this.navCtrl.parent.select(3);
+                    }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
                 } else if (data.param1 === "upcoming_task") {
@@ -310,20 +315,8 @@ export class ForemanPage {
     }
 
     showDrivingDirections(lat, lon) {
-        this.utils.presentLoading();
-
-        this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-            let params = {
-                directions: response
-            };
-            setTimeout(() => {
-                this.navCtrl.push(DrivingDirectionsPage, params);
-                this.utils.dismissLoading();
-            }, 2000)
-        }).catch((error) => {
-            this.utils.dismissLoading();
-            this.utils.presentToast("Location currently unavailable", true);
-        })
+        let options = "location=no";
+        this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
     }
 
     expandTask(i?, j?, task?) {

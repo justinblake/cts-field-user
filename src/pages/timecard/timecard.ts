@@ -63,7 +63,12 @@ export class TimecardPage {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
                 if (data.param1 === 'alert') {
-                    this.navCtrl.parent.select(3);
+                    if (data.project !== null) {
+                        this.taskMgr.saveAlertDispatch(data.task, data.project, true);
+                        this.navCtrl.parent.select(0);
+                    } else {
+                        this.navCtrl.parent.select(3);
+                    }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
                 } else if (data.param1 === "upcoming_task") {

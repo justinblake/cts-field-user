@@ -1,0 +1,99 @@
+page-manage-tasks-home {
+  .no-tasks {
+    font-weight: 700;
+    font-size: 2.5rem;
+  }
+
+  //timecard section css
+  .clockOut {
+    color: #d9534f;
+  }
+
+  .clockIn {
+    color: #57AD57;
+  }
+
+  .orange {
+    color: orange;
+  }
+
+  .clock-out {
+    margin-top: -7px;
+  }
+
+  .time-font {
+    font-size: 2.2rem;
+  }
+  // end timecard section css
+
+  .chip-continue, .chip-clock-in {
+    font-size: 1.7rem;
+  }
+
+  .show-all {
+    display: inherit;
+  }
+  .show-navigation-only {
+    display: none;
+  }
+
+  @media (min-width: 351px) {
+    .show-task {
+      display: none
+    }
+  }
+
+  @media (max-width: 426px) {
+    .next-space {
+      width: 110%;
+      margin-left: -5%;
+    }
+  }
+
+  @media (max-width: 376px) {
+    .task-icon {
+      right: -10px;
+    }
+    .next-space {
+      width: 109%;
+      margin-left: -5%;
+    }
+    .chip-clock-in {
+      font-size: 1.6rem;
+    }
+    .hide-chip {
+      display: none;
+    }
+  }
+
+  @media (max-width: 350px) {
+    .task-icon {
+      right: -5px;
+    }
+    .newTime {
+      color: white;
+      top: -1px;
+    }
+    .next-space {
+      width: 112%;
+      margin-left: -6%;
+    }
+    .hide-task {
+      display: none
+    }
+    .show-all {
+      display: none;
+    }
+    .show-navigation-only {
+      display: inherit;
+    }
+  }
+
+  .pad8 {
+    padding-right: 8px;
+  }
+
+  .circle-down{
+    background-color: inherit;
+  }
+}

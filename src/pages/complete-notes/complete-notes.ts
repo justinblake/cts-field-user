@@ -123,6 +123,7 @@ export class CompleteNotesPage {
             this.utils.dismissLoading();
             setTimeout(() => {
                 if (response === true) {
+                    this.taskMgr.passCompleteTask(true);
                     this.navCtrl.pop().then(res => {
                         if (this.debug) {
                             console.log('res in complete pages  ', JSON.stringify(res));

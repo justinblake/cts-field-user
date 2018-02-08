@@ -127,6 +127,7 @@ export class FeedbackPage {
 
     /** save button clicked */
     save() {
+        console.log('this.data in feedback', JSON.stringify(this.data));
         this.data.save = true;
         this.data.notes = this.data.notes.trim();
         this.utils.presentLoading();
@@ -144,6 +145,9 @@ export class FeedbackPage {
             this.utils.dismissLoading();
             setTimeout(() => {
                 if (response === true) {
+                    if(this.data.statusId === 12) {
+                        this.taskMgr.passTempHold(true, false);
+                    }
                     this.navCtrl.pop();
                 } else {
                     this.utils.toastError({msg: 'There was an error posting feedback'});

@@ -67,8 +67,8 @@
         </ion-row>
     </ion-navbar>
 </ion-header>
-<ion-content footer *ngIf="userRole !== 6">
 
+<ion-content footer *ngIf="userRole !== 6">
 
     <ion-card class="manage-app" *ngIf="!isLessor">
         <ion-card-header class="task-card-header time-font" (click)="showClockInOut()">
@@ -211,7 +211,7 @@
                             <button ion-button icon-left clear medium
                                     (click)="showDrivingDirections(currentTask.lat, currentTask.lon)">
                                 <ion-icon name="navigate"></ion-icon>
-                                Get Directions
+                                Launch Navigation
                             </button>
                         </ion-col>
                     </ion-row>
@@ -356,7 +356,7 @@
                                     <button ion-button icon-left clear medium
                                             (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
                                         <ion-icon name="navigate"></ion-icon>
-                                        Get Directions
+                                        Launch Navigation
                                     </button>
                                 </ion-col>
                             </ion-row>
@@ -389,10 +389,10 @@
 
                     <!--<ion-row>-->
 
-                    <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                    <!--(click)="testNewGeoService()">-->
-                    <!--New Geo Service-->
-                    <!--</button>-->
+                        <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+                                <!--(click)="loadMultipleTasks()">-->
+                            <!--See All Tasks-->
+                        <!--</button>-->
 
                     <!--</ion-row>-->
 
@@ -415,6 +415,61 @@
 </ion-content>
 
 <ion-content footer *ngIf="userRole === 6">
+
+    <ion-card class="manage-app" *ngIf="!isLessor">
+        <ion-card-header class="task-card-header time-font" (click)="showClockInOut()">
+
+            <div *ngIf="!showTimecard" text-center class="pad-top4">
+                <span class="hide-task">Timecard Status: </span>
+                <span class="show-task">Timecard:</span>
+                <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
+                    class="clockIn"
+                    *ngIf="timecardStatus === 1">Clocked In</span>
+                <h3 class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
+                        *ngIf="timecardStatus === 1">out</span>)</h3>
+            </div>
+            <div *ngIf="showTimecard">
+                <!--clock in-->
+                <div *ngIf="timecardStatus === 0">
+                    <ion-row class="clock-out">
+                        <ion-col width-30>
+                            <button class="home-btn" ion-button icon-left block
+                                    (click)="!showTimecard">
+                                Cancel
+                            </button>
+                        </ion-col>
+                        <ion-col width-70>
+                            <button class="home-btn" ion-button icon-left block color="secondary"
+                                    (click)="createTimecardEntry(1)">
+                                Clock In
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                <!--clock out-->
+                <div *ngIf="timecardStatus === 1">
+                    <ion-row class="clock-out">
+                        <ion-col width-30>
+                            <button class="home-btn" ion-button icon-left block
+                                    (click)="!showTimecard">
+                                Cancel
+                            </button>
+                        </ion-col>
+                        <ion-col width-70>
+                            <button class="home-btn" ion-button icon-left block color="danger"
+                                    (click)="createTimecardEntry(0)">
+                                Clock Out
+                            </button>
+                        </ion-col>
+                    </ion-row>
+
+
+                </div>
+            </div>
+        </ion-card-header>
+
+    </ion-card>
+
     <div class="pad-bot18">
         <div *ngIf="showTasks">
             <ion-card class="card-border pad-bot20 mar-top25"
@@ -530,7 +585,7 @@
                                                 <button ion-button icon-left clear medium
                                                         (click)="showDrivingDirections(task.lat, task.lon)">
                                                     <ion-icon name="navigate"></ion-icon>
-                                                    Get Directions
+                                                    Launch Navigation
                                                 </button>
                                             </ion-col>
                                         </ion-row>
@@ -636,9 +691,9 @@
                 <ion-card-header class="task-card-header">
                     Additional Options
                 </ion-card-header>
-                <ion-card-content>
+                <ion-card-content no-padding>
 
-                    <ion-row>
+                    <ion-row padding>
 
                         <button class="home-btn" ion-button icon-left block color="secondary"
                                 (click)="openNextDayTasks()">

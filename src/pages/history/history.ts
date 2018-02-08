@@ -10,8 +10,7 @@ import {HistoryReviewPage} from '../history-review/history-review';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {SingleHistoryTaskPage} from "../single-history-task/single-history-task"
-import {DrivingDirectionsPage} from "../driving-directions/driving-directions";
-import {DrivingDirectionsService} from "../../providers/driving-directions";
+import {InAppBrowser} from '@ionic-native/in-app-browser';
 
 @Component({
     selector: 'page-history',
@@ -68,7 +67,7 @@ export class HistoryPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM,
-                private ddService: DrivingDirectionsService) {
+                private iab: InAppBrowser) {
 
         this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
@@ -86,7 +85,12 @@ export class HistoryPage {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
                 if (data.param1 === 'alert') {
-                    this.navCtrl.parent.select(3);
+                    if (data.project !== null) {
+                        this.taskMgr.saveAlertDispatch(data.task, data.project, true);
+                        this.navCtrl.parent.select(0);
+                    } else {
+                        this.navCtrl.parent.select(3);
+                    }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
                 } else if (data.param1 === "upcoming_task") {
@@ -193,6 +197,7 @@ export class HistoryPage {
                     timestamp: new Date(Date.now())
                 };
                 this.taskMgr.resumeOnHoldTask(data).then((response) => {
+                    this.taskMgr.passTempHold(false, true);
                     this.navCtrl.parent.select(0);
                 })
             } else if (currentStatus === 4 || currentStatus === 5) {
@@ -214,6 +219,7 @@ export class HistoryPage {
                 timestamp: new Date(Date.now())
             };
             this.taskMgr.resumeOnHoldTask(data).then((response) => {
+                this.taskMgr.passTempHold(false, true);
                 this.navCtrl.parent.select(0);
             })
         })
@@ -374,19 +380,24 @@ export class HistoryPage {
     }
 
     showDrivingDirections(lat, lon) {
-        this.utils.presentLoading();
 
-        this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-            let params = {
-                directions: response
-            };
-            setTimeout(() => {
-                this.navCtrl.push(DrivingDirectionsPage, params);
-                this.utils.dismissLoading();
-            }, 2000)
-        }).catch((error) => {
-            this.utils.dismissLoading();
-            this.utils.presentToast("Location currently unavailable", true);
-        })
+        let options = "location=no";
+        this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
+        //
+        //
+        // this.utils.presentLoading();
+        //
+        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
+        //     let params = {
+        //         directions: response
+        //     };
+        //     setTimeout(() => {
+        //         this.navCtrl.push(DrivingDirectionsPage, params);
+        //         this.utils.dismissLoading();
+        //     }, 2000)
+        // }).catch((error) => {
+        //     this.utils.dismissLoading();
+        //     this.utils.presentToast("Location currently unavailable", true);
+        // })
     }
 }

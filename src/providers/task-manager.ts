@@ -24,6 +24,19 @@ export class TaskManager {
     crewsTab: boolean = false;
     isCordova: boolean = false;
 
+    alertTaskId: number;
+    alertId: number;
+    hasDispatchAlert: boolean = false;
+
+    alertBody: string;
+    hasAlertBody: boolean = false;
+    alertObject: any = {};
+
+    tempHold: boolean = false;
+    resumeTempHold: boolean = false;
+
+    completeTask: boolean = false;
+
     constructor(public userMgr: UserManager,
                 public apiService: ApiService,
                 private platform: Platform,
@@ -47,8 +60,57 @@ export class TaskManager {
 
     }
 
+    passCompleteTask(input: boolean) {
+        this.completeTask = input;
+    }
+
+    returnCompleteTask() {
+        return {completeTask: this.completeTask};
+    }
+
+    passTempHold(input:boolean, resume?: boolean) {
+        this.tempHold = input;
+        this.resumeTempHold = resume || false;
+    }
+
+    returnTempHold() {
+        return {tempHold: this.tempHold, resumeTempHold: this.resumeTempHold};
+    }
+
     returnPlatform() {
         return {isIos: this.isIos, isAndroid: this.isAndroid, isCordova: this.isCordova};
+    }
+
+    passAlertMessage(task) {
+        this.alertObject = task;
+        this.hasAlertBody = true;
+    }
+
+    returnAlertMessage() {
+        return {alertObject: this.alertObject, hasAlertBody: this.hasAlertBody};
+    }
+
+    clearAlertMessage() {
+        console.log('Clear Alert Message')
+        this.alertBody = '';
+        this.hasAlertBody = false;
+    }
+
+    saveAlertDispatch(taskId, alertId, dispatchBool: boolean) {
+        this.alertTaskId = taskId;
+        this.alertId = alertId;
+        this.hasDispatchAlert = dispatchBool;
+    }
+
+    returnDispatchAlert() {
+        return {alertTaskId: this.alertTaskId, alertId: this.alertId, hasDispatchAlert: this.hasDispatchAlert }
+    }
+
+    clearDispatchAlert() {
+        console.log('Clear Dispatch Message')
+        this.alertTaskId = -1;
+        this.alertId = -1;
+        this.hasDispatchAlert = false;
     }
 
     saveEmergencyInfo(taskId, projectId, crewsBool?: boolean) {
@@ -60,7 +122,6 @@ export class TaskManager {
             console.log('this.emergencyTaskId in tskMgr ', JSON.stringify(this.emergencyTaskId));
             console.log('this.emergencyProjectId in tskMgr ', JSON.stringify(this.emergencyProjectId));
         }
-
     }
 
     returnEmergencyInfo() {
@@ -134,6 +195,19 @@ export class TaskManager {
                 let json: any = response;
                 currentTaskResponse.task.job_tasks.task_user_log = json.data;
                 resolve(currentTaskResponse);
+            }).catch(error => {
+                reject(error);
+            })
+        })
+    };
+
+    loadMultipleTasks() {
+        this.currentUser = this.userMgr.getUser();
+        this.userId = this.userMgr.getUserId();
+        return new Promise((resolve, reject) => {
+            let data = {userId: this.currentUser.userId};
+            this.apiService.loadCurrentTaskV2(data).then((response: any) => {
+                resolve(response);
             }).catch(error => {
                 reject(error);
             })
@@ -369,9 +443,51 @@ export class TaskManager {
         })
     };
 
-    //  * just calls api.postTaskFeedback, no image uploading
+    updateManagedTaskStatus = (data: any): Promise<any> => {
+        console.log('data ', JSON.stringify(data));
+        console.log('data 2 ', JSON.stringify(data));
+        return new Promise((resolve, reject) => {
+            let myMessage = "success";
+            this.apiService.postTaskFeedback(data).then((json) => {
+                let response: any = JSON.parse(JSON.stringify(json));
+                if (response.code != 0) {
+                    let msg = `Could not update task status: ${response.msg}`;
+                    this.utils.presentToast(msg, true, 'X');
+                    return this.resolveAsPromise(false);
+                } else if (data.statusId === 3) {
+                    return myMessage;
+                } else if (data.statusId === 4) {
+                    return myMessage;
+                } else if (data.statusId === 5) {
+                    return myMessage;
+                } else if (data.statusId === 6) {
+                    return myMessage;
+                } else if (data.statusId === 7) {
+                    return myMessage;
+                } else if (data.statusId === 8) {
+                    return myMessage;
+                } else if (data.statusId === 9) {
+                    return myMessage;
+                } else if (data.statusId === 12) {
+                    return myMessage;
+                } else if (data.statusId === 13) {
+                    return myMessage;
+                } else {
+                    let msg = `Could not update task status: ${response.msg}`;
+                    this.utils.presentToast(msg, true, 'X');
+                    resolve(false);
+                }
+            }).then(response => {
+                resolve(response);
+            });
+        })
+    };
+
+
+
     updateNextDayTaskStatus = (data: any): Promise<any> => {
         data.userId = this.userId;
+        console.log('data 2 ', JSON.stringify(data));
         return new Promise((resolve, reject) => {
             let myMessage = "success";
             this.apiService.postTaskFeedback(data).then((json) => {
@@ -397,7 +513,7 @@ export class TaskManager {
         })
     };
 
-    //  * just calls api.postTaskFeedback, no image uploading
+
     updateTaskStatus = (data: any): Promise<any> => {
         data.userId = this.userId;
         data.taskId = this.currentTask.job_tasks.id;
@@ -561,6 +677,7 @@ export class TaskManager {
             };
 
             this.apiService.createTimecardEntry(data).then(response => {
+                console.log('response ', JSON.stringify(response));
                 resolve(response)
             }).catch(error => {
                 reject(error);
@@ -654,16 +771,12 @@ export class TaskManager {
 
     validateEmail(data) {
         return new Promise((resolve, reject) => {
-
-
             this.apiService.validateEmail(data).then(response => {
-
                 if (this.debug) {
                     console.log("valid email");
                 }
                 resolve(response)
             }).catch(error => {
-
                 if (this.debug) {
                     console.log('error updating timecard');
                 }
@@ -674,7 +787,6 @@ export class TaskManager {
 
     loadHomePage(input) {
         this.homePage = input;
-
         if (this.debug) {
             console.log('this.homePage ', JSON.stringify(this.homePage));
         }
@@ -683,71 +795,22 @@ export class TaskManager {
     reportHomePage() {
         return this.homePage;
     }
+
+    getSingleAlert(empId, alertId) {
+        return new Promise((resolve, reject) => {
+            let data = {
+                userId: empId,
+                alertId: alertId
+            };
+            this.apiService.loadSingleAlert(data).then((res:any) => {
+                console.log('res in task manager ', JSON.stringify(res));
+                resolve(res);
+            })
+        })
+    }
+
+
+
+
 }
-
-// loadNextDayTask() {
-//     let nextDayTaskResponse: any;
-//     return new Promise((resolve, reject) => {
-//         let user = this.userMgr.getUser();
-//         //let token = this.userMgr.getToken();
-//         let data = {userId: user.userId};
-//         this.apiService.loadNextDayTask(data).then(response => {
-//             let task: any = response;
-//             nextDayTaskResponse = {
-//                 "task": task.data,
-//                 "user": user
-//             };
-//             this.tomorrowsTask = task;
-//             if (this.tomorrowsTask.job_tasks) {
-//                 Number(this.tomorrowsTask.job_tasks.task_start_time);
-//             }
-//             this.currentUser = user;
-//         })
-//             .then(response => {
-//                 resolve(nextDayTaskResponse);
-//             }).catch(error => {
-//             reject(error);
-//         })
-//     })
-// };
-
-
-// createNewTimecardEntry(empId, myStatus, altTime, inNotes?: any) {
-//     return new Promise((resolve, reject) => {
-//         let data = {
-//             employee_id: empId,
-//             alt_timestamp: altTime,
-//             status: myStatus,
-//             notes: inNotes || "NULL"
-//         };
-//
-//         this.apiService.createTimecardEntry(data).then(response => {
-//             console.log("a new entry has been created");
-//             resolve(response)
-//         }).catch(error => {
-//             console.log('error updating timecard');
-//             reject(error);
-//         })
-//     })
-// }
-
-// deleteTimecardEntry(empId, entryId) {
-//     return new Promise((resolve, reject) => {
-//         let data = {
-//             employee_id: empId,
-//             id: entryId
-//
-//         };
-//
-//         console.log('data in task manager ', JSON.stringify(data));
-//
-//         this.apiService.makeTimecardEntryInactive(data).then(response => {
-//             console.log("That is now inactive");
-//             resolve(response)
-//         }).catch(error => {
-//             console.log('error updating timecard');
-//             reject(error);
-//         })
-//     })
-// }
 

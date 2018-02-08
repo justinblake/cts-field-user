@@ -1,5 +1,11 @@
 <ion-tabs selectedIndex="0">
-    <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="fa-home"></ion-tab>
+    <div *ngIf="managesTasks">
+        <ion-tab [root]="tab6Root" tabTitle="Home" tabIcon="fa-home"></ion-tab>
+    </div>
+    <div *ngIf="!managesTasks">
+        <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="fa-home"></ion-tab>
+    </div>
+
     <div *ngIf="foremanTab">
         <ion-tab [root]="tab5Root" tabTitle="Crews" tabIcon="fa-users"></ion-tab>
     </div>
@@ -7,9 +13,8 @@
         <ion-tab [root]="tab2Root" tabTitle="History" tabIcon="fa-history"></ion-tab>
         <ion-tab [root]="tab3Root" tabTitle="Alerts" tabIcon="fa-alert"
                  [(tabBadge)]="taskManager.badgeNumber" tabBadgeStyle="danger"></ion-tab>
-        <div *ngIf="!isLessor">
-            <ion-tab [root]="tab4Root" tabTitle="Timecard" tabIcon="fa-clock-o"></ion-tab>
-        </div>
     </div>
-
+    <div *ngIf="!isLessor">
+        <ion-tab [root]="tab4Root" tabTitle="Timecard" tabIcon="fa-clock-o"></ion-tab>
+    </div>
 </ion-tabs>

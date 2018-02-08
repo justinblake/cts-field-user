@@ -39,6 +39,7 @@ export class ApiService {
             "authenticateUser": `${this.utilApi}/authenticate_user`,
             "sendPasswordReset": `${this.ctsApi}/sendPasswordReset`,
             "loadCurrentTask": `${this.ctsApi}/loadCurrentTask`,
+            "loadCurrentTaskV2": `${this.ctsApi}/loadCurrentTaskV2`,
             "loadTaskHistoryV2": `${this.ctsApi}/loadTaskHistoryV2`,
             "createTaskUserLog": `${this.ctsApi}/createTaskUserLog`,
             "createTaskUserLogFiles": `${this.ctsApi}/createTaskUserLogFiles`,
@@ -46,9 +47,10 @@ export class ApiService {
             "loadEmployeeAlerts": `${this.ctsApi}/loadEmployeeAlerts`,
             "markEmployeeAlertRead": `${this.ctsApi}/markEmployeeAlertRead`,
             "checkEmployeeAlerts": `${this.ctsApi}/checkEmployeeAlerts`,
+            "loadSingleAlert": `${this.ctsApi}/loadSingleAlert`,
             "updateEmployeeToken": `${this.ctsApi}/updateEmployeeToken`,
             "loadTaskUserNotes": `${this.ctsApi}/loadTaskUserNotes`,
-            "loadNextDayTaskByDate": `${this.ctsApi}/loadNextDayTaskByDate`,
+            "loadNextDayTaskByDateV2": `${this.ctsApi}/loadNextDayTaskByDateV2`,
             "loadForemanTasks": `${this.ctsApi}/loadForemanTasks`,
             "loadLaborerTasks": `${this.ctsApi}/loadLaborerTasks`,
             "createTimecardEntry": `${this.ctsApi}/createTimecardEntry`,
@@ -234,6 +236,13 @@ export class ApiService {
         return this.request(requestOptions);
     };
 
+    loadCurrentTaskV2 = (data) => {
+        console.log('multiple in api-service ')
+        let endpoint = this.apiUrls.loadCurrentTaskV2;
+        let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
+        return this.request(requestOptions);
+    };
+
     // loadNextDayTask = (data) => {
     //     let endpoint = this.apiUrls.loadNextDayTask;
     //     let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
@@ -250,7 +259,7 @@ export class ApiService {
     };
 
     loadNextDayTaskByDate = (data) => {
-        let endpoint = this.apiUrls.loadNextDayTaskByDate;
+        let endpoint = this.apiUrls.loadNextDayTaskByDateV2;
         let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
         return this.request(requestOptions)
     };
@@ -275,6 +284,12 @@ export class ApiService {
 
     checkEmployeeAlerts = (data) => {
         let endpoint = this.apiUrls.checkEmployeeAlerts;
+        let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
+        return this.request(requestOptions)
+    };
+
+    loadSingleAlert = (data) => {
+        let endpoint = this.apiUrls.loadSingleAlert;
         let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
         return this.request(requestOptions)
     };

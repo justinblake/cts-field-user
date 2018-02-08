@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {HomePage} from '../home/home';
+import {ManageTasksHomePage} from "../manage-tasks-home/manage-tasks-home";
 import {HistoryPage} from '../history/history';
 import {AlertsPage} from '../alerts/alerts';
 import {TaskManager} from "../../providers/task-manager";
@@ -17,10 +18,13 @@ export class TabsPage {
     tab3Root: any = AlertsPage;
     tab4Root: any = TimecardPage;
     tab5Root: any = ForemanPage;
+    tab6Root: any = ManageTasksHomePage;
+
     currentUser: any = '';
     disableTabs: boolean = false;
     foremanTab: boolean = false;
     isLessor: boolean = false;
+    managesTasks: boolean = false;
 
     constructor(public taskManager: TaskManager,
                 private userMgr: UserManager) {
@@ -34,6 +38,13 @@ export class TabsPage {
         }
         if (this.currentUser.is_lessor === 1) {
             this.isLessor = true;
+        }
+
+
+        //This will load a new home page for the user where all the
+        // tasks are visible on the home page instead of one at a time
+        if (this.currentUser.manages_tasks === 1) {
+            this.managesTasks = true;
         }
     }
 }

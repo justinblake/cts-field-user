@@ -228,9 +228,6 @@ export class HistoryFeedbackPage {
             });
             alert.present();
 
-            if (this.debug) {
-                console.log(`ERROR -> ${JSON.stringify(err)}`);
-            }
             this.utils.dismissLoading();
         });
     }
