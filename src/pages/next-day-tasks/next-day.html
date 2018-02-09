@@ -91,9 +91,9 @@
                                         {{task.strTime}}
                                     </ion-col>
                                     <ion-col class="task-icon" width-10>
-                                        <ion-icon *ngIf="expandTaskId !== task.id || taskId !== j"
+                                        <ion-icon *ngIf="(expandTaskId !== task.id || taskId !== j) && (expandTaskId !== task.id)"
                                                   name="fa-chevron-circle-right"></ion-icon>
-                                        <ion-icon *ngIf="expandTaskId === task.id && taskId === j"
+                                        <ion-icon *ngIf="(expandTaskId === task.id && taskId === j) || (expandTaskId === task.id)"
                                                   name="fa-chevron-circle-down"></ion-icon>
                                     </ion-col>
                                 </ion-row>
@@ -101,8 +101,7 @@
 
 
                             <div class="next-space" *ngIf="expandTaskId === task.id">
-
-
+                                
                                 <!--Read Alert-->
                                 <ion-card class="card-border"
                                           *ngIf="expandTaskId === dispatchAlert && alertObject.viewed === 1">
