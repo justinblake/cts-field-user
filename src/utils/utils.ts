@@ -12,7 +12,7 @@ export class Utils {
     modal: Modal;
     loadingIsPresent: boolean = false;
     homePage: number = 0;
-    appVersion: string = '1.4.5';
+    appVersion: string = '1.4.6';
 
     constructor(public loadingCtrl: LoadingController,
                 public alertCtrl: AlertController,
@@ -64,7 +64,7 @@ export class Utils {
         let opts: any = {
             content: content || 'Updating App. Thank You For Your Patience',
             enableBackdropDismiss: false,
-            spinner: 'dots',
+            spinner: 'dots'
         };
         this.loading = this.loadingCtrl.create(opts);
         this.loading.present().then(response => {
