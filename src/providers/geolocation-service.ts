@@ -62,6 +62,10 @@ export class GeolocationService {
                                 timestamp: timestamp,
                                 accuracy: accuracy
                             };
+                            // console.log('this.lon in high accuracy', JSON.stringify(this.lon));
+                            // console.log('this.lat in high accuracy', JSON.stringify(this.lat));
+                            // console.log('timestamp in high accuracy', JSON.stringify(timestamp));
+                            // console.log('accuracy in high accuracy', JSON.stringify(accuracy));
                             resolve(locationObj);
                         }).catch((error) => {
                             console.log('geo error catch');
@@ -70,10 +74,10 @@ export class GeolocationService {
                                 this.lon = position.coords.longitude;
                                 let accuracy = position.coords.accuracy;
                                 let timestamp = position.timestamp;
-                                console.log('this.lon in low accuracy', JSON.stringify(this.lon));
-                                console.log('this.lat in low accuracy', JSON.stringify(this.lat));
-                                console.log('timestamp in low accuracy', JSON.stringify(timestamp));
-                                console.log('accuracy in low accuracy', JSON.stringify(accuracy));
+                                // console.log('this.lon in low accuracy', JSON.stringify(this.lon));
+                                // console.log('this.lat in low accuracy', JSON.stringify(this.lat));
+                                // console.log('timestamp in low accuracy', JSON.stringify(timestamp));
+                                // console.log('accuracy in low accuracy', JSON.stringify(accuracy));
                                 let locationObj = {
                                     lat: this.lat,
                                     lon: this.lon,
@@ -87,7 +91,9 @@ export class GeolocationService {
                             })
                         });
                     } else {
-                        reject("error");
+                        this.diagnostic.requestLocationAuthorization().then((res: any) => {
+                            console.log('res in request location authorization ', JSON.stringify(res));
+                        })
                     }
                 }, (error: any) => {
                     console.log('error in getLocationAuthorizationStatus ', JSON.stringify(error));

@@ -984,7 +984,6 @@ export class HomePage {
         } else {
             console.log('Not Cordova so no updates')
         }
-
     }
 
     // demo() {

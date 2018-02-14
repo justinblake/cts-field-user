@@ -161,29 +161,36 @@ export class ManageTasksHomePage {
 
 
     ionViewDidEnter() {
+        let alertDispatch = this.taskMgr.returnDispatchAlert();
         this.checkForCurrentTask();
-        console.log('ionViewDidEnter manage tasks');
-        console.log("temp hold in tskmgr - " + this.taskMgr.returnTempHold().tempHold);
-        this.loadMultipleTasks();
         this.subscribeAgain();
 
+        let tempNum = this.taskMgr.reportHomePage();
+        if (tempNum === 0 && alertDispatch.hasDispatchAlert === false) {
+            this.loadMultipleTasks();
+            setTimeout(() => {
+                this.setBadges()
+            }, 3000);
+        } else if (tempNum === 1) {
+            this.presentFutureAlert();
+        } else if (tempNum === 2) {
+            this.presentAlert();
+        } else if (alertDispatch.hasDispatchAlert === true) {
+            this.openNextDayTasksAlert(alertDispatch.alertTaskId, alertDispatch.alertId);
+        }
         if (this.taskMgr.returnTempHold().tempHold === true) {
             this.activeTask = {};
             this.taskMgr.passTempHold(false);
         }
-
         if (this.taskMgr.returnTempHold().resumeTempHold === true) {
             this.checkForCurrentTask();
             this.taskMgr.passTempHold(false, false);
         }
-
         let tempObject = this.taskMgr.returnCompleteTask();
-
         if (tempObject.completeTask === true) {
             this.taskMgr.passCompleteTask(false);
             this.activeTask = {}
         }
-
         this.checkUpdates();
     }
 
@@ -210,6 +217,7 @@ export class ManageTasksHomePage {
             });
         }
     }
+
     presentAlert() {
         let alert = this.alertCtrl.create({
             title: 'New Task Notes',
@@ -222,7 +230,7 @@ export class ManageTasksHomePage {
         alert.present();
     }
 
-     presentFutureAlert() {
+    presentFutureAlert() {
         let alert = this.alertCtrl.create({
             title: 'New Task Dispatched',
             message: 'Please see the new notes that have been added to the task',
@@ -269,7 +277,7 @@ export class ManageTasksHomePage {
         }
     }
 
-     setCompany() {
+    setCompany() {
         let holdingObject: any;
         holdingObject = this.currentUser;
         this.compName = holdingObject.company_name;
@@ -339,6 +347,7 @@ export class ManageTasksHomePage {
                 platform = 'android'
             }
             this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+                console.log('res in set location ', JSON.stringify(res));
                 this.lat = res.lat;
                 this.lon = res.lon;
                 this.locationTimestamp = res.timestamp;
