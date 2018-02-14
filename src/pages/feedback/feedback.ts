@@ -4,6 +4,7 @@ import {Camera} from '@ionic-native/camera';
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
+import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
 
 
 @Component({
@@ -29,6 +30,7 @@ export class FeedbackPage {
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
+                public managesTskMgr: ManagesTasksManager,
                 private taskMgr: TaskManager,
                 private actionSheetCtrl: ActionSheetController,
                 private platform: Platform,
@@ -146,9 +148,15 @@ export class FeedbackPage {
             setTimeout(() => {
                 if (response === true) {
                     if(this.data.statusId === 12) {
+                        this.managesTskMgr.removeTask();
                         this.taskMgr.passTempHold(true, false);
                     }
-                    this.navCtrl.pop();
+                    this.navCtrl.popToRoot();
+                    // if(this.data.statusId === 12) {
+                    //     this.taskMgr.passTempHold(true, false);
+                    //     this.navCtrl.popToRoot();
+                    // }
+
                 } else {
                     this.utils.toastError({msg: 'There was an error posting feedback'});
                 }

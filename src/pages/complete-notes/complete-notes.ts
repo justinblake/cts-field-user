@@ -4,6 +4,7 @@ import {Camera} from '@ionic-native/camera';
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
+import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
 
 @Component({
     selector: 'page-complete-notes',
@@ -24,6 +25,7 @@ export class CompleteNotesPage {
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
+                public managesTskMgr: ManagesTasksManager,
                 private taskMgr: TaskManager,
                 private actionSheetCtrl: ActionSheetController,
                 private platform: Platform,
@@ -124,7 +126,8 @@ export class CompleteNotesPage {
             setTimeout(() => {
                 if (response === true) {
                     this.taskMgr.passCompleteTask(true);
-                    this.navCtrl.pop().then(res => {
+                    this.managesTskMgr.removeTask();
+                    this.navCtrl.popToRoot().then(res => {
                         if (this.debug) {
                             console.log('res in complete pages  ', JSON.stringify(res));
                         }

@@ -1,0 +1,45 @@
+page-single-manage-tasks {
+
+    .task-card-header {
+        font-size: 2.5rem;
+    }
+
+    ion-footer {
+        background-color: #EFEFEF;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px -2px 3px 1px;
+    }
+
+    .show-all {
+        display: inherit;
+    }
+    .show-navigation-only {
+        display: none;
+    }
+
+    @media (max-width: 376px) {
+        .show-all {
+            display: none;
+        }
+        .show-navigation-only {
+            display: inherit;
+        }
+    }
+    @media (min-width: 351px) {
+        .show-task {
+            display: none
+        }
+    }
+
+    @media (max-width: 350px) {
+
+        .hide-task {
+            display: none
+        }
+    }
+
+    .status-13 {
+        color: red;
+        margin-bottom: 7px;
+    }
+
+}

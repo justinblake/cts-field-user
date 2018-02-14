@@ -1,99 +1,109 @@
 page-manage-tasks-home {
-  .no-tasks {
-    font-weight: 700;
-    font-size: 2.5rem;
-  }
-
-  //timecard section css
-  .clockOut {
-    color: #d9534f;
-  }
-
-  .clockIn {
-    color: #57AD57;
-  }
-
-  .orange {
-    color: orange;
-  }
-
-  .clock-out {
-    margin-top: -7px;
-  }
-
-  .time-font {
-    font-size: 2.2rem;
-  }
-  // end timecard section css
-
-  .chip-continue, .chip-clock-in {
-    font-size: 1.7rem;
-  }
-
-  .show-all {
-    display: inherit;
-  }
-  .show-navigation-only {
-    display: none;
-  }
-
-  @media (min-width: 351px) {
-    .show-task {
-      display: none
+    .task-card-header {
+        font-size: 2.5rem;
     }
-  }
 
-  @media (max-width: 426px) {
-    .next-space {
-      width: 110%;
-      margin-left: -5%;
+    .no-tasks {
+        font-weight: 700;
+        font-size: 2.5rem;
     }
-  }
 
-  @media (max-width: 376px) {
-    .task-icon {
-      right: -10px;
+    //timecard section css
+    .clockOut {
+        color: #d9534f;
     }
-    .next-space {
-      width: 109%;
-      margin-left: -5%;
+
+    .clockIn {
+        color: #57AD57;
     }
-    .chip-clock-in {
-      font-size: 1.6rem;
+
+    .orange {
+        color: orange;
     }
-    .hide-chip {
-      display: none;
+
+    .clock-out {
+        margin-top: -7px;
     }
+
+    .time-font {
+        font-size: 2.2rem;
+    }
+    // end timecard section css
+
+    .chip-continue, .chip-clock-in {
+        font-size: 1.7rem;
+    }
+
     .show-all {
-      display: none;
+        display: inherit;
     }
     .show-navigation-only {
-      display: inherit;
+        display: none;
     }
-  }
 
-  @media (max-width: 350px) {
-    .task-icon {
-      right: -5px;
+    @media (min-width: 351px) {
+        .show-task {
+            display: none
+        }
     }
-    .newTime {
-      color: white;
-      top: -1px;
-    }
-    .next-space {
-      width: 112%;
-      margin-left: -6%;
-    }
-    .hide-task {
-      display: none
-    }
-  }
 
-  .pad8 {
-    padding-right: 8px;
-  }
+    @media (max-width: 426px) {
+        .next-space {
+            width: 110%;
+            margin-left: -5%;
+        }
+    }
 
-  .circle-down{
-    background-color: inherit;
-  }
+    @media (max-width: 376px) {
+        .task-icon {
+            right: -10px;
+        }
+        .next-space {
+            width: 109%;
+            margin-left: -5%;
+        }
+        .chip-clock-in {
+            font-size: 1.6rem;
+        }
+        .hide-chip {
+            display: none;
+        }
+        .show-all {
+            display: none;
+        }
+        .show-navigation-only {
+            display: inherit;
+        }
+    }
+
+    @media (max-width: 350px) {
+        .task-icon {
+            right: -5px;
+        }
+        .newTime {
+            display: none;
+        }
+        .next-space {
+            width: 112%;
+            margin-left: -6%;
+        }
+        .hide-task {
+            display: none
+        }
+        ion-col[width-70] {
+            -webkit-flex: 0 0 100%;
+            -ms-flex: 0 0 100%;
+            -webkit-box-flex: 0;
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    .pad8 {
+        padding-right: 8px;
+    }
+
+    .circle-down {
+        background-color: inherit;
+    }
 }

@@ -5,7 +5,7 @@ import {CallNumber} from '@ionic-native/call-number';
 import {AndroidFullScreen} from '@ionic-native/android-full-screen';
 import {LoginPage} from '../login/login';
 import {FeedbackPage} from '../feedback/feedback';
-import {GeolocationService} from '../../providers/geolocation-service'
+import {GeolocationService} from '../../providers/geolocation-service';
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
 import {checkForUpdate} from '../../providers/deploy-manager';
@@ -22,6 +22,8 @@ import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
+import {SingleManageTasksPage} from "../single-manage-tasks/single-manage-tasks";
+import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
 
 
 @Component({
@@ -39,7 +41,6 @@ export class ManageTasksHomePage {
     currentUser: any = '';
     userId: number;
     data: any;
-    isIos: boolean = false;
     lat: number;
     lon: number;
     locationTimestamp: number;
@@ -54,6 +55,7 @@ export class ManageTasksHomePage {
     complete: boolean = false;
     isCordova: boolean;
     isAndroid: any;
+    isIos: boolean = false;
 
     empData: any = {};
 
@@ -76,6 +78,7 @@ export class ManageTasksHomePage {
                 public geoSrvc: GeolocationService,
                 public plt: Platform,
                 public navParams: NavParams,
+                public managesTskMgr: ManagesTasksManager,
                 private userMgr: UserManager,
                 private appCtrl: App,
                 private utils: Utils,
@@ -101,13 +104,13 @@ export class ManageTasksHomePage {
 
     }
 
-    ionViewDidLoad() {
-        console.log('ionViewDidLoad manage tasks');
-        this.checkForCurrentTask();
-    }
+    // ionViewDidLoad() {
+    //     this.checkForCurrentTask();
+    // }
 
 
     ionViewDidEnter() {
+        this.checkForCurrentTask();
         console.log('ionViewDidEnter manage tasks');
         console.log("temp hold in tskmgr - " + this.taskMgr.returnTempHold().tempHold);
         this.loadMultipleTasks();
@@ -118,7 +121,6 @@ export class ManageTasksHomePage {
         }
 
         if (this.taskMgr.returnTempHold().resumeTempHold === true) {
-            console.log('inside second if');
             this.checkForCurrentTask();
             this.taskMgr.passTempHold(false, false);
         }
@@ -129,8 +131,6 @@ export class ManageTasksHomePage {
             this.taskMgr.passCompleteTask(false);
             this.activeTask = {}
         }
-
-
     }
 
     setLocation() {
@@ -147,10 +147,8 @@ export class ManageTasksHomePage {
                 this.lon = res.lon;
                 this.locationTimestamp = res.timestamp;
                 this.locationAccuracy = res.accuracy;
-                console.log('res in new location service', JSON.stringify(res));
                 resolve(`${this.lat},${this.lon}`);
             }, (err: any) => {
-                console.log('err ', JSON.stringify(err));
                 reject(err)
             })
         })
@@ -158,9 +156,10 @@ export class ManageTasksHomePage {
 
     checkForCurrentTask() {
         this.taskMgr.getCurrentTaskRemote().then((response: any) => {
-            console.log('response in check ', JSON.stringify(response));
+            console.log('response in check checkForCurrentTask ', JSON.stringify(response));
             if (response.task.job_tasks.status_id > 3) {
                 this.activeTask = response.task.job_tasks;
+                this.managesTskMgr.storeTask(this.activeTask);
             }
 
         })
@@ -178,149 +177,34 @@ export class ManageTasksHomePage {
     }
 
 
-    setStatus(statusId: number, taskId: number, projectIndex: number, taskIndex: number, notes?: any) {
-        if (statusId === 3 || statusId === 8) {
-            this.projectObject[projectIndex].job_tasks[taskIndex].status_id = statusId;
-            let data = {
-                userId: this.userId,
-                notes: notes || '',
-                statusId: statusId,
-                files: [],
-                timestamp: new Date(Date.now()),
-                taskId: taskId
-            };
-            this.taskMgr.updateManagedTaskStatus(data).then((response) => {
-                this.utils.dismissLoading();
-            }).catch(error => {
-                if (this.debug) {
-                    console.log(`ERROR: ${Utils.toJson(error)}`);
-                }
-                this.utils.toastError(error);
-            });
-        } else if (statusId === 4 || statusId === 5 || statusId === 7 || statusId === 9) {
-            //update task status
-            this.projectObject[projectIndex].job_tasks[taskIndex].status_id = statusId;
-            //store current task
-
-            this.storeCurrentTask(this.projectObject[projectIndex].job_tasks[taskIndex], statusId);
-            //update task
-            this.dataFunction(notes, statusId, taskId).then((res: any) => {
-                this.taskMgr.updateManagedTaskStatus(res).then((response) => {
-                    console.log('response ', JSON.stringify(response));
-                    if (statusId === 9) {
-                        this.loadMultipleTasks();
-                    }
-                })
-            })
-
-        }
-    };
 
     showActiveTask() {
         console.log('this.activeTask ', JSON.stringify(this.activeTask));
-    }
 
-    storeCurrentTask(task: any, statusId: number) {
-        console.log('task in storeCurrentTask() ', JSON.stringify(task));
-        console.log('statusId in storeCurrentTask()  ', JSON.stringify(statusId));
-        if (statusId === 4 || statusId === 5 || statusId === 7) {
-            this.activeTask = task;
-            console.log('this.activeTask ', JSON.stringify(this.activeTask));
-        } else if (statusId === 9) {
-            this.activeTask = {};
-        }
+        let testObject: any = this.managesTskMgr.returnTask().activeTask;
     }
-
 
     // function to replace writing this logic multiple times in this.setStatus
     dataFunction(notes: any, statusId: number, taskId: number) {
         return new Promise((resolve, reject) => {
-            let data = {};
+            let data: any = {
+                userId: this.userId,
+                notes: notes || '',
+                taskId: taskId,
+                statusId: statusId,
+                files: []
+            };
             if (this.isCordova) {
                 this.setLocation().then(() => {
-                    data = {
-                        userId: this.userId,
-                        notes: notes || '',
-                        statusId: statusId,
-                        files: [],
-                        lat: this.lat,
-                        lon: this.lon,
-                        taskId: taskId
-                    };
-
+                    data.lat = this.lat;
+                    data.lon = this.lon;
                     resolve(data);
                 })
             } else {
-                data = {
-                    userId: this.userId,
-                    notes: notes || '',
-                    statusId: statusId,
-                    files: [],
-                    taskId: taskId
-                };
                 resolve(data);
             }
-
         })
     }
-
-    openRejectModal(statusId: number, taskId: number, projectIndex: number, taskIndex: number, notes?: any) {
-        let modal: Modal = this.utils.presentRejectNotesModal();
-        modal.onDidDismiss((data) => {
-            if (data.save === true) {
-                this.setStatus(statusId, taskId, projectIndex, taskIndex, data.notes);
-            }
-        })
-    }
-
-
-    // 0 = complete page, 1 = feedback page
-    openActionPage(page: number) {
-        this.utils.presentLoading();
-        let params = {};
-        if (this.isCordova) {
-            this.setLocation().then((res: any) => {
-                params = {
-                    'lat': this.lat,
-                    'lon': this.lon,
-                    'task_id': this.activeTask.id,
-                    'user_id': this.userId
-                };
-                if (page === 0) {
-                    this.navCtrl.push(CompleteNotesPage, params).then(res => {
-                        this.utils.dismissLoading();
-                    });
-                    return true;
-                } else if (page === 1) {
-                    this.navCtrl.push(FeedbackPage, params).then(res => {
-                        this.utils.dismissLoading();
-                    });
-                    return true;
-                }
-            })
-        } else {
-            params = {
-                'lat': 0,
-                'lon': 0,
-                'task_id': this.activeTask.id,
-                'user_id': this.userId
-            };
-            console.log('params ', JSON.stringify(params));
-            if (page === 0) {
-                this.navCtrl.push(CompleteNotesPage, params).then(res => {
-                    this.utils.dismissLoading();
-                });
-                return true;
-            } else if (page === 1) {
-                console.log("heading to feedback")
-                this.navCtrl.push(FeedbackPage, params).then(res => {
-                    this.utils.dismissLoading();
-                });
-                return true;
-            }
-        }
-    }
-
 
     toggleDivState(proj) {
         if (this.contractorDetails.proj === proj) {
@@ -330,51 +214,9 @@ export class ManageTasksHomePage {
         }
     }
 
-    expandTask(project, task) {
-        if (this.taskDetails.proj === project) {
-            if (this.taskDetails.task === task) {
-                this.taskDetails.proj = -1;
-                this.taskDetails.task = -1;
-            } else if (this.taskDetails.task !== task) {
-                this.taskDetails.task = task;
-            }
-        } else if (this.taskDetails.proj !== project) {
-            this.taskDetails.proj = project;
-            this.taskDetails.task = task;
-        }
-    }
-
     showDrivingDirections(lat, lon) {
         let options = "location=no";
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
-    }
-
-    logout() {
-
-        this.userMgr.logout().then(response => {
-            this.appCtrl.getRootNav().push(LoginPage);
-        })
-
-        // if (this.timecardStatus === 1) {
-        //     let alert = this.alertCtrl.create({
-        //         title: 'Timecard Alert!',
-        //         cssClass: 'myAlerts',
-        //         message: 'You are currently clocked in. Please clock out before logging out.',
-        //         buttons: ['OK']
-        //     });
-        //     alert.present();
-        // }
-        // else {
-        //     let token = 'logged out';
-        //     this.taskMgr.updateEmployeeToken(token, this.currentUser.userId).then(res => {
-        //         if (this.debug) {
-        //             console.log('res ', JSON.stringify(res));
-        //         }
-        //     });
-        //     this.userMgr.logout().then(response => {
-        //         this.appCtrl.getRootNav().push(LoginPage);
-        //     })
-        // }
     }
 
     openNextDayTasks(taskId?: string) {
@@ -388,9 +230,44 @@ export class ManageTasksHomePage {
         this.iab.create("https://www.cleartasksolutions.com/app/login/index.html", "_system", options);
     }
 
+    openSingleTask(project, task) {
+        console.log('project ', JSON.stringify(project));
+        console.log('task ', JSON.stringify(task));
+        let userInfo = {
+            timecardStatus: this.timecardStatus,
+            userId: this.userId
+        };
+        let currentProject = {
+            job_name: this.projectObject[project].job_name,
+            address: this.projectObject[project].address,
+            city: this.projectObject[project].city,
+            state: this.projectObject[project].state,
+            zip: this.projectObject[project].zip,
+            lat: this.projectObject[project].lat,
+            lon: this.projectObject[project].lon,
+            notes: this.projectObject[project].notes,
+            contractor: this.projectObject[project].contractor,
+            contractor_contacts: this.projectObject[project].contractor_contacts
+        };
+        let currentTask = this.projectObject[project].job_tasks[task];
+        console.log('currentTask in middle ', JSON.stringify(currentTask));
+        let params = {
+            currentTask: currentTask,
+            currentProject: currentProject,
+            userInfo: userInfo
+        };
+        this.navCtrl.push(SingleManageTasksPage, params).then(() => {
+            console.log('in promise of push ');
+        })
+    }
+
+
+
+    //Timecard and logout functions
+
     getTimecardStatus() {
         this.taskMgr.getLastTimecardEntry(this.userId).then((res: any) => {
-            console.log('res timecard', JSON.stringify(res));
+            console.log('res in timecard', JSON.stringify(res));
             if (res.data.length === 0) {
                 this.timecardStatus = 0;
             } else {
@@ -401,19 +278,13 @@ export class ManageTasksHomePage {
 
     createTimecardEntry(status) {
         this.utils.presentLoading();
-
-        console.log('this.isCordova ', JSON.stringify(this.isCordova));
-        console.log('this.isCordova type' + typeof this.isCordova);
-
         if (this.userRole !== 6 && this.activeTask.id) {
             let newNotes = '';
-
             if (status === 0 && this.activeTask.status_id === 4) {
                 newNotes = "Clocked out while task was started";
                 this.dataFunction(newNotes, 13, this.activeTask.id).then((res: any) => {
                     this.taskMgr.updateManagedTaskStatus(res).then((response) => {
                         this.activeTask.status_id = 13;
-                        console.log('response ', JSON.stringify(response));
                     })
                 })
             } else if (status === 1 && this.activeTask.status_id === 13) {
@@ -421,46 +292,109 @@ export class ManageTasksHomePage {
                 this.dataFunction(newNotes, 4, this.activeTask.id).then((res: any) => {
                     this.taskMgr.updateManagedTaskStatus(res).then((response) => {
                         this.activeTask.status_id = 4;
-                        console.log('response ', JSON.stringify(response));
                     })
                 })
             }
-
-
         }
-
         if (this.isCordova) {
             this.setLocation().then((res: any) => {
                 this.taskMgr.createTimecardEntry(this.currentUser.userId, this.lat, this.lon, status).then(res => {
-                    if (this.debug) {
-                        console.log("inside create timecard entry");
-                    }
-
                     this.timecardStatus = status;
                     this.showTimecard = false;
+                    this.loadMultipleTasks();
                     this.utils.dismissLoading();
                 })
             })
         } else if (!this.isCordova) {
-            console.log("Create timecard entry");
             this.taskMgr.createTimecardEntry(this.currentUser.userId, 0, 0, status).then(res => {
-                if (this.debug) {
-                    console.log("inside create timecard entry");
-                }
-
                 this.timecardStatus = status;
                 this.showTimecard = false;
+                this.loadMultipleTasks();
                 this.utils.dismissLoading();
             })
         }
-
-
     }
-
 
     showClockInOut() {
         this.showTimecard = !this.showTimecard;
     }
 
+    logout() {
+        // this.userMgr.logout().then(response => {
+        //     this.appCtrl.getRootNav().push(LoginPage);
+        // })
+        // add alert to logout button
+        if (this.timecardStatus === 1) {
+            let alert = this.alertCtrl.create({
+                title: 'Timecard Alert!',
+                cssClass: 'myAlerts',
+                message: 'You are currently clocked in. Please clock out before logging out.',
+                buttons: ['OK']
+            });
+            alert.present();
+        }
+        else {
+            let token = 'logged out';
+            this.taskMgr.updateEmployeeToken(token, this.currentUser.userId).then(res => {
+                if (this.debug) {
+                    console.log('res ', JSON.stringify(res));
+                }
+            });
+            this.userMgr.logout().then(response => {
+                this.appCtrl.getRootNav().push(LoginPage);
+            })
+        }
+    }
+
+      // storeCurrentTask(task: any, statusId: number) {
+    //     console.log('task in storeCurrentTask() ', JSON.stringify(task));
+    //     console.log('statusId in storeCurrentTask()  ', JSON.stringify(statusId));
+    //     if (statusId === 4 || statusId === 5 || statusId === 7) {
+    //         this.activeTask = task;
+    //         console.log('this.activeTask ', JSON.stringify(this.activeTask));
+    //     } else if (statusId === 9) {
+    //         this.activeTask = {};
+    //     }
+    // }
+
+
+
+    // setStatus(statusId: number, taskId: number, projectIndex: number, taskIndex: number, notes?: any) {
+    //     if (statusId === 3 || statusId === 8) {
+    //         this.projectObject[projectIndex].job_tasks[taskIndex].status_id = statusId;
+    //         let data = {
+    //             userId: this.userId,
+    //             notes: notes || '',
+    //             statusId: statusId,
+    //             files: [],
+    //             timestamp: new Date(Date.now()),
+    //             taskId: taskId
+    //         };
+    //         this.taskMgr.updateManagedTaskStatus(data).then((response) => {
+    //             this.utils.dismissLoading();
+    //         }).catch(error => {
+    //             if (this.debug) {
+    //                 console.log(`ERROR: ${Utils.toJson(error)}`);
+    //             }
+    //             this.utils.toastError(error);
+    //         });
+    //     } else if (statusId === 4 || statusId === 5 || statusId === 7 || statusId === 9) {
+    //         //update task status
+    //         this.projectObject[projectIndex].job_tasks[taskIndex].status_id = statusId;
+    //         //store current task
+    //
+    //         this.storeCurrentTask(this.projectObject[projectIndex].job_tasks[taskIndex], statusId);
+    //         //update task
+    //         this.dataFunction(notes, statusId, taskId).then((res: any) => {
+    //             this.taskMgr.updateManagedTaskStatus(res).then((response) => {
+    //                 console.log('response ', JSON.stringify(response));
+    //                 if (statusId === 9) {
+    //                     this.loadMultipleTasks();
+    //                 }
+    //             })
+    //         })
+    //
+    //     }
+    // };
 
 }

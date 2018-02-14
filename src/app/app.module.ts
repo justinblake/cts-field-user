@@ -40,6 +40,7 @@ import {ManageTasksHomePage} from "../pages/manage-tasks-home/manage-tasks-home"
 import {RejectNotesPage} from '../pages/reject-notes/reject-notes';
 import {SingleForemanTaskPage} from "../pages/single-foreman-task/single-foreman-task";
 import {SingleHistoryTaskPage} from "../pages/single-history-task/single-history-task";
+import {SingleManageTasksPage} from "../pages/single-manage-tasks/single-manage-tasks";
 import {SplashPage} from '../pages/splash/splash';
 import {TabsPage} from '../pages/tabs/tabs';
 import {TimecardKeysPipe, TimecardPage} from '../pages/timecard/timecard'
@@ -53,6 +54,7 @@ import {Geolocation} from '@ionic-native/geolocation';
 import {GeolocationService} from '../providers/geolocation-service';
 import {GoogleMapsService} from '../providers/google-maps-service';
 import {HardwareBackButtonService} from '../providers/backbutton';
+import {ManagesTasksManager} from "../providers/manages-tasks-manager";
 import {StorageService} from '../providers/storage-service';
 import {TaskManager} from '../providers/task-manager';
 import {UserManager} from '../providers/user-manager';
@@ -62,7 +64,7 @@ import {Utils} from '../utils/utils';
 import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-    appVersion: "1.4.2"
+    appVersion: "1.4.3"
 });
 
 @Injectable()
@@ -110,6 +112,7 @@ export function provideStorage() {
         SplashPage,
         SingleForemanTaskPage,
         SingleHistoryTaskPage,
+        SingleManageTasksPage,
         TabsPage,
         TimecardKeysPipe,
         TimecardPage,
@@ -152,6 +155,7 @@ export function provideStorage() {
         RejectNotesPage,
         SingleForemanTaskPage,
         SingleHistoryTaskPage,
+        SingleManageTasksPage,
         SplashPage,
         TabsPage,
         TimecardPage,
@@ -178,6 +182,7 @@ export function provideStorage() {
         HardwareBackButtonService,
         InAppBrowser,
         Keyboard,
+        ManagesTasksManager,
         Sim,
         SplashScreen,
         StatusBar,
