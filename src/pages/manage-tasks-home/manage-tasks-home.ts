@@ -56,6 +56,7 @@ export class ManageTasksHomePage {
     isCordova: boolean;
     isAndroid: any;
     isIos: boolean = false;
+    fcmToken: any = '';
 
     empData: any = {};
 
@@ -101,12 +102,62 @@ export class ManageTasksHomePage {
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
         this.isCordova = this.taskMgr.returnPlatform().isCordova;
 
+        plt.ready().then(() => {
+            this.plt.pause.subscribe(() => {
+                if (this.debug) {
+                    console.log('[INFO] App paused');
+                }
+            });
+
+            this.plt.resume.subscribe(() => {
+                if (this.isCordova) {
+                    this.setLocation();
+                }
+
+                if (this.debug) {
+                    console.log('[INFO] App resumed');
+                }
+            });
+        });
+
+        if (this.plt.is('cordova')) {
+            fcm.getToken().then(token => {
+                this.fcmToken = token;
+                if (this.debug) {
+                    console.log('FCM token 2 ', JSON.stringify(token));
+                }
+                this.taskMgr.updateEmployeeToken(token).then(response => {
+                })
+            });
+
+            fcm.onTokenRefresh().subscribe(token => {
+                this.taskMgr.updateEmployeeToken(token).then(response => {
+                })
+            });
+        }
+
+        if (this.isAndroid) {
+            this.androidFullScreen.isImmersiveModeSupported()
+                .then(() => this.androidFullScreen.immersiveMode())
+                .catch((error: any) => {
+                    if (this.debug) {
+                        console.log(error)
+                    }
+                });
+        }
+
 
     }
 
-    // ionViewDidLoad() {
-    //     this.checkForCurrentTask();
-    // }
+    ionViewDidLoad() {
+        this.setUser();
+        setTimeout(() => this.setCompany(), 500);
+        this._backBtn.registerAction(() => {
+            this._backBtn.doubleBackToExit();
+        }, 101);
+
+
+    }
 
 
     ionViewDidEnter() {
@@ -127,10 +178,154 @@ export class ManageTasksHomePage {
 
         let tempObject = this.taskMgr.returnCompleteTask();
 
-        if(tempObject.completeTask === true) {
+        if (tempObject.completeTask === true) {
             this.taskMgr.passCompleteTask(false);
             this.activeTask = {}
         }
+
+        this.checkUpdates();
+    }
+
+    subscribeAgain() {
+        if (this.utils.FCMFlagDebug()) {
+            this.fcm.onNotification().subscribe(data => {
+                console.log('data from alert', JSON.stringify(data));
+                if (data.param1 === 'alert') {
+                    if (data.project !== 'null') {
+                        this.openNextDayTasksAlert(data.task, data.project);
+                    } else {
+                        this.navCtrl.parent.select(3);
+                    }
+                } else if (data.param1 === 'additional_notes') {
+                    if (this.projectObject.length > 0) {
+                        this.presentAlert();
+                    }
+                } else if (data.param1 === "upcoming_task") {
+                    this.presentFutureAlert();
+                } else if (data.param1 === 'crews') {
+                    this.taskMgr.saveEmergencyInfo(parseInt(data.task), parseInt(data.project), true);
+                    this.navCtrl.parent.select(1);
+                }
+            });
+        }
+    }
+    presentAlert() {
+        let alert = this.alertCtrl.create({
+            title: 'New Task Notes',
+            message: 'Please see the new notes that have been added to the task',
+            cssClass: 'myAlerts',
+            buttons: ['OK']
+        });
+        this.loadMultipleTasks();
+        this.taskMgr.loadHomePage(0);
+        alert.present();
+    }
+
+     presentFutureAlert() {
+        let alert = this.alertCtrl.create({
+            title: 'New Task Dispatched',
+            message: 'Please see the new notes that have been added to the task',
+            cssClass: 'myAlerts',
+            buttons: [{
+                text: 'OK',
+                role: 'cancel',
+                handler: () => {
+                    this.taskMgr.loadHomePage(0);
+                    this.openNextDayTasks();
+                }
+            }]
+        });
+        alert.present();
+    }
+
+    openNextDayTasksAlert(task, alert_id) {
+        console.log('step 4');
+        console.log('task in home ', JSON.stringify(task));
+        let params = {
+            task: task,
+            alert_id: alert_id
+        };
+        this.taskMgr.clearDispatchAlert();
+        this.navCtrl.push(NextDayPage, params).then(response => {
+
+        });
+        return true;
+    }
+
+
+    setBadges() {
+        this.taskMgr.checkEmployeeAlerts().then((res: any) => {
+            this.myAlerts = res.data.new_alert_count;
+            this.badge.set(this.myAlerts);
+        });
+        this.requestPermission();
+    }
+
+    requestPermission() {
+        let hasPermission = this.badge.hasPermission();
+        if (!hasPermission) {
+            let permission = this.badge.registerPermission();
+        }
+    }
+
+     setCompany() {
+        let holdingObject: any;
+        holdingObject = this.currentUser;
+        this.compName = holdingObject.company_name;
+    }
+
+    setUser() {
+        this.taskMgr.setUser();
+    }
+
+    presentLocationAlert() {
+        let alertText = '';
+
+        if (this.isAndroid) {
+            alertText = 'Select OK to enable location on your device';
+        } else if (this.isIos) {
+            alertText = 'Location Services is enabled on your device but not for this app. Please open your device settings, scroll down and select clear-task-solutions-mobile, select Location, and then select the While Using the App option'
+        } else {
+            alertText = 'Select OK to enable location on your device';
+        }
+
+        let alert = this.alertCtrl.create({
+            title: 'Location Required',
+            message: alertText,
+            cssClass: 'myAlerts',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: () => {
+                        if (this.isAndroid) {
+
+                            this.diagnostic.isLocationEnabled().then(res => {
+                                if (res) {
+                                    this.diagnostic.isLocationAvailable().then(res => {
+                                        if (this.debug) {
+                                            console.log('res for location ', JSON.stringify(res));
+                                        }
+                                    })
+                                } else if (res === false) {
+                                    this.diagnostic.switchToLocationSettings();
+                                }
+                            })
+
+
+                        }
+                        if (this.isIos) {
+                            this.diagnostic.getLocationAuthorizationStatus().then(response => {
+                                if (response === 'denied') {
+                                    this.setLocation();
+                                }
+                            });
+                        }
+                    }
+                }
+            ]
+        });
+        alert.present()
     }
 
     setLocation() {
@@ -172,10 +367,11 @@ export class ManageTasksHomePage {
             console.log('res in home ', JSON.stringify(res));
 
             this.projectObject = res.data;
+            console.log('this.projectObject ', JSON.stringify(this.projectObject));
+
 
         })
     }
-
 
 
     showActiveTask() {
@@ -262,7 +458,6 @@ export class ManageTasksHomePage {
     }
 
 
-
     //Timecard and logout functions
 
     getTimecardStatus() {
@@ -346,55 +541,25 @@ export class ManageTasksHomePage {
         }
     }
 
-      // storeCurrentTask(task: any, statusId: number) {
-    //     console.log('task in storeCurrentTask() ', JSON.stringify(task));
-    //     console.log('statusId in storeCurrentTask()  ', JSON.stringify(statusId));
-    //     if (statusId === 4 || statusId === 5 || statusId === 7) {
-    //         this.activeTask = task;
-    //         console.log('this.activeTask ', JSON.stringify(this.activeTask));
-    //     } else if (statusId === 9) {
-    //         this.activeTask = {};
-    //     }
-    // }
+    checkUpdates() {
+        if (this.isCordova) {
+            checkForUpdate().then((res: any) => {
+                if (res === 'true') {
+                    downloadUpdate().then((result: any) => {
+                        if (result === 'true') {
+                            extractUpdate().then((extract: any) => {
+                                if (extract === 'done') {
+                                    loadNewVersion();
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+        } else {
+            console.log('Not Cordova so no updates')
+        }
 
-
-
-    // setStatus(statusId: number, taskId: number, projectIndex: number, taskIndex: number, notes?: any) {
-    //     if (statusId === 3 || statusId === 8) {
-    //         this.projectObject[projectIndex].job_tasks[taskIndex].status_id = statusId;
-    //         let data = {
-    //             userId: this.userId,
-    //             notes: notes || '',
-    //             statusId: statusId,
-    //             files: [],
-    //             timestamp: new Date(Date.now()),
-    //             taskId: taskId
-    //         };
-    //         this.taskMgr.updateManagedTaskStatus(data).then((response) => {
-    //             this.utils.dismissLoading();
-    //         }).catch(error => {
-    //             if (this.debug) {
-    //                 console.log(`ERROR: ${Utils.toJson(error)}`);
-    //             }
-    //             this.utils.toastError(error);
-    //         });
-    //     } else if (statusId === 4 || statusId === 5 || statusId === 7 || statusId === 9) {
-    //         //update task status
-    //         this.projectObject[projectIndex].job_tasks[taskIndex].status_id = statusId;
-    //         //store current task
-    //
-    //         this.storeCurrentTask(this.projectObject[projectIndex].job_tasks[taskIndex], statusId);
-    //         //update task
-    //         this.dataFunction(notes, statusId, taskId).then((res: any) => {
-    //             this.taskMgr.updateManagedTaskStatus(res).then((response) => {
-    //                 console.log('response ', JSON.stringify(response));
-    //                 if (statusId === 9) {
-    //                     this.loadMultipleTasks();
-    //                 }
-    //             })
-    //         })
-    //
-    //     }
-    // };
+    }
 
 }
