@@ -165,6 +165,7 @@ export class ManageTasksHomePage {
         console.log('ionViewDidEnter manage tasks');
         console.log("temp hold in tskmgr - " + this.taskMgr.returnTempHold().tempHold);
         this.loadMultipleTasks();
+        this.subscribeAgain();
 
         if (this.taskMgr.returnTempHold().tempHold === true) {
             this.activeTask = {};
