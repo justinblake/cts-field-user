@@ -156,6 +156,10 @@ export class ManageTasksHomePage {
             this._backBtn.doubleBackToExit();
         }, 101);
 
+        if (this.plt.is('cordova')) {
+            setTimeout(() => this.getSimInfo(), 10000)
+        }
+
 
     }
 
@@ -216,6 +220,49 @@ export class ManageTasksHomePage {
                 }
             });
         }
+    }
+
+    getSimInfo() {
+        if (this.isAndroid) {
+            this.sim.requestReadPermission().then(
+                () => {
+                    this.sim.getSimInfo().then((info: any) => {
+                            this.empData.cell_carrier = info.carrierName;
+                            this.empData.cell_number = info.phoneNumber;
+                            this.empData.emp_device_id = info.deviceId;
+                            if (this.debug) {
+                                console.log('this.empData ', JSON.stringify(this.empData));
+                            }
+                        },
+                        (err) => {
+                            if (this.debug) {
+                                console.log('Unable to get sim info: ', err)
+                            }
+                        })
+                },
+                () => {
+                    if (this.debug) {
+                        console.log('Permission denied')
+                    }
+                }
+            );
+        }
+
+        if (this.isIos) {
+            this.sim.getSimInfo().then((info: any) => {
+                    this.empData.cell_carrier = info.carrierName;
+                    this.empData.emp_device_id = info.mcc;
+                    if (this.debug) {
+                        console.log('this.empData in ios', JSON.stringify(this.empData));
+                    }
+                },
+                (err) => {
+                    if (this.debug) {
+                        console.log('Unable to get sim info: ', err)
+                    }
+                })
+        }
+
     }
 
     presentAlert() {
