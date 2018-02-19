@@ -614,23 +614,23 @@ export class ManageTasksHomePage {
     }
 
     checkUpdates() {
-        // if (this.isCordova) {
-        //     checkForUpdate().then((res: any) => {
-        //         if (res === 'true') {
-        //             downloadUpdate().then((result: any) => {
-        //                 if (result === 'true') {
-        //                     extractUpdate().then((extract: any) => {
-        //                         if (extract === 'done') {
-        //                             loadNewVersion();
-        //                         }
-        //                     })
-        //                 }
-        //             })
-        //         }
-        //     });
-        // } else {
-        //     console.log('Not Cordova so no updates')
-        // }
+        if (this.isCordova) {
+            checkForUpdate().then((res: any) => {
+                if (res === 'true') {
+                    downloadUpdate().then((result: any) => {
+                        if (result === 'true') {
+                            extractUpdate().then((extract: any) => {
+                                if (extract === 'done') {
+                                    loadNewVersion();
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+        } else {
+            console.log('Not Cordova so no updates')
+        }
 
     }
 
