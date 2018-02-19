@@ -1,6 +1,6 @@
 import {Component, ViewChild, Pipe, PipeTransform} from '@angular/core';
 import {HardwareBackButtonService} from '../../providers/backbutton';
-import {NavController, NavParams, App, Modal, Platform, Content, AlertController} from 'ionic-angular';
+import {NavController, NavParams, App, Modal, Platform, Content, AlertController, reorderArray} from 'ionic-angular';
 import {CallNumber} from '@ionic-native/call-number';
 import {AndroidFullScreen} from '@ionic-native/android-full-screen';
 import {LoginPage} from '../login/login';
@@ -37,6 +37,9 @@ export class ManageTasksHomePage {
     @ViewChild(Content) content: Content;
 
     debug: boolean;
+
+    btnName: any = 'Edit Project Arrangement';
+    reorderFlag: any = false;
 
     currentUser: any = '';
     userId: number;
@@ -97,6 +100,11 @@ export class ManageTasksHomePage {
         this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
         console.log('this.currentUser ', JSON.stringify(this.currentUser));
+
+        if (this.currentUser.is_lessor === 1) {
+            this.isLessor = true;
+        }
+
         this.userId = this.currentUser.userId;
         this.userRole = this.currentUser.role_id;
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
@@ -147,6 +155,10 @@ export class ManageTasksHomePage {
         }
 
 
+    }
+
+    reorderItems(indexes) {
+        this.projectObject = reorderArray(this.projectObject, indexes);
     }
 
     ionViewDidLoad() {
@@ -201,7 +213,7 @@ export class ManageTasksHomePage {
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
-                console.log('data from alert', JSON.stringify(data));
+                // console.log('data from alert', JSON.stringify(data));
                 if (data.param1 === 'alert') {
                     if (data.project !== 'null') {
                         this.openNextDayTasksAlert(data.task, data.project);
@@ -231,7 +243,7 @@ export class ManageTasksHomePage {
                             this.empData.cell_number = info.phoneNumber;
                             this.empData.emp_device_id = info.deviceId;
                             if (this.debug) {
-                                console.log('this.empData ', JSON.stringify(this.empData));
+                                // console.log('this.empData ', JSON.stringify(this.empData));
                             }
                         },
                         (err) => {
@@ -295,8 +307,8 @@ export class ManageTasksHomePage {
     }
 
     openNextDayTasksAlert(task, alert_id) {
-        console.log('step 4');
-        console.log('task in home ', JSON.stringify(task));
+        // console.log('step 4');
+        // console.log('task in home ', JSON.stringify(task));
         let params = {
             task: task,
             alert_id: alert_id
@@ -360,7 +372,7 @@ export class ManageTasksHomePage {
                                 if (res) {
                                     this.diagnostic.isLocationAvailable().then(res => {
                                         if (this.debug) {
-                                            console.log('res for location ', JSON.stringify(res));
+                                            // console.log('res for location ', JSON.stringify(res));
                                         }
                                     })
                                 } else if (res === false) {
@@ -394,7 +406,7 @@ export class ManageTasksHomePage {
                 platform = 'android'
             }
             this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
-                console.log('res in set location ', JSON.stringify(res));
+                // console.log('res in set location ', JSON.stringify(res));
                 this.lat = res.lat;
                 this.lon = res.lon;
                 this.locationTimestamp = res.timestamp;
@@ -408,7 +420,7 @@ export class ManageTasksHomePage {
 
     checkForCurrentTask() {
         this.taskMgr.getCurrentTaskRemote().then((response: any) => {
-            console.log('response in check checkForCurrentTask ', JSON.stringify(response));
+            // console.log('response in check checkForCurrentTask ', JSON.stringify(response));
             if (response.task.job_tasks.status_id > 3) {
                 this.activeTask = response.task.job_tasks;
                 this.managesTskMgr.storeTask(this.activeTask);
@@ -421,7 +433,7 @@ export class ManageTasksHomePage {
     loadMultipleTasks() {
         this.getTimecardStatus();
         this.taskMgr.loadMultipleTasks().then((res: any) => {
-            console.log('res in home ', JSON.stringify(res));
+            // console.log('res in home ', JSON.stringify(res));
 
             this.projectObject = res.data;
             console.log('this.projectObject ', JSON.stringify(this.projectObject));
@@ -435,6 +447,8 @@ export class ManageTasksHomePage {
         console.log('this.activeTask ', JSON.stringify(this.activeTask));
 
         let testObject: any = this.managesTskMgr.returnTask().activeTask;
+
+        console.log('this.projectObject ', JSON.stringify(this.projectObject));
     }
 
     // function to replace writing this logic multiple times in this.setStatus
@@ -484,11 +498,12 @@ export class ManageTasksHomePage {
     }
 
     openSingleTask(project, task) {
-        console.log('project ', JSON.stringify(project));
-        console.log('task ', JSON.stringify(task));
+        // console.log('project ', JSON.stringify(project));
+        // console.log('task ', JSON.stringify(task));
         let userInfo = {
             timecardStatus: this.timecardStatus,
-            userId: this.userId
+            userId: this.userId,
+            isLessor: this.isLessor
         };
         let currentProject = {
             job_name: this.projectObject[project].job_name,
@@ -503,14 +518,14 @@ export class ManageTasksHomePage {
             contractor_contacts: this.projectObject[project].contractor_contacts
         };
         let currentTask = this.projectObject[project].job_tasks[task];
-        console.log('currentTask in middle ', JSON.stringify(currentTask));
+        // console.log('currentTask in middle ', JSON.stringify(currentTask));
         let params = {
             currentTask: currentTask,
             currentProject: currentProject,
             userInfo: userInfo
         };
         this.navCtrl.push(SingleManageTasksPage, params).then(() => {
-            console.log('in promise of push ');
+            // console.log('in promise of push ');
         })
     }
 
@@ -519,7 +534,7 @@ export class ManageTasksHomePage {
 
     getTimecardStatus() {
         this.taskMgr.getLastTimecardEntry(this.userId).then((res: any) => {
-            console.log('res in timecard', JSON.stringify(res));
+            // console.log('res in timecard', JSON.stringify(res));
             if (res.data.length === 0) {
                 this.timecardStatus = 0;
             } else {
@@ -589,7 +604,7 @@ export class ManageTasksHomePage {
             let token = 'logged out';
             this.taskMgr.updateEmployeeToken(token, this.currentUser.userId).then(res => {
                 if (this.debug) {
-                    console.log('res ', JSON.stringify(res));
+                    // console.log('res ', JSON.stringify(res));
                 }
             });
             this.userMgr.logout().then(response => {
@@ -599,24 +614,25 @@ export class ManageTasksHomePage {
     }
 
     checkUpdates() {
-        if (this.isCordova) {
-            checkForUpdate().then((res: any) => {
-                if (res === 'true') {
-                    downloadUpdate().then((result: any) => {
-                        if (result === 'true') {
-                            extractUpdate().then((extract: any) => {
-                                if (extract === 'done') {
-                                    loadNewVersion();
-                                }
-                            })
-                        }
-                    })
-                }
-            });
-        } else {
-            console.log('Not Cordova so no updates')
-        }
+        // if (this.isCordova) {
+        //     checkForUpdate().then((res: any) => {
+        //         if (res === 'true') {
+        //             downloadUpdate().then((result: any) => {
+        //                 if (result === 'true') {
+        //                     extractUpdate().then((extract: any) => {
+        //                         if (extract === 'done') {
+        //                             loadNewVersion();
+        //                         }
+        //                     })
+        //                 }
+        //             })
+        //         }
+        //     });
+        // } else {
+        //     console.log('Not Cordova so no updates')
+        // }
 
     }
+
 
 }

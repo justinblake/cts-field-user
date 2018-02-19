@@ -35,6 +35,7 @@ export class SingleManageTasksPage {
     activeTask: any;
     hasTask: boolean = false;
     isActiveTask: boolean = false;
+    isLessor: boolean = false;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -49,6 +50,7 @@ export class SingleManageTasksPage {
         this.currentTask = navParams.get('currentTask');
         this.currentProject = navParams.get('currentProject');
         this.userInfo = navParams.get('userInfo');
+        this.isLessor = this.userInfo.isLessor;
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
         this.isCordova = this.taskMgr.returnPlatform().isCordova;
 
@@ -207,14 +209,17 @@ export class SingleManageTasksPage {
             console.log('params ', JSON.stringify(params));
             if (page === 0) {
                 this.navCtrl.push(CompleteNotesPage, params).then(res => {
-                    this.utils.dismissLoading();
+
                 });
+                this.utils.dismissLoading();
                 return true;
             } else if (page === 1) {
                 console.log("heading to feedback");
                 this.navCtrl.push(FeedbackPage, params).then(res => {
-                    this.utils.dismissLoading();
+                    console.log('res in feedback ', JSON.stringify(res));
+
                 });
+                this.utils.dismissLoading();
                 return true;
             }
         }

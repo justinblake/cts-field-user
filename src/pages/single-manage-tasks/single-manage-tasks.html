@@ -154,8 +154,9 @@
         </ion-card-header>
         <ion-card-content>
             <div class="task-card-content">
-                <div class="equip-div" *ngFor="let item of currentTask.task_equipment">
+                <div class="equip-div" padding-bottom *ngFor="let item of currentTask.task_equipment">
                     <h4 class="crew-font">{{item.equipment_name}}</h4>
+                    <h4 class="equip-notes" *ngIf="item.notes">{{item.notes}}</h4>
                 </div>
                 <div class="equip-center crew-font" *ngIf="currentTask.task_equipment.length === 0">
                     No Equipment Specified
@@ -254,40 +255,45 @@
                 </button>
                 <button class="btn-shadow" ion-button icon-left block color="secondary"
                         (click)="setStatus(4, currentTask.id)"
-                        *ngIf="currentTask.status_id === 3 && userInfo.timecardStatus === 1">
+                        *ngIf="(currentTask.status_id === 3 && userInfo.timecardStatus === 1) || (currentTask.status_id === 3 && isLessor)">
                     <ion-icon name="fa-thumbs-o-up"></ion-icon>
                     Start Task
                 </button>
                 <button class="btn-shadow" ion-button disabled icon-left block color="secondary"
-                        *ngIf="currentTask.status_id === 3 && userInfo.timecardStatus === 0">
+                        *ngIf="currentTask.status_id === 3 && userInfo.timecardStatus === 0 && !isLessor">
                     <ion-icon name="fa-thumbs-o-up"></ion-icon>
                     Start Task
                 </button>
                 <button class="btn-shadow" ion-button icon-left block color="secondary"
                         (click)="setStatus(4, currentTask.id)"
-                        *ngIf="(currentTask.status_id === 5 || currentTask.status_id === 7) && userInfo.timecardStatus === 1">
+                        *ngIf="((currentTask.status_id === 5 || currentTask.status_id === 7) && userInfo.timecardStatus === 1) || ((currentTask.status_id === 5 || currentTask.status_id === 7) && isLessor) ">
                     <ion-icon name="fa-thumbs-o-up"></ion-icon>
                     Resume Task
                 </button>
                 <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="openActionPage(0)"
-                        *ngIf="currentTask.status_id === 4 && userInfo.timecardStatus === 1">
+                        *ngIf="(currentTask.status_id === 4 && userInfo.timecardStatus === 1) || (currentTask.status_id === 4 && isLessor)">
                     <ion-icon name="checkbox-outline"></ion-icon>
                     Complete Task
                 </button>
             </ion-col>
             <ion-col width-50>
                 <button class="btn-shadow" ion-button icon-left block color="danger"
-                        (click)="openRejectModal(8, task.id,  i, j )"
+                        (click)="openRejectModal(8, currentTask.id )"
                         *ngIf="currentTask.status_id === 2 || currentTask.status_id === 3">
                     <ion-icon name="fa-thumbs-o-down"></ion-icon>
                     Reject
                 </button>
                 <button class="btn-shadow" ion-button icon-left block color="warning"
-                        *ngIf="(currentTask.status_id === 4 || currentTask.status_id === 5 || currentTask.status_id === 7) && userInfo.timecardStatus === 1"
+                        *ngIf="((currentTask.status_id === 4 || currentTask.status_id === 5 || currentTask.status_id === 7) && userInfo.timecardStatus === 1) || ((currentTask.status_id === 4 || currentTask.status_id === 5 || currentTask.status_id === 7) && isLessor)"
                         (click)="openActionPage(1)">
                     <ion-icon name="fa-chatbubble"></ion-icon>
                     <span class="hide-task">Task Options</span>
                     <span class="show-task">Options</span>
+                </button>
+                <button class="btn-shadow" ion-button disabled icon-left block color="danger"
+                        *ngIf="currentTask.status_id === 8">
+                    <ion-icon name="fa-thumbs-o-down"></ion-icon>
+                    Reject
                 </button>
             </ion-col>
         </ion-row>
@@ -306,7 +312,7 @@
                     Accept
                 </button>
                 <button class="btn-shadow" ion-button disabled icon-left block color="secondary"
-                        *ngIf="currentTask.status_id === 3">
+                        *ngIf="currentTask.status_id === 3 || currentTask.status_id === 7">
                     <ion-icon name="fa-thumbs-o-up"></ion-icon>
                     Start Task
                 </button>
@@ -323,6 +329,11 @@
                     <ion-icon name="fa-thumbs-o-down"></ion-icon>
                     Reject
                 </button>
+                <button class="btn-shadow" ion-button disabled icon-left block color="warning"  *ngIf="currentTask.status_id === 7">
+                    <ion-icon name="fa-chatbubble"></ion-icon>
+                    <span class="hide-task">Task Options</span>
+                    <span class="show-task">Options</span>
+                </button>
             </ion-col>
         </ion-row>
 
@@ -331,6 +342,7 @@
                 <h3 class="status-13" no-margin>Please Clock In To Resume This Task</h3>
             </ion-col>
         </ion-row>
+
     </ion-grid>
 
 

@@ -12,6 +12,18 @@ page-manage-tasks-home {
         font-size: 2.5rem;
     }
 
+    //.tasks-reorder {
+    //    background-color: transparent;
+    //}
+    //
+    //.tasks-reorder > div.item-inner {
+    //    padding-right: 0 !important;
+    //}
+    //
+    //.tasks-reorder > div.item-inner > div.input-wrapper > ion-label {
+    //    margin-right: 0 !important;
+    //}
+
     //timecard section css
     .clockOut {
         color: #d9534f;
@@ -94,12 +106,12 @@ page-manage-tasks-home {
         .hide-task {
             display: none
         }
-        ion-col[width-70] {
-            -webkit-flex: 0 0 100%;
-            -ms-flex: 0 0 100%;
+        ion-col[width-60] {
+            -webkit-flex: 0 0 90%;
+            -ms-flex: 0 0 90%;
             -webkit-box-flex: 0;
-            flex: 0 0 100%;
-            max-width: 100%;
+            flex: 0 0 90%;
+            max-width: 90%;
         }
     }
 
@@ -110,4 +122,60 @@ page-manage-tasks-home {
     .circle-down {
         background-color: inherit;
     }
+
+    //    status markers on tasks
+
+    .accept-icon {
+        top: 16px;
+        right: 4px;
+    }
+
+    .task-status-border {
+        width: 10px;
+        height: 19px;
+        border: 2px solid black;
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+    }
+
+    .task-status-accept {
+        width: 10px;
+        height: 19px;
+        background-color: #73E573;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    .task-status-in-progress {
+        width: 10px;
+        height: 19px;
+        background-color: #57AD57;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    .task-status-delay {
+        width: 10px;
+        height: 19px;
+        background-color: yellow;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    .task-status-nothing {
+        width: 10px;
+        height: 19px;
+        background-color: gray;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    .task-status-emergency {
+        width: 10px;
+        height: 19px;
+        background-color: red;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
 }

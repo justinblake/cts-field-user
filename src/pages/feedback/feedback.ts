@@ -147,10 +147,14 @@ export class FeedbackPage {
             this.utils.dismissLoading();
             setTimeout(() => {
                 if (response === true) {
-                    if(this.data.statusId === 12) {
+                    if(this.data.statusId === 12 || this.data.statusId === 7) {
                         this.managesTskMgr.removeTask();
                         this.taskMgr.passTempHold(true, false);
                     }
+                    // if(this.data.statusId === 12) {
+                    //     this.managesTskMgr.removeTask();
+                    //     this.taskMgr.passTempHold(true, false);
+                    // }
                     this.navCtrl.popToRoot();
                     // if(this.data.statusId === 12) {
                     //     this.taskMgr.passTempHold(true, false);
