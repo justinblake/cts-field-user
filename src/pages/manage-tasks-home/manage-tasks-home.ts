@@ -109,6 +109,7 @@ export class ManageTasksHomePage {
         this.userRole = this.currentUser.role_id;
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
         this.isCordova = this.taskMgr.returnPlatform().isCordova;
+        this.isIos = this.taskMgr.returnPlatform().isIos;
 
         plt.ready().then(() => {
             this.plt.pause.subscribe(() => {

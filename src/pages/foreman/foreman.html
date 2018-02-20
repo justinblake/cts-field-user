@@ -149,18 +149,30 @@
                         <div class="card-width">
                             <ion-grid class="task-button">
                                 <ion-row (click)="expandTask(i, j, task.id)">
-                                    <ion-col *ngIf="task.importantStatus === 7" width-5
-                                             class="current-status status-problem"></ion-col>
-                                    <ion-col *ngIf="task.importantStatus === 5" width-5
-                                             class="current-status status-delay"></ion-col>
-                                    <ion-col *ngIf="task.importantStatus === 4" width-5
-                                             class="current-status status-working"></ion-col>
-                                    <ion-col *ngIf="task.importantStatus === 9" width-5
-                                             class="current-status status-complete"></ion-col>
-                                    <ion-col *ngIf="task.importantStatus === 11" width-5
-                                             class="current-status status-cancelled"></ion-col>
-                                    <ion-col *ngIf="task.importantStatus === 0" width-5
-                                             class="current-status not-started"></ion-col>
+                                    <ion-col no-padding *ngIf="task.importantStatus === 7" width-5
+                                             class="current-status ">
+                                        <div class="status-problem"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.importantStatus === 5" width-5
+                                             class="current-status">
+                                        <div class="status-delay"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.importantStatus === 4" width-5
+                                             class="current-status">
+                                        <div class="status-working"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.importantStatus === 9" width-5
+                                             class="current-status">
+                                        <div class="status-complete"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.importantStatus === 11" width-5
+                                             class="current-status">
+                                        <div class="status-cancelled"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.importantStatus === 0" width-5
+                                             class="current-status">
+                                        <div class="not-started"></div>
+                                    </ion-col>
 
                                     <ion-col class="task-text" text-left *ngIf="j === 0" width-65>
                                         <span>{{task.task_description}}</span>

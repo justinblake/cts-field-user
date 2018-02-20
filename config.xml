@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.cleartasksolutionsmobile323809" version="1.4.10" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.cleartasksolutionsmobile323809" version="1.4.11" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>clear-task-solutions-mobile</name>
     <description>Clear Task Solutions Mobile App</description>
     <author email="jblake@cleartasksolutions.com" href="https://www.cleartasksolutions.com">CTS</author>
@@ -123,8 +123,8 @@
     <allow-navigation href="http://172.16.55.46:8100" />
     <allow-navigation href="http://172.16.55.46:8101" />
     <allow-navigation href="http://172.16.55.59:8100" />
-    <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="6.3.0" />
+    <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-actionsheet" spec="^2.3.3" />
     <plugin name="cordova-plugin-badge" spec="^0.8.1" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">

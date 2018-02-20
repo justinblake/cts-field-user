@@ -33,7 +33,7 @@ export class GeolocationService {
             console.log('step 2');
             this.verifyLocationEnabled().then((res: any) => {
 
-                console.log('res in verify location ', JSON.stringify(res));
+                // console.log('res in verify location ', JSON.stringify(res));
 
                 if (!this.locEnabled) {
                     if (this.platform === 'android') {
@@ -49,8 +49,9 @@ export class GeolocationService {
                 }
             }).then(() => {
                 this.diagnostic.getLocationAuthorizationStatus().then((res: any) => {
+                    // console.log('res in getLocationAuthorizationStatus ', JSON.stringify(res));
 
-                    if (res === 'GRANTED') {
+                    if (res === 'GRANTED' || res === 'authorized_when_in_use' || res === 'authorized') {
                         this.geolocation.getCurrentPosition().then(position => {
                             this.lat = position.coords.latitude;
                             this.lon = position.coords.longitude;
@@ -107,6 +108,8 @@ export class GeolocationService {
     }
 
     verifyLocationEnabled() {
+        console.log('verifyLocationEnabled func');
+
 
         console.log('inside verify ');
 

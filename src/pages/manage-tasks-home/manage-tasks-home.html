@@ -237,28 +237,22 @@
                                 </ion-row>
                                 <ion-row>
 
-                                    <ion-col class="accept-icon" width-5>
-
-                                                <div *ngIf="task.status_id === 3" class="task-status-accept"></div>
-                                                <div *ngIf="task.status_id === 4" class="task-status-in-progress"></div>
-                                                <div *ngIf="task.status_id === 5 || task.status_id === 13" class="task-status-delay"></div>
-                                                <div *ngIf="task.status_id === 7" class="task-status-emergency"></div>
-                                                <div *ngIf="task.status_id === 2" class="task-status-nothing"></div>
-
+                                    <ion-col no-padding *ngIf="task.status_id === 3" class="managed-task-status" width-5>
+                                        <div class=""></div>
                                     </ion-col>
-
-                                    <!--<ion-col class="accept-icon" width-10-->
-                                             <!--*ngIf="task.status_id === 3 || task.status_id === 4 || task.status_id === 9">-->
-                                            <!--<i class="fa fa-check-square"></i>-->
-                                    <!--</ion-col>-->
-                                    <!--<ion-col class="accept-icon" width-10-->
-                                             <!--*ngIf="task.status_id === 8 || task.status_id === 5 || task.status_id === 6 || task.status_id === 7 || task.status_id === 12 || task.status_id === 13">-->
-                                        <!--<i class="fa fa-exclamation-triangle"></i>-->
-                                    <!--</ion-col>-->
-                                    <!--<ion-col class="accept-icon" width-10 *ngIf="task.status_id === 2">-->
-                                        <!--<i class="fa fa-square"></i>-->
-                                    <!--</ion-col>-->
-
+                                    <ion-col no-padding *ngIf="task.status_id === 4" class="managed-task-status" width-5>
+                                        <div class="task-status-in-progress"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.status_id === 5 || task.status_id === 13"
+                                             class="managed-task-status" width-5>
+                                        <div class="task-status-delay"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.status_id === 7" class="managed-task-status" width-5>
+                                        <div class="task-status-emergency"></div>
+                                    </ion-col>
+                                    <ion-col no-padding *ngIf="task.status_id === 2" class="managed-task-status" width-5>
+                                        <div class="task-status-nothing"></div>
+                                    </ion-col>
 
                                     <ion-col class="task-text" text-left *ngIf="j >= 0" width-65>
                                         <span>{{task.task_description}}</span>
@@ -290,10 +284,10 @@
             </ion-row>
 
             <!--<ion-row>-->
-                <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                        <!--(click)="showActiveTask()">-->
-                    <!--Active Task-->
-                <!--</button>-->
+            <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+            <!--(click)="showActiveTask()">-->
+            <!--Active Task-->
+            <!--</button>-->
             <!--</ion-row>-->
 
             <div *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && !isLessor">
