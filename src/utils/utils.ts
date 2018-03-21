@@ -7,12 +7,12 @@ import {RejectNotesPage} from '../pages/reject-notes/reject-notes';
 @Injectable()
 export class Utils {
 
-    debug: boolean = true;
+    debug: boolean = false;
     loading: Loading;
     modal: Modal;
     loadingIsPresent: boolean = false;
     homePage: number = 0;
-    appVersion: string = '1.4.14';
+    appVersion: string = '1.4.15';
 
     constructor(public loadingCtrl: LoadingController,
                 public alertCtrl: AlertController,
