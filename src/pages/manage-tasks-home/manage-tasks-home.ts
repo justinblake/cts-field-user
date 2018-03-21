@@ -485,6 +485,7 @@ export class ManageTasksHomePage {
                 this.setLocation().then(() => {
                     data.lat = this.lat;
                     data.lon = this.lon;
+                    data.accuracy = this.locationAccuracy;
                     resolve(data);
                 })
             } else {
