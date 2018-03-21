@@ -1,0 +1,33 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Image Review</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding
+             [class.disable-scrolling]='isScaling'>
+
+    <ion-card class="notes-margin" *ngIf="notes !== null">
+        <ion-card-header class="task-card-header">
+            Notes
+        </ion-card-header>
+        <ion-card-content class="task-card-content" padding>
+            <h5 class="add_notes">{{notes}}</h5>
+        </ion-card-content>
+    </ion-card>
+
+    <div pinch class="myPinch"
+         (pinchstart)="onPinchStart($event)"
+         (pinchend)="onPinchEnd($event)"
+         (pinchmove)="onPinchMove($event)">
+
+        <img #image src="{{imageUrl}}" [style.maxWidth]="maxWidth" [style.paddingRight]="paddingRight">
+
+
+    </div>
+
+</ion-content>
+

@@ -12,17 +12,32 @@ page-manage-tasks-home {
         font-size: 2.5rem;
     }
 
-    //.tasks-reorder {
-    //    background-color: transparent;
-    //}
-    //
-    //.tasks-reorder > div.item-inner {
-    //    padding-right: 0 !important;
-    //}
-    //
-    //.tasks-reorder > div.item-inner > div.input-wrapper > ion-label {
-    //    margin-right: 0 !important;
-    //}
+    .loadAnim {
+        position: relative;
+        top: -4px;
+        animation: loadingMove 2s;
+        animation-iteration-count: 20;
+        animation-timing-function: ease-in;
+        animation-direction: alternate;
+    }
+
+    .loadAnimColorRed {
+        color: red;
+    }
+
+    .loadAnimColorGreen {
+        color: green;
+    }
+
+    @keyframes loadingMove {
+        from {
+            left: 0;
+        }
+        to {
+            left: 30px;
+        }
+    }
+
 
     //timecard section css
     .clockOut {

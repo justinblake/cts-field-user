@@ -2,11 +2,10 @@ import {Injectable} from '@angular/core';
 //NgZone from above
 import {Http, Request, RequestMethod, RequestOptions, Headers} from '@angular/http';
 import {FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
-// import {File} from '@ionic-native/file';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/delay';
-import {Utils} from '../utils/utils';
 
 @Injectable()
 
@@ -18,10 +17,9 @@ export class ApiService {
     crudApi: String;
     apiUrls: any;
     jwtHeader: string;
-    uploading: boolean = true;
     current: number = 1;
-    total: number;
-    progress: number;
+
+
 
 
     constructor(public http: Http,
@@ -59,7 +57,8 @@ export class ApiService {
             "updateTimecard": `${this.ctsApi}/updateTimecard`,
             "makeTimecardEntryInactive": `${this.ctsApi}/makeTimecardEntryInactive`,
             "validateEmail": `${this.ctsApi}/validateEmail`,
-            "getLastTimecardEntry": `${this.ctsApi}/getLastTimecardEntry`
+            "getLastTimecardEntry": `${this.ctsApi}/getLastTimecardEntry`,
+            "updateUserDeviceInfo": `${this.ctsApi}/updateUserDeviceInfo`
         }
 
     }
@@ -231,23 +230,26 @@ export class ApiService {
     // * @Param token: string
     // * @Return Promise
     loadCurrentTask = (data) => {
+        let endpoint = this.apiUrls.loadCurrentTaskV2;
+        let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
+        return this.request(requestOptions);
+    };
+
+     // * loads the current active task from the api for the manages tasks page
+    // * @Param user:currentUser
+    // * @Param token: string
+    // * @Return Promise
+    loadCurrentActiveTask = (data) => {
         let endpoint = this.apiUrls.loadCurrentTask;
         let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
         return this.request(requestOptions);
     };
 
     loadCurrentTaskV2 = (data) => {
-        console.log('multiple in api-service ')
         let endpoint = this.apiUrls.loadCurrentTaskV2;
         let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
         return this.request(requestOptions);
     };
-
-    // loadNextDayTask = (data) => {
-    //     let endpoint = this.apiUrls.loadNextDayTask;
-    //     let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
-    //     return this.request(requestOptions);
-    // };
 
     // *  loads the task history from the api
     // *  @Param data:any = {userId:number}
@@ -321,6 +323,12 @@ export class ApiService {
     postTaskFeedback = (feedback) => {
         let endpoint = this.apiUrls.createTaskUserLog;
         let requestOptions = this.ctsApiPostRequestOptions(endpoint, feedback);
+        return this.request(requestOptions)
+    };
+
+    updateUserDeviceInfo = (data) => {
+        let endpoint = this.apiUrls.updateUserDeviceInfo;
+        let requestOptions = this.ctsApiPostRequestOptions(endpoint, data);
         return this.request(requestOptions)
     };
 

@@ -3,10 +3,10 @@ import {NavController, NavParams, Content} from 'ionic-angular';
 import {CallNumber} from '@ionic-native/call-number';
 import {TaskManager} from '../../providers/task-manager';
 import {ConversionManager} from "../../providers/conversion-manager";
-import {Utils} from "../../utils/utils";
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {HistoryFeedbackPage} from '../history-feedback/history-feedback';
 import {HistoryReviewPage} from "../history-review/history-review";
+import {TaskPhotoReviewPage} from "../task-photo-review/task-photo-review";
 
 
 
@@ -32,6 +32,9 @@ export class SingleHistoryTaskPage {
     isIos: boolean = false;
     contractor_name: any;
     contractor_phone: any;
+    task_links: any;
+    task_files: any;
+    taskFileUrl: string = 'https://www.cleartasksolutions.com/assets/task_files/';
 
 
     constructor(public navCtrl: NavController,
@@ -39,7 +42,6 @@ export class SingleHistoryTaskPage {
                 public taskMgr: TaskManager,
                 private callNumber: CallNumber,
                 private conMgr: ConversionManager,
-                private utils: Utils,
                 private iab: InAppBrowser) {
 
         this.taskId = navParams.get('id');
@@ -54,20 +56,8 @@ export class SingleHistoryTaskPage {
         this.task_user_log = navParams.get('task_user_log');
         this.contractor_name = navParams.get('contractor_name');
         this.contractor_phone = navParams.get('contractor_phone');
-
-        console.log('this.taskId ', JSON.stringify(this.taskId));
-        console.log('this.strTime ', JSON.stringify(this.strTime));
-        console.log('this.task_description ', JSON.stringify(this.task_description));
-        console.log('this.status ', JSON.stringify(this.status));
-        console.log('this.task_crew ', JSON.stringify(this.task_crew));
-        console.log('this.task_equipment ', JSON.stringify(this.task_equipment));
-        console.log('this.additional_notes ', JSON.stringify(this.additional_notes));
-        console.log('this.task_materials ', JSON.stringify(this.task_materials));
-        console.log('this.contractor_contacts ', JSON.stringify(this.contractor_contacts));
-        console.log('this.task_user_log ', JSON.stringify(this.task_user_log));
-        console.log('this.contractor_phone ', JSON.stringify(this.contractor_phone));
-        console.log('this.contractor_name ', JSON.stringify(this.contractor_name));
-
+        this.task_links = navParams.get('task_links');
+        this.task_files = navParams.get('task_files');
         this.isIos = this.taskMgr.returnPlatform().isIos;
 
     }
@@ -87,31 +77,15 @@ export class SingleHistoryTaskPage {
     }
 
     showDrivingDirections(lat, lon) {
-
         let options = "location=no";
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
-
-
-        // this.utils.presentLoading();
-        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-        //     let params = {
-        //         directions: response
-        //     };
-        //     setTimeout(() => {
-        //         this.navCtrl.push(DrivingDirectionsPage, params);
-        //         this.utils.dismissLoading();
-        //     }, 2000)
-        // }).catch((error) => {
-        //     this.utils.dismissLoading();
-        //     this.utils.presentToast("Location currently unavailable", true);
-        // })
     }
 
     openHistoryFeedback() {
 
         let params ={
             id: this.taskId
-        }
+        };
 
         this.navCtrl.push(HistoryFeedbackPage, params).then(() => {
 
@@ -119,11 +93,42 @@ export class SingleHistoryTaskPage {
 
     }
 
+    openAttachedUrl(url) {
+        let options = "location=no";
+        this.iab.create("" + url, "_system", options);
+    }
+
+    openAttachedImage(imageObject) {
+console.log('imageObject ', JSON.stringify(imageObject));
+
+        let fileType: string = '';
+
+        if (imageObject.file_type === 'image/png') {
+            fileType = 'image';
+
+            let params = {
+                file_type: fileType,
+                file_name: '' + this.taskFileUrl + '' + imageObject.file_name,
+                notes: imageObject.notes
+            };
+
+            this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
+                console.log('pushed task photo review')
+            })
+
+        } else if (imageObject.file_type === 'application/pdf') {
+            fileType = 'pdf';
+            let options = "location=no";
+            this.iab.create('' + this.taskFileUrl + '' + imageObject.file_name, "_system", options);
+        }
+
+    }
+
     reviewImage(imageUrl) {
 
         let params ={
             file_name: imageUrl
-        }
+        };
 
         this.navCtrl.push(HistoryReviewPage, params).then(() => {
 

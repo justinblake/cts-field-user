@@ -273,7 +273,9 @@ export class HistoryPage {
                     contractor_contacts: currentTask.contractor_contacts,
                     task_user_log: currentTask.task_user_log,
                     contractor_name: contractor[0].name,
-                    contractor_phone: contractor[0].office_phone
+                    contractor_phone: contractor[0].office_phone,
+                    task_files: currentTask.task_files,
+                    task_links: currentTask.task_links
                 };
 
                 this.navCtrl.push(SingleHistoryTaskPage, params).then(() => {
@@ -327,7 +329,9 @@ export class HistoryPage {
                     contractor_contacts: currentTask.contractor_contacts,
                     task_user_log: currentTask.task_user_log,
                     contractor_name: contractor[0].name,
-                    contractor_phone: contractor[0].office_phone
+                    contractor_phone: contractor[0].office_phone,
+                    task_files: currentTask.task_files,
+                    task_links: currentTask.task_links
                 };
 
                 this.navCtrl.push(SingleHistoryTaskPage, params).then(() => {

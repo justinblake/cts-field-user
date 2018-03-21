@@ -22,6 +22,7 @@ import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
+import {TaskPhotoReviewPage} from '../task-photo-review/task-photo-review';
 
 
 @Pipe({name: 'keys', pure: false})
@@ -82,6 +83,11 @@ export class HomePage {
     operating_system: any;
     cell_number: any;
     emp_device_id: any;
+
+    retrievingLocation: boolean = false;
+    createEntry: boolean = false;
+
+    taskFileUrl: string = 'https://www.cleartasksolutions.com/assets/task_files/';
 
 
     constructor(public navCtrl: NavController,
@@ -172,7 +178,6 @@ export class HomePage {
 
 
     ionViewDidLoad() {
-
         this.setUser();
         setTimeout(() => this.setCompany(), 500);
         this._backBtn.registerAction(() => {
@@ -180,7 +185,7 @@ export class HomePage {
         }, 101);
 
         if (this.plt.is('cordova')) {
-            setTimeout(() => this.getSimInfo(), 10000)
+            setTimeout(() => this.getSimInfo(), 6000)
         }
 
         this.empData.employee_id = this.currentUser.userId;
@@ -238,10 +243,14 @@ export class HomePage {
             this.presentFutureAlert();
         } else if (tempNum === 2) {
             this.presentAlert();
-        } else if(alertDispatch.hasDispatchAlert === true) {
+        } else if (alertDispatch.hasDispatchAlert === true) {
             this.openNextDayTasksAlert(alertDispatch.alertTaskId, alertDispatch.alertId);
         }
-        this.checkUpdates();
+        setTimeout(() => {
+            this.checkUpdates();
+        }, 7500);
+
+
     }
 
     // helper method for the expand/collapse div animation
@@ -258,6 +267,7 @@ export class HomePage {
             this.sim.requestReadPermission().then(
                 () => {
                     this.sim.getSimInfo().then((info: any) => {
+                            console.log('info ', JSON.stringify(info));
                             this.empData.cell_carrier = info.carrierName;
                             this.empData.cell_number = info.phoneNumber;
                             this.empData.emp_device_id = info.deviceId;
@@ -472,6 +482,7 @@ export class HomePage {
     // }
 
     setLocation() {
+
         return new Promise((resolve, reject) => {
             this.lat = 0;
             this.lon = 0;
@@ -486,6 +497,7 @@ export class HomePage {
                 this.locationTimestamp = res.timestamp;
                 this.locationAccuracy = res.accuracy;
                 console.log('res in new location service', JSON.stringify(res));
+
                 resolve(`${this.lat},${this.lon}`);
             }, (err: any) => {
                 console.log('err ', JSON.stringify(err));
@@ -497,8 +509,11 @@ export class HomePage {
 // sets the status of the task using TaskManager
 // then loads the current task from the API
     setStatus = (statusId: number, notes?: any, showLoading?: boolean): void => {
+
         showLoading = showLoading || false;
         if (statusId === 3) {
+
+
             let data = this.dataFunction(notes, statusId);
 
             if (showLoading) {
@@ -506,7 +521,7 @@ export class HomePage {
             }
 
             this.taskMgr.updateTaskStatus(data).then((response) => {
-                this.setCurrentTask(true);
+                this.setCurrentTask(false);
             }).catch(error => {
                 if (this.debug) {
                     console.log(`ERROR: ${Utils.toJson(error)}`);
@@ -525,6 +540,8 @@ export class HomePage {
                 this.utils.presentLoading();
             }
             if (!this.isCordova) {
+                console.log("inside !this.isCordova");
+                this.retrievingLocation = true;
                 let data = this.dataFunction(notes, statusId, null, null);
                 if (data.statusId === 6 || data.statusId === 9) {
                     this.showTasks = false;
@@ -537,21 +554,28 @@ export class HomePage {
                     });
                 }
                 else if (data.statusId < 8 || data.statusId === 10 || data.statusId === 13) {
-                    this.taskMgr.updateTaskStatus(data).then((response) => {
-                        this.setCurrentTask(false);
-                    }).catch(error => {
-                        if (this.debug) {
-                            console.log("error " + error);
-                        }
-                    });
+                    setTimeout(() => {
+                        this.taskMgr.updateTaskStatus(data).then((response) => {
+
+                            this.retrievingLocation = false;
+
+                            this.setCurrentTask(false);
+                        }).catch(error => {
+                            if (this.debug) {
+                                console.log("error " + error);
+                            }
+                        });
+                    }, 5000)
                 }
             }
             else {
+                this.retrievingLocation = true;
                 this.setLocation().then((res: any) => {
                     let data = this.dataFunction(notes, statusId, this.lat, this.lon);
                     if (data.statusId === 6 || data.statusId === 9) {
                         this.showTasks = false;
                         this.taskMgr.updateTaskStatus(data).then((response) => {
+                            this.retrievingLocation = false;
                             this.setCurrentTask(false);
                         }).catch(error => {
                             if (this.debug) {
@@ -561,6 +585,7 @@ export class HomePage {
                     }
                     else if (data.statusId < 8 || data.statusId === 10 || data.statusId === 13) {
                         this.taskMgr.updateTaskStatus(data).then((response) => {
+                            this.retrievingLocation = false;
                             this.setCurrentTask(false);
                         }).catch(error => {
                             if (this.debug) {
@@ -571,6 +596,7 @@ export class HomePage {
                 });
             }
         }
+        //test
         else if (statusId === 8) {
             let data = this.dataFunction(notes, statusId);
             this.taskMgr.updateTaskStatus(data).then((response) => {
@@ -585,11 +611,6 @@ export class HomePage {
         this.utils.dismissLoading();
     };
 
-    disableStart() {
-        if (this.timecardStatus === 0) {
-            return true;
-        }
-    }
 
 // function to replace writing this logic multiple times in this.setStatus
     dataFunction(notes: any, statusId: number, lat ?: any, lon ?: any) {
@@ -600,7 +621,8 @@ export class HomePage {
                 files: [],
                 lat: lat,
                 lon: lon,
-                timestamp: new Date(Date.now())
+                timestamp: new Date(Date.now()),
+                accuracy: this.locationAccuracy
             }
         } else {
             this.myData = {
@@ -632,7 +654,7 @@ export class HomePage {
             this.data = response;
             this.currentTask = this.data.task;
             this.currentUser = this.data.user;
-            if (this.currentTask === []) {
+            if (!this.currentTask.hasOwnProperty('id')) {
                 this.showTasks = false;
             } else if (
                 this.currentTask.job_tasks.status_id === 2 ||
@@ -673,35 +695,8 @@ export class HomePage {
 // gets the directions, passes the directions as a param to
 // the driving directions page
     showDrivingDirections(lat, lon) {
-
-
         let options = "location=no";
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving", "_system", options);
-
-
-        // let params = {
-        //     lat: lat,
-        //     lon: lon
-        // };
-        //
-        // setTimeout(() => {
-        //     this.navCtrl.push(DrivingDirectionsPage, params);
-        //     this.utils.dismissLoading();
-        // }, 2000)
-
-
-        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-        //     let params = {
-        //         directions: response
-        //     };
-        //     setTimeout(() => {
-        //         this.navCtrl.push(DrivingDirectionsPage, params);
-        //         this.utils.dismissLoading();
-        //     }, 2000)
-        // }).catch((error) => {
-        //     this.utils.dismissLoading();
-        //     this.utils.presentToast("Location currently unavailable", true);
-        // })
     }
 
 // opens the reject task modal, handles the data passed back from the modal
@@ -715,33 +710,15 @@ export class HomePage {
     }
 
     openCompletePage() {
-        this.utils.presentLoading();
+        this.setLocation();
         this.complete = true;
-        if (this.isCordova) {
-            this.setLocation().then((res: any) => {
-                let params = {
-                    'lat': this.lat,
-                    'lon': this.lon,
-                    'task_id': this.currentTask.job_tasks.id,
-                    'user_id': this.currentUser.userId
-                };
-                this.navCtrl.push(CompleteNotesPage, params).then(res => {
-                    this.utils.dismissLoading();
-                });
-                return true;
-            })
-        } else {
-            let params = {
-                'lat': 0,
-                'lon': 0,
-                'task_id': this.currentTask.job_tasks.id,
-                'user_id': this.currentUser.userId
-            };
-            this.navCtrl.push(CompleteNotesPage, params).then(res => {
-                this.utils.dismissLoading();
-            });
-            return true;
-        }
+        let params = {
+            'task_id': this.currentTask.job_tasks.id,
+            'user_id': this.currentUser.userId
+        };
+        this.navCtrl.push(CompleteNotesPage, params).then(res => {
+        });
+        return true;
 
 
     }
@@ -914,8 +891,16 @@ export class HomePage {
         this.iab.create("https://www.cleartasksolutions.com/app/login/index.html", "_system", options);
     }
 
+    disableStart() {
+        if (this.timecardStatus === 0) {
+            return true;
+        }
+    }
+
     createTimecardEntry(status) {
-        this.utils.presentLoading();
+        console.log('this.isCordova ', JSON.stringify(this.isCordova));
+        this.createEntry = true;
+        // this.utils.presentLoading();
 
         if (this.showTasks && this.userRole !== 6) {
 
@@ -928,35 +913,71 @@ export class HomePage {
                 this.setStatus(4, newNotes, false)
             }
         }
-
         if (this.isCordova) {
             this.setLocation().then((res: any) => {
-                this.taskMgr.createTimecardEntry(this.currentUser.userId, this.lat, this.lon, status).then(res => {
+                this.taskMgr.createTimecardEntry(this.currentUser.userId, this.lat, this.lon, status, this.locationAccuracy).then(res => {
                     if (this.debug) {
                         console.log("inside create timecard entry");
                     }
-
                     this.timecardStatus = status;
                     this.showTimecard = false;
-                    this.utils.dismissLoading();
+                    this.createEntry = false;
                 })
             })
         } else if (!this.isCordova) {
             console.log("Create timecard entry");
-            this.taskMgr.createTimecardEntry(this.currentUser.userId, 0, 0, status).then(res => {
-                if (this.debug) {
-                    console.log("inside create timecard entry");
-                }
 
-                this.timecardStatus = status;
-                this.showTimecard = false;
-                this.utils.dismissLoading();
-            })
+            setTimeout(() => {
+                this.taskMgr.createTimecardEntry(this.currentUser.userId, 0, 0, status).then(res => {
+                    if (this.debug) {
+                        console.log("inside create timecard entry");
+                    }
+                    this.timecardStatus = status;
+                    this.showTimecard = false;
+                    this.createEntry = false;
+                })
+            }, 3000)
+
+
         }
 
 
     }
 
+
+    openAttachedUrl(url) {
+        let options = "location=no";
+        this.iab.create("" + url, "_system", options);
+    }
+
+    openAttachedImage(imageObject) {
+        console.log('imageObject ', JSON.stringify(imageObject));
+
+        let fileType: string = '';
+
+        if (imageObject.file_type === 'image/png') {
+            fileType = 'image';
+
+            let params = {
+                file_type: fileType,
+                file_name: '' + this.taskFileUrl + '' + imageObject.file_name,
+                notes: imageObject.notes
+            };
+
+            this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
+                console.log('pushed task photo review')
+            })
+
+        } else if (imageObject.file_type === 'application/pdf') {
+            fileType = 'pdf';
+            let options = "location=no";
+            this.iab.create('' + this.taskFileUrl + '' + imageObject.file_name, "_system", options);
+        }
+
+
+    }
+
+    //test
 
     showClockInOut() {
         this.showTimecard = !this.showTimecard;
@@ -970,15 +991,37 @@ export class HomePage {
         if (this.isCordova) {
             checkForUpdate().then((res: any) => {
                 if (res === 'true') {
-                    downloadUpdate().then((result: any) => {
-                        if (result === 'true') {
-                            extractUpdate().then((extract: any) => {
-                                if (extract === 'done') {
-                                    loadNewVersion();
-                                }
-                            })
-                        }
-                    })
+
+                    let appVersion = this.utils.returnAppVersion();
+
+                    let empObject: any = {
+                        userId: this.currentUser.userId,
+                        software_version: this.empData.software_version,
+                        emp_platform: this.empData.emp_platform,
+                        operating_system: this.empData.operating_system,
+                        cell_carrier: this.empData.cell_carrier,
+                        version: appVersion,
+                        source: 1
+                    };
+
+                    if (this.isAndroid) {
+                        empObject.cell_number = this.empData.cell_number;
+                        empObject.emp_device_id = this.empData.emp_device_id;
+                    }
+
+                    this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
+                        console.log('appVerResult ', JSON.stringify(appVerResult));
+                    });
+
+                    // downloadUpdate().then((result: any) => {
+                    //     if (result === 'true') {
+                    //         extractUpdate().then((extract: any) => {
+                    //             if (extract === 'done') {
+                    //                 loadNewVersion();
+                    //             }
+                    //         })
+                    //     }
+                    // })
                 }
             });
         } else {
@@ -1004,8 +1047,6 @@ export class HomePage {
     //         console.log('res in delete ', JSON.stringify(res));
     //     });
     // }
-
-
 
 
 }

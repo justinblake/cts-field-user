@@ -1,5 +1,4 @@
-import {Injectable} from '@angular/core'
-import {Platform} from 'ionic-angular';
+import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -21,6 +20,10 @@ export class ManagesTasksManager {
     removeTask() {
         this.activeTask = {};
         this.hasTask = false;
+    }
+
+    updateTaskStatus(status) {
+        this.activeTask.status_id = status;
     }
 
     returnTask() {

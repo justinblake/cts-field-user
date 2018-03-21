@@ -48,4 +48,58 @@ page-single-manage-tasks {
         margin-top: 6px;
     }
 
+    .taskAnim {
+        position: absolute;
+        top: 1px;
+        animation: taskMove 2s;
+        animation-iteration-count: 200;
+        animation-timing-function: ease-in;
+        animation-direction: alternate;
+        color: green;
+        font-size: 32px;
+        z-index: 100;
+    }
+
+    @keyframes taskMove {
+        from {
+            left: 10px;
+        }
+        to {
+            left: 110px;
+        }
+    }
+
+    @media (max-width: 475px) {
+        @keyframes taskMove {
+            from {
+                left: 50px;
+            }
+            to {
+                left: 130px;
+            }
+        }
+    }
+
+    @media (max-width: 376px) {
+        @keyframes taskMove {
+            from {
+                left: 40px;
+            }
+            to {
+                left: 120px;
+            }
+        }
+    }
+
+    @media (max-width: 346px) {
+        @keyframes taskMove {
+            from {
+                left: 25px;
+            }
+            to {
+                left: 105px;
+            }
+        }
+    }
+
 }

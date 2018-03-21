@@ -9,8 +9,10 @@ import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
+import {SingleUpcomingTaskPage} from "../single-upcoming-task/single-upcoming-task";
 
 import {InAppBrowser} from '@ionic-native/in-app-browser';
+
 
 @Pipe({name: 'myKeys', pure: false})
 export class KeysPipe implements PipeTransform {
@@ -74,6 +76,7 @@ export class NextDayPage {
     }
 
     ionViewDidEnter() {
+        console.log('ion view did enter');
         let alertDispatch = this.taskMgr.returnDispatchAlert();
         if (alertDispatch.hasDispatchAlert === true) {
             this.alertTask = alertDispatch.alertTaskId;
@@ -84,9 +87,11 @@ export class NextDayPage {
     }
 
     ionViewWillLeave() {
+        this.alertTask = -1;
+        this.alertId = -1;
+        this.expandTaskId = -1;
         this.taskMgr.clearDispatchAlert();
         this.taskMgr.clearAlertMessage();
-        console.log('test');
     }
 
 
@@ -105,8 +110,6 @@ export class NextDayPage {
                     } else {
                         this.navCtrl.parent.select(3);
                     }
-                    console.log('test');
-
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
                 } else if (data.param1 === "upcoming_task") {
@@ -187,14 +190,15 @@ export class NextDayPage {
                         return (a.task_start_time > b.task_start_time) ? 1 : ((b.task_start_time > a.task_start_time) ? -1 : 0);
                     });
                 }
-                if (this.alertTask) {
+                console.log('this.alertTask in next day', JSON.stringify(this.alertTask));
+                if (this.alertTask && this.alertTask !== -1) {
                     this.expandTaskId = parseInt(this.alertTask);
                     this.dispatchAlert = parseInt(this.alertTask);
                     let passedAlert = this.taskMgr.returnAlertMessage();
                     if (passedAlert.hasAlertBody === true) {
                         this.alertObject = passedAlert.alertObject;
 
-                        if(this.alertObject.viewed === 0) {
+                        if (this.alertObject.viewed === 0) {
                             this.alertObject.viewedBoolean = false;
                         } else {
                             this.alertObject.viewedBoolean = true;
@@ -210,9 +214,20 @@ export class NextDayPage {
                             // this.alertBody = res.data[0].alert_description;
                             this.taskMgr.clearDispatchAlert();
                             this.taskMgr.clearAlertMessage();
+
+                            if (res.data[0].viewed !== 1) {
+                                let holdObj = {
+                                    alertId: this.alertId
+                                };
+                                this.taskMgr.markEmployeeAlertRead(holdObj).then((response: any) => {
+                                    // this.taskMgr.badgeNumber -= 1;
+                                })
+                            }
+
                         })
                     }
                 }
+                // console.log('this.nextDayTask ', JSON.stringify(this.nextDayTask));
                 this.utils.dismissLoading();
             }
         })
@@ -281,20 +296,7 @@ export class NextDayPage {
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
 
 
-        // this.utils.presentLoading();
-        //
-        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-        //     let params = {
-        //         directions: response
-        //     };
-        //     setTimeout(() => {
-        //         this.navCtrl.push(DrivingDirectionsPage, params);
-        //         this.utils.dismissLoading();
-        //     }, 2000)
-        // }).catch((error) => {
-        //     this.utils.dismissLoading();
-        //     this.utils.presentToast("Location currently unavailable", true);
-        // })
+
     }
 
     expandDateTasks(index) {
@@ -305,7 +307,9 @@ export class NextDayPage {
         }
     }
 
-    expandTask(id, index) {
+    expandTask(id, index, task) {
+        console.log('task ', JSON.stringify(task));
+
         if (this.expandTaskId === id && this.taskId === index) {
             if (!this.isIos) {
                 this.content.scrollTo(0, 0, 300).then(res => {
@@ -339,6 +343,16 @@ export class NextDayPage {
 
     adjustTime(time) {
         return this.conMgr.adjustTime(time);
+    }
+
+    openSingleTask(task) {
+        let params = {
+            currentTask: task
+        };
+        this.navCtrl.push(SingleUpcomingTaskPage, params).then(() => {
+            // console.log('in promise of push ');
+        })
+
     }
 }
 

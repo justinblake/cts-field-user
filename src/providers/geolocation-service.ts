@@ -20,6 +20,8 @@ export class GeolocationService {
 
     getCurrentPosition(plat) {
 
+        console.log('inside get current position')
+
         this.locEnabled = false;
 
         this.lat = 0;
@@ -27,10 +29,10 @@ export class GeolocationService {
 
         this.platform = plat;
 
-        console.log('step 1');
+
 
         return new Promise((resolve, reject) => {
-            console.log('step 2');
+
             this.verifyLocationEnabled().then((res: any) => {
 
                 // console.log('res in verify location ', JSON.stringify(res));
@@ -63,8 +65,8 @@ export class GeolocationService {
                                 timestamp: timestamp,
                                 accuracy: accuracy
                             };
-                            // console.log('this.lon in high accuracy', JSON.stringify(this.lon));
-                            // console.log('this.lat in high accuracy', JSON.stringify(this.lat));
+                            console.log('this.lon in high accuracy', JSON.stringify(this.lon));
+                            console.log('this.lat in high accuracy', JSON.stringify(this.lat));
                             // console.log('timestamp in high accuracy', JSON.stringify(timestamp));
                             // console.log('accuracy in high accuracy', JSON.stringify(accuracy));
                             resolve(locationObj);

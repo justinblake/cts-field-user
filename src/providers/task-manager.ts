@@ -91,7 +91,6 @@ export class TaskManager {
     }
 
     clearAlertMessage() {
-        console.log('Clear Alert Message')
         this.alertBody = '';
         this.hasAlertBody = false;
     }
@@ -174,6 +173,43 @@ export class TaskManager {
         return new Promise((resolve, reject) => {
             let data = {userId: this.userId};
             this.apiService.loadCurrentTask(data).then(response => {
+                let task: any = response;
+                currentTaskResponse = {
+                    "task": task.data.hasOwnProperty('id') ? task.data : null,
+                    "user": this.currentUser
+                };
+                this.currentTask = task.data;
+                if (this.currentTask.job_tasks) {
+                    Number(this.currentTask.job_tasks.task_start_time);
+                }
+                // have we received a task? //
+                if (task.data.hasOwnProperty('id')) {
+                    // load the task user log
+                    return this.loadTaskUserLog();
+                } else {
+                    //no task found
+                    reject()
+                }
+            }).then(response => {
+                let json: any = response;
+                currentTaskResponse.task.job_tasks.task_user_log = json.data;
+                resolve(currentTaskResponse);
+            }).catch(error => {
+                reject(error);
+            })
+        })
+    };
+
+    //  * gets current task for logged in user
+    //  * then gets the taskUserLog for the task
+    //  * @Returns: Promise:any
+    getCurrentActiveTask() {
+        this.currentUser = this.userMgr.getUser();
+        this.userId = this.userMgr.getUserId();
+        let currentTaskResponse: any;
+        return new Promise((resolve, reject) => {
+            let data = {userId: this.userId};
+            this.apiService.loadCurrentActiveTask(data).then(response => {
                 let task: any = response;
                 currentTaskResponse = {
                     "task": task.data.hasOwnProperty('id') ? task.data : null,
@@ -666,15 +702,22 @@ export class TaskManager {
         })
     }
 
-    createTimecardEntry(empId, inLat, inLon, myStatus, inNotes?: any) {
+    createTimecardEntry(empId, inLat, inLon, myStatus, accuracy?: number, inNotes?: any) {
         return new Promise((resolve, reject) => {
-            let data = {
+            let data: any = {
                 employee_id: empId,
                 lat: inLat,
                 lon: inLon,
                 status: myStatus,
                 notes: inNotes
             };
+            console.log('data pre', JSON.stringify(data));
+
+            if(accuracy) {
+                data.accuracy = accuracy;
+            }
+
+            console.log('data post ', JSON.stringify(data));
 
             this.apiService.createTimecardEntry(data).then(response => {
                 console.log('response ', JSON.stringify(response));
@@ -809,6 +852,17 @@ export class TaskManager {
         })
     }
 
+
+
+    updateUserDeviceInfo(userObject) {
+        return new Promise((resolve, reject) => {
+
+            this.apiService.updateUserDeviceInfo(userObject).then((res:any) => {
+                console.log('res in task manager ', JSON.stringify(res));
+                resolve(res);
+            })
+        })
+    }
 
 
 

@@ -41,8 +41,10 @@ import {RejectNotesPage} from '../pages/reject-notes/reject-notes';
 import {SingleForemanTaskPage} from "../pages/single-foreman-task/single-foreman-task";
 import {SingleHistoryTaskPage} from "../pages/single-history-task/single-history-task";
 import {SingleManageTasksPage} from "../pages/single-manage-tasks/single-manage-tasks";
+import {SingleUpcomingTaskPage} from "../pages/single-upcoming-task/single-upcoming-task";
 import {SplashPage} from '../pages/splash/splash';
 import {TabsPage} from '../pages/tabs/tabs';
+import {TaskPhotoReviewPage} from "../pages/task-photo-review/task-photo-review";
 import {TimecardKeysPipe, TimecardPage} from '../pages/timecard/timecard'
 import {TimecardSearchPage} from '../pages/timecard-search/timecard-search'
 
@@ -50,9 +52,9 @@ import {TimecardSearchPage} from '../pages/timecard-search/timecard-search'
 import {ApiService} from '../providers/api-service';
 import {CalendarModule, CALENDAR_COMPONENTS} from '../components/ion2-calendar';
 import {ConversionManager} from "../providers/conversion-manager";
+import {DirectivesModule} from '../directives/directives.module';
 import {Geolocation} from '@ionic-native/geolocation';
 import {GeolocationService} from '../providers/geolocation-service';
-import {GoogleMapsService} from '../providers/google-maps-service';
 import {HardwareBackButtonService} from '../providers/backbutton';
 import {ManagesTasksManager} from "../providers/manages-tasks-manager";
 import {StorageService} from '../providers/storage-service';
@@ -64,7 +66,7 @@ import {Utils} from '../utils/utils';
 import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-    appVersion: "1.4.11"
+    appVersion: "1.4.14"
 });
 
 @Injectable()
@@ -113,7 +115,9 @@ export function provideStorage() {
         SingleForemanTaskPage,
         SingleHistoryTaskPage,
         SingleManageTasksPage,
+        SingleUpcomingTaskPage,
         TabsPage,
+        TaskPhotoReviewPage,
         TimecardKeysPipe,
         TimecardPage,
         TimecardSearchPage
@@ -124,6 +128,7 @@ export function provideStorage() {
         HttpModule,
         HttpClientModule,
         CalendarModule,
+        DirectivesModule,
         BrowserAnimationsModule,
         IonicModule.forRoot(MyApp, {
             scrollAssist: false,
@@ -156,8 +161,10 @@ export function provideStorage() {
         SingleForemanTaskPage,
         SingleHistoryTaskPage,
         SingleManageTasksPage,
+        SingleUpcomingTaskPage,
         SplashPage,
         TabsPage,
+        TaskPhotoReviewPage,
         TimecardPage,
         TimecardSearchPage
     ],

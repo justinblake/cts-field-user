@@ -133,8 +133,8 @@
                             <ion-icon *ngIf="detailedStats.emp !== k"
                                       name="arrow-dropright"></ion-icon>
                             <ion-icon
-                                    *ngIf="detailedStats.emp === k"
-                                    name="arrow-dropdown"></ion-icon>
+                                *ngIf="detailedStats.emp === k"
+                                name="arrow-dropdown"></ion-icon>
                         </h4>
                         <div *ngIf="detailedStats.emp === k">
                             <div *ngFor="let status of crewMember.statusLog">
@@ -288,7 +288,7 @@
                     </h4>
                     <h4 class="equip-assig" *ngIf="item.employee_id !== 0">Assigned
                         Employee: <span
-                                class="equip-bold">{{getEmployeeName(task_crew, item)}}</span>
+                            class="equip-bold">{{getEmployeeName(task_crew, item)}}</span>
                     </h4>
                 </div>
                 <div class="equip-center crew-font" *ngIf="task_equipment.length === 0">
@@ -336,7 +336,7 @@
                                         class="call-contractor"
                                         (click)="callPhone(material.supplier.phone)">
                                     <span class="contractor-phone">Office: </span> <span
-                                        class="contractor-underline">{{material.supplier.phone}}</span>
+                                    class="contractor-underline">{{material.supplier.phone}}</span>
                                 </button>
                             </h4>
 
@@ -364,6 +364,56 @@
         </div>
 
     </ion-card>
+
+    <ion-card *ngIf="task_files.length > 0">
+        <ion-card-header class="task-card-header">
+            Task Images/Documents
+        </ion-card-header>
+        <ion-card-content class="task-card-content">
+            <ion-row>
+                <ion-col text-center>
+                    <h5 class="add_notes" text-center>Select An Image To Enlarge</h5>
+                </ion-col>
+            </ion-row>
+            <ion-row class="spacer"></ion-row>
+            <ion-row>
+                <ion-col *ngFor="let file of task_files" col-6>
+                    <div (click)="openAttachedImage(file)">
+                        <figure>
+
+                            <div *ngIf="file.file_type !== 'application/pdf'" class="image-container">
+                                <img src="{{taskFileUrl}}{{file.file_name}}" class="image-width">
+                            </div>
+                            <div *ngIf="file.file_type === 'application/pdf'" class="image-container">
+                                <img src="../../assets/img/pdf.png" class="image-width">
+                            </div>
+                            <figcaption class="image-notes" padding-top *ngIf="file.notes !== null"><u>Read
+                                <span *ngIf="file.file_type !== 'application/pdf'">Image</span><span
+                                    *ngIf="file.file_type === 'application/pdf'">PDF</span> Notes</u></figcaption>
+                            <figcaption padding-top *ngIf="file.notes === null">No Image Notes</figcaption>
+                        </figure>
+
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="task_links.length > 0">
+        <ion-card-header class="task-card-header">
+            Task External Url<span *ngIf="task_links.length>1">s</span>
+        </ion-card-header>
+        <ion-card-content class="task-card-content">
+            <ion-row *ngFor="let link of task_links">
+
+                <ion-item *ngFor="let link of task_links" no-padding>
+                    <h5 class="add_notes task-link" (click)="openAttachedUrl(link.url)">{{link.url}}</h5>
+                </ion-item>
+
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+
 </ion-content>
 
 

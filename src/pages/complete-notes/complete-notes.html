@@ -63,7 +63,9 @@
                 </button>
             </ion-col>
             <ion-col width-50>
-                <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="save()">
+                <span class="taskAnim"
+                              *ngIf="retrievingLocation">...</span>
+                <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="save()" [disabled]=retrievingLocation>
                     <ion-icon name="checkbox-outline"></ion-icon>
                     Save
                 </button>

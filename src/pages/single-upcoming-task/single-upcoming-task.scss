@@ -1,0 +1,63 @@
+page-single-upcoming-task {
+
+    .task-card-header {
+        font-size: 2.5rem;
+    }
+
+    ion-footer {
+        background-color: #EFEFEF;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px -2px 3px 1px;
+    }
+
+    .show-all {
+        display: inherit;
+    }
+    .show-navigation-only {
+        display: none;
+    }
+
+    @media (max-width: 376px) {
+        .show-all {
+            display: none;
+        }
+        .show-navigation-only {
+            display: inherit;
+        }
+    }
+    @media (min-width: 351px) {
+        .show-task {
+            display: none
+        }
+    }
+
+    @media (max-width: 350px) {
+
+        .hide-task {
+            display: none
+        }
+    }
+
+    .status-13 {
+        color: red;
+        margin-bottom: 7px;
+    }
+
+    .equip-notes {
+        font-size: 1.4rem;
+        font-weight: 400;
+        margin-top: 6px;
+    }
+
+    .in-progress {
+        color: rgb(0, 205, 0);
+    }
+
+    .on-hold {
+        color: #D90000;
+    }
+
+    .complete {
+        color: rgb(0, 128, 0);
+    }
+
+}

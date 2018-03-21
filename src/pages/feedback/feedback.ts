@@ -240,6 +240,7 @@ export class FeedbackPage {
             destinationType: 1,
             sourceType: sourceType,
             allowEdit: true,
+            mediaType: 0,
             saveToPhotoAlbum: false,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then((imageData) => {

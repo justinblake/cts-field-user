@@ -5,6 +5,7 @@ import {Diagnostic} from '@ionic-native/diagnostic';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
 import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
+import {GeolocationService} from "../../providers/geolocation-service";
 
 @Component({
     selector: 'page-complete-notes',
@@ -17,15 +18,20 @@ export class CompleteNotesPage {
     files: Array<any> = [];
     type: any = {options: ''};
     isIos: boolean = false;
-    lat: any;
-    lon: any;
+    isAndroid: boolean;
+    lat: number;
+    lon: number;
+    locationTimestamp: number;
+    locationAccuracy: number;
     public taskId;
     public userId;
     isCordova: boolean = false;
+    retrievingLocation: boolean = false;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
                 public managesTskMgr: ManagesTasksManager,
+                public geoSrvc: GeolocationService,
                 private taskMgr: TaskManager,
                 private actionSheetCtrl: ActionSheetController,
                 private platform: Platform,
@@ -36,9 +42,10 @@ export class CompleteNotesPage {
 
         this.debug = this.utils.returnDebug();
         this.taskId = navParams.get('task_id');
-        this.lat = navParams.get('lat');
-        this.lon = navParams.get('lon');
+
+
         this.userId = navParams.get('user_id');
+        this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
 
 
         if (this.debug) {
@@ -53,9 +60,7 @@ export class CompleteNotesPage {
             notes: '',
             statusId: 9,
             files: this.files,
-            save: false,
-            lat: this.lat,
-            lon: this.lon
+            save: false
         };
 
 
@@ -65,7 +70,6 @@ export class CompleteNotesPage {
         }
 
         let successCallback = (isAvailable) => {
-
             if (this.debug) {
                 console.log('Is available? ' + isAvailable);
             }
@@ -79,6 +83,56 @@ export class CompleteNotesPage {
         }
 
 
+    }
+
+    ionViewWillEnter() {
+        if (this.isCordova) {
+            this.setLocation().then(() => {
+                this.data.lat = this.lat;
+                this.data.lon = this.lon;
+                this.data.accuracy = this.locationAccuracy;
+            })
+        } else {
+            this.retrievingLocation = true;
+            setTimeout(() => {
+                this.data.lat = 0;
+                this.data.lon = 0;
+                this.retrievingLocation = false;
+            }, 5000)
+
+        }
+
+    }
+
+    setLocation() {
+        this.retrievingLocation = true;
+        return new Promise((resolve, reject) => {
+
+            this.lat = 0;
+            this.lon = 0;
+
+            let platform = 'ios';
+            if (this.isAndroid) {
+                platform = 'android'
+            }
+
+            if (this.isCordova) {
+                this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+                    this.lat = res.lat;
+                    this.lon = res.lon;
+                    this.locationTimestamp = res.timestamp;
+                    this.locationAccuracy = res.accuracy;
+                    console.log('res in new location service', JSON.stringify(res));
+                    this.retrievingLocation = false;
+                    resolve(`${this.lat},${this.lon}`);
+                }, (err: any) => {
+                    console.log('err ', JSON.stringify(err));
+                    this.retrievingLocation = false;
+                    reject(err)
+                })
+            }
+
+        })
     }
 
     //Nothing is loaded, everything is passed from the home page
@@ -107,8 +161,8 @@ export class CompleteNotesPage {
     save() {
         this.data.save = true;
         this.data.notes = this.data.notes.trim();
+        console.log('this.data ', JSON.stringify(this.data));
         this.utils.presentLoading();
-
 
 
         this.taskMgr.postFeedback(this.data).then(response => {
@@ -164,7 +218,7 @@ export class CompleteNotesPage {
          *  if false OR false, then disable (true) OR
          *  if true AND true, the don't disable (false)
          */
-        return !( (this.data.notes.trim().length > 4) && (this.data.statusId > 0) )
+        return !((this.data.notes.trim().length > 4) && (this.data.statusId > 0))
     }
 
     /** trim notes  */
@@ -206,13 +260,12 @@ export class CompleteNotesPage {
      * @Param sourceType:number camera or gallery
      */
     getPicture(sourceType: number, editable: boolean) {
+        console.log("num 4")
         this.utils.presentLoading();
         this.camera.getPicture({
-            quality: 40,
+            quality: 50,
             destinationType: 1,
             sourceType: sourceType,
-            targetWidth: 1000,
-            targetHeight: 1333,
             allowEdit: true,
             mediaType: 0,
             saveToPhotoAlbum: false,

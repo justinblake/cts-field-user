@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.cleartasksolutionsmobile323809" version="1.4.11" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.cleartasksolutionsmobile323809" version="1.4.14" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>clear-task-solutions-mobile</name>
     <description>Clear Task Solutions Mobile App</description>
     <author email="jblake@cleartasksolutions.com" href="https://www.cleartasksolutions.com">CTS</author>
@@ -49,6 +49,9 @@
         </config-file>
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
             <string>This app needs access to your Camera to allow you to take and upload pictures.</string>
+        </config-file>
+        <config-file parent="NSLocationWhenInUseUsageDescription" platform="ios" target="*-Info.plist">
+            <string>This app requires access to your location when the screen is on and the app is displayed to provide driving directions. Your location is also recorded when clocking in or out and when starting or completing a task.</string>
         </config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
@@ -123,6 +126,9 @@
     <allow-navigation href="http://172.16.55.46:8100" />
     <allow-navigation href="http://172.16.55.46:8101" />
     <allow-navigation href="http://172.16.55.59:8100" />
+    <allow-navigation href="http://172.16.55.83:8100" />
+    <allow-navigation href="http://172.16.55.105:8100" />
+    <allow-navigation href="http://172.16.55.105:8101" />
     <engine name="android" spec="6.3.0" />
     <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-actionsheet" spec="^2.3.3" />

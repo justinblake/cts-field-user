@@ -287,6 +287,7 @@ export class ForemanPage {
             if (showLoading) {
                 this.utils.dismissLoading();
             }
+            // console.log('this.tasks ', JSON.stringify(this.tasks));
         })
     }
 
@@ -348,8 +349,12 @@ export class ForemanPage {
                 task_materials: currentTask.task_materials,
                 contractor_contacts: currentTask.contractor_contacts,
                 contractor_name: this.tasks[i].contractor[0].name,
-                contractor_phone: this.tasks[i].contractor[0].office_phone
+                contractor_phone: this.tasks[i].contractor[0].office_phone,
+                task_files: currentTask.task_files,
+                task_links: currentTask.task_links
             };
+
+
 
             this.navCtrl.push(SingleForemanTaskPage, params).then(() => {
             })
@@ -372,7 +377,9 @@ export class ForemanPage {
                 task_equipment: currentTask.task_equipment,
                 additional_notes: currentTask.additional_notes,
                 task_materials: currentTask.task_materials,
-                contractor_contacts: currentTask.contractor_contacts
+                contractor_contacts: currentTask.contractor_contacts,
+                task_files: currentTask.task_files,
+                task_links: currentTask.task_links
             };
 
             this.navCtrl.push(SingleForemanTaskPage, params).then(() => {

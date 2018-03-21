@@ -76,11 +76,17 @@
             <div *ngIf="!showTimecard" text-center class="pad-top4">
                 <span class="hide-task">Timecard Status: </span>
                 <span class="show-task">Timecard:</span>
-                <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
+                <span *ngIf="!createEntry">
+                    <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
                     class="clockIn"
                     *ngIf="timecardStatus === 1">Clocked In</span>
-                <h3 class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
-                        *ngIf="timecardStatus === 1">out</span>)</h3>
+                </span>
+                <span class="loadAnim"
+                      [ngClass]="{'loadAnimColorGreen': timecardStatus === 0, 'loadAnimColorRed': timecardStatus === 1}"
+                      *ngIf="createEntry">...</span>
+                <h3 *ngIf="!createEntry" class="orange">(Click here to clock <span
+                    *ngIf="timecardStatus === 0">in</span><span
+                    *ngIf="timecardStatus === 1">out</span>)</h3>
             </div>
             <div *ngIf="showTimecard">
                 <!--clock in-->
@@ -159,7 +165,7 @@
                                         (click)="callPhone(currentTask.contractor[0].office_phone)"
                                         [@expandCollapse]="divState">
                                     <span class="contractor-phone" [@expandCollapse]="divState">Office: </span> <span
-                                        class="contractor-underline" [@expandCollapse]="divState">{{currentTask.contractor[0].office_phone}}</span>
+                                    class="contractor-underline" [@expandCollapse]="divState">{{currentTask.contractor[0].office_phone}}</span>
                                 </button>
                             </h4>
 
@@ -191,7 +197,7 @@
                                             class="call-contractor"
                                             (click)="callPhone(contacts.cell_phone)" [@expandCollapse]="divState">
                                         <span class="contractor-phone" [@expandCollapse]="divState">Cell: </span> <span
-                                            class="contractor-underline" [@expandCollapse]="divState">{{contacts.cell_phone}}</span>
+                                        class="contractor-underline" [@expandCollapse]="divState">{{contacts.cell_phone}}</span>
                                     </button>
                                 </h4>
                             </div>
@@ -241,12 +247,61 @@
                                         {{newNotes.employee.last_name}}</strong>
                                         at {{newNotes.strTime}}
                                     </h5>
-
-
                                 </ion-item>
                             </div>
+
                         </ion-list>
                     </div>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-card *ngIf="currentTask.job_tasks.task_files?.length > 0">
+                <ion-card-header class="task-card-header">
+                    Task Images/Documents
+                </ion-card-header>
+                <ion-card-content class="task-card-content">
+                    <ion-row>
+                        <ion-col text-center>
+                            <h5 class="add_notes" text-center>Select An Image To Enlarge</h5>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="spacer"></ion-row>
+                    <ion-row>
+                        <ion-col *ngFor="let file of currentTask.job_tasks.task_files" col-6>
+                            <div (click)="openAttachedImage(file)">
+                                <figure>
+
+                                    <div *ngIf="file.file_type !== 'application/pdf'" class="image-container">
+                                        <img src="{{taskFileUrl}}{{file.file_name}}" class="image-width">
+                                    </div>
+                                    <div *ngIf="file.file_type === 'application/pdf'" class="image-container">
+                                        <img src="../../assets/img/pdf.png" class="image-width">
+                                    </div>
+                                    <figcaption class="image-notes" padding-top *ngIf="file.notes !== null"><u>Read
+                                        <span *ngIf="file.file_type !== 'application/pdf'">Image</span><span
+                                            *ngIf="file.file_type === 'application/pdf'">PDF</span> Notes</u>
+                                    </figcaption>
+                                    <figcaption padding-top *ngIf="file.notes === null">No Image Notes</figcaption>
+                                </figure>
+
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-card *ngIf="currentTask.job_tasks.task_links?.length > 0">
+                <ion-card-header class="task-card-header">
+                    Task External Url<span *ngIf="currentTask.job_tasks.task_links.length>1">s</span>
+                </ion-card-header>
+                <ion-card-content class="task-card-content">
+                    <ion-row *ngFor="let link of currentTask.job_tasks.task_links">
+
+                        <ion-item *ngFor="let link of currentTask.job_tasks.task_links" no-padding>
+                            <h5 class="add_notes task-link" (click)="openAttachedUrl(link.url)">{{link.url}}</h5>
+                        </ion-item>
+
+                    </ion-row>
                 </ion-card-content>
             </ion-card>
 
@@ -312,7 +367,8 @@
                             <h4 *ngIf="material.material_price !== 0" class="contractor-sub">
                                 <strong>Price: </strong> ${{material.material_price}}
                             </h4>
-                            <div *ngIf="(material.quantity > 0) || (material.quantity !== null && material.quantity !== 0)">
+                            <div
+                                *ngIf="(material.quantity > 0) || (material.quantity !== null && material.quantity !== 0)">
                                 <h4 class="contractor-sub">
                                     <strong>Quantity: </strong> {{material.quantity}}
                                 </h4>
@@ -344,7 +400,7 @@
                                                 class="call-contractor"
                                                 (click)="callPhone(material.supplier.phone)">
                                             <span class="contractor-phone">Office: </span> <span
-                                                class="contractor-underline">{{material.supplier.phone}}</span>
+                                            class="contractor-underline">{{material.supplier.phone}}</span>
                                         </button>
                                     </h4>
                                 </ion-item>
@@ -389,10 +445,10 @@
 
                     <!--<ion-row>-->
 
-                        <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                                <!--(click)="loadMultipleTasks()">-->
-                            <!--See All Tasks-->
-                        <!--</button>-->
+                    <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
+                    <!--(click)="loadMultipleTasks()">-->
+                    <!--See All Tasks-->
+                    <!--</button>-->
 
                     <!--</ion-row>-->
 
@@ -423,10 +479,10 @@
                 <span class="hide-task">Timecard Status: </span>
                 <span class="show-task">Timecard:</span>
                 <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
-                    class="clockIn"
-                    *ngIf="timecardStatus === 1">Clocked In</span>
+                class="clockIn"
+                *ngIf="timecardStatus === 1">Clocked In</span>
                 <h3 class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
-                        *ngIf="timecardStatus === 1">out</span>)</h3>
+                    *ngIf="timecardStatus === 1">out</span>)</h3>
             </div>
             <div *ngIf="showTimecard">
                 <!--clock in-->
@@ -612,6 +668,66 @@
                                     </ion-card-content>
                                 </ion-card>
 
+                                <ion-card class="card-border" *ngIf="task.task_files?.length > 0">
+                                    <ion-card-header class="task-card-header">
+                                        Task Images/Documents
+                                    </ion-card-header>
+                                    <ion-card-content class="task-card-content">
+                                        <ion-row>
+                                            <ion-col text-center>
+                                                <h5 class="add_notes" text-center>Select An Image To Enlarge</h5>
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row class="spacer"></ion-row>
+                                        <ion-row>
+                                            <ion-col *ngFor="let file of task.task_files" col-6>
+                                                <div (click)="openAttachedImage(file)">
+                                                    <figure>
+
+                                                        <div *ngIf="file.file_type !== 'application/pdf'"
+                                                             class="image-container">
+                                                            <img src="{{taskFileUrl}}{{file.file_name}}"
+                                                                 class="image-width">
+                                                        </div>
+                                                        <div *ngIf="file.file_type === 'application/pdf'"
+                                                             class="image-container">
+                                                            <img src="../../assets/img/pdf.png" class="image-width">
+                                                        </div>
+                                                        <figcaption class="image-notes" padding-top
+                                                                    *ngIf="file.notes !== null"><u>Read
+                                                            <span
+                                                                *ngIf="file.file_type !== 'application/pdf'">Image</span><span
+                                                                *ngIf="file.file_type === 'application/pdf'">PDF</span>
+                                                            Notes</u></figcaption>
+                                                        <figcaption padding-top *ngIf="file.notes === null">No Image
+                                                            Notes
+                                                        </figcaption>
+                                                    </figure>
+
+                                                </div>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card class="card-border" *ngIf="task.task_links?.length > 0">
+                                    <ion-card-header class="task-card-header">
+                                        Task External Url<span
+                                        *ngIf="task.task_links.length>1">s</span>
+                                    </ion-card-header>
+                                    <ion-card-content class="task-card-content">
+                                        <ion-row *ngFor="let link of task.task_links">
+
+                                            <ion-item *ngFor="let link of task.task_links" no-padding>
+                                                <h5 class="add_notes task-link" (click)="openAttachedUrl(link.url)">
+                                                    {{link.url}}</h5>
+                                            </ion-item>
+
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+
                                 <ion-card class="card-border">
                                     <ion-card-header class="task-card-header card-pad">
                                         Foreman
@@ -713,7 +829,7 @@
 <ion-footer *ngIf="userRole !== 6">
 
     <ion-grid
-            *ngIf="timecardStatus === 0 && currentTask && (currentTask.job_tasks.status_id === 2 || currentTask.job_tasks.status_id === 3) && !isLessor">
+        *ngIf="timecardStatus === 0 && currentTask && (currentTask.job_tasks.status_id === 2 || currentTask.job_tasks.status_id === 3) && !isLessor">
         <ion-row>
             <ion-col width-50>
                 <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="setStatus(3)"
@@ -743,27 +859,33 @@
         <ion-grid>
             <ion-row>
                 <ion-col width-50>
+                    <span class="taskAnim"
+                          *ngIf="retrievingLocation">...</span>
                     <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="setStatus(3)"
                             *ngIf="currentTask && currentTask.job_tasks.status_id === 2">
                         <ion-icon name="fa-thumbs-o-up"></ion-icon>
                         Accept
                     </button>
-                    <button class="btn-shadow" ion-button icon-left block color="secondary"
-                            (click)="setStatus(4, '', true)"
+                    <button class="btn-shadow" [disabled]=retrievingLocation ion-button icon-left block
+                            color="secondary"
+                            (click)="setStatus(4, '', false)"
                             *ngIf="currentTask && currentTask.job_tasks.status_id === 3">
                         <ion-icon name="fa-thumbs-o-up"></ion-icon>
                         Start Task
                     </button>
-                    <button class="btn-shadow" ion-button icon-left block color="secondary"
-                            (click)="setStatus(4,  '', true)"
+                    <button class="btn-shadow" [disabled]=retrievingLocation ion-button icon-left block
+                            color="secondary"
+                            (click)="setStatus(4,  '', false)"
                             *ngIf="currentTask && (currentTask.job_tasks.status_id === 5 || currentTask.job_tasks.status_id === 6 || currentTask.job_tasks.status_id === 7 )">
                         <ion-icon name="fa-thumbs-o-up"></ion-icon>
                         Resume Task
                     </button>
-                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="openCompletePage()"
+                    <button class="btn-shadow" [disabled]=retrievingLocation ion-button icon-left block
+                            color="secondary" (click)="openCompletePage()"
                             *ngIf="currentTask && currentTask.job_tasks.status_id === 4">
                         <ion-icon name="checkbox-outline"></ion-icon>
-                        Complete Task
+                        <span class="hide-task">Complete Task</span>
+                        <span class="show-task">Complete</span>
                     </button>
                 </ion-col>
                 <ion-col width-50>
@@ -783,6 +905,7 @@
         </ion-grid>
     </div>
 
+
     <div *ngIf="isLessor">
         <ion-grid>
             <ion-row>
@@ -792,18 +915,21 @@
                         <ion-icon name="fa-thumbs-o-up"></ion-icon>
                         Accept
                     </button>
-                    <button class="btn-shadow" ion-button icon-left block color="secondary"
+                    <button class="btn-shadow" [disabled]=retrievingLocation ion-button icon-left block
+                            color="secondary"
                             (click)="setStatus(4, '', true)"
                             *ngIf="currentTask && currentTask.job_tasks.status_id === 3">
                         <ion-icon name="fa-thumbs-o-up"></ion-icon>
                         Start Task
                     </button>
-                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="setStatus(4)"
+                    <button class="btn-shadow" [disabled]=retrievingLocation ion-button icon-left block
+                            color="secondary" (click)="setStatus(4)"
                             *ngIf="currentTask && (currentTask.job_tasks.status_id === 5 || currentTask.job_tasks.status_id === 6 || currentTask.job_tasks.status_id === 7 )">
                         <ion-icon name="fa-thumbs-o-up"></ion-icon>
                         Resume Task
                     </button>
-                    <button class="btn-shadow" ion-button icon-left block color="secondary" (click)="openCompletePage()"
+                    <button class="btn-shadow" [disabled]=retrievingLocation ion-button icon-left block
+                            color="secondary" (click)="openCompletePage()"
                             *ngIf="currentTask && currentTask.job_tasks.status_id === 4">
                         <ion-icon name="checkbox-outline"></ion-icon>
                         Complete Task

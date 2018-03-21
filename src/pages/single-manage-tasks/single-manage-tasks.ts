@@ -3,14 +3,13 @@ import {NavController, NavParams, Content} from 'ionic-angular';
 import {CallNumber} from '@ionic-native/call-number';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
-import {ConversionManager} from "../../providers/conversion-manager";
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
 import {FeedbackPage} from '../feedback/feedback';
 import {GeolocationService} from '../../providers/geolocation-service'
-import {NextDayPage} from '../next-day-tasks/next-day';
 import {CompleteNotesPage} from '../complete-notes/complete-notes';
 import {Modal} from "../../../node_modules/ionic-angular/index";
+import {TaskPhotoReviewPage} from '../task-photo-review/task-photo-review';
 
 @Component({
     selector: 'page-single-manage-tasks',
@@ -36,6 +35,10 @@ export class SingleManageTasksPage {
     hasTask: boolean = false;
     isActiveTask: boolean = false;
     isLessor: boolean = false;
+    debug: boolean = false;
+    retrievingLocation: boolean = false;
+    taskFileUrl: string = 'https://www.cleartasksolutions.com/assets/task_files/';
+
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -43,7 +46,6 @@ export class SingleManageTasksPage {
                 public geoSrvc: GeolocationService,
                 public managesTskMgr: ManagesTasksManager,
                 private callNumber: CallNumber,
-                private conMgr: ConversionManager,
                 private utils: Utils,
                 private iab: InAppBrowser) {
 
@@ -81,8 +83,12 @@ export class SingleManageTasksPage {
     }
 
     setStatus(statusId: number, taskId: number, notes?: any) {
-        this.utils.presentLoading();
+
+        console.log('notes in set status ', JSON.stringify(notes));
+
         if (statusId === 3 || statusId === 8) {
+
+            this.utils.presentLoading();
             let data = {
                 userId: this.userInfo.userId,
                 notes: notes || '',
@@ -99,21 +105,23 @@ export class SingleManageTasksPage {
             });
         } else if (statusId === 4 || statusId === 5 || statusId === 7 || statusId === 9) {
             //update task status
-            this.currentTask.status_id = statusId;
+            this.retrievingLocation = true;
             this.activeTask = this.currentTask;
             this.isActiveTask = true;
             //store current task
 
-            // this.storeCurrentTask(this.projectObject[projectIndex].job_tasks[taskIndex], statusId);
             //update task
-            this.dataFunction(notes, statusId, taskId).then((res: any) => {
+            this.dataFunction(statusId, taskId, (notes || '')).then((res: any) => {
                 this.taskMgr.updateManagedTaskStatus(res).then((response) => {
                     if (statusId === 4 || statusId === 5 || statusId === 7) {
+                        this.currentTask.status_id = statusId;
                         this.managesTskMgr.storeTask(this.currentTask);
+                        this.retrievingLocation = false;
                     } else if (statusId === 9) {
+                        this.currentTask.status_id = statusId;
                         this.managesTskMgr.removeTask();
+                        this.retrievingLocation = false;
                     }
-                    this.utils.dismissLoading();
                     console.log('response ', JSON.stringify(response));
                     // if (statusId === 9) {
                     //     this.loadMultipleTasks();
@@ -126,7 +134,7 @@ export class SingleManageTasksPage {
 
 
     // function to replace writing this logic multiple times in this.setStatus
-    dataFunction(notes: any, statusId: number, taskId: number) {
+    dataFunction(statusId: number, taskId: number, notes?: any) {
         return new Promise((resolve, reject) => {
             let data = {};
             if (this.isCordova) {
@@ -138,7 +146,8 @@ export class SingleManageTasksPage {
                         files: [],
                         lat: this.lat,
                         lon: this.lon,
-                        taskId: taskId
+                        taskId: taskId,
+                        accuracy: this.locationAccuracy
                     };
 
                     resolve(data);
@@ -158,7 +167,9 @@ export class SingleManageTasksPage {
     }
 
     setLocation() {
+
         return new Promise((resolve, reject) => {
+
             this.lat = 0;
             this.lon = 0;
 
@@ -172,6 +183,7 @@ export class SingleManageTasksPage {
                 this.locationTimestamp = res.timestamp;
                 this.locationAccuracy = res.accuracy;
                 console.log('res in new location service', JSON.stringify(res));
+
                 resolve(`${this.lat},${this.lon}`);
             }, (err: any) => {
                 console.log('err ', JSON.stringify(err));
@@ -182,46 +194,22 @@ export class SingleManageTasksPage {
 
     // 0 = complete page, 1 = feedback page
     openActionPage(page: number) {
-        this.utils.presentLoading();
+        this.setLocation();
         let params: any = {
             'task_id': this.currentTask.id,
             'user_id': this.userInfo.userId
         };
-        if (this.currentProject.isCordova) {
-            this.setLocation().then((res: any) => {
-                params.lat = this.lat;
-                params.lon = this.lon;
-                if (page === 0) {
-                    this.navCtrl.push(CompleteNotesPage, params).then(res => {
-                        this.utils.dismissLoading();
-                    });
-                    return true;
-                } else if (page === 1) {
-                    this.navCtrl.push(FeedbackPage, params).then(res => {
-                        this.utils.dismissLoading();
-                    });
-                    return true;
-                }
-            })
-        } else {
-            params.lat = 0;
-            params.lon = 0;
-            console.log('params ', JSON.stringify(params));
-            if (page === 0) {
-                this.navCtrl.push(CompleteNotesPage, params).then(res => {
+        if (page === 0) {
+            this.navCtrl.push(CompleteNotesPage, params).then(res => {
 
-                });
-                this.utils.dismissLoading();
-                return true;
-            } else if (page === 1) {
-                console.log("heading to feedback");
-                this.navCtrl.push(FeedbackPage, params).then(res => {
-                    console.log('res in feedback ', JSON.stringify(res));
+            });
+            return true;
+        } else if (page === 1) {
 
-                });
-                this.utils.dismissLoading();
-                return true;
-            }
+            this.navCtrl.push(FeedbackPage, params).then(res => {
+
+            });
+            return true;
         }
     }
 
@@ -239,19 +227,48 @@ export class SingleManageTasksPage {
         })
     }
 
-    openNextDayTasks(taskId?: string) {
-        this.navCtrl.push(NextDayPage).then(response => {
-        });
-        return true;
+    callPhone(number) {
+        this.callNumber.callNumber(number, false)
+            .then(() => {
+                if (this.debug) {
+                    console.log('Launched dialer!')
+                }
+            })
+            .catch(() => {
+                if (this.debug) {
+                    console.log('Error launching dialer')
+                }
+            });
     }
 
-    showActiveTask() {
-        console.log('this.activeTask in show active ', JSON.stringify(this.activeTask));
-        console.log('this.currentTask in show active  ', JSON.stringify(this.currentTask));
+    openAttachedUrl(url) {
+        let options = "location=no";
+        this.iab.create("" + url, "_system", options);
     }
 
-    test() {
+    openAttachedImage(imageObject) {
+        console.log('imageObject ', JSON.stringify(imageObject));
 
+        let fileType: string = '';
+
+        if (imageObject.file_type === 'image/png') {
+            fileType = 'image';
+
+            let params = {
+                file_type: fileType,
+                file_name: '' + this.taskFileUrl + '' + imageObject.file_name,
+                notes: imageObject.notes
+            };
+
+            this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
+                console.log('pushed task photo review')
+            })
+
+        } else if (imageObject.file_type === 'application/pdf') {
+            fileType = 'pdf';
+            let options = "location=no";
+            this.iab.create('' + this.taskFileUrl + '' + imageObject.file_name, "_system", options);
+        }
 
     }
 

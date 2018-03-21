@@ -1,0 +1,23 @@
+page-task-photo-review {
+    .scroll-content {
+        overflow-x: scroll;
+    }
+
+    ion-content.disable-scrolling .scroll-content {
+        overflow-y: hidden;
+    }
+
+    .myPinch {
+        touch-action: auto !important;
+    }
+
+    .pad-right16 {
+        padding-right: 16px;
+    }
+
+    .notes-margin {
+        margin: 0 0 15px 0;
+        width: 99%;
+    }
+
+}

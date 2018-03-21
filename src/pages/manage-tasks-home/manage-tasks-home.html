@@ -79,10 +79,13 @@
             <div *ngIf="!showTimecard" text-center>
                 <span class="hide-task">Timecard Status: </span>
                 <span class="show-task">Timecard:</span>
-                <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
-                class="clockIn"
-                *ngIf="timecardStatus === 1">Clocked In</span>
-                <h3 class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
+                <span *ngIf="!createEntry">
+                    <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
+                    class="clockIn"
+                    *ngIf="timecardStatus === 1">Clocked In</span>
+                </span>
+                <span class="loadAnim" [ngClass]="{'loadAnimColorGreen': timecardStatus === 0, 'loadAnimColorRed': timecardStatus === 1}" *ngIf="createEntry">...</span>
+                <h3 *ngIf="!createEntry" class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
                     *ngIf="timecardStatus === 1">out</span>)</h3>
             </div>
             <div *ngIf="showTimecard">
@@ -238,7 +241,7 @@
                                 <ion-row>
 
                                     <ion-col no-padding *ngIf="task.status_id === 3" class="managed-task-status" width-5>
-                                        <div class=""></div>
+                                        <div class="task-status-accept"></div>
                                     </ion-col>
                                     <ion-col no-padding *ngIf="task.status_id === 4" class="managed-task-status" width-5>
                                         <div class="task-status-in-progress"></div>
@@ -283,12 +286,12 @@
                 </button>
             </ion-row>
 
-            <!--<ion-row>-->
-            <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-            <!--(click)="showActiveTask()">-->
-            <!--Active Task-->
-            <!--</button>-->
-            <!--</ion-row>-->
+            <ion-row>
+                <button class="home-btn" ion-button icon-left block color="secondary"
+                        (click)="showActiveTask()">
+                    Active Task
+                </button>
+            </ion-row>
 
             <div *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && !isLessor">
                 <ion-row class="management-pad">

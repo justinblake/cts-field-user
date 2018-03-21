@@ -5,6 +5,7 @@ import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {InAppBrowser} from '@ionic-native/in-app-browser';
+import {TaskPhotoReviewPage} from "../task-photo-review/task-photo-review";
 
 @Component({
     selector: 'page-single-foreman-task',
@@ -37,6 +38,9 @@ export class SingleForemanTaskPage {
     };
     imageLength: number = -1;
     role_id: number = -1;
+    taskFileUrl: string = 'https://www.cleartasksolutions.com/assets/task_files/';
+    task_links: any;
+    task_files: any;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -59,11 +63,9 @@ export class SingleForemanTaskPage {
         this.contractor_contacts = navParams.get('contractor_contacts');
         this.contractor_name = navParams.get('contractor_name');
         this.contractor_phone = navParams.get('contractor_phone');
+        this.task_links = navParams.get('task_links');
+        this.task_files = navParams.get('task_files');
         this.isIos = this.taskMgr.returnPlatform().isIos;
-
-        console.log('this.task_materials ', JSON.stringify(this.task_materials));
-        console.log("type of task materials " + typeof this.task_materials);
-        console.log("length " + this.task_materials.length)
     }
 
     setBackground(crew) {
@@ -190,25 +192,43 @@ export class SingleForemanTaskPage {
         return equip.name;
     }
 
+    openAttachedUrl(url) {
+        let options = "location=no";
+        this.iab.create("" + url, "_system", options);
+    }
+
+    openAttachedImage(imageObject) {
+console.log('imageObject ', JSON.stringify(imageObject));
+
+        let fileType: string = '';
+
+        if (imageObject.file_type === 'image/png') {
+            fileType = 'image';
+
+            let params = {
+                file_type: fileType,
+                file_name: '' + this.taskFileUrl + '' + imageObject.file_name,
+                notes: imageObject.notes
+            };
+
+            this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
+                console.log('pushed task photo review')
+            })
+
+        } else if (imageObject.file_type === 'application/pdf') {
+            fileType = 'pdf';
+            let options = "location=no";
+            this.iab.create('' + this.taskFileUrl + '' + imageObject.file_name, "_system", options);
+        }
+
+    }
+
+
+
     showDrivingDirections(lat, lon) {
 
         let options = "location=no";
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
-        //
-        //
-        // this.utils.presentLoading();
-        //
-        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-        //     let params = {
-        //         directions: response
-        //     };
-        //     setTimeout(() => {
-        //         this.navCtrl.push(DrivingDirectionsPage, params);
-        //         this.utils.dismissLoading();
-        //     }, 2000)
-        // }).catch((error) => {
-        //     this.utils.dismissLoading();
-        //     this.utils.presentToast("Location currently unavailable", true);
-        // })
+
     }
 }
