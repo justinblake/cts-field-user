@@ -1013,15 +1013,15 @@ export class HomePage {
                         console.log('appVerResult ', JSON.stringify(appVerResult));
                     });
 
-                    // downloadUpdate().then((result: any) => {
-                    //     if (result === 'true') {
-                    //         extractUpdate().then((extract: any) => {
-                    //             if (extract === 'done') {
-                    //                 loadNewVersion();
-                    //             }
-                    //         })
-                    //     }
-                    // })
+                    downloadUpdate().then((result: any) => {
+                        if (result === 'true') {
+                            extractUpdate().then((extract: any) => {
+                                if (extract === 'done') {
+                                    loadNewVersion();
+                                }
+                            })
+                        }
+                    })
                 }
             });
         } else {
