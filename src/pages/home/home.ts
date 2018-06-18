@@ -28,7 +28,6 @@ import {TabsPage} from "../tabs/tabs";
 import {ManageTasksHomePage} from "../manage-tasks-home/manage-tasks-home";
 import {SplashPage} from "../splash/splash";
 import {SplashScreen} from '@ionic-native/splash-screen';
-import {SingleUpcomingTaskPage} from "../single-upcoming-task/single-upcoming-task";
 import {SingleLaborerTaskPage} from "../single-laborer-task/single-laborer-task";
 
 
@@ -1010,47 +1009,47 @@ export class HomePage {
     }
 
     checkUpdates() {
-        // if (this.isCordova) {
-        //     checkForUpdate().then((res: any) => {
-        //         if (res === 'true') {
-        //
-        //             let appVersion = this.utils.returnAppVersion();
-        //
-        //             let empObject: any = {
-        //                 userId: this.currentUser.userId,
-        //                 software_version: this.empData.software_version,
-        //                 emp_platform: this.empData.emp_platform,
-        //                 operating_system: this.empData.operating_system,
-        //                 cell_carrier: this.empData.cell_carrier,
-        //                 version: appVersion,
-        //                 source: 1
-        //             };
-        //
-        //             if (this.isAndroid) {
-        //                 empObject.cell_number = this.empData.cell_number;
-        //                 empObject.emp_device_id = this.empData.emp_device_id;
-        //             }
-        //
-        //             // this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
-        //             //     console.log('appVerResult ', JSON.stringify(appVerResult));
-        //             //     downloadUpdate().then((result: any) => {
-        //             //         if (result === 'true') {
-        //             //             extractUpdate().then((extract: any) => {
-        //             //                 if (extract === 'done') {
-        //             //                     loadNewVersion();
-        //             //                 }
-        //             //             })
-        //             //         }
-        //             //     })
-        //             //
-        //             // });
-        //
-        //
-        //         }
-        //     });
-        // } else {
-        //     console.log('Not Cordova so no updates')
-        // }
+        if (this.isCordova) {
+            checkForUpdate().then((res: any) => {
+                if (res === 'true') {
+
+                    let appVersion = this.utils.returnAppVersion();
+
+                    let empObject: any = {
+                        userId: this.currentUser.userId,
+                        software_version: this.empData.software_version,
+                        emp_platform: this.empData.emp_platform,
+                        operating_system: this.empData.operating_system,
+                        cell_carrier: this.empData.cell_carrier,
+                        version: appVersion,
+                        source: 1
+                    };
+
+                    if (this.isAndroid) {
+                        empObject.cell_number = this.empData.cell_number;
+                        empObject.emp_device_id = this.empData.emp_device_id;
+                    }
+
+                    this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
+                        console.log('appVerResult ', JSON.stringify(appVerResult));
+                        downloadUpdate().then((result: any) => {
+                            if (result === 'true') {
+                                extractUpdate().then((extract: any) => {
+                                    if (extract === 'done') {
+                                        loadNewVersion();
+                                    }
+                                })
+                            }
+                        })
+
+                    });
+
+
+                }
+            });
+        } else {
+            console.log('Not Cordova so no updates')
+        }
     }
 
 

@@ -710,18 +710,18 @@ export class ManageTasksHomePage {
                         empObject.emp_device_id = this.empData.emp_device_id;
                     }
 
-                    // this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
-                    //     console.log('appVerResult ', JSON.stringify(appVerResult));
-                    //     downloadUpdate().then((result: any) => {
-                    //         if (result === 'true') {
-                    //             extractUpdate().then((extract: any) => {
-                    //                 if (extract === 'done') {
-                    //                     loadNewVersion();
-                    //                 }
-                    //             })
-                    //         }
-                    //     })
-                    // });
+                    this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
+                        console.log('appVerResult ', JSON.stringify(appVerResult));
+                        downloadUpdate().then((result: any) => {
+                            if (result === 'true') {
+                                extractUpdate().then((extract: any) => {
+                                    if (extract === 'done') {
+                                        loadNewVersion();
+                                    }
+                                })
+                            }
+                        })
+                    });
 
                 }
             });
