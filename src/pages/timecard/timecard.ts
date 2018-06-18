@@ -7,6 +7,8 @@ import {LoginPage} from '../login/login';
 import {TimecardSearchPage} from "../timecard-search/timecard-search"
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
+import {StorageService} from "../../providers/storage-service";
+import {SplashScreen} from '@ionic-native/splash-screen';
 
 @Pipe({name: 'keys', pure: false})
 export class TimecardKeysPipe implements PipeTransform {
@@ -35,6 +37,7 @@ export class TimecardPage {
     currentDate: any;
     showSearchResults: boolean = false;
     noEntry: boolean = false;
+    role_id: number;
 
 
     constructor(public navCtrl: NavController,
@@ -45,12 +48,15 @@ export class TimecardPage {
                 private utils: Utils,
                 private alertCtrl: AlertController,
                 private conMgr: ConversionManager,
-                private fcm: FCM) {
+                private fcm: FCM,
+                private storage: StorageService,
+                private splashscreen: SplashScreen) {
 
         this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
         this.userId = this.currentUser.userId;
         this.isIos = this.taskMgr.returnPlatform().isIos;
+        this.role_id = this.currentUser.role_id;
     }
 
 
@@ -67,7 +73,11 @@ export class TimecardPage {
                         this.taskMgr.saveAlertDispatch(data.task, data.project, true);
                         this.navCtrl.parent.select(0);
                     } else {
-                        this.navCtrl.parent.select(3);
+                        if (this.role_id === 3) {
+                            this.navCtrl.parent.select(2);
+                        } else {
+                            this.navCtrl.parent.select(3);
+                        }
                     }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
@@ -77,9 +87,24 @@ export class TimecardPage {
                 } else if (data.param1 === 'crews') {
                     this.taskMgr.saveEmergencyInfo(parseInt(data.task), parseInt(data.project), true);
                     this.navCtrl.parent.select(1);
+                } else if (data.param1 === 'User Update') {
+                    let tempNumber = parseInt(data.managesTasks);
+                    let tempRole = parseInt(data.userRole);
+                    this.storage.get('user').then((res1: any) => {
+                        res1.manages_tasks = tempNumber;
+                        res1.role_id = tempRole;
+                        this.storage.update('user', res1).then((res: any) => {
+                            this.reload();
+                        })
+                    });
                 }
             });
         }
+    }
+
+    reload() {
+        this.splashscreen.show();
+        window.location.reload();
     }
 
     presentAlert() {
@@ -108,6 +133,8 @@ export class TimecardPage {
 
             if (response.data.length === 0) {
                 this.noEntry = true;
+            } else if (response.data.length > 0) {
+                this.noEntry = false;
             }
 
             this.todaysTime = response.data;
@@ -141,11 +168,106 @@ export class TimecardPage {
             }
             this.todaysTime = dupArray;
             this.utils.dismissLoading();
+            console.log('todaysTime ', JSON.stringify(this.todaysTime));
         });
         this.showSearchResults = false;
     }
 
+    convertToMilliseconds(time) {
+        return Date.parse(time);
+    }
+
     updateTodaysTimecard(id, newTime, repeatIndex, newestNote: string) {
+        console.log("newTime ", newTime);
+        console.log('repeatIndex ', repeatIndex);
+        console.log('this.todaysTime[repeatIndex] ', JSON.stringify(this.todaysTime[repeatIndex]));
+        console.log('this.todaysTime[repeatIndex - 1] ', JSON.stringify(this.todaysTime[repeatIndex - 1]));
+        console.log('this.todaysTime[repeatIndex + 1] ', JSON.stringify(this.todaysTime[repeatIndex + 1]));
+
+
+        let newTimeMinusZ = newTime.slice(0, 19);
+        let newEntryInMilliseconds = Date.parse(newTimeMinusZ);
+        let currentTimeInMilliseconds = Date.parse(new Date().toLocaleString());
+        let lengthOfTimeEntries = this.todaysTime.length;
+
+        let previousEntry = 0;
+        let nextEntry = 0;
+
+        if (repeatIndex > 0 && repeatIndex < (lengthOfTimeEntries - 1)) {
+            previousEntry = Date.parse(this.todaysTime[(repeatIndex - 1)].alt_timestamp);
+            nextEntry = Date.parse(this.todaysTime[(repeatIndex + 1)].alt_timestamp);
+            console.log('previousEntry ', previousEntry);
+            console.log('nextEntry ', nextEntry);
+        }
+        else if (repeatIndex > 0 && repeatIndex === (lengthOfTimeEntries - 1)) {
+            previousEntry = Date.parse(this.todaysTime[(repeatIndex - 1)].alt_timestamp);
+
+            console.log('previousEntry ', previousEntry);
+
+        }
+        else if (repeatIndex === 0 && lengthOfTimeEntries >= 2) {
+            nextEntry = Date.parse(this.todaysTime[(repeatIndex + 1)].alt_timestamp);
+            console.log('nextEntry ', nextEntry);
+        }
+
+
+        console.log('newEntryInMilliseconds ', newEntryInMilliseconds);
+        console.log('currentTimeInMilliseconds ', currentTimeInMilliseconds);
+        console.log('lengthOfTimeEntries ', lengthOfTimeEntries);
+
+
+        // this is the first entry and only entry in the timecard
+        if (repeatIndex === 0 && lengthOfTimeEntries === 1) {
+            if (newEntryInMilliseconds > currentTimeInMilliseconds) {
+                console.log('sorry, that is past the current time');
+                this.presentTimecardErrorAlert(2);
+            } else {
+                console.log('this is valid');
+                this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
+            }
+        }
+        // this is the first entry and there are additional entries
+        else if (repeatIndex === 0 && lengthOfTimeEntries > 1) {
+
+            if (newEntryInMilliseconds > nextEntry) {
+                console.log('sorry, that is past the current time 2 ');
+                this.presentTimecardErrorAlert(1);
+            } else {
+                console.log('this is valid 2');
+                this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
+            }
+        }
+        // this is a middle timecard entry but no the last
+        else if (repeatIndex > 0 && repeatIndex < (lengthOfTimeEntries - 1)) {
+            if ((newEntryInMilliseconds > previousEntry) && (newEntryInMilliseconds < nextEntry)) {
+                console.log('This works');
+                this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
+            } else if (newEntryInMilliseconds > nextEntry) {
+                console.log('This does not work');
+                this.presentTimecardErrorAlert(1);
+            } else if (newEntryInMilliseconds < previousEntry) {
+                console.log('This does not work');
+                this.presentTimecardErrorAlert(0);
+            }
+        }
+        // this is the last entry
+        else if (repeatIndex > 0 && repeatIndex === (lengthOfTimeEntries - 1)) {
+            if ((newEntryInMilliseconds > previousEntry) && (newEntryInMilliseconds < currentTimeInMilliseconds)) {
+                console.log('lkjansdfljhbasdf');
+                this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
+            } else if (newEntryInMilliseconds < previousEntry) {
+                console.log('This does not work');
+                this.presentTimecardErrorAlert(0);
+            } else if (newEntryInMilliseconds > currentTimeInMilliseconds) {
+                console.log('lkjansdfljhbasdf');
+                console.log('This does not work');
+                this.presentTimecardErrorAlert(2);
+            }
+        }
+
+    }
+
+    saveValidatedEntries(id, newTime, repeatIndex, newestNote: string) {
         let notes = '';
         if (newestNote === '') {
             notes = "NULL"
@@ -158,18 +280,53 @@ export class TimecardPage {
         let alt_timestamp = newYear + ' ' + newestTime;
 
 
-        this.taskMgr.updateTimecard(this.userId, id, alt_timestamp, notes).then(res => {
+        this.taskMgr.updateTimecard(this.userId, id, alt_timestamp, notes).then((res: any) => {
             if (this.debug) {
                 console.log('Timecard res ', JSON.stringify(res));
             }
-
 
             this.todaysTime[repeatIndex].alt_timestamp = newTime;
             this.todaysTime[repeatIndex].timestamp = newTime;
             this.todaysTime[repeatIndex].notes = newestNote;
             this.todaysTime[repeatIndex].originalNotes = newestNote;
+            this.todaysTime[repeatIndex].id = res.data.msg
         })
     }
+
+
+    presentTimecardErrorAlert(problem: number) {
+
+        let msg = '';
+
+        // new time is earlier than the previous entry
+        if (problem === 0) {
+            msg = 'The new entry is earlier than the previous entry. Please change your ' +
+                'new entry to after the previous entry\'s time'
+        }
+
+        // new time is later than the next entry
+        else if (problem === 1) {
+            msg = 'The new entry is later than the next entry. Please change your ' +
+                'new entry to before the next entry\'s time'
+        }
+
+        // new time is later than the current time
+        else if (problem === 2) {
+            msg = 'Your new entry is later than the current time. Please change your new entry to be before the present time'
+        }
+
+        let alert = this.alertCtrl.create({
+            title: 'Timecard Entry Error',
+            message: msg,
+            cssClass: 'myAlerts',
+            buttons: [{
+                text: 'OK',
+                role: 'cancel'
+            }]
+        });
+        alert.present();
+    }
+
 
     // function to sort timecard data into their individual days
     groupBy(array, property) {

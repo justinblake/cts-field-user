@@ -38,7 +38,6 @@ page-manage-tasks-home {
         }
     }
 
-
     //timecard section css
     .clockOut {
         color: #d9534f;
@@ -70,64 +69,6 @@ page-manage-tasks-home {
     }
     .show-navigation-only {
         display: none;
-    }
-
-    @media (min-width: 351px) {
-        .show-task {
-            display: none
-        }
-    }
-
-    @media (max-width: 426px) {
-        .next-space {
-            width: 110%;
-            margin-left: -5%;
-        }
-    }
-
-    @media (max-width: 376px) {
-        .task-icon {
-            right: -10px;
-        }
-        .next-space {
-            width: 109%;
-            margin-left: -5%;
-        }
-        .chip-clock-in {
-            font-size: 1.6rem;
-        }
-        .hide-chip {
-            display: none;
-        }
-        .show-all {
-            display: none;
-        }
-        .show-navigation-only {
-            display: inherit;
-        }
-    }
-
-    @media (max-width: 350px) {
-        .task-icon {
-            right: -5px;
-        }
-        .newTime {
-            display: none;
-        }
-        .next-space {
-            width: 112%;
-            margin-left: -6%;
-        }
-        .hide-task {
-            display: none
-        }
-        ion-col[width-60] {
-            -webkit-flex: 0 0 90%;
-            -ms-flex: 0 0 90%;
-            -webkit-box-flex: 0;
-            flex: 0 0 90%;
-            max-width: 90%;
-        }
     }
 
     .pad8 {
@@ -197,6 +138,38 @@ page-manage-tasks-home {
         padding-left: 10px;
     }
 
+    .mar-top13 {
+        margin-top: 13px;
+    }
+
+    .manage-app > .card-header-md {
+        height: 100px;
+        padding-top: 10px;
+    }
+
+    .manage-app > .card-header-ios {
+        height: 100px;
+        padding-top: 10px;
+    }
+
+    .greeting {
+        font-size: 1.8rem;
+        color: black;
+        opacity: .8;
+    }
+
+    .greeting-div {
+        margin-bottom: 5px;
+    }
+
+    .content-md > .scroll-content {
+        margin-top: 71px !important;
+    }
+
+    .content-ios > .scroll-content {
+        margin-top: 91px !important;
+    }
+
     @media (min-width: 685px) {
         .comp-wrap {
             white-space: nowrap;
@@ -207,7 +180,56 @@ page-manage-tasks-home {
         }
     }
 
-    .mar-top13 {
-        margin-top: 13px;
+    @media (max-width: 426px) {
+        .next-space {
+            width: 110%;
+            margin-left: -5%;
+        }
     }
+
+    @media (max-width: 376px) {
+        .task-icon {
+            right: -10px;
+        }
+        .next-space {
+            width: 109%;
+            margin-left: -5%;
+        }
+        .chip-clock-in {
+            font-size: 1.6rem;
+        }
+        .hide-chip {
+            display: none;
+        }
+        .show-all {
+            display: none;
+        }
+        .show-navigation-only {
+            display: inherit;
+        }
+    }
+
+    @media (min-width: 351px) {
+        .show-task {
+            display: none
+        }
+    }
+
+    @media (max-width: 350px) {
+        .task-icon {
+            right: -5px;
+        }
+        .newTime {
+            font-size: 1.4rem;
+        }
+        .next-space {
+            width: 112%;
+            margin-left: -6%;
+        }
+        .hide-task {
+            display: none
+        }
+
+    }
+
 }

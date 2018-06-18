@@ -7,6 +7,9 @@ import {UserManager} from '../../providers/user-manager';
 import {LoginPage} from '../login/login';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
+import {InAppBrowser} from '@ionic-native/in-app-browser';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {StorageService} from "../../providers/storage-service";
 
 @Component({
     selector: 'page-alerts',
@@ -36,7 +39,10 @@ export class AlertsPage {
                 private callNumber: CallNumber,
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
-                private fcm: FCM) {
+                private fcm: FCM,
+                private iab: InAppBrowser,
+                private storage: StorageService,
+                private splashscreen: SplashScreen) {
 
         this.debug = this.utils.returnDebug();
 
@@ -49,6 +55,10 @@ export class AlertsPage {
         this.loadAlerts();
         this.subscribeAgain();
         this.taskMgr.clearDispatchAlert();
+    }
+
+    ionViewDidLeave() {
+        this.displayAlert = -1;
     }
 
     subscribeAgain() {
@@ -71,9 +81,24 @@ export class AlertsPage {
                 } else if (data.param1 === 'crews') {
                     this.taskMgr.saveEmergencyInfo(parseInt(data.task), parseInt(data.project), true);
                     this.navCtrl.parent.select(1);
+                } else if (data.param1 === 'User Update') {
+                    let tempNumber = parseInt(data.managesTasks);
+                    let tempRole = parseInt(data.userRole);
+                    this.storage.get('user').then((res1: any) => {
+                        res1.manages_tasks = tempNumber;
+                        res1.role_id = tempRole;
+                        this.storage.update('user', res1).then((res: any) => {
+                            this.reload();
+                        })
+                    });
                 }
             });
         }
+    }
+
+    reload() {
+        this.splashscreen.show();
+        window.location.reload();
     }
 
     presentAlert() {
@@ -99,7 +124,7 @@ export class AlertsPage {
 
         console.log('task ', JSON.stringify(task));
 
-        this.taskMgr.saveAlertDispatch(task.task_id, task.id,true);
+        this.taskMgr.saveAlertDispatch(task.task_id, task.id, true);
         this.taskMgr.passAlertMessage(task);
 
         this.navCtrl.parent.select(0);
@@ -112,6 +137,7 @@ export class AlertsPage {
         this.utils.presentLoading();
         this.alertsLoaded = false;
         this.taskMgr.getEmployeeAlerts().then((response: any) => {
+            console.log('response ', JSON.stringify(response));
 
             let interimTime = new Date(Date.now());
 
@@ -206,6 +232,11 @@ export class AlertsPage {
         this.userMgr.logout().then(response => {
             this.appCtrl.getRootNav().push(LoginPage);
         })
+    }
+
+    openAttachedUrl(url) {
+        let options = "location=no";
+        this.iab.create("" + url, "_system", options);
     }
 
     adjustTime(time) {

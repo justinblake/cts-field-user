@@ -25,18 +25,17 @@
 
     <!--Timecard Search-->
     <div *ngIf="startDay !== -1">
-        <ion-card>
-            <ion-card-header text-center class="task-card-header">
-                {{startDay | date:'mediumDate'}} To {{endDay | date:'mediumDate'}}
+        <ion-card class="card-border">
+            <ion-card-header class="task-card-header search-result">
+                Timecard Search Dates
             </ion-card-header>
             <ion-card-content>
-                <ion-buttons text-center>
-                    <button class="search-button search-buttons" color="secondary" ion-button block icon-left
-                            (click)="timecardSearch()">
-                        <ion-icon name="search"></ion-icon>
-                        Search
-                    </button>
-                </ion-buttons>
+                <h3 class="clock-status" *ngIf="!isIos">
+                    {{startDay | date:'mediumDate'}} To {{endDay | date:'mediumDate'}}
+                </h3>
+                <h3 class="clock-status" *ngIf="isIos">
+                    {{convertMilli(startDay)}} To {{convertMilli(endDay)}}
+                </h3>
             </ion-card-content>
         </ion-card>
     </div>
@@ -104,7 +103,7 @@
             </ion-card>
         </div>
 
-        <ion-card>
+        <ion-card class="card-border">
             <ion-card-header class="task-card-header search-results">
                 Timecard Search Results
             </ion-card-header>

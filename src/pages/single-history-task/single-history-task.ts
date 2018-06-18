@@ -63,7 +63,7 @@ export class SingleHistoryTaskPage {
     }
 
     ionViewWillEnter() {
-
+        console.log('this.task_user_log ', this.task_user_log);
     }
 
     adjustTime(time) {
@@ -103,7 +103,7 @@ console.log('imageObject ', JSON.stringify(imageObject));
 
         let fileType: string = '';
 
-        if (imageObject.file_type === 'image/png') {
+        if (imageObject.file_type !== 'application/pdf') {
             fileType = 'image';
 
             let params = {

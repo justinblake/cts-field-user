@@ -47,7 +47,16 @@
     <div *ngIf="showTasks">
         <div *ngIf="nextDayTask">
             <ion-card class="card-border" *ngFor="let date of nextDayTask.data | myKeys ; let i = index">
-                <ion-card-header class="task-card-header">
+                <ion-card-header class="task-card-header" *ngIf="isIos">
+
+                    <div bold class="head-font" text-center *ngIf="nextDayTask.data[date].length === 1">
+                        {{convertDate(date)}}: {{nextDayTask.data[date].length}} TASK
+                    </div>
+                    <div bold class="head-font" text-center *ngIf="nextDayTask.data[date].length > 1">
+                        {{convertDate(date)}}: {{nextDayTask.data[date].length}} TASKS
+                    </div>
+                </ion-card-header>
+                <ion-card-header class="task-card-header" *ngIf="!isIos">
 
                     <div bold class="head-font" text-center *ngIf="nextDayTask.data[date].length === 1">
                         {{date | date:'mediumDate' }}: {{nextDayTask.data[date].length}} TASK
@@ -61,9 +70,7 @@
                         <div class="card-width">
 
                             <ion-grid class="task-button">
-                                <!--<ion-row>-->
-                                <!--task.id - {{task.id}}, index- {{ j}}-->
-                                <!--</ion-row>-->
+
                                 <ion-row (click)="openSingleTask(task); alertObject = {}">
                                     <ion-col class="accept-icon" width-10
                                              *ngIf="task.status_id === 3 || task.status_id === 4 || task.status_id === 9">

@@ -114,7 +114,7 @@
                     </ion-col>
                 </ion-row>
 
-                <ion-list *ngFor="let file of data.files; let i = index">
+               <ion-list *ngFor="let file of data.files; let i = index">
                     <ion-item>
                         {{file.name}}
                         <button ion-button icon-only item-right clear (click)="deleteImage(i)">
@@ -146,6 +146,7 @@
                 </button>
             </ion-col>
         </ion-row>
+        <!--test-->
 
 
     </ion-card>

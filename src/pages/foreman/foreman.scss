@@ -99,12 +99,6 @@ page-foreman {
         margin-top: -15px;
     }
 
-    @media (max-width: 328px) {
-        .newTime {
-            font-size: 1.5rem;
-        }
-    }
-
     .address {
         padding-top: 0;
     }
@@ -119,7 +113,6 @@ page-foreman {
 
     .card-space {
         padding-bottom: 25px;
-        margin-bottom: 25px;
     }
 
     .card-space > .task-card-header {
@@ -154,6 +147,47 @@ page-foreman {
     .card-ios p {
         color: black;
         letter-spacing: 0.5px;
+    }
+
+    .home-btn {
+        font-size: 1.6rem;
+    }
+
+    .super-btn-pad {
+        padding-top: 7px;
+    }
+
+    .super-btn-pad > ion-col > ion-item > .item-inner > .input-wrapper > ion-datetime > button {
+        border: 2px solid #3F51B5;
+        border-radius: 5px;
+    }
+
+    .super-tools {
+        padding: 0 8px 5px 6px;
+    }
+
+    .pad-left-8 {
+        padding-left: 8px;
+    }
+
+    .pad-right-8 {
+        padding-right: 8px;
+    }
+
+    @media (max-width: 360px) {
+        .pad-left-8 {
+            padding-left: 0;
+        }
+
+        .pad-right-8 {
+            padding-right: 0;
+        }
+    }
+
+    @media (max-width: 328px) {
+        .newTime {
+            font-size: 1.5rem;
+        }
     }
 
 }

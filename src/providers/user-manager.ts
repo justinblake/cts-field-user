@@ -82,6 +82,7 @@ export class UserManager {
     }
 
     logout() {
+        this.authenticated = false;
         return Promise.all(
             [
                 this.deleteStorageKey('user'),
@@ -115,6 +116,7 @@ export class UserManager {
     getUserId() {
         return this.user.userId;
     }
+
 
     setUser(user) {
         this.user = user

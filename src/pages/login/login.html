@@ -3,7 +3,7 @@
     <div>
         <ion-list *ngIf="!showEmail">
             <ion-item *ngIf="!validEmail" class="login-pad">
-                <ion-label floating>Email Address</ion-label>
+                <ion-label floating>Login Email</ion-label>
                 <ion-input type="email" [(ngModel)]="credentials.email" required></ion-input>
             </ion-item>
             <ion-item *ngIf="validEmail" class="login-pad">
@@ -24,10 +24,17 @@
                     </button>
                 </ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row *ngIf="validEmail">
                 <ion-col class="login-btn" width-100>
                     <button class="pass-reset" ion-button icon-left block clear (click)="showPasswordReset()">
                         Forgot Password?
+                    </button>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="!validEmail">
+                <ion-col class="login-btn" width-100>
+                    <button class="pass-reset" ion-button icon-left block clear (click)="presentHelpAlert()">
+                        Login Questions?
                     </button>
                 </ion-col>
             </ion-row>

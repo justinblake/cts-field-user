@@ -28,6 +28,9 @@ export class TabsPage {
 
     constructor(public taskManager: TaskManager,
                 private userMgr: UserManager) {
+
+        console.log('This is the Tabs Page');
+
         this.currentUser = this.userMgr.getUser();
 
         if (this.currentUser.role_id === 6) {

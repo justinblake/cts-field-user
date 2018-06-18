@@ -78,39 +78,6 @@ page-home {
         }
     }
 
-    @media (max-width: 475px) {
-        @keyframes taskMove {
-            from {
-                left: 50px;
-            }
-            to {
-                left: 130px;
-            }
-        }
-    }
-
-    @media (max-width: 376px) {
-        @keyframes taskMove {
-            from {
-                left: 40px;
-            }
-            to {
-                left: 120px;
-            }
-        }
-    }
-
-    @media (max-width: 346px) {
-        @keyframes taskMove {
-            from {
-                left: 25px;
-            }
-            to {
-                left: 105px;
-            }
-        }
-    }
-
     .mar-top10 {
         margin-top: 10px;
     }
@@ -167,28 +134,6 @@ page-home {
         padding-top: 2px;
     }
 
-    @media (min-width: 685px) {
-        .comp-wrap {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 169px;
-            padding-left: 10px;
-        }
-    }
-
-    @media (max-width: 350px) {
-        .hide-task {
-            display: none
-        }
-    }
-
-    @media (min-width: 351px) {
-        .show-task {
-            display: none
-        }
-    }
-
     .mar-bot75 {
         margin-bottom: 75px;
     }
@@ -219,30 +164,6 @@ page-home {
         color: #3F51B5;
     }
 
-    @media (max-width: 376px) {
-        .task-icon {
-            right: -10px;
-        }
-    }
-
-    @media (max-width: 350px) {
-        .task-icon {
-            right: -5px;
-        }
-        .newTime {
-            color: white;
-            top: -2px;
-        }
-
-        .timecard-hide {
-            display: none;
-        }
-
-        .timecard-show {
-            display: inherit;
-        }
-    }
-
     .manage-app.card-md {
         margin-top: 6px;
     }
@@ -252,11 +173,13 @@ page-home {
     }
 
     .manage-app > .card-header-md {
-        height: 80px;
+        height: 100px;
+        padding-top: 10px;
     }
 
     .manage-app > .card-header-ios {
-        height: 80px;
+        height: 100px;
+        padding-top: 10px;
     }
 
     .pad-top4 {
@@ -288,8 +211,18 @@ page-home {
         font-size: 1.8rem;
     }
 
-    .time-font {
+    .time-font-1 {
         font-size: 2.2rem;
+    }
+
+    .greeting {
+        font-size: 1.8rem;
+        color: black;
+        opacity: .8;
+    }
+
+    .greeting-div {
+        margin-bottom: 5px;
     }
 
     .accept-icon {
@@ -299,33 +232,6 @@ page-home {
 
     .contractConts {
         margin: 5px 0;
-    }
-
-    //.content-ios > .scroll-content > .timecard-margin {
-    //  margin-top: 26px !important;
-    //}
-
-    @media (max-width: 426px) {
-        .next-space {
-            width: 104%;
-            margin-left: -2%;
-        }
-    }
-
-    @media (max-width: 376px) {
-
-        .next-space {
-            width: 105%;
-            margin-left: -3%;
-        }
-    }
-
-    @media (max-width: 350px) {
-
-        .next-space {
-            width: 107%;
-            margin-left: -4%;
-        }
     }
 
     .laborer-action {
@@ -340,6 +246,109 @@ page-home {
     .loadAni {
         position: relative;
         right: -5px;
+    }
+
+    .content-md > .scroll-content {
+        margin-top: 71px !important;
+    }
+
+    .content-ios > .scroll-content {
+        margin-top: 91px !important;
+    }
+
+    @media (min-width: 685px) {
+        .comp-wrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 169px;
+            padding-left: 10px;
+        }
+    }
+
+    @media (max-width: 475px) {
+        @keyframes taskMove {
+            from {
+                left: 50px;
+            }
+            to {
+                left: 130px;
+            }
+        }
+    }
+
+    @media (max-width: 426px) {
+        .next-space {
+            width: 104%;
+            margin-left: -2%;
+        }
+    }
+
+
+
+    @media (max-width: 376px) {
+        .task-icon {
+            right: -10px;
+        }
+
+        .next-space {
+            width: 105%;
+            margin-left: -3%;
+        }
+
+        @keyframes taskMove {
+            from {
+                left: 40px;
+            }
+            to {
+                left: 120px;
+            }
+        }
+    }
+
+    @media (min-width: 351px) {
+        .show-task {
+            display: none
+        }
+    }
+
+    @media (max-width: 350px) {
+
+        .next-space {
+            width: 107%;
+            margin-left: -4%;
+        }
+
+        .task-icon {
+            right: -5px;
+        }
+        .newTime {
+            color: white;
+            top: -2px;
+        }
+
+        .timecard-hide {
+            display: none;
+        }
+
+        .timecard-show {
+            display: inherit;
+        }
+
+        .hide-task {
+            display: none
+        }
+    }
+
+    @media (max-width: 346px) {
+        @keyframes taskMove {
+            from {
+                left: 25px;
+            }
+            to {
+                left: 105px;
+            }
+        }
     }
 
 }

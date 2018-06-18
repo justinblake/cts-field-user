@@ -8,6 +8,9 @@ import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {SingleForemanTaskPage} from "../single-foreman-task/single-foreman-task"
 import {InAppBrowser} from '@ionic-native/in-app-browser';
+import {UserManager} from "../../providers/user-manager";
+import {StorageService} from "../../providers/storage-service";
+import {SplashScreen} from '@ionic-native/splash-screen';
 
 
 @Component({
@@ -44,6 +47,7 @@ export class ForemanPage {
     };
     currentDate: any = '-1';
     search: boolean = false;
+    role_id: number;
 
     emergencyTaskId: number = 0;
     emergencyProjectId: number = 0;
@@ -57,6 +61,8 @@ export class ForemanPage {
     displayMonth: string = '';
     displayDay: any;
     displayYear: any;
+    userRole: number = 0;
+    currentUser: any = '';
 
     constructor(public navCtrl: NavController,
                 public taskMgr: TaskManager,
@@ -65,10 +71,16 @@ export class ForemanPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM,
-                private iab: InAppBrowser) {
+                private iab: InAppBrowser,
+                private userMgr: UserManager,
+                private storage: StorageService,
+                private splashscreen: SplashScreen) {
 
         this.isIos = this.taskMgr.returnPlatform().isIos;
         this.debug = this.utils.returnDebug();
+        this.currentUser = this.userMgr.getUser();
+        this.userRole = this.currentUser.role_id;
+        this.role_id = this.currentUser.role_id;
     }
 
     ionViewWillEnter() {
@@ -107,7 +119,11 @@ export class ForemanPage {
                         this.taskMgr.saveAlertDispatch(data.task, data.project, true);
                         this.navCtrl.parent.select(0);
                     } else {
-                        this.navCtrl.parent.select(3);
+                        if (this.role_id === 3) {
+                            this.navCtrl.parent.select(2);
+                        } else {
+                            this.navCtrl.parent.select(3);
+                        }
                     }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
@@ -118,9 +134,24 @@ export class ForemanPage {
                     this.refreshView();
                     this.emergencyTaskId = parseInt(data.task);
                     this.presentEmergencyAlert();
+                } else if (data.param1 === 'User Update') {
+                    let tempNumber = parseInt(data.managesTasks);
+                    let tempRole = parseInt(data.userRole);
+                    this.storage.get('user').then((res1: any) => {
+                        res1.manages_tasks = tempNumber;
+                        res1.role_id = tempRole;
+                        this.storage.update('user', res1).then((res: any) => {
+                            this.reload();
+                        })
+                    });
                 }
             });
         }
+    }
+
+    reload() {
+        this.splashscreen.show();
+        window.location.reload();
     }
 
     presentAlert() {
@@ -177,6 +208,8 @@ export class ForemanPage {
             });
     }
 
+    // test
+
     getForemanTasks(showLoading?: boolean, refreshDate?: boolean) {
         this.search = false;
         if (this.debug) {
@@ -189,24 +222,15 @@ export class ForemanPage {
 
         if (this.currentDate === '-1') {
             let interimTime = new Date();
-            console.log('interimTime ', JSON.stringify(interimTime));
             let myZone = interimTime.getTimezoneOffset();
-            console.log('myZone ', JSON.stringify(myZone));
             let year = interimTime.getFullYear();
-            console.log('year ', JSON.stringify(year));
             let month = interimTime.getMonth();
-            console.log('month ', JSON.stringify(month));
             let day = interimTime.getUTCDate();
-            console.log('day ', JSON.stringify(day));
             let hour = interimTime.getUTCHours() - (myZone / 60);
-            console.log('hour ', JSON.stringify(hour));
             let minute = interimTime.getUTCMinutes();
-            console.log('minute ', JSON.stringify(minute));
             let seconds = interimTime.getUTCSeconds();
-            console.log('seconds ', JSON.stringify(seconds));
             let adjustTimezone = new Date(Date.UTC(year, month, day, hour, minute, seconds));
-            this.currentDate = adjustTimezone.toISOString().slice(0,10);
-            console.log('this.currentDate ', JSON.stringify(this.currentDate));
+            this.currentDate = adjustTimezone.toISOString().slice(0, 10);
 
             this.displayDay = this.deleteLeadingZero(this.currentDate.slice(8, 9), this.currentDate.slice(9, 10));
             this.displayMonth = this.month[(parseInt(this.currentDate.slice(5, 7))) - 1];
@@ -224,6 +248,7 @@ export class ForemanPage {
 
         this.taskMgr.loadForemanTasks(this.currentDate).then((response: any) => {
             this.tasks = response.data;
+            console.log('this.tasks ', JSON.stringify(this.tasks));
             if (response.data.length === 0) {
                 this.tasks = false
             }
@@ -284,10 +309,11 @@ export class ForemanPage {
                     return (a.task_start_time > b.task_start_time) ? 1 : ((b.task_start_time > a.task_start_time) ? -1 : 0);
                 });
             }
+
             if (showLoading) {
                 this.utils.dismissLoading();
             }
-            // console.log('this.tasks ', JSON.stringify(this.tasks));
+            console.log('this.tasks ', JSON.stringify(this.tasks));
         })
     }
 
@@ -355,7 +381,6 @@ export class ForemanPage {
             };
 
 
-
             this.navCtrl.push(SingleForemanTaskPage, params).then(() => {
             })
         }
@@ -389,6 +414,11 @@ export class ForemanPage {
 
     adjustTime(time) {
         return this.conMgr.adjustTime(time);
+    }
+
+    openInAppBrowser() {
+        let options = "location=no";
+        this.iab.create("https://www.cleartasksolutions.com/app/login", "_system", options);
     }
 
 

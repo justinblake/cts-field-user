@@ -2,30 +2,32 @@
 
 <ion-header *ngIf="isIos">
     <ion-navbar>
-        <ion-row>
-            <ion-col width-50 class="bottom-pad">
+        <ion-row no-padding>
+            <ion-col no-padding width-50 class="bottom-pad">
                 <div text-center>
                     <div class="main-title-ios">
                         Current Task
                     </div>
-                    <div text-nowrap class="company-name comp-wrap">
-                        {{compName}}
+                    <div text-nowrap class="comp-wrap company-name">
+                        <span>{{compName}}</span>
                     </div>
                 </div>
             </ion-col>
-            <ion-col width-25 class="mar-top13">
+            <!--<span></span>-->
+            <ion-col no-padding width-25 class="mar-top13">
                 <ion-buttons class="mar-right6" end>
                     <button class="refresh" ion-button round icon-right color="secondary"
                             (click)="setCurrentTask(true)">
-                        Refresh
-                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                        <span class="refresh-word">Refresh</span>
+                        <ion-icon class="refresh-logo" name="refresh"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
-            <ion-col width-25 class="mar-top13">
+            <ion-col no-padding width-25 class="mar-top13">
                 <ion-buttons class="mar-right6" end>
-                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
-                        <ion-icon class="logout-hide" name="log-out"></ion-icon>
+                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()">
+                        <span class="refresh-word">Logout</span>
+                        <ion-icon class="refresh-logo" name="log-out"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
@@ -37,8 +39,8 @@
 
 <ion-header *ngIf="!isIos">
     <ion-navbar>
-        <ion-row>
-            <ion-col width-50 class="bottom-pad">
+        <ion-row no-padding>
+            <ion-col no-padding width-50 class="bottom-pad">
                 <div text-center>
                     <ion-title class="main-title-ios">
                         Current Task
@@ -48,19 +50,20 @@
                     </ion-title>
                 </div>
             </ion-col>
-            <ion-col width-25 class="mar-top10">
+            <ion-col no-padding width-25 class="mar-top10">
                 <ion-buttons class="mar-right6" end>
                     <button class="refresh" ion-button round icon-right color="secondary"
                             (click)="setCurrentTask(true)">
-                        Refresh
-                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                        <span class="refresh-word">Refresh</span>
+                        <ion-icon class="refresh-logo" name="refresh"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
-            <ion-col width-25 class="mar-top10">
+            <ion-col no-padding width-25 class="mar-top10">
                 <ion-buttons class="mar-right6" end>
-                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
-                        <ion-icon class="logout-hide" name="log-out"></ion-icon>
+                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()">
+                        <span class="refresh-word">Logout</span>
+                        <ion-icon class="refresh-logo" name="log-out"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
@@ -71,7 +74,13 @@
 <ion-content footer *ngIf="userRole !== 6">
 
     <ion-card class="manage-app" *ngIf="!isLessor">
-        <ion-card-header class="task-card-header time-font" (click)="showClockInOut()">
+        <ion-card-header class="task-card-header time-font-1" (click)="showClockInOut()">
+            <div class="greeting-div" text-center>
+                <span class="greeting" *ngIf="localHour < 12">Good Morning {{currentUser.first_name}}</span>
+                <span class="greeting" *ngIf="(localHour >= 12) && (localHour < 17)">Good Afternoon {{currentUser.first_name}}</span>
+                <span class="greeting" *ngIf="localHour >= 17">Good Evening {{currentUser.first_name}}</span>
+            </div>
+
 
             <div *ngIf="!showTimecard" text-center class="pad-top4">
                 <span class="hide-task">Timecard Status: </span>
@@ -84,15 +93,15 @@
                 <span class="loadAnim"
                       [ngClass]="{'loadAnimColorGreen': timecardStatus === 0, 'loadAnimColorRed': timecardStatus === 1}"
                       *ngIf="createEntry">...</span>
-                <h3 *ngIf="!createEntry" class="orange">(Click here to clock <span
+                <h3 *ngIf="!createEntry" text-uppercase class="timecard-blue">Click here to clock <span
                     *ngIf="timecardStatus === 0">in</span><span
-                    *ngIf="timecardStatus === 1">out</span>)</h3>
+                    *ngIf="timecardStatus === 1">out</span></h3>
             </div>
             <div *ngIf="showTimecard">
                 <!--clock in-->
                 <div *ngIf="timecardStatus === 0">
                     <ion-row class="clock-out">
-                        <ion-col width-30>
+                        <ion-col width-30 class="no-padding-left">
                             <button class="home-btn" ion-button icon-left block
                                     (click)="!showTimecard">
                                 Cancel
@@ -109,7 +118,7 @@
                 <!--clock out-->
                 <div *ngIf="timecardStatus === 1">
                     <ion-row class="clock-out">
-                        <ion-col width-30>
+                        <ion-col width-30 class="no-padding-left">
                             <button class="home-btn" ion-button icon-left block
                                     (click)="!showTimecard">
                                 Cancel
@@ -133,7 +142,7 @@
 
     <div *ngIf="showTasks">
         <div *ngIf="currentTask">
-            <ion-card>
+            <ion-card class="card-border">
                 <ion-card-header class="task-card-header">
                     Project Details
                 </ion-card-header>
@@ -155,7 +164,7 @@
 
                     <ion-list no-padding text-wrap [@expandCollapse]="divState">
                         <ion-item class="contractor-label" no-padding text-wrap [@expandCollapse]="divState">
-                            <h4 class="contractor-main" [@expandCollapse]="divState">Contractor:</h4>
+                            <h4 class="contractor-main" [@expandCollapse]="divState">Customer:</h4>
                             <h4 class="contractor-sub" [@expandCollapse]="divState">
                                 {{currentTask.contractor[0].name}}
                             </h4>
@@ -175,7 +184,7 @@
                     <ion-list no-padding text-wrap [@expandCollapse]="divState"
                               *ngIf="currentTask.contractor_contacts?.length > 0">
                         <ion-item no-padding text-wrap [@expandCollapse]="divState">
-                            <h4 class="contractor-main" [@expandCollapse]="divState">Contractor Contacts:</h4>
+                            <h4 class="contractor-main" [@expandCollapse]="divState">Customer Contacts:</h4>
                             <div class="contractor-div"
                                  *ngFor="let contacts of currentTask.contractor_contacts; let p = index"
                                  [@expandCollapse]="divState">
@@ -209,7 +218,7 @@
                 <div no-padding class="more-back mar-top-15">
                     <ion-row>
                         <ion-col>
-                            <button ion-button icon-left clear medium (click)="toggleDivState()">
+                            <button ion-button clear medium (click)="toggleDivState()">
                                 {{divState == 'collapse' ? 'More' : 'Less'}}...
                             </button>
                         </ion-col>
@@ -217,14 +226,15 @@
                             <button ion-button icon-left clear medium
                                     (click)="showDrivingDirections(currentTask.lat, currentTask.lon)">
                                 <ion-icon name="navigate"></ion-icon>
-                                Launch Navigation
+                                <span class="full-navigation">Launch Navigation</span>
+                                <span class="half-navigation">Navigation</span>
                             </button>
                         </ion-col>
                     </ion-row>
                 </div>
             </ion-card>
 
-            <ion-card>
+            <ion-card class="card-border">
                 <ion-card-header class="task-card-header">
                     Current Task
                 </ion-card-header>
@@ -232,7 +242,9 @@
                     <div class="task-card-content">
                         <ion-list no-padding text-wrap>
                             <ion-item no-padding text-wrap>
-                                <h4 class="project-name capitalize">{{currentTask.job_tasks.task_description}}</h4>
+                                <h4 class="project-name capitalize">
+                                    {{currentTask.job_tasks.task_description}}</h4>
+
                                 <h5 class="s-time">Start Time: {{currentTask.job_tasks.strTime}}
                                 </h5>
 
@@ -255,7 +267,7 @@
                 </ion-card-content>
             </ion-card>
 
-            <ion-card *ngIf="currentTask.job_tasks.task_files?.length > 0">
+            <ion-card class="card-border" *ngIf="currentTask.job_tasks.task_files?.length > 0">
                 <ion-card-header class="task-card-header">
                     Task Images/Documents
                 </ion-card-header>
@@ -290,32 +302,35 @@
                 </ion-card-content>
             </ion-card>
 
-            <ion-card *ngIf="currentTask.job_tasks.task_links?.length > 0">
+            <ion-card class="card-border" *ngIf="currentTask.job_tasks.task_links.length > 0">
                 <ion-card-header class="task-card-header">
-                    Task External Url<span *ngIf="currentTask.job_tasks.task_links.length>1">s</span>
+                    External Task Links
                 </ion-card-header>
                 <ion-card-content class="task-card-content">
-                    <ion-row *ngFor="let link of currentTask.job_tasks.task_links">
-
-                        <ion-item *ngFor="let link of currentTask.job_tasks.task_links" no-padding>
-                            <h5 class="add_notes task-link" (click)="openAttachedUrl(link.url)">{{link.url}}</h5>
+                    <ion-row *ngFor="let link of currentTask.job_tasks.task_links; let b = index">
+                        <ion-item no-padding>
+                            <h4 class="external-link" (click)="openAttachedUrl(link.url)">Link #{{b + 1}}</h4>
+                            <h4 *ngIf="link.notes" class="external-notes">
+                                <span class="external-notes-bold">Notes:</span>
+                                {{link.notes}}
+                            </h4>
                         </ion-item>
-
                     </ion-row>
                 </ion-card-content>
             </ion-card>
 
-            <ion-card>
+            <ion-card class="card-border">
                 <ion-card-header class="task-card-header">
                     Crew
                 </ion-card-header>
                 <ion-card-content>
                     <div class="task-card-content">
                         <ion-row *ngFor="let crewMember of currentTask.job_tasks.task_crew; let k = index">
-                            <ion-col class="margin-left-crew" *ngIf="crewMember.is_supervisor !== 1">
+                            <ion-col class="margin-left-crew">
                                 <h4 class="crew-font">{{crewMember.first_name}}
                                     {{crewMember.last_name}} </h4>
                                 <h4 *ngIf="crewMember.is_foreman === 1"> -- Foreman --</h4>
+                                <h4 *ngIf="crewMember.is_supervisor === 1"> -- Supervisor --</h4>
                                 <p class="crew-phone">
                                     <button ion-button icon-left clear medium
                                             class="phoneNum2"
@@ -330,7 +345,7 @@
                 </ion-card-content>
             </ion-card>
 
-            <ion-card>
+            <ion-card class="card-border">
                 <ion-card-header class="task-card-header">
                     Assigned Equipment
                 </ion-card-header>
@@ -354,15 +369,15 @@
                 </div>
             </ion-card>
 
-            <ion-card>
+            <ion-card class="card-border">
                 <ion-card-header class="task-card-header">
                     Materials/Supplier
                 </ion-card-header>
 
                 <div *ngIf="currentTask.job_tasks.task_materials.length > 0">
-                    <div *ngFor="let material of currentTask.job_tasks.task_materials; let i = index">
+                    <div *ngFor="let material of currentTask.job_tasks.task_materials; let i = index; last as isLast">
                         <ion-card-content class="task-card-content material-padding">
-                            <h3 class="text-info">{{material.material_name}}</h3>
+                            <h4 class="text-info">{{material.material_name}}</h4>
 
                             <h4 *ngIf="material.material_price !== 0" class="contractor-sub">
                                 <strong>Price: </strong> ${{material.material_price}}
@@ -376,13 +391,6 @@
                                     <strong>Units: </strong> {{material.unit}}
                                 </h4>
                             </div>
-
-
-                            <!--<ion-list class="material-quantity" no-margin no-padding text-wrap *ngIf="material.material_price !== 0 && material.quantity !== null && material.unit !== null">-->
-                            <!--<ion-item no-padding text-wrap>-->
-                            <!---->
-                            <!--</ion-item>-->
-                            <!--</ion-list>-->
 
                             <ion-list no-padding text-wrap *ngIf="material.supplier_id !== 0">
                                 <ion-item no-padding text-wrap>
@@ -405,15 +413,21 @@
                                     </h4>
                                 </ion-item>
                             </ion-list>
+                            <ion-row *ngIf="material.supplier_id !== 0">
+
+                                <button class="btn-shadow" no-margin margin-bottom ion-button icon-left color="primary"
+                                        (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
+                                    <ion-icon name="navigate"></ion-icon>
+                                    Launch Navigation
+                                </button>
+
+                            </ion-row>
+
                         </ion-card-content>
-                        <div class="more-back" *ngIf="material.supplier_id !== 0">
-                            <ion-row>
+                        <div class="more-back" *ngIf="!isLast">
+                            <ion-row class="empty-gray">
                                 <ion-col>
-                                    <button ion-button icon-left clear medium
-                                            (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
-                                        <ion-icon name="navigate"></ion-icon>
-                                        Launch Navigation
-                                    </button>
+
                                 </ion-col>
                             </ion-row>
                         </div>
@@ -428,7 +442,7 @@
 
             </ion-card>
 
-            <ion-card class="mar-bot75">
+            <ion-card class="card-border mar-bot75">
                 <ion-card-header class="task-card-header">
                     Additional Actions
                 </ion-card-header>
@@ -442,15 +456,6 @@
                         </button>
 
                     </ion-row>
-
-                    <!--<ion-row>-->
-
-                    <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                    <!--(click)="loadMultipleTasks()">-->
-                    <!--See All Tasks-->
-                    <!--</button>-->
-
-                    <!--</ion-row>-->
 
                     <div *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && showTasks && !isLessor">
 
@@ -473,7 +478,13 @@
 <ion-content footer *ngIf="userRole === 6">
 
     <ion-card class="manage-app" *ngIf="!isLessor">
-        <ion-card-header class="task-card-header time-font" (click)="showClockInOut()">
+        <ion-card-header class="task-card-header time-font-1" (click)="showClockInOut()">
+
+            <div class="greeting-div" text-center>
+                <span class="greeting" *ngIf="localHour < 12">Good Morning {{currentUser.first_name}}</span>
+                <span class="greeting" *ngIf="(localHour >= 12) && (localHour < 17)">Good Afternoon {{currentUser.first_name}}</span>
+                <span class="greeting" *ngIf="localHour >= 17">Good Evening {{currentUser.first_name}}</span>
+            </div>
 
             <div *ngIf="!showTimecard" text-center class="pad-top4">
                 <span class="hide-task">Timecard Status: </span>
@@ -481,8 +492,9 @@
                 <span class="clockOut" *ngIf="timecardStatus === 0">Clocked Out</span><span
                 class="clockIn"
                 *ngIf="timecardStatus === 1">Clocked In</span>
-                <h3 class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
-                    *ngIf="timecardStatus === 1">out</span>)</h3>
+                <h3 class="timecard-blue" text-uppercase>Click here to clock <span
+                    *ngIf="timecardStatus === 0">in</span><span
+                    *ngIf="timecardStatus === 1">out</span></h3>
             </div>
             <div *ngIf="showTimecard">
                 <!--clock in-->
@@ -530,7 +542,15 @@
         <div *ngIf="showTasks">
             <ion-card class="card-border pad-bot20 mar-top25"
                       *ngFor="let date of laborerTasks.data | keys ; let i = index">
-                <ion-card-header class="task-card-header">
+                <ion-card-header class="task-card-header" *ngIf="isIos">
+                    <div bold class="head-font" text-center *ngIf="laborerTasks.data[date].length === 1">
+                        {{convertDate(date)}}: {{laborerTasks.data[date].length}} TASK
+                    </div>
+                    <div bold class="head-font" text-center *ngIf="laborerTasks.data[date].length > 1">
+                        {{convertDate(date)}}: {{laborerTasks.data[date].length}} TASKS
+                    </div>
+                </ion-card-header>
+                <ion-card-header class="task-card-header" *ngIf="!isIos">
                     <div bold class="head-font" text-center *ngIf="laborerTasks.data[date].length === 1">
                         {{date | date:'mediumDate' }}: {{laborerTasks.data[date].length}} TASK
                     </div>
@@ -543,7 +563,7 @@
                         <div class="card-width">
 
                             <ion-grid class="task-button">
-                                <ion-row (click)="expandTask(task.id, j)">
+                                <ion-row (click)="openSingleTask(task)">
                                     <ion-col class="accept-icon" width-10 *ngIf="task.status_id === 3">
                                         <ion-icon name="fa-check"></ion-icon>
                                     </ion-col>
@@ -561,14 +581,6 @@
                                              *ngIf="j > 0 && (expandTaskId !== task.id || taskId !== j)" width-50>
                                         {{task.job_name}}
                                     </ion-col>
-                                    <ion-col class="task-text" text-left
-                                             *ngIf="j === 0 && (expandTaskId === task.id && taskId === j)" width-80>
-                                        Hide Details
-                                    </ion-col>
-                                    <ion-col class="task-text" text-left
-                                             *ngIf="j > 0 && (expandTaskId === task.id && taskId === j)" width-80>
-                                        Hide Details
-                                    </ion-col>
                                     <ion-col text-right width-30 class="newTime"
                                              *ngIf="expandTaskId !== task.id || taskId !== j">
                                         {{task.strTime}}
@@ -581,221 +593,6 @@
                                     </ion-col>
                                 </ion-row>
                             </ion-grid>
-
-
-                            <div class="mar-top25 next-space" *ngIf="expandTaskId === task.id && taskId === j">
-                                <ion-card class="card-border">
-                                    <ion-card-header class="task-card-header card-pad">
-                                        Project Details
-                                    </ion-card-header>
-
-
-                                    <ion-card-content class="task-card-content">
-                                        <ion-list no-padding>
-                                            <ion-item no-padding>
-                                                <h4 class="project-name">
-                                                    {{task.job_name}}
-                                                </h4>
-                                                <h4 class="contractor-main">Address:</h4>
-                                                <h4 class="contractor-sub">
-                                                    {{task.address}}
-                                                </h4>
-                                                <h4 class="contractor-sub">
-                                                    {{task.city}}, {{task.state}} {{task.zip}}
-                                                </h4>
-                                            </ion-item>
-                                        </ion-list>
-
-
-                                        <ion-list no-padding text-wrap [@expandCollapse]="divState">
-                                            <ion-item no-padding text-wrap [@expandCollapse]="divState">
-                                                <h4 [@expandCollapse]="divState" class="contractor-main">
-                                                    Contractor:</h4>
-                                                <h4 [@expandCollapse]="divState" class="contractor-sub">
-                                                    {{task.contractor[0].name}}
-                                                </h4>
-                                                <h4 [@expandCollapse]="divState">
-                                                    <button [@expandCollapse]="divState" ion-button icon-left clear
-                                                            medium
-                                                            class="call-contractor"
-                                                            (click)="callPhone(task.contractor[0].office_phone)">
-                                                        <span [@expandCollapse]="divState" class="contractor-phone">Office: </span>
-                                                        <span [@expandCollapse]="divState"
-                                                              class="contractor-underline">{{task.contractor[0].office_phone}}</span>
-                                                    </button>
-                                                </h4>
-
-                                            </ion-item>
-                                        </ion-list>
-                                    </ion-card-content>
-
-                                    <div no-padding class="more-back">
-                                        <ion-row>
-                                            <ion-col>
-                                                <button ion-button icon-left clear medium
-                                                        (click)="toggleDivState()">
-                                                    {{divState == 'collapse' ? 'More' : 'Less'}}...
-                                                </button>
-                                            </ion-col>
-                                            <ion-col>
-                                                <button ion-button icon-left clear medium
-                                                        (click)="showDrivingDirections(task.lat, task.lon)">
-                                                    <ion-icon name="navigate"></ion-icon>
-                                                    Launch Navigation
-                                                </button>
-                                            </ion-col>
-                                        </ion-row>
-                                    </div>
-                                </ion-card>
-
-                                <ion-card class="card-border">
-                                    <ion-card-header class="task-card-header card-pad">
-                                        Task Details
-                                    </ion-card-header>
-                                    <ion-card-content>
-                                        <div class="task-card-content">
-                                            <ion-list no-padding text-wrap>
-                                                <ion-item no-padding text-wrap>
-                                                    <h4 class="text-info capitalize">
-                                                        {{task.task_description}}</h4>
-                                                    <h5 class="s-time">
-                                                        Start Time: {{task.strTime}}
-                                                    </h5>
-
-                                                </ion-item>
-                                            </ion-list>
-                                        </div>
-                                    </ion-card-content>
-                                </ion-card>
-
-                                <ion-card class="card-border" *ngIf="task.task_files?.length > 0">
-                                    <ion-card-header class="task-card-header">
-                                        Task Images/Documents
-                                    </ion-card-header>
-                                    <ion-card-content class="task-card-content">
-                                        <ion-row>
-                                            <ion-col text-center>
-                                                <h5 class="add_notes" text-center>Select An Image To Enlarge</h5>
-                                            </ion-col>
-                                        </ion-row>
-                                        <ion-row class="spacer"></ion-row>
-                                        <ion-row>
-                                            <ion-col *ngFor="let file of task.task_files" col-6>
-                                                <div (click)="openAttachedImage(file)">
-                                                    <figure>
-
-                                                        <div *ngIf="file.file_type !== 'application/pdf'"
-                                                             class="image-container">
-                                                            <img src="{{taskFileUrl}}{{file.file_name}}"
-                                                                 class="image-width">
-                                                        </div>
-                                                        <div *ngIf="file.file_type === 'application/pdf'"
-                                                             class="image-container">
-                                                            <img src="../../assets/img/pdf.png" class="image-width">
-                                                        </div>
-                                                        <figcaption class="image-notes" padding-top
-                                                                    *ngIf="file.notes !== null"><u>Read
-                                                            <span
-                                                                *ngIf="file.file_type !== 'application/pdf'">Image</span><span
-                                                                *ngIf="file.file_type === 'application/pdf'">PDF</span>
-                                                            Notes</u></figcaption>
-                                                        <figcaption padding-top *ngIf="file.notes === null">No Image
-                                                            Notes
-                                                        </figcaption>
-                                                    </figure>
-
-                                                </div>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ion-card-content>
-                                </ion-card>
-
-                                <ion-card class="card-border" *ngIf="task.task_links?.length > 0">
-                                    <ion-card-header class="task-card-header">
-                                        Task External Url<span
-                                        *ngIf="task.task_links.length>1">s</span>
-                                    </ion-card-header>
-                                    <ion-card-content class="task-card-content">
-                                        <ion-row *ngFor="let link of task.task_links">
-
-                                            <ion-item *ngFor="let link of task.task_links" no-padding>
-                                                <h5 class="add_notes task-link" (click)="openAttachedUrl(link.url)">
-                                                    {{link.url}}</h5>
-                                            </ion-item>
-
-                                        </ion-row>
-                                    </ion-card-content>
-                                </ion-card>
-
-
-                                <ion-card class="card-border">
-                                    <ion-card-header class="task-card-header card-pad">
-                                        Foreman
-                                    </ion-card-header>
-                                    <ion-card-content>
-                                        <div class="task-card-content">
-
-                                            <ion-row *ngFor="let crewMember of task.task_crew; let k = index">
-                                                <ion-col class="margin-left-crew" *ngIf="crewMember.is_foreman === 1">
-                                                    <h4 class="crew-font">{{crewMember.first_name}}
-                                                        {{crewMember.last_name}} </h4>
-                                                    <p class="crew-phone">
-                                                        <button ion-button icon-left clear medium
-                                                                class="phoneNum2"
-                                                                (click)="callPhone(crewMember.phone)">
-                                                            {{crewMember.phone}}
-                                                        </button>
-                                                    </p>
-                                                </ion-col>
-
-                                            </ion-row>
-
-
-                                            <div *ngIf="task.task_crew.length === 0">No Foreman Has Been Assigned</div>
-                                        </div>
-                                    </ion-card-content>
-                                </ion-card>
-
-                                <ion-card class="laborer-action">
-                                    <ion-card-header class="task-card-header action-button">
-
-                                        <ion-row>
-                                            <ion-col width-50>
-                                                <button class="btn-shadow" ion-button icon-left block
-                                                        color="secondary"
-                                                        (click)="setLaborerStatus(3, laborerTasks.data[date][j].id, date, j)"
-                                                        *ngIf="task.status_id === 2 || task.status_id === 8">
-                                                    <ion-icon name="fa-thumbs-o-up"></ion-icon>
-                                                    Accept
-                                                </button>
-                                                <button class="btn-shadow" disabled ion-button icon-left block
-                                                        color="secondary"
-                                                        *ngIf="task.status_id === 3">
-                                                    <ion-icon name="fa-thumbs-o-up"></ion-icon>
-                                                    Accepted
-                                                </button>
-
-                                            </ion-col>
-                                            <ion-col width-50>
-                                                <button class="btn-shadow" ion-button icon-left block
-                                                        color="danger"
-                                                        (click)="openLaborerRejectModal(8, task.id, date, j)"
-                                                        *ngIf="task.status_id === 2 || task.status_id === 3">
-                                                    <ion-icon name="fa-thumbs-o-down"></ion-icon>
-                                                    Reject
-                                                </button>
-                                                <button class="btn-shadow" disabled ion-button icon-left block
-                                                        color="danger"
-                                                        *ngIf="task.status_id === 8">
-                                                    <ion-icon name="fa-thumbs-o-down"></ion-icon>
-                                                    Rejected
-                                                </button>
-                                            </ion-col>
-                                        </ion-row>
-
-                                    </ion-card-header>
-                                </ion-card>
-                            </div>
                         </div>
                     </div>
                 </ion-card-content>
@@ -803,7 +600,7 @@
             </ion-card>
 
 
-            <ion-card class="mar-bot75">
+            <ion-card class="mar-bot75 card-border">
                 <ion-card-header class="task-card-header">
                     Additional Options
                 </ion-card-header>

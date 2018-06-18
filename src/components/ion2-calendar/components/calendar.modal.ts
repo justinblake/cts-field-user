@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef, ChangeDetectorRef, Renderer} from '@angular/core';
-import {NavParams, ViewController, Content, InfiniteScroll, Platform} from 'ionic-angular';
+import {NavParams, ViewController, Content, InfiniteScroll, Platform, AlertController} from 'ionic-angular';
 import {CalendarDay, CalendarMonth, CalendarOptions, CalendarControllerOptions} from '../calendar.model'
 import {CalendarService} from '../services/calendar.service';
 import * as moment from 'moment';
@@ -11,14 +11,13 @@ import * as moment from 'moment';
 
             <ion-navbar [color]="_color">
 
-                <!--<ion-buttons start [hidden]="!showYearPicker">-->
-                <!--<ion-select [(ngModel)]="year" (ngModelChange)="changedYearSelection()" interface="popover">-->
-                <!--<ion-option *ngFor="let y of years" value="{{y}}">{{y}}</ion-option>-->
-                <!--</ion-select>-->
-                <!--</ion-buttons>-->
+                <ion-buttons start>
+                    <button class="margin-right-4x" ion-button icon-only clear (click)="presentAlert()">HELP
+                    </button>
+                </ion-buttons>
 
                 <ion-buttons end>
-                    <button ion-button icon-only clear (click)="onCancel()">
+                    <button class="margin-right" ion-button icon-only clear (click)="onCancel()">
                         <span *ngIf="closeLabel !== '' && !closeIcon">{{closeLabel}}</span>
                         <ion-icon *ngIf="closeIcon" name="close"></ion-icon>
                     </button>
@@ -26,20 +25,20 @@ import * as moment from 'moment';
 
                 <ion-title>{{title}}</ion-title>
 
-                <ion-buttons end>
-                    <button ion-button icon-only *ngIf="!_d.autoDone" clear [disabled]="!canDone()" (click)="done()">
-                        <span *ngIf="doneLabel !== '' && !doneIcon">{{doneLabel}}</span>
-                        <ion-icon *ngIf="doneIcon" name="checkmark"></ion-icon>
-                    </button>
+                <!--<ion-buttons end>-->
+                    <!--<button ion-button icon-only *ngIf="!_d.autoDone" clear [disabled]="!canDone()" (click)="done()">-->
+                        <!--<span *ngIf="doneLabel !== '' && !doneIcon">{{doneLabel}}</span>-->
+                        <!--<ion-icon *ngIf="doneIcon" name="checkmark"></ion-icon>-->
+                    <!--</button>-->
 
-                </ion-buttons>
+                <!--</ion-buttons>-->
 
             </ion-navbar>
 
             <ion-calendar-week
-                    [color]="_color"
-                    [weekArray]="weekdays"
-                    [weekStart]="weekStart">
+                [color]="_color"
+                [weekArray]="weekdays"
+                [weekStart]="weekStart">
             </ion-calendar-week>
 
         </ion-header>
@@ -108,7 +107,8 @@ export class CalendarModal {
                 public viewCtrl: ViewController,
                 public ref: ChangeDetectorRef,
                 public calSvc: CalendarService,
-                public plt: Platform,) {
+                public plt: Platform,
+                public alertCtrl: AlertController) {
         if (this.plt.is('ios')) {
             this.isIos = true;
         }
@@ -214,6 +214,17 @@ export class CalendarModal {
 
     }
 
+    presentAlert() {
+
+        let alert = this.alertCtrl.create({
+            title: 'Calendar Help',
+            message: 'To review time for a single day, please tap the same date twice. <br> <br> To review all time worked between two dates, please select the start date and then the end date.',
+            cssClass: 'myAlerts',
+            buttons: ['OK']
+        });
+        alert.present();
+    }
+
     onChange(data: any) {
         this.datesTemp = data;
         this.calSvc.savedHistory(data, this._id);
@@ -313,7 +324,7 @@ export class CalendarModal {
         let nextTime = moment(final.original.time).add(1, 'M').valueOf();
         let rangeEnd = this.options.range_end ? moment(this.options.range_end).subtract(1, 'M') : 0;
 
-        if (len <= 0 || ( rangeEnd !== 0 && moment(final.original.time).isAfter(rangeEnd) )) {
+        if (len <= 0 || (rangeEnd !== 0 && moment(final.original.time).isAfter(rangeEnd))) {
             infiniteScroll.enable(false);
             return;
         }
@@ -350,7 +361,7 @@ export class CalendarModal {
                 this.backwardsMonth();
                 let nowHeight = this.content.getContentDimensions().scrollHeight;
                 console.log('nowHeight ', JSON.stringify(nowHeight));
-                this.content.scrollTo(0, nowHeight  - lastHeight, 300)
+                this.content.scrollTo(0, nowHeight - lastHeight, 300)
                     .then(() => {
                         this._s = !0;
                     })

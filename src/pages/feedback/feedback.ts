@@ -26,6 +26,7 @@ export class FeedbackPage {
     public userId;
     hasStatus: boolean = false;
     hasSelected: boolean = false;
+    accuracy: any;
 
 
     constructor(public navCtrl: NavController,
@@ -43,6 +44,7 @@ export class FeedbackPage {
         this.userId = navParams.get('user_id');
         this.lat = navParams.get('lat');
         this.lon = navParams.get('lon');
+        this.accuracy = navParams.get('accuracy');
 
 
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
@@ -57,7 +59,8 @@ export class FeedbackPage {
             files: this.files,
             save: false,
             lat: this.lat,
-            lon: this.lon
+            lon: this.lon,
+            accuracy: this.accuracy
         };
 
         this.type.options = [
@@ -236,11 +239,9 @@ export class FeedbackPage {
     getPicture(sourceType: number) {
         this.utils.presentLoading();
         this.camera.getPicture({
-            quality: 50,
             destinationType: 1,
             sourceType: sourceType,
             allowEdit: true,
-            mediaType: 0,
             saveToPhotoAlbum: false,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then((imageData) => {

@@ -23,6 +23,13 @@ import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
 import {TaskPhotoReviewPage} from '../task-photo-review/task-photo-review';
+import {StorageService} from "../../providers/storage-service";
+import {TabsPage} from "../tabs/tabs";
+import {ManageTasksHomePage} from "../manage-tasks-home/manage-tasks-home";
+import {SplashPage} from "../splash/splash";
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {SingleUpcomingTaskPage} from "../single-upcoming-task/single-upcoming-task";
+import {SingleLaborerTaskPage} from "../single-laborer-task/single-laborer-task";
 
 
 @Pipe({name: 'keys', pure: false})
@@ -73,6 +80,7 @@ export class HomePage {
     locationTimestamp: any;
     locationAccuracy: any;
     isCordova: boolean;
+    role_id: number;
 
     empData: any = {};
 
@@ -86,6 +94,7 @@ export class HomePage {
 
     retrievingLocation: boolean = false;
     createEntry: boolean = false;
+    localHour: number;
 
     taskFileUrl: string = 'https://www.cleartasksolutions.com/assets/task_files/';
 
@@ -107,7 +116,9 @@ export class HomePage {
                 private alertCtrl: AlertController,
                 private conMgr: ConversionManager,
                 private fcm: FCM,
-                private sim: Sim) {
+                private sim: Sim,
+                private storage: StorageService,
+                private splashscreen: SplashScreen) {
 
         this.debug = this.utils.returnDebug();
 
@@ -123,6 +134,7 @@ export class HomePage {
 
             this.plt.resume.subscribe(() => {
                 if (this.isCordova) {
+                    this.localTimeFunction();
                     this.setLocation();
                 }
 
@@ -151,6 +163,7 @@ export class HomePage {
 
         this.currentUser = this.userMgr.getUser();
         this.userRole = this.currentUser.role_id;
+        this.role_id = this.currentUser.role_id;
         if (this.currentUser.is_lessor === 1) {
             this.isLessor = true;
         }
@@ -176,8 +189,14 @@ export class HomePage {
         this.divState = 'collapse';
     }
 
+    localTimeFunction() {
+        let interimTime = new Date();
+        this.localHour = interimTime.getHours();
+    }
+
 
     ionViewDidLoad() {
+        this.localTimeFunction();
         this.setUser();
         setTimeout(() => this.setCompany(), 500);
         this._backBtn.registerAction(() => {
@@ -253,6 +272,9 @@ export class HomePage {
 
     }
 
+    // test
+    // test
+
     // helper method for the expand/collapse div animation
     toggleDivState() {
         let states = {
@@ -314,12 +336,17 @@ export class HomePage {
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
-                console.log('data from alert', JSON.stringify(data));
+                // console.log('data from alert', JSON.stringify(data));
                 if (data.param1 === 'alert') {
                     if (data.project !== 'null') {
                         this.openNextDayTasksAlert(data.task, data.project);
                     } else {
-                        this.navCtrl.parent.select(3);
+                        if (this.role_id === 3) {
+                            this.navCtrl.parent.select(2);
+                        } else {
+                            this.navCtrl.parent.select(3);
+                        }
+
                     }
                 } else if (data.param1 === 'additional_notes') {
                     if (this.showTasks === true) {
@@ -330,9 +357,24 @@ export class HomePage {
                 } else if (data.param1 === 'crews') {
                     this.taskMgr.saveEmergencyInfo(parseInt(data.task), parseInt(data.project), true);
                     this.navCtrl.parent.select(1);
+                } else if (data.param1 === 'User Update') {
+                    let tempNumber = parseInt(data.managesTasks);
+                    let tempRole = parseInt(data.userRole);
+                    this.storage.get('user').then((res1: any) => {
+                        res1.manages_tasks = tempNumber;
+                        res1.role_id = tempRole;
+                        this.storage.update('user', res1).then((res: any) => {
+                            this.reload();
+                        })
+                    });
                 }
             });
         }
+    }
+
+    reload() {
+        this.splashscreen.show();
+        window.location.reload();
     }
 
     presentAlert() {
@@ -469,17 +511,7 @@ export class HomePage {
         alert.present()
     }
 
-    // testNewGeoService() {
-    //
-    //     if (this.isAndroid) {
-    //         let platform = 'android';
-    //         this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
-    //             console.log('res in new location service', JSON.stringify(res));
-    //         }, (err: any) => {
-    //             console.log('err ', JSON.stringify(err));
-    //         })
-    //     }
-    // }
+    // test
 
     setLocation() {
 
@@ -496,7 +528,6 @@ export class HomePage {
                 this.lon = res.lon;
                 this.locationTimestamp = res.timestamp;
                 this.locationAccuracy = res.accuracy;
-                console.log('res in new location service', JSON.stringify(res));
 
                 resolve(`${this.lat},${this.lon}`);
             }, (err: any) => {
@@ -540,7 +571,6 @@ export class HomePage {
                 this.utils.presentLoading();
             }
             if (!this.isCordova) {
-                console.log("inside !this.isCordova");
                 this.retrievingLocation = true;
                 let data = this.dataFunction(notes, statusId, null, null);
                 if (data.statusId === 6 || data.statusId === 9) {
@@ -649,7 +679,6 @@ export class HomePage {
             this.utils.presentLoading();
         }
         this.taskMgr.getCurrentTaskRemote().then(response => {
-            console.log('response ', JSON.stringify(response));
             this.utils.dismissLoading();
             this.data = response;
             this.currentTask = this.data.task;
@@ -696,7 +725,7 @@ export class HomePage {
 // the driving directions page
     showDrivingDirections(lat, lon) {
         let options = "location=no";
-        this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving", "_system", options);
+        this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
     }
 
 // opens the reject task modal, handles the data passed back from the modal
@@ -733,6 +762,7 @@ export class HomePage {
                 let params = {
                     'lat': this.lat,
                     'lon': this.lon,
+                    'accuracy': this.locationAccuracy,
                     'task_id': this.currentTask.job_tasks.id,
                     'user_id': this.currentUser.userId
                 };
@@ -747,7 +777,7 @@ export class HomePage {
                 'lon': 0,
                 'task_id': this.currentTask.job_tasks.id,
                 'user_id': this.currentUser.userId
-            }
+            };
             this.navCtrl.push(FeedbackPage, params).then(res => {
                 this.utils.dismissLoading();
             });
@@ -763,8 +793,6 @@ export class HomePage {
     }
 
     openNextDayTasksAlert(task, alert_id) {
-        console.log('step 4');
-        console.log('task in home ', JSON.stringify(task));
         let params = {
             task: task,
             alert_id: alert_id
@@ -888,7 +916,7 @@ export class HomePage {
 
     openInAppBrowser() {
         let options = "location=no";
-        this.iab.create("https://www.cleartasksolutions.com/app/login/index.html", "_system", options);
+        this.iab.create("https://www.cleartasksolutions.com/app/login", "_system", options);
     }
 
     disableStart() {
@@ -898,12 +926,9 @@ export class HomePage {
     }
 
     createTimecardEntry(status) {
-        console.log('this.isCordova ', JSON.stringify(this.isCordova));
         this.createEntry = true;
-        // this.utils.presentLoading();
 
         if (this.showTasks && this.userRole !== 6) {
-
             if (status === 0 && this.currentTask.job_tasks.status_id === 4) {
                 let newNotes = "Clocked out while task was started";
                 this.setStatus(13, newNotes, false)
@@ -925,8 +950,6 @@ export class HomePage {
                 })
             })
         } else if (!this.isCordova) {
-            console.log("Create timecard entry");
-
             setTimeout(() => {
                 this.taskMgr.createTimecardEntry(this.currentUser.userId, 0, 0, status).then(res => {
                     if (this.debug) {
@@ -937,8 +960,6 @@ export class HomePage {
                     this.createEntry = false;
                 })
             }, 3000)
-
-
         }
 
 
@@ -951,33 +972,22 @@ export class HomePage {
     }
 
     openAttachedImage(imageObject) {
-        console.log('imageObject ', JSON.stringify(imageObject));
-
         let fileType: string = '';
-
-        if (imageObject.file_type === 'image/png') {
+        if (imageObject.file_type !== 'application/pdf') {
             fileType = 'image';
-
             let params = {
                 file_type: fileType,
                 file_name: '' + this.taskFileUrl + '' + imageObject.file_name,
                 notes: imageObject.notes
             };
-
             this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
-                console.log('pushed task photo review')
             })
-
         } else if (imageObject.file_type === 'application/pdf') {
             fileType = 'pdf';
             let options = "location=no";
             this.iab.create('' + this.taskFileUrl + '' + imageObject.file_name, "_system", options);
         }
-
-
     }
-
-    //test
 
     showClockInOut() {
         this.showTimecard = !this.showTimecard;
@@ -987,53 +997,62 @@ export class HomePage {
         return this.conMgr.adjustTime(time);
     }
 
-    checkUpdates() {
-        if (this.isCordova) {
-            checkForUpdate().then((res: any) => {
-                if (res === 'true') {
 
-                    let appVersion = this.utils.returnAppVersion();
+    openSingleTask(task) {
+        console.log('task ', task);
+        let params = {
+            currentTask: task
+        };
+        this.navCtrl.push(SingleLaborerTaskPage, params).then(() => {
+            // console.log('in promise of push ');
+        })
 
-                    let empObject: any = {
-                        userId: this.currentUser.userId,
-                        software_version: this.empData.software_version,
-                        emp_platform: this.empData.emp_platform,
-                        operating_system: this.empData.operating_system,
-                        cell_carrier: this.empData.cell_carrier,
-                        version: appVersion,
-                        source: 1
-                    };
-
-                    if (this.isAndroid) {
-                        empObject.cell_number = this.empData.cell_number;
-                        empObject.emp_device_id = this.empData.emp_device_id;
-                    }
-
-                    this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
-                        console.log('appVerResult ', JSON.stringify(appVerResult));
-                        downloadUpdate().then((result: any) => {
-                            if (result === 'true') {
-                                extractUpdate().then((extract: any) => {
-                                    if (extract === 'done') {
-                                        loadNewVersion();
-                                    }
-                                })
-                            }
-                        })
-
-                    });
-
-
-                }
-            });
-        } else {
-            console.log('Not Cordova so no updates')
-        }
     }
 
-    // demo() {
-    //     console.log('   test');
-    // }
+    checkUpdates() {
+        // if (this.isCordova) {
+        //     checkForUpdate().then((res: any) => {
+        //         if (res === 'true') {
+        //
+        //             let appVersion = this.utils.returnAppVersion();
+        //
+        //             let empObject: any = {
+        //                 userId: this.currentUser.userId,
+        //                 software_version: this.empData.software_version,
+        //                 emp_platform: this.empData.emp_platform,
+        //                 operating_system: this.empData.operating_system,
+        //                 cell_carrier: this.empData.cell_carrier,
+        //                 version: appVersion,
+        //                 source: 1
+        //             };
+        //
+        //             if (this.isAndroid) {
+        //                 empObject.cell_number = this.empData.cell_number;
+        //                 empObject.emp_device_id = this.empData.emp_device_id;
+        //             }
+        //
+        //             // this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
+        //             //     console.log('appVerResult ', JSON.stringify(appVerResult));
+        //             //     downloadUpdate().then((result: any) => {
+        //             //         if (result === 'true') {
+        //             //             extractUpdate().then((extract: any) => {
+        //             //                 if (extract === 'done') {
+        //             //                     loadNewVersion();
+        //             //                 }
+        //             //             })
+        //             //         }
+        //             //     })
+        //             //
+        //             // });
+        //
+        //
+        //         }
+        //     });
+        // } else {
+        //     console.log('Not Cordova so no updates')
+        // }
+    }
+
 
     // checkVersions() {
     //     checkVersions().then((response:any)=>{
@@ -1050,6 +1069,9 @@ export class HomePage {
     //     });
     // }
 
+    convertDate(input) {
+        return this.conMgr.convertDate(input);
 
+    }
 }
 

@@ -8,7 +8,7 @@
                     <div class="main-title-ios">
                         Current Task
                     </div>
-                    <div text-nowrap class="company-name comp-wrap">
+                    <div text-nowrap class="comp-wrap company-name">
                         {{compName}}
                     </div>
                 </div>
@@ -17,15 +17,16 @@
                 <ion-buttons class="mar-right6" end>
                     <button class="refresh" ion-button round icon-right color="secondary"
                             (click)="loadMultipleTasks()">
-                        Refresh
-                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                        <span class="refresh-word">Refresh</span>
+                        <ion-icon class="refresh-logo" name="refresh"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
             <ion-col width-25 class="mar-top13">
                 <ion-buttons class="mar-right6" end>
-                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
-                        <ion-icon class="logout-hide" name="log-out"></ion-icon>
+                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()">
+                        <span class="refresh-word">Logout</span>
+                        <ion-icon class="refresh-logo" name="log-out"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
@@ -52,15 +53,16 @@
                 <ion-buttons class="mar-right6" end>
                     <button class="refresh" ion-button round icon-right color="secondary"
                             (click)="loadMultipleTasks()">
-                        Refresh
-                        <ion-icon class="logout-hide" name="refresh"></ion-icon>
+                        <span class="refresh-word">Refresh</span>
+                        <ion-icon class="refresh-logo" name="refresh"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
             <ion-col width-25 class="mar-top10">
                 <ion-buttons class="mar-right6" end>
-                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()"> Logout
-                        <ion-icon class="logout-hide" name="log-out"></ion-icon>
+                    <button class="logout" ion-button round icon-right color="danger" (click)="logout()">
+                        <span class="refresh-word">Logout</span>
+                        <ion-icon class="refresh-logo" name="log-out"></ion-icon>
                     </button>
                 </ion-buttons>
             </ion-col>
@@ -76,6 +78,12 @@
     <ion-card class="manage-app" *ngIf="!isLessor">
         <ion-card-header class="task-card-header time-font" (click)="showClockInOut()">
 
+            <div class="greeting-div" text-center>
+                <span class="greeting" *ngIf="localHour < 12">Good Morning {{currentUser.first_name}}</span>
+                <span class="greeting" *ngIf="(localHour >= 12) && (localHour < 17)">Good Afternoon {{currentUser.first_name}}</span>
+                <span class="greeting" *ngIf="localHour >= 17">Good Evening {{currentUser.first_name}}</span>
+            </div>
+
             <div *ngIf="!showTimecard" text-center>
                 <span class="hide-task">Timecard Status: </span>
                 <span class="show-task">Timecard:</span>
@@ -84,9 +92,12 @@
                     class="clockIn"
                     *ngIf="timecardStatus === 1">Clocked In</span>
                 </span>
-                <span class="loadAnim" [ngClass]="{'loadAnimColorGreen': timecardStatus === 0, 'loadAnimColorRed': timecardStatus === 1}" *ngIf="createEntry">...</span>
-                <h3 *ngIf="!createEntry" class="orange">(Click here to clock <span *ngIf="timecardStatus === 0">in</span><span
-                    *ngIf="timecardStatus === 1">out</span>)</h3>
+                <span class="loadAnim"
+                      [ngClass]="{'loadAnimColorGreen': timecardStatus === 0, 'loadAnimColorRed': timecardStatus === 1}"
+                      *ngIf="createEntry">...</span>
+                <h3 *ngIf="!createEntry" text-uppercase class="timecard-blue">Click here to clock <span
+                    *ngIf="timecardStatus === 0">in</span><span
+                    *ngIf="timecardStatus === 1">out</span></h3>
             </div>
             <div *ngIf="showTimecard">
                 <!--clock in-->
@@ -164,7 +175,7 @@
 
                         <ion-list no-padding text-wrap>
                             <ion-item no-padding text-wrap>
-                                <h4 class="contractor-main">Contractor:</h4>
+                                <h4 class="contractor-main">Customer:</h4>
                                 <h4 class="contractor-sub">
                                     {{project.contractor[0].name}}
                                 </h4>
@@ -204,7 +215,7 @@
                 <ion-card-content>
                     <div *ngFor="let task of project.job_tasks; let j = index">
                         <div class="card-width">
-                            <ion-grid (click)="openSingleTask(i, j)" class="task-button">
+                            <ion-grid (click)="openSingleTask(i, j)" class="task-button no-padding-right">
                                 <ion-row *ngIf="activeTask.id === task.id">
                                     <ion-col width-100 text-center no-padding padding-top>
 
@@ -240,27 +251,31 @@
                                 </ion-row>
                                 <ion-row>
 
-                                    <ion-col no-padding *ngIf="task.status_id === 3" class="managed-task-status" width-5>
+                                    <ion-col no-padding *ngIf="task.status_id === 3" class="managed-task-status"
+                                             width-5>
                                         <div class="task-status-accept"></div>
                                     </ion-col>
-                                    <ion-col no-padding *ngIf="task.status_id === 4" class="managed-task-status" width-5>
+                                    <ion-col no-padding *ngIf="task.status_id === 4" class="managed-task-status"
+                                             width-5>
                                         <div class="task-status-in-progress"></div>
                                     </ion-col>
                                     <ion-col no-padding *ngIf="task.status_id === 5 || task.status_id === 13"
                                              class="managed-task-status" width-5>
                                         <div class="task-status-delay"></div>
                                     </ion-col>
-                                    <ion-col no-padding *ngIf="task.status_id === 7" class="managed-task-status" width-5>
+                                    <ion-col no-padding *ngIf="task.status_id === 7" class="managed-task-status"
+                                             width-5>
                                         <div class="task-status-emergency"></div>
                                     </ion-col>
-                                    <ion-col no-padding *ngIf="task.status_id === 2" class="managed-task-status" width-5>
+                                    <ion-col no-padding *ngIf="task.status_id === 2" class="managed-task-status"
+                                             width-5>
                                         <div class="task-status-nothing"></div>
                                     </ion-col>
 
                                     <ion-col class="task-text" text-left *ngIf="j >= 0" width-65>
                                         <span>{{task.task_description}}</span>
                                     </ion-col>
-                                    <ion-col width-30 class="newTime" text-right>
+                                    <ion-col width-30 class="newTime no-padding-right" text-right>
                                         {{task.strTime}}
                                     </ion-col>
                                 </ion-row>
@@ -279,28 +294,24 @@
             Additional Actions
         </ion-card-header>
         <ion-card-content padding>
+
             <ion-row>
+
                 <button class="home-btn" ion-button icon-left block color="secondary"
                         (click)="openNextDayTasks()">
                     See Upcoming Tasks
                 </button>
+
             </ion-row>
 
-            <!--<ion-row>-->
-                <!--<button class="home-btn" ion-button icon-left block color="secondary"-->
-                        <!--(click)="showActiveTask()">-->
-                    <!--Active Task-->
-                <!--</button>-->
-            <!--</ion-row>-->
 
-            <div *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && !isLessor">
-                <ion-row class="management-pad">
-                    <button class="home-btn" ion-button icon-left block color="secondary"
-                            (click)="openInAppBrowser()">
-                        Open Management App
-                    </button>
-                </ion-row>
-            </div>
+            <ion-row class="management-pad" *ngIf="userRole === 1 || userRole === 2 || userRole === 4 && !isLessor">
+                <button class="home-btn" ion-button icon-left block color="secondary"
+                        (click)="openInAppBrowser()">
+                    Open Management App
+                </button>
+            </ion-row>
+
         </ion-card-content>
     </ion-card>
 </ion-content>

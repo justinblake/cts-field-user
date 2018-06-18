@@ -21,6 +21,11 @@ import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
 import {SingleManageTasksPage} from "../single-manage-tasks/single-manage-tasks";
 import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
+import {TabsPage} from "../tabs/tabs";
+import {StorageService} from "../../providers/storage-service";
+import {HomePage} from "../home/home";
+import {SplashPage} from "../splash/splash";
+import {SplashScreen} from '@ionic-native/splash-screen';
 
 
 @Component({
@@ -57,6 +62,8 @@ export class ManageTasksHomePage {
     isAndroid: any;
     isIos: boolean = false;
     fcmToken: any = '';
+    localHour: number;
+    role_id: number;
 
     empData: any = {};
 
@@ -93,7 +100,9 @@ export class ManageTasksHomePage {
                 private alertCtrl: AlertController,
                 private conMgr: ConversionManager,
                 private fcm: FCM,
-                private sim: Sim) {
+                private sim: Sim,
+                private storage: StorageService,
+                private splashscreen: SplashScreen) {
 
         this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
@@ -105,6 +114,7 @@ export class ManageTasksHomePage {
 
         this.userId = this.currentUser.userId;
         this.userRole = this.currentUser.role_id;
+        this.role_id = this.currentUser.role_id;
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
         this.isCordova = this.taskMgr.returnPlatform().isCordova;
         this.isIos = this.taskMgr.returnPlatform().isIos;
@@ -118,6 +128,7 @@ export class ManageTasksHomePage {
 
             this.plt.resume.subscribe(() => {
                 if (this.isCordova) {
+                    this.localTimeFunction();
                     this.setLocation();
                 }
 
@@ -154,11 +165,20 @@ export class ManageTasksHomePage {
         }
     }
 
+    localTimeFunction() {
+        let interimTime = new Date();
+        this.localHour = interimTime.getHours();
+    }
+
     reorderItems(indexes) {
         this.projectObject = reorderArray(this.projectObject, indexes);
     }
 
+
+
     ionViewDidLoad() {
+        console.log('test');
+        this.localTimeFunction();
         this.checkForCurrentTask();
         this.setUser();
         setTimeout(() => this.setCompany(), 500);
@@ -243,12 +263,16 @@ export class ManageTasksHomePage {
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
-                // console.log('data from alert', JSON.stringify(data));
+                console.log('data from alert', JSON.stringify(data));
                 if (data.param1 === 'alert') {
                     if (data.project !== 'null') {
                         this.openNextDayTasksAlert(data.task, data.project);
                     } else {
-                        this.navCtrl.parent.select(3);
+                         if (this.role_id === 3) {
+                            this.navCtrl.parent.select(2);
+                        } else {
+                            this.navCtrl.parent.select(3);
+                        }
                     }
                 } else if (data.param1 === 'additional_notes') {
                     if (this.projectObject.length > 0) {
@@ -259,9 +283,26 @@ export class ManageTasksHomePage {
                 } else if (data.param1 === 'crews') {
                     this.taskMgr.saveEmergencyInfo(parseInt(data.task), parseInt(data.project), true);
                     this.navCtrl.parent.select(1);
+                } else if (data.param1 === 'User Update') {
+                    let tempNumber = parseInt(data.managesTasks);
+                    let tempRole = parseInt(data.userRole);
+                    this.storage.get('user').then((res1: any) => {
+                        res1.manages_tasks = tempNumber;
+                        res1.role_id = tempRole;
+                        this.storage.update('user', res1).then((res: any) => {
+                            console.log('res ', JSON.stringify(res));
+                            console.log('test');
+                            this.reload();
+                        })
+                    });
                 }
             });
         }
+    }
+
+    reload() {
+        this.splashscreen.show();
+        window.location.reload();
     }
 
     getSimInfo() {
@@ -669,18 +710,18 @@ export class ManageTasksHomePage {
                         empObject.emp_device_id = this.empData.emp_device_id;
                     }
 
-                    this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
-                        console.log('appVerResult ', JSON.stringify(appVerResult));
-                        downloadUpdate().then((result: any) => {
-                            if (result === 'true') {
-                                extractUpdate().then((extract: any) => {
-                                    if (extract === 'done') {
-                                        loadNewVersion();
-                                    }
-                                })
-                            }
-                        })
-                    });
+                    // this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
+                    //     console.log('appVerResult ', JSON.stringify(appVerResult));
+                    //     downloadUpdate().then((result: any) => {
+                    //         if (result === 'true') {
+                    //             extractUpdate().then((extract: any) => {
+                    //                 if (extract === 'done') {
+                    //                     loadNewVersion();
+                    //                 }
+                    //             })
+                    //         }
+                    //     })
+                    // });
 
                 }
             });

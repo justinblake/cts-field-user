@@ -233,12 +233,12 @@ export class CompleteNotesPage {
             buttons.push({
                 text: 'Choose Photo',
                 handler: () => {
-                    this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY, editable); // 0 == Library
+                    this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY); // 0 == Library
                 }
             }, {
                 text: 'Take Photo',
                 handler: () => {
-                    this.getPicture(this.camera.PictureSourceType.CAMERA, editable); // 1 == Camera
+                    this.getPicture(this.camera.PictureSourceType.CAMERA); // 1 == Camera
                 }
             })
         }
@@ -259,16 +259,13 @@ export class CompleteNotesPage {
      * get picture from gallery or camera
      * @Param sourceType:number camera or gallery
      */
-    getPicture(sourceType: number, editable: boolean) {
-        console.log("num 4")
+    getPicture(sourceType: number) {
         this.utils.presentLoading();
         this.camera.getPicture({
-            quality: 50,
-            destinationType: 1,
+            quality: 40,
             sourceType: sourceType,
             allowEdit: true,
             mediaType: 0,
-            saveToPhotoAlbum: false,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then((imageData) => {
 
@@ -306,38 +303,6 @@ export class CompleteNotesPage {
         });
     }
 
-    // createBlob(image) {
-    //     console.log('Image in create blob', image);
-    //     window.resolveLocalFileSystemURL(image, (entry: FileEntry) => {
-    //         console.log("image log 2")
-    //         entry.file(file => {
-    //             console.log("image log 3")
-    //             console.log('file', JSON.stringify(file));
-    //             let reader = new FileReader();
-    //             reader.onload = (ev) => console.log('onload', ev);
-    //
-    //             reader.onloadend = (ev) => {
-    //                 console.log("image log 6")
-    //                 console.log('ev ', JSON.stringify(ev));
-    //                 let blob = new Blob([new Uint8Array(reader.result)], {type: "image/png"});
-    //                 console.log('blob type ' + typeof blob + ' plus contents ' + JSON.stringify(blob))
-    //                 let oReq = new XMLHttpRequest();
-    //                 oReq.open("POST", "https://www.cleartasksolutions.com/api/ctsapi.php/createTaskUserLogFiles", true);
-    //                 oReq.onload = (oEvent) => {
-    //                     console.log('oEvent ', JSON.stringify(oEvent));
-    //                     console.log("image log 6")
-    //                     // all done!
-    //                 };
-    //                 // Pass the blob in to XHR's send method
-    //                 oReq.send(blob);
-    //                 console.log('onloadend', ev)
-    //             };
-    //             reader.onloadstart = (ev) => console.log('onloadstart', ev);
-    //             console.log("image log 4")
-    //             reader.readAsArrayBuffer(file)
-    //             console.log("image log 5")
-    //         })
-    //     })
-    // }
+
 
 }

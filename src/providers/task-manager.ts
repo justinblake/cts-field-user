@@ -5,6 +5,8 @@ import {ApiService} from './api-service';
 import {UserManager} from './user-manager';
 import {Utils} from '../utils/utils';
 
+// import {TabsPage} from "../pages/tabs/tabs";
+
 @Injectable()
 export class TaskManager {
 
@@ -40,7 +42,8 @@ export class TaskManager {
     constructor(public userMgr: UserManager,
                 public apiService: ApiService,
                 private platform: Platform,
-                private utils: Utils) {
+                private utils: Utils
+    ) {
 
         console.log("This is the Task Manager");
 
@@ -60,6 +63,7 @@ export class TaskManager {
 
     }
 
+
     passCompleteTask(input: boolean) {
         this.completeTask = input;
     }
@@ -68,7 +72,7 @@ export class TaskManager {
         return {completeTask: this.completeTask};
     }
 
-    passTempHold(input:boolean, resume?: boolean) {
+    passTempHold(input: boolean, resume?: boolean) {
         this.tempHold = input;
         this.resumeTempHold = resume || false;
     }
@@ -102,11 +106,11 @@ export class TaskManager {
     }
 
     returnDispatchAlert() {
-        return {alertTaskId: this.alertTaskId, alertId: this.alertId, hasDispatchAlert: this.hasDispatchAlert }
+        return {alertTaskId: this.alertTaskId, alertId: this.alertId, hasDispatchAlert: this.hasDispatchAlert}
     }
 
     clearDispatchAlert() {
-        console.log('Clear Dispatch Message')
+        console.log('Clear Dispatch Message');
         this.alertTaskId = -1;
         this.alertId = -1;
         this.hasDispatchAlert = false;
@@ -145,6 +149,10 @@ export class TaskManager {
             console.log('this.userId Task Manager ', JSON.stringify(this.userId));
         }
 
+    }
+
+    returnUserRole(){
+        return this.currentUser.role_id;
     }
 
     updateEmployeeToken(newToken, userId?) {
@@ -520,7 +528,6 @@ export class TaskManager {
     };
 
 
-
     updateNextDayTaskStatus = (data: any): Promise<any> => {
         data.userId = this.userId;
         console.log('data 2 ', JSON.stringify(data));
@@ -713,7 +720,7 @@ export class TaskManager {
             };
             console.log('data pre', JSON.stringify(data));
 
-            if(accuracy) {
+            if (accuracy) {
                 data.accuracy = accuracy;
             }
 
@@ -845,25 +852,23 @@ export class TaskManager {
                 userId: empId,
                 alertId: alertId
             };
-            this.apiService.loadSingleAlert(data).then((res:any) => {
+            this.apiService.loadSingleAlert(data).then((res: any) => {
                 console.log('res in task manager ', JSON.stringify(res));
                 resolve(res);
             })
         })
     }
-
 
 
     updateUserDeviceInfo(userObject) {
         return new Promise((resolve, reject) => {
 
-            this.apiService.updateUserDeviceInfo(userObject).then((res:any) => {
+            this.apiService.updateUserDeviceInfo(userObject).then((res: any) => {
                 console.log('res in task manager ', JSON.stringify(res));
                 resolve(res);
             })
         })
     }
-
 
 
 }

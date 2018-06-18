@@ -194,22 +194,43 @@ export class SingleManageTasksPage {
 
     // 0 = complete page, 1 = feedback page
     openActionPage(page: number) {
-        this.setLocation();
-        let params: any = {
-            'task_id': this.currentTask.id,
-            'user_id': this.userInfo.userId
-        };
+
         if (page === 0) {
+            let params: any = {
+                'task_id': this.currentTask.id,
+                'user_id': this.userInfo.userId
+            };
             this.navCtrl.push(CompleteNotesPage, params).then(res => {
 
             });
             return true;
         } else if (page === 1) {
-
-            this.navCtrl.push(FeedbackPage, params).then(res => {
-
-            });
-            return true;
+            if (this.isCordova) {
+                this.setLocation().then((res: any) => {
+                    let params = {
+                        'lat': this.lat,
+                        'lon': this.lon,
+                        'accuracy': this.locationAccuracy,
+                        'task_id': this.currentTask.id,
+                        'user_id': this.userInfo.userId
+                    };
+                    this.navCtrl.push(FeedbackPage, params).then(res => {
+                        this.utils.dismissLoading();
+                    });
+                    return true;
+                })
+            } else {
+                let params = {
+                    'lat': 0,
+                    'lon': 0,
+                    'task_id': this.currentTask.id,
+                    'user_id': this.userInfo.userId
+                };
+                this.navCtrl.push(FeedbackPage, params).then(res => {
+                    this.utils.dismissLoading();
+                });
+                return true;
+            }
         }
     }
 
@@ -251,7 +272,7 @@ export class SingleManageTasksPage {
 
         let fileType: string = '';
 
-        if (imageObject.file_type === 'image/png') {
+        if (imageObject.file_type !== 'application/pdf') {
             fileType = 'image';
 
             let params = {

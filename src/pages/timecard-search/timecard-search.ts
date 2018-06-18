@@ -88,6 +88,7 @@ export class TimecardSearchPage {
         }).then(res => {
             this.startDay = res.from.time;
             this.endDay = res.to.time;
+            this.timecardSearch();
         })
             .catch(err => console.log(err))
     }
@@ -125,6 +126,12 @@ export class TimecardSearchPage {
 
     adjustTime(time) {
         return this.conMgr.adjustTime(time);
+    }
+
+    convertMilli(input) {
+        let tempTime = new Date(input).toISOString().slice(0, 10);
+
+        return this.conMgr.convertDate(tempTime);
     }
 
     convertSeconds(dateObject) {

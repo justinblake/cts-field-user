@@ -40,6 +40,7 @@ import {ManageTasksHomePage} from "../pages/manage-tasks-home/manage-tasks-home"
 import {RejectNotesPage} from '../pages/reject-notes/reject-notes';
 import {SingleForemanTaskPage} from "../pages/single-foreman-task/single-foreman-task";
 import {SingleHistoryTaskPage} from "../pages/single-history-task/single-history-task";
+import {SingleLaborerTaskPage} from "../pages/single-laborer-task/single-laborer-task";
 import {SingleManageTasksPage} from "../pages/single-manage-tasks/single-manage-tasks";
 import {SingleUpcomingTaskPage} from "../pages/single-upcoming-task/single-upcoming-task";
 import {SplashPage} from '../pages/splash/splash';
@@ -56,6 +57,7 @@ import {DirectivesModule} from '../directives/directives.module';
 import {Geolocation} from '@ionic-native/geolocation';
 import {GeolocationService} from '../providers/geolocation-service';
 import {HardwareBackButtonService} from '../providers/backbutton';
+import {ImageResizer} from "../providers/image-resizer";
 import {ManagesTasksManager} from "../providers/manages-tasks-manager";
 import {StorageService} from '../providers/storage-service';
 import {TaskManager} from '../providers/task-manager';
@@ -66,7 +68,7 @@ import {Utils} from '../utils/utils';
 import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-    appVersion: "1.4.18"
+    appVersion: "1.4.19"
 });
 
 @Injectable()
@@ -93,7 +95,7 @@ export class MyErrorHandler implements ErrorHandler {
 export function provideStorage() {
     return new Storage({name: '_ctsdb'});
 }
-
+//
 @NgModule({
     declarations: [
         MyApp,
@@ -114,6 +116,7 @@ export function provideStorage() {
         SplashPage,
         SingleForemanTaskPage,
         SingleHistoryTaskPage,
+        SingleLaborerTaskPage,
         SingleManageTasksPage,
         SingleUpcomingTaskPage,
         TabsPage,
@@ -160,6 +163,7 @@ export function provideStorage() {
         RejectNotesPage,
         SingleForemanTaskPage,
         SingleHistoryTaskPage,
+        SingleLaborerTaskPage,
         SingleManageTasksPage,
         SingleUpcomingTaskPage,
         SplashPage,
@@ -187,6 +191,7 @@ export function provideStorage() {
         Geolocation,
         GeolocationService,
         HardwareBackButtonService,
+        ImageResizer,
         InAppBrowser,
         Keyboard,
         ManagesTasksManager,

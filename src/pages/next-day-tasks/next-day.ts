@@ -12,6 +12,8 @@ import {FCM} from "@ionic-native/fcm";
 import {SingleUpcomingTaskPage} from "../single-upcoming-task/single-upcoming-task";
 
 import {InAppBrowser} from '@ionic-native/in-app-browser';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {StorageService} from "../../providers/storage-service";
 
 
 @Pipe({name: 'myKeys', pure: false})
@@ -46,6 +48,7 @@ export class NextDayPage {
     userId: any = '';
     role_id: number = -1;
     dispatchAlert: any;
+    alert_role_id: number;
 
     alertTask: any = 0;
     alertId: number;
@@ -62,7 +65,9 @@ export class NextDayPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM,
-                private iab: InAppBrowser) {
+                private iab: InAppBrowser,
+                private storage: StorageService,
+                private splashscreen: SplashScreen) {
 
         this.debug = this.utils.returnDebug();
         this.user = this.userMgr.getUser();
@@ -73,6 +78,7 @@ export class NextDayPage {
 
         this.alertTask = navParams.get('task');
         this.alertId = navParams.get('alert_id');
+        this.alert_role_id = this.user.role_id;
     }
 
     ionViewDidEnter() {
@@ -108,7 +114,11 @@ export class NextDayPage {
                         this.alertId = data.project;
                         this.loadTomorrowsTasks(this.userId);
                     } else {
-                        this.navCtrl.parent.select(3);
+                        if (this.alert_role_id === 3) {
+                            this.navCtrl.parent.select(2);
+                        } else {
+                            this.navCtrl.parent.select(3);
+                        }
                     }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
@@ -117,9 +127,24 @@ export class NextDayPage {
                 } else if (data.param1 === 'crews') {
                     this.taskMgr.saveEmergencyInfo(parseInt(data.task), parseInt(data.project), true);
                     this.navCtrl.parent.select(1);
+                } else if (data.param1 === 'User Update') {
+                    let tempNumber = parseInt(data.managesTasks);
+                    let tempRole = parseInt(data.userRole);
+                    this.storage.get('user').then((res1: any) => {
+                        res1.manages_tasks = tempNumber;
+                        res1.role_id = tempRole;
+                        this.storage.update('user', res1).then((res: any) => {
+                            this.reload();
+                        })
+                    });
                 }
             });
         }
+    }
+
+    reload() {
+        this.splashscreen.show();
+        window.location.reload();
     }
 
     presentAlert() {
@@ -176,6 +201,7 @@ export class NextDayPage {
         this.taskMgr.loadNextDayTaskByDate(userId).then((response: any) => {
             this.nextDayTask = response;
 
+
             if (this.nextDayTask.data === {}) {
                 this.showTasks = false;
                 this.utils.dismissLoading();
@@ -227,68 +253,76 @@ export class NextDayPage {
                         })
                     }
                 }
-                // console.log('this.nextDayTask ', JSON.stringify(this.nextDayTask));
+                console.log('this.nextDayTask ', JSON.stringify(this.nextDayTask));
+                console.log('this.nextDayTask ', this.nextDayTask.data['2018-06-15']);
                 this.utils.dismissLoading();
             }
         })
     }
 
-    setStatus = (statusId: number, taskId: number, dateKey: string, taskIndex: number, notes?: any): void => {
-        if (statusId === 3) {
-            this.nextDayTask.data[dateKey][taskIndex].status_id = 3;
-            let data = {
-                notes: notes || '',
-                statusId: statusId,
-                files: [],
-                timestamp: new Date(Date.now()),
-                taskId: taskId
-            };
-            this.utils.presentLoading();
-            this.taskMgr.updateNextDayTaskStatus(data).then((response) => {
-                this.utils.dismissLoading();
-            }).catch(error => {
-                if (this.debug) {
-                    console.log(`ERROR: ${Utils.toJson(error)}`);
-                }
-                this.utils.toastError(error);
-            });
-        } else if (statusId === 8) {
-            this.nextDayTask.data[dateKey][taskIndex].status_id = 8;
-            let data = {
-                notes: notes || '',
-                statusId: statusId,
-                files: [],
-                timestamp: new Date(Date.now()),
-                taskId: taskId
-            };
-            this.utils.presentLoading();
-            this.taskMgr.updateNextDayTaskStatus(data).then((response) => {
-                this.utils.dismissLoading();
-            }).catch(error => {
-                if (this.debug) {
-                    console.log(`ERROR: ${Utils.toJson(error)}`);
-                }
-                this.utils.toastError(error);
-            });
-        }
-    };
-
-    openRejectModal(statusId: number, taskId: number, dateKey: string, taskIndex: number, notes?: any) {
-        let modal: Modal = this.utils.presentRejectNotesModal();
-        modal.onDidDismiss((data) => {
-            if (data.save === true) {
-                this.setStatus(statusId, taskId, dateKey, taskIndex, data.notes);
-            }
-        })
+    convertDate(input) {
+        let tempDate = this.conMgr.convertDate(input);
+        console.log('tempDate ', JSON.stringify(tempDate));
+        return tempDate;
     }
 
-    showContractorInfo(index) {
-        if (this.showContractor === index) {
-            this.showContractor = -1
-        } else {
-            this.showContractor = index;
-        }
-    }
+
+    // setStatus = (statusId: number, taskId: number, dateKey: string, taskIndex: number, notes?: any): void => {
+    //     if (statusId === 3) {
+    //         this.nextDayTask.data[dateKey][taskIndex].status_id = 3;
+    //         let data = {
+    //             notes: notes || '',
+    //             statusId: statusId,
+    //             files: [],
+    //             timestamp: new Date(Date.now()),
+    //             taskId: taskId
+    //         };
+    //         this.utils.presentLoading();
+    //         this.taskMgr.updateNextDayTaskStatus(data).then((response) => {
+    //             this.utils.dismissLoading();
+    //         }).catch(error => {
+    //             if (this.debug) {
+    //                 console.log(`ERROR: ${Utils.toJson(error)}`);
+    //             }
+    //             this.utils.toastError(error);
+    //         });
+    //     } else if (statusId === 8) {
+    //         this.nextDayTask.data[dateKey][taskIndex].status_id = 8;
+    //         let data = {
+    //             notes: notes || '',
+    //             statusId: statusId,
+    //             files: [],
+    //             timestamp: new Date(Date.now()),
+    //             taskId: taskId
+    //         };
+    //         this.utils.presentLoading();
+    //         this.taskMgr.updateNextDayTaskStatus(data).then((response) => {
+    //             this.utils.dismissLoading();
+    //         }).catch(error => {
+    //             if (this.debug) {
+    //                 console.log(`ERROR: ${Utils.toJson(error)}`);
+    //             }
+    //             this.utils.toastError(error);
+    //         });
+    //     }
+    // };
+
+    // openRejectModal(statusId: number, taskId: number, dateKey: string, taskIndex: number, notes?: any) {
+    //     let modal: Modal = this.utils.presentRejectNotesModal();
+    //     modal.onDidDismiss((data) => {
+    //         if (data.save === true) {
+    //             this.setStatus(statusId, taskId, dateKey, taskIndex, data.notes);
+    //         }
+    //     })
+    // }
+
+    // showContractorInfo(index) {
+    //     if (this.showContractor === index) {
+    //         this.showContractor = -1
+    //     } else {
+    //         this.showContractor = index;
+    //     }
+    // }
 
     showDrivingDirections(lat, lon) {
 

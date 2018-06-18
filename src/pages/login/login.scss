@@ -1,91 +1,97 @@
 page-login {
-  .version {
-    position: absolute;
-    bottom: 20px;
-    font-size: 1.5rem;
-  }
-  .scroll-content {
-
-    .title {
-      position: absolute;
-      top: 0;
-      margin: 0 auto;
-      width: 100vw;
-      text-align: center;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      font-size: 24px;
-      color: #666;
-      font-weight: bold;
-      img {
-        max-height: 20vh
-      }
+    .version {
+        position: absolute;
+        bottom: 20px;
+        font-size: 1.5rem;
     }
 
-    .item-ios, .item-md {
-      background-color: transparent;
-    }
-    .label {
-      color: #696969 !important;
-    }
-    .item-label-floating {
-      color: #696969 !important;
-    }
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    justify-content: center;
-    -webkit-box-align: center;
-    -moz-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
+    //.alert-md .alert-message {
+    //    font-size: 16px !important;
+    //}
 
-    div {
-      width: 90vw;
-    }
 
-    .login-pad {
-      padding-right: 16px;
-    }
+    .scroll-content {
 
-    .login-btn {
-      padding-left: 16px;
-      padding-right: 16px;
-      margin-top: 10px;
-    }
+        .title {
+            position: absolute;
+            top: 0;
+            margin: 0 auto;
+            width: 100vw;
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            font-size: 24px;
+            color: #666;
+            font-weight: bold;
+            img {
+                max-height: 20vh
+            }
+        }
 
-    .list-ios > .item-block:first-child {
-      border-top: none;
-    }
+        .item-ios, .item-md {
+            background-color: transparent;
+        }
+        .label {
+            color: #696969 !important;
+        }
+        .item-label-floating {
+            color: #696969 !important;
+        }
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        justify-content: center;
+        -webkit-box-align: center;
+        -moz-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
 
-    .button-ios {
-      box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.85);
-      height: 2em;
-      font-size: 1.8rem;
-      padding-top: 2px;
-    }
+        div {
+            width: 90vw;
+        }
 
-    .button-md {
-      height: 4rem;
-      border-radius: 5px;
-      font-weight: 400;
-      font-size: 1.8rem;
-      box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.85);
-      padding-top: 2px;
-    }
+        .login-pad {
+            padding-right: 16px;
+        }
 
-    .pass-reset {
-      box-shadow: none;
-      color: #3F51B5;
-    }
+        .login-btn {
+            padding-left: 16px;
+            padding-right: 16px;
+            margin-top: 10px;
+        }
 
-    .browser {
-      background-color: #3F51B5;
-      margin-top: 15px;
-    }
+        .list-ios > .item-block:first-child {
+            border-top: none;
+        }
 
-  }
+        .button-ios {
+            box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.85);
+            height: 2em;
+            font-size: 1.8rem;
+            padding-top: 2px;
+        }
+
+        .button-md {
+            height: 4rem;
+            border-radius: 5px;
+            font-weight: 400;
+            font-size: 1.8rem;
+            box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.85);
+            padding-top: 2px;
+        }
+
+        .pass-reset {
+            box-shadow: none;
+            color: #3F51B5;
+        }
+
+        .browser {
+            background-color: #3F51B5;
+            margin-top: 15px;
+        }
+
+    }
 
 }

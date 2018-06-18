@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-row *ngIf="isIos">
-            <ion-col width-50>
+            <ion-col width-75>
                 <div text-center>
                     <div class="ios-title">
                         Timecard
@@ -30,68 +30,105 @@
 </ion-header>
 
 <ion-content>
+
     <!--Today's Timecard-->
-    <ion-card>
+
+    <ion-card class="card-border">
+
+
         <ion-card-header class="task-card-header">
             Today's Timecard
         </ion-card-header>
+
 
         <ion-card-content *ngIf="noEntry">
             <h3 class="noEntries">No Current Timecard Entries</h3>
         </ion-card-content>
 
         <ion-card-content *ngIf="!noEntry">
-            <ion-list class="first-list">
-                <div *ngFor="let time of todaysTime; let i = index;let first=first;">
-                    <ion-row [ngClass]="{first:first}">
-                        <ion-col width-100>
-                            <ion-item *ngIf="time.status === 0" class="o">
-                                <ion-label>
-                                    <span *ngIf="time.status === 0">Clocked Out</span>
+            <div *ngFor="let time of todaysTime; let j = index">
+                <div padding-top>
+
+                    <ion-row>
+                        <ion-col no-padding *ngIf="time.status === 0" width-5
+                                 class="current-status ">
+                            <div class="status-clock-out"></div>
+                        </ion-col>
+                        <ion-col no-padding *ngIf="time.status === 1" width-5
+                                 class="current-status">
+                            <div class="status-clock-in"></div>
+                        </ion-col>
+                        <ion-col class="task-text" text-left width-55>
+                            <span *ngIf="time.status === 0">Clocked Out</span>
+                            <span *ngIf="time.status === 1">Clocked In</span>
+                        </ion-col>
+                        <ion-col width-40>
+                            <div class="edit-container">
+
+
+                                <ion-label class="edit-label">
+                                    <ion-icon name="fa-edit"></ion-icon>
                                 </ion-label>
-                                <ion-datetime displayFormat="h:mm a" pickerFormat="h mm A"
-                                              [(ngModel)]="todaysTime[i].alt_timestamp">
+
+                                <ion-datetime class="rel-datetime" displayFormat="h:mm A" pickerFormat="h mm A"
+                                              [(ngModel)]="todaysTime[j].alt_timestamp">
                                 </ion-datetime>
-                            </ion-item>
-                            <ion-item *ngIf="time.status === 1" class="e">
-                                <ion-label>
-                                    <span *ngIf="time.status === 1">Clocked In</span>
-                                </ion-label>
-                                <ion-datetime displayFormat="h:mm a" pickerFormat="h mm A"
-                                              [(ngModel)]="todaysTime[i].alt_timestamp">
-                                </ion-datetime>
-                            </ion-item>
+                            </div>
                         </ion-col>
                     </ion-row>
-                    <ion-item class="notes">
-                        <ion-input class="mar0" [(ngModel)]="todaysTime[i].notes" placeholder="Notes"
-                                   clearInput></ion-input>
-                    </ion-item>
+                    <ion-row *ngIf="todaysTime[j].alt_timestamp !== todaysTime[j].timestamp">
+                        <ion-col no-padding width-5
+                                 class="current-status ">
+                            <div class="previous-entry"></div>
+                        </ion-col>
+                        <ion-col class="task-text prev-entry-text" text-left width-55>
+                            Previous Entry
+                        </ion-col>
+                        <ion-col class="task-text prev-entry-text" text-right width-40 text-uppercase>
+                            {{todaysTime[j].strTime}}
+                        </ion-col>
 
-                    <ion-row class="btn-margin">
-                        <ion-col width-50>
-                            <ion-buttons
-                                    *ngIf="todaysTime[i].alt_timestamp !== todaysTime[i].timestamp || todaysTime[i].originalNotes !== todaysTime[i].notes">
+                    </ion-row>
+                    <ion-row>
+                        <ion-col class="notes">
+
+                                <ion-label class="notes-label" *ngIf="todaysTime[j].notes.length > 0">Tap notes to edit</ion-label>
+
+                                <ion-textarea class="mar0"
+                                              [ngClass]="{'height-20': todaysTime[j].notes.length < 38}"
+                                              [(ngModel)]="todaysTime[j].notes"
+                                              placeholder="Tap here to add notes"
+                                              clearInput></ion-textarea>
+
+
+                        </ion-col>
+                    </ion-row>
+                    <ion-row
+                        *ngIf="todaysTime[j].alt_timestamp !== todaysTime[j].timestamp || todaysTime[j].originalNotes !== todaysTime[j].notes">
+                        <ion-col width-50 no-padding>
+                            <ion-buttons>
                                 <button ion-button block color="danger" small
                                         (click)="loadTodaysTime()">
                                     Discard Changes
                                 </button>
                             </ion-buttons>
                         </ion-col>
-                        <ion-col width-50>
+                        <ion-col width-50 no-padding>
                             <ion-buttons
-                                    *ngIf="todaysTime[i].alt_timestamp !== todaysTime[i].timestamp || todaysTime[i].originalNotes !== todaysTime[i].notes">
+                                *ngIf="todaysTime[j].alt_timestamp !== todaysTime[j].timestamp || todaysTime[j].originalNotes !== todaysTime[j].notes">
                                 <button ion-button block color="secondary" small
-                                        (click)="updateTodaysTimecard(todaysTime[i].id, todaysTime[i].alt_timestamp, i, todaysTime[i].notes)">
+                                        (click)="updateTodaysTimecard(todaysTime[j].id, todaysTime[j].alt_timestamp, j, todaysTime[j].notes)">
                                     Save Changes
                                 </button>
                             </ion-buttons>
                         </ion-col>
                     </ion-row>
+
                 </div>
-            </ion-list>
+            </div>
         </ion-card-content>
     </ion-card>
+
 
     <ion-card>
         <ion-card-header>

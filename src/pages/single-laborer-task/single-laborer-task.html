@@ -20,23 +20,6 @@
 
 <ion-content footer>
 
-
-    <ion-card
-        *ngIf="currentTask.status_id === 4 || currentTask.status_id === 5 ||currentTask.status_id === 6 || currentTask.status_id === 7 || currentTask.status_id === 9 || currentTask.status_id === 12 || currentTask.status_id === 13">
-        <ion-card-header class="task-card-header">
-            Task Status:
-
-            <span class="in-progress" *ngIf="currentTask.status_id === 4">In Progress</span>
-            <span class="on-hold" *ngIf="currentTask.status_id === 5">Delayed</span>
-            <span class="on-hold" *ngIf="currentTask.status_id === 6">On Hold</span>
-            <span class="on-hold" *ngIf="currentTask.status_id === 7">Emergency</span>
-            <span class="complete" *ngIf="currentTask.status_id === 9">Complete</span>
-            <span class="on-hold" *ngIf="currentTask.status_id === 12">Task On Hold</span>
-            <span class="on-hold" *ngIf="currentTask.status_id === 13">Timecard Pause</span>
-        </ion-card-header>
-
-    </ion-card>
-
     <ion-card class="card-border">
         <ion-card-header class="task-card-header">
             Project Details
@@ -206,7 +189,7 @@
         </ion-card-content>
     </ion-card>
 
-    <ion-card class="card-border" *ngIf="currentTask.task_equipment?.length > 0">
+    <ion-card class="card-border">
         <ion-card-header class="task-card-header">
             Equipment
         </ion-card-header>
@@ -223,79 +206,76 @@
         </ion-card-content>
     </ion-card>
 
-    <div *ngIf="currentTask.task_materials?.length > 0">
-        <ion-card class="card-border">
-            <ion-card-header class="task-card-header">
-                Materials/Supplier
-            </ion-card-header>
 
-            <div *ngFor="let material of currentTask.task_materials; last as isLast">
-                <ion-card-content>
-                    <h4 class="text-info">{{material.material_name}}</h4>
-                    <h4 *ngIf="material.material_price !== 0" class="contractor-sub">
-                        <strong>Price: </strong> ${{material.material_price}}
+    <ion-card class="card-border" *ngIf="currentTask.task_materials.length > 0">
+        <ion-card-header class="task-card-header">
+            Materials/Supplier
+        </ion-card-header>
+
+        <div *ngFor="let material of currentTask.task_materials; last as isLast">
+            <ion-card-content>
+                <h4 class="text-info">{{material.material_name}}</h4>
+                <h4 *ngIf="material.material_price !== 0" class="contractor-sub">
+                    <strong>Price: </strong> ${{material.material_price}}
+                </h4>
+                <div *ngIf="(material.quantity > 0) || (material.quantity !== null && material.quantity !== 0)">
+                    <h4 class="contractor-sub">
+                        <strong>Quantity: </strong> {{material.quantity}}
                     </h4>
-                    <div *ngIf="(material.quantity > 0) || (material.quantity !== null && material.quantity !== 0)">
-                        <h4 class="contractor-sub">
-                            <strong>Quantity: </strong> {{material.quantity}}
-                        </h4>
-                        <h4 class="contractor-sub">
-                            <strong>Units: </strong> {{material.unit}}
-                        </h4>
-                    </div>
-                    <ion-list no-padding text-wrap *ngIf="material.supplier_id !== 0">
-                        <ion-item no-padding text-wrap>
-                            <h4 class="contractor-main">
-                                {{material.supplier.name}}
-                            </h4>
-                            <h4 class="contractor-sub">
-                                {{material.supplier.address}}
-                            </h4>
-                            <h4 class="contractor-sub">
-                                {{material.supplier.city}}, {{material.supplier.state}}&nbsp;{{material.supplier.zip}}
-                            </h4>
-                            <h4>
-                                <button ion-button icon-left clear medium
-                                        class="call-contractor"
-                                        (click)="callPhone(material.supplier.phone)">
-                                    <span class="contractor-phone">Office: </span> <span
-                                    class="contractor-underline">{{material.supplier.phone}}</span>
-                                </button>
-                            </h4>
-                        </ion-item>
-                    </ion-list>
-                    <ion-row *ngIf="material.supplier_id !== 0">
-
-                        <button class="btn-shadow" no-margin margin-bottom ion-button icon-left color="primary"
-                                (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
-                            <ion-icon name="navigate"></ion-icon>
-                            Launch Navigation
-                        </button>
-
-                    </ion-row>
-
-                </ion-card-content>
-
-                <div class="more-back" *ngIf="!isLast">
-                    <ion-row class="empty-gray">
-                        <ion-col>
-
-                        </ion-col>
-                    </ion-row>
+                    <h4 class="contractor-sub">
+                        <strong>Units: </strong> {{material.unit}}
+                    </h4>
                 </div>
-            </div>
-        </ion-card>
-    </div>
-    <div *ngIf="currentTask.task_materials.length === 0">
-        <ion-card>
-            <ion-card-header class="task-card-header">
-                Materials/Supplier
-            </ion-card-header>
-            <ion-card-content class="crew-font" padding>
-                No Materials Specified
+                <ion-list no-padding text-wrap *ngIf="material.supplier_id !== 0">
+                    <ion-item no-padding text-wrap>
+                        <h4 class="contractor-main">
+                            {{material.supplier.name}}
+                        </h4>
+                        <h4 class="contractor-sub">
+                            {{material.supplier.address}}
+                        </h4>
+                        <h4 class="contractor-sub">
+                            {{material.supplier.city}}, {{material.supplier.state}}&nbsp;{{material.supplier.zip}}
+                        </h4>
+                        <h4>
+                            <button ion-button icon-left clear medium
+                                    class="call-contractor"
+                                    (click)="callPhone(material.supplier.phone)">
+                                <span class="contractor-phone">Office: </span> <span
+                                class="contractor-underline">{{material.supplier.phone}}</span>
+                            </button>
+                        </h4>
+                    </ion-item>
+                </ion-list>
+                <ion-row *ngIf="material.supplier_id !== 0">
+
+                    <button class="btn-shadow" no-margin margin-bottom ion-button icon-left color="primary"
+                            (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
+                        <ion-icon name="navigate"></ion-icon>
+                        Launch Navigation
+                    </button>
+
+                </ion-row>
             </ion-card-content>
-        </ion-card>
-    </div>
+            <div class="more-back" *ngIf="!isLast">
+                <ion-row class="empty-gray">
+                    <ion-col>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </div>
+    </ion-card>
+
+
+    <ion-card *ngIf="currentTask.task_materials.length === 0">
+        <ion-card-header class="task-card-header">
+            Materials/Supplier
+        </ion-card-header>
+        <ion-card-content class="crew-font" padding>
+            No Materials Specified
+        </ion-card-content>
+    </ion-card>
+
 
 </ion-content>
 

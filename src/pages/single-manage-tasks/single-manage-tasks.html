@@ -52,7 +52,7 @@
 
                 <ion-list no-padding text-wrap>
                     <ion-item no-padding text-wrap>
-                        <h4 class="contractor-main">Contractor:</h4>
+                        <h4 class="contractor-main">Customer:</h4>
                         <h4 class="contractor-sub">
                             {{currentProject.contractor[0].name}}
                         </h4>
@@ -160,15 +160,17 @@
 
     <ion-card *ngIf="currentTask.task_links?.length > 0">
         <ion-card-header class="task-card-header">
-            Task External Url<span *ngIf="currentTask.task_links.length>1">s</span>
+            External Task Links
         </ion-card-header>
         <ion-card-content class="task-card-content">
-            <ion-row *ngFor="let link of currentTask.task_links">
-
-                <ion-item *ngFor="let link of currentTask.task_links" no-padding>
-                    <h5 class="add_notes task-link" (click)="openAttachedUrl(link.url)">{{link.url}}</h5>
+            <ion-row *ngFor="let link of currentTask.task_links; let b = index">
+                <ion-item no-padding>
+                    <h4 class="external-link" (click)="openAttachedUrl(link.url)">Link #{{b + 1}}</h4>
+                    <h4 *ngIf="link.notes" class="external-notes">
+                        <span class="external-notes-bold">Notes:</span>
+                        {{link.notes}}
+                    </h4>
                 </ion-item>
-
             </ion-row>
         </ion-card-content>
     </ion-card>
@@ -180,10 +182,11 @@
         <ion-card-content>
             <div class="task-card-content">
                 <ion-row *ngFor="let crewMember of currentTask.task_crew; let j = index">
-                    <ion-col class="margin-left-crew" *ngIf="crewMember.is_supervisor !== 1">
+                    <ion-col class="margin-left-crew">
                         <h4 class="crew-font">{{crewMember.first_name}}
                             {{crewMember.last_name}} </h4>
                         <h4 *ngIf="crewMember.is_foreman === 1"> -- Foreman --</h4>
+                        <h4 *ngIf="crewMember.is_supervisor === 1"> -- Supervisor --</h4>
                         <p class="crew-phone">
                             <button ion-button icon-left clear medium
                                     class="phoneNum2"
@@ -220,9 +223,9 @@
                 Materials/Supplier
             </ion-card-header>
 
-            <div *ngFor="let material of currentTask.task_materials; let m = index">
+            <div *ngFor="let material of currentTask.task_materials; let m = index; last as isLast">
                 <ion-card-content>
-                    <h3 class="text-info">{{material.material_name}}</h3>
+                    <h4 class="text-info">{{material.material_name}}</h4>
                     <h4 *ngIf="material.material_price !== 0" class="contractor-sub">
                         <strong>Price: </strong> ${{material.material_price}}
                     </h4>
@@ -255,15 +258,23 @@
                             </h4>
                         </ion-item>
                     </ion-list>
+
+                    <ion-row *ngIf="material.supplier_id !== 0">
+
+                        <button class="btn-shadow" no-margin margin-bottom ion-button icon-left color="primary"
+                                (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
+                            <ion-icon name="navigate"></ion-icon>
+                            Launch Navigation
+                        </button>
+
+                    </ion-row>
+
                 </ion-card-content>
-                <div class="more-back" *ngIf="material.supplier_id !== 0">
-                    <ion-row>
+
+                <div class="more-back" *ngIf="!isLast">
+                    <ion-row class="empty-gray">
                         <ion-col>
-                            <button ion-button icon-left clear medium
-                                    (click)="showDrivingDirections(material.supplier.lat, material.supplier.lon)">
-                                <ion-icon name="navigate"></ion-icon>
-                                Launch Navigation
-                            </button>
+
                         </ion-col>
                     </ion-row>
                 </div>

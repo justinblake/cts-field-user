@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar *ngIf="isIos">
         <ion-row>
-            <ion-col width-50>
+            <ion-col width-75>
                 <div text-center>
                     <div class="ios-title">
                         Alerts
@@ -70,45 +70,55 @@
 
             <ion-card-content *ngIf="displayAlert === i" class="alert-padding">
 
-                <ion-row>
-                    <h4 class="contractor-main">Message:</h4>
-                </ion-row>
-                <ion-row>
-                    <h5 class="contractor-sub">{{alert.alert_description}}</h5>
-                </ion-row>
 
-                <ion-row *ngIf="alert.same_day && alert.task_id">
-                    <h4>
-                        <button ion-button icon-left clear medium
-                                class="call-contractor"
-                                (click)="jumpToTask(alert)"><span
+                <div class="list-pad">
+                    <ion-row>
+                        <h4 class="contractor-main">Message:</h4>
+                    </ion-row>
+                    <ion-row>
+                        <h5 class="contractor-sub">{{alert.alert_description}}</h5>
+                    </ion-row>
+                </div>
+
+
+                <div *ngIf="alert.url" class="list-pad">
+                    <ion-row>
+                        <h4 class="contractor-main">External Link:</h4>
+                    </ion-row>
+                    <ion-row>
+                        <h5 class="contractor-sub link-color" (click)="openAttachedUrl(alert.url)">{{alert.url}}</h5>
+                    </ion-row>
+                </div>
+
+                <div class="list-pad">
+                    <ion-row *ngIf="alert.same_day && alert.task_id">
+                        <h4>
+                            <button ion-button icon-left clear medium
+                                    class="call-contractor"
+                                    (click)="jumpToTask(alert)"><span
                                 class="contractor-underline">Click Here To See This Task</span>
-                        </button>
-                    </h4>
-                </ion-row>
+                            </button>
+                        </h4>
+                    </ion-row>
+                </div>
 
-                <ion-row>
-                    <h6 class="important">Sent:
-                        <span class="less-important">{{alert.strTimeSent}} - {{alert.strDateSent}}</span>
-                    </h6>
-                </ion-row>
-                <ion-row *ngIf="alert.updatedTimeView !== null">
-                    <h6 class="important">Read:
-                        <span class="less-important">{{alert.strTimeViewed}} - {{alert.strDateViewed}}</span>
-                    </h6>
+                <div class="list-pad">
+                    <ion-row>
+                        <h4 class="contractor-main">Alert Details:</h4>
+                    </ion-row>
+                    <ion-row>
+                        <h5 class="contractor-sub">Sent: {{alert.strTimeSent}} - {{alert.strDateSent}}</h5>
+                        <h5 *ngIf="alert.updatedTimeView !== null" class="contractor-sub">Read: {{alert.strTimeViewed}}
+                            - {{alert.strDateViewed}}</h5>
+                    </ion-row>
+                    <ion-row>
+                        <h4 class="contractor-sub" (click)="callPhone(alert.sending_emp.phone)">
+                            {{alert.sending_emp.first_name}}'s #:
+                            <span class="link-color">{{alert.sending_emp.phone}}</span>
+                        </h4>
+                    </ion-row>
+                </div>
 
-                </ion-row>
-                <ion-row>
-
-                    <h4>
-                        <button ion-button icon-left clear medium
-                                class="call-contractor"
-                                (click)="callPhone(alert.sending_emp.phone)">
-                            <span class="contractor-phone">{{alert.sending_emp.first_name}}'s #: </span> <span
-                                class="contractor-underline">{{alert.sending_emp.phone}}</span>
-                        </button>
-                    </h4>
-                </ion-row>
 
             </ion-card-content>
             <div no-padding class="more-back move-up">

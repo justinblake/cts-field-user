@@ -45,13 +45,19 @@ export class LoginPage {
         this.appVersion = this.utils.returnAppVersion();
     }
 
-    ionViewDidLoad() {
+    // ionViewDidLoad() {
+    //
+    //     console.log('ionViewDidLoad LoginPage');
+    //
+    // }
 
-        console.log('ionViewDidLoad LoginPage');
-
+    ionViewWillEnter() {
+        this.validEmail = false;
     }
 
     ionViewDidEnter() {
+
+
 
         this.platform.ready().then(() => {
             Keyboard.disableScroll(true);
@@ -67,16 +73,23 @@ export class LoginPage {
 
         console.log('ionViewDidEnter LoginPage');
 
+
     }
 
     ionViewWillLeave() {
+
+        console.log('ionViewWillLeave LoginPage');
+
         // reverse android keyboard workaround //
         this.platform.ready().then(() => {
             Keyboard.disableScroll(false);
         });
         this.platform.registerBackButtonAction(() => {
             //this.navCtrl.pop();
-        })
+        });
+
+        this.validEmail = false;
+
     }
 
     /** used to enable/disable login button */
@@ -90,8 +103,10 @@ export class LoginPage {
     }
 
     validateEmail(email) {
+        this.validEmail = false;
         let data = {"email": email};
         this.taskMgr.validateEmail(data).then((res: any) => {
+            console.log('res in login ', JSON.stringify(res));
 
             if (res.code === 0) {
                 this.validEmail = true;
@@ -136,10 +151,10 @@ export class LoginPage {
         let credentials: any = {};
         Object.assign(credentials, this.credentials);
 
-        console.log('credentials ', JSON.stringify(credentials));
+        // console.log('credentials ', JSON.stringify(credentials));
 
         this.userMgr.md5Password(credentials).then((res: any) => {
-            console.log('res ', JSON.stringify(res));
+            // console.log('res ', JSON.stringify(res));
             credentials.password = res.md5Pass;
 
             this.userMgr.authenticate(credentials).then(valid => {
@@ -164,6 +179,19 @@ export class LoginPage {
         this.taskMgr.resetPassword(this.resetEmail);
         this.resetEmail = '';
         this.showEmail = false;
+    }
+
+    presentHelpAlert() {
+
+        let alert = this.alertCtrl.create({
+            title: 'Login Questions',
+            message: 'Please enter the email address that was used when your account with CTS was created. <br><br> ' +
+            'If you are unsure which email address was used, please contact your office admin or call our support line at: <br><br> ' +
+            ' <a href="tel:1-385-625-6884">385-625-6884</a>',
+            cssClass: 'loginMessage',
+            buttons: ['Close']
+        });
+        alert.present();
     }
 
 }

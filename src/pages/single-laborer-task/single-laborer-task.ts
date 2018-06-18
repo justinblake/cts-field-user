@@ -9,12 +9,12 @@ import {TaskPhotoReviewPage} from "../task-photo-review/task-photo-review";
 
 
 @Component({
-    selector: 'page-single-upcoming-task',
-    templateUrl: 'single-upcoming-task.html',
+    selector: 'page-single-laborer-task',
+    templateUrl: 'single-laborer-task.html',
 
 })
 
-export class SingleUpcomingTaskPage {
+export class SingleLaborerTaskPage {
     @ViewChild(Content) content: Content;
 
     currentTask: any;
@@ -40,7 +40,6 @@ export class SingleUpcomingTaskPage {
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
         this.isCordova = this.taskMgr.returnPlatform().isCordova;
         this.isIos = this.taskMgr.returnPlatform().isIos;
-        console.log('this.currentTask in single task', JSON.stringify(this.currentTask));
     }
 
 
@@ -124,9 +123,7 @@ export class SingleUpcomingTaskPage {
                 file_name: '' + this.taskFileUrl + '' + imageObject.file_name,
                 notes: imageObject.notes
             };
-
             this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
-                console.log('pushed task photo review')
             })
 
         } else if (imageObject.file_type === 'application/pdf') {
@@ -142,10 +139,6 @@ export class SingleUpcomingTaskPage {
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
     }
 
-    showTaskManager() {
-        let temp1 = this.taskMgr.returnDispatchAlert();
-        let temp2 = this.taskMgr.returnAlertMessage();
-    }
 
 
 }

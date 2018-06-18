@@ -11,6 +11,9 @@ import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {SingleHistoryTaskPage} from "../single-history-task/single-history-task"
 import {InAppBrowser} from '@ionic-native/in-app-browser';
+import {GeolocationService} from "../../providers/geolocation-service";
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {StorageService} from "../../providers/storage-service";
 
 @Component({
     selector: 'page-history',
@@ -56,6 +59,13 @@ export class HistoryPage {
     data: any;
     pausedTasks: any;
 
+    isAndroid: boolean;
+    lat: number;
+    lon: number;
+    locationAccuracy: number;
+    isCordova: boolean = false;
+    role_id: number;
+
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -67,14 +77,22 @@ export class HistoryPage {
                 private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM,
-                private iab: InAppBrowser) {
+                private iab: InAppBrowser,
+                public geoSrvc: GeolocationService,
+                private storage: StorageService,
+                private splashscreen: SplashScreen) {
 
         this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
         this.userId = this.currentUser.userId;
+        this.role_id = this.currentUser.role_id;
         this.divState = 'collapse';
         this.isIos = this.taskMgr.returnPlatform().isIos;
+        this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
+        this.isCordova = this.taskMgr.returnPlatform().isCordova;
     }
+
+
 
     ionViewDidEnter() {
         this.subscribeAgain();
@@ -89,7 +107,11 @@ export class HistoryPage {
                         this.taskMgr.saveAlertDispatch(data.task, data.project, true);
                         this.navCtrl.parent.select(0);
                     } else {
-                        this.navCtrl.parent.select(3);
+                        if (this.role_id === 3) {
+                            this.navCtrl.parent.select(2);
+                        } else {
+                            this.navCtrl.parent.select(3);
+                        }
                     }
                 } else if (data.param1 === 'additional_notes') {
                     this.presentAlert();
@@ -99,9 +121,24 @@ export class HistoryPage {
                 } else if (data.param1 === 'crews') {
                     this.taskMgr.saveEmergencyInfo(parseInt(data.task), parseInt(data.project), true);
                     this.navCtrl.parent.select(1);
+                } else if (data.param1 === 'User Update') {
+                    let tempNumber = parseInt(data.managesTasks);
+                    let tempRole = parseInt(data.userRole);
+                    this.storage.get('user').then((res1: any) => {
+                        res1.manages_tasks = tempNumber;
+                        res1.role_id = tempRole;
+                        this.storage.update('user', res1).then((res: any) => {
+                            this.reload();
+                        })
+                    });
                 }
             });
         }
+    }
+
+    reload() {
+        this.splashscreen.show();
+        window.location.reload();
     }
 
     presentAlert() {
@@ -188,18 +225,25 @@ export class HistoryPage {
         this.taskMgr.getCurrentTaskRemote().then((res: any) => {
             let currentStatus = res.task.job_tasks.status_id;
             if (currentStatus === 2 || currentStatus === 3 || currentStatus === 7) {
-                let data = {
-                    taskId: this.pausedTasks[project].job_tasks[task].id,
-                    userId: this.userId,
-                    notes: '',
-                    statusId: 4,
-                    files: [],
-                    timestamp: new Date(Date.now())
-                };
-                this.taskMgr.resumeOnHoldTask(data).then((response) => {
-                    this.taskMgr.passTempHold(false, true);
-                    this.navCtrl.parent.select(0);
+
+                this.setLocation().then((res: any) => {
+                    let data = {
+                        taskId: this.pausedTasks[project].job_tasks[task].id,
+                        userId: this.userId,
+                        notes: '',
+                        statusId: 4,
+                        files: [],
+                        lat: this.lat,
+                        lon: this.lon,
+                        accuracy: this.locationAccuracy
+                    };
+                    this.taskMgr.resumeOnHoldTask(data).then((response) => {
+                        this.taskMgr.passTempHold(false, true);
+                        this.navCtrl.parent.select(0);
+                    })
                 })
+
+
             } else if (currentStatus === 4 || currentStatus === 5) {
                 let alert = this.alertCtrl.create({
                     title: 'Task In Progress',
@@ -216,12 +260,42 @@ export class HistoryPage {
                 notes: '',
                 statusId: 4,
                 files: [],
-                timestamp: new Date(Date.now())
+                lat: this.lat,
+                lon: this.lon,
+                accuracy: this.locationAccuracy
             };
             this.taskMgr.resumeOnHoldTask(data).then((response) => {
                 this.taskMgr.passTempHold(false, true);
                 this.navCtrl.parent.select(0);
             })
+        })
+    }
+
+    setLocation() {
+
+        return new Promise((resolve, reject) => {
+
+            this.lat = 0;
+            this.lon = 0;
+
+            let platform = 'ios';
+            if (this.isAndroid) {
+                platform = 'android'
+            }
+
+            if (this.isCordova) {
+                this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+                    this.lat = res.lat;
+                    this.lon = res.lon;
+                    this.locationAccuracy = res.accuracy;
+                    console.log('res in new location service', JSON.stringify(res));
+                    resolve(`${this.lat},${this.lon}`);
+                }, (err: any) => {
+                    console.log('err ', JSON.stringify(err));
+                    reject(err)
+                })
+            }
+
         })
     }
 

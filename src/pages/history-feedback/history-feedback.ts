@@ -166,12 +166,12 @@ export class HistoryFeedbackPage {
             buttons.push({
                 text: 'Choose Photo',
                 handler: () => {
-                    this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY, editable); // 0 == Library
+                    this.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY); // 0 == Library
                 }
             }, {
                 text: 'Take Photo',
                 handler: () => {
-                    this.getPicture(this.camera.PictureSourceType.CAMERA, editable); // 1 == Camera
+                    this.getPicture(this.camera.PictureSourceType.CAMERA); // 1 == Camera
                 }
             })
         }
@@ -192,14 +192,13 @@ export class HistoryFeedbackPage {
      * get picture from gallery or camera
      * @Param sourceType:number camera or gallery
      */
-    getPicture(sourceType: number, editable: boolean) {
+    getPicture(sourceType: number) {
         this.utils.presentLoading();
         this.camera.getPicture({
-            quality: 50,
-            destinationType: 1,
+            quality: 40,
             sourceType: sourceType,
             allowEdit: true,
-            saveToPhotoAlbum: false,
+            mediaType: 0,
             correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
         }).then((imageData) => {
 
