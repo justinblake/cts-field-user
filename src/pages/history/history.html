@@ -34,6 +34,7 @@
             <ion-card class="card-border" *ngIf="task.job_tasks.length > 0">
                 <ion-card-header text-wrap class="task-card-header header-proj">
                     {{task.job_name}}
+                    <h5 *ngIf="task.custom_job_id" class="project-id"><strong>Project ID: </strong>{{task.custom_job_id}}</h5>
                 </ion-card-header>
 
                 <ion-card-content *ngIf="pausedContractorDetails.proj === a">
@@ -94,7 +95,7 @@
                 <div *ngFor="let jobTasks of task.job_tasks; let b = index">
                     <ion-card-content tappable (click)="expandPausedTask(a, b)">
                         <div class="task-card-content">
-                            <h3 class="text-info">{{b + 1}}: {{jobTasks.task_description}} </h3>
+                            <h4 class="text-info">{{b + 1}}: {{jobTasks.task_description}} </h4>
                             <h4 class="date-info mar-top10">Date: {{jobTasks.strDate}}</h4>
                             <div *ngIf="jobTasks.additional_notes?.length > 0">
                                 <h5 class="text-info">Additional Task Notes</h5>
@@ -135,6 +136,7 @@
         <ion-card class="card-border" *ngFor="let task of history.data; let i = index">
             <ion-card-header text-wrap class="task-card-header header-proj">
                 {{task.job_name}}
+                <h5 *ngIf="task.custom_job_id" class="project-id"><strong>Project ID: </strong>{{task.custom_job_id}}</h5>
             </ion-card-header>
 
             <ion-card-content *ngIf="contractorDetails.proj === i">
@@ -202,11 +204,11 @@
                     <div class="task-card-content">
 
 
-                        <h3 class="text-info">{{j + 1}}: {{jobTasks.task_description}} </h3>
+                        <h4 class="text-info">{{j + 1}}: {{jobTasks.task_description}} </h4>
                         <h4 class="date-info mar-top10">Date: {{jobTasks.strDate}}
                         </h4>
                         <div *ngIf="jobTasks.additional_notes.length > 0">
-                            <h5 class="text-info">Additional Task Notes</h5>
+                            <h5 class="additional_notes">Additional Task Notes</h5>
                             <ul class="add-ul" *ngFor="let newNotes of jobTasks.additional_notes; let u = index">
                                 <li class="more-notes">{{newNotes.notes}}</li>
                                 <li class="notes-by">Added By: <strong>{{newNotes.employee.first_name}}

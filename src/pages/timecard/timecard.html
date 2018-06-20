@@ -76,7 +76,7 @@
                             </div>
                         </ion-col>
                     </ion-row>
-                    <ion-row *ngIf="todaysTime[j].alt_timestamp !== todaysTime[j].timestamp">
+                    <ion-row *ngIf="todaysTime[j].alt_timestamp !== todaysTime[j].timestamp" class="pad-top-3">
                         <ion-col no-padding width-5
                                  class="current-status ">
                             <div class="previous-entry"></div>
@@ -105,18 +105,18 @@
                     </ion-row>
                     <ion-row
                         *ngIf="todaysTime[j].alt_timestamp !== todaysTime[j].timestamp || todaysTime[j].originalNotes !== todaysTime[j].notes">
-                        <ion-col width-50 no-padding>
+                        <ion-col width-50 no-padding class="pad-right-2">
                             <ion-buttons>
-                                <button ion-button block color="danger" small
+                                <button class="btn-shadow" ion-button block color="danger" small
                                         (click)="loadTodaysTime()">
                                     Discard Changes
                                 </button>
                             </ion-buttons>
                         </ion-col>
-                        <ion-col width-50 no-padding>
+                        <ion-col width-50 no-padding class="pad-left-2">
                             <ion-buttons
                                 *ngIf="todaysTime[j].alt_timestamp !== todaysTime[j].timestamp || todaysTime[j].originalNotes !== todaysTime[j].notes">
-                                <button ion-button block color="secondary" small
+                                <button class="btn-shadow" ion-button block color="secondary" small
                                         (click)="updateTodaysTimecard(todaysTime[j].id, todaysTime[j].alt_timestamp, j, todaysTime[j].notes)">
                                     Save Changes
                                 </button>
@@ -133,7 +133,7 @@
     <ion-card>
         <ion-card-header>
             <ion-buttons text-center>
-                <button color="secondary" ion-button block icon-left
+                <button class="btn-shadow" color="secondary" ion-button block icon-left
                         (click)="goToSearch()">
                     Search Timecard Entries
                 </button>

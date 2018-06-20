@@ -37,6 +37,7 @@ export class GeolocationService {
                 }
             }).then(() => {
                 this.diagnostic.getLocationAuthorizationStatus().then((res: any) => {
+                    console.log('res ', JSON.stringify(res));
                     if (res === 'GRANTED' || res === 'authorized_when_in_use' || res === 'authorized') {
                         this.geolocation.getCurrentPosition().then(position => {
                             this.lat = position.coords.latitude;

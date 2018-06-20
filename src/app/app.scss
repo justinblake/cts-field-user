@@ -345,6 +345,13 @@ h5.text-info {
     font-size: 1.8rem !important;
 }
 
+h5.additional_notes {
+    margin-top: 20px;
+    color: black;
+    font-weight: 500;
+    font-size: 1.8rem !important;
+}
+
 .capitalize {
     text-transform: capitalize;
 }
@@ -1125,8 +1132,13 @@ circle {
 .project-name {
     color: #222222 !important;
     font-weight: 500 !important;
-    font-size: 2.3rem !important;
-    margin-bottom: 15px !important;
+    font-size: 2.0rem !important;
+}
+
+.project-id {
+    color: orange !important;
+    font-size: 1.7rem !important;
+
 }
 
 ion-item.contractor-label > div.item-inner > div.input-wrapper > ion-label.label {

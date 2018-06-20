@@ -146,80 +146,91 @@
                 <ion-card-header class="task-card-header">
                     Project Details
                 </ion-card-header>
-                <ion-card-content class="task-card-content">
-                    <ion-list no-padding>
-                        <ion-item no-padding>
-                            <h4 class="project-name">
-                                {{currentTask.job_name}}
-                            </h4>
-                            <h4 class="contractor-main">Address:</h4>
-                            <h4 class="contractor-sub">
-                                {{currentTask.address}}
-                            </h4>
-                            <h4 class="contractor-sub">
-                                {{currentTask.city}}, {{currentTask.state}}&nbsp;{{currentTask.zip}}
-                            </h4>
-                        </ion-item>
-                    </ion-list>
-
-                    <ion-list no-padding text-wrap [@expandCollapse]="divState">
-                        <ion-item class="contractor-label" no-padding text-wrap [@expandCollapse]="divState">
-                            <h4 class="contractor-main" [@expandCollapse]="divState">Customer:</h4>
-                            <h4 class="contractor-sub" [@expandCollapse]="divState">
-                                {{currentTask.contractor[0].name}}
-                            </h4>
-                            <h4 [@expandCollapse]="divState">
-                                <button ion-button icon-left clear medium
-                                        class="call-contractor"
-                                        (click)="callPhone(currentTask.contractor[0].office_phone)"
-                                        [@expandCollapse]="divState">
-                                    <span class="contractor-phone" [@expandCollapse]="divState">Office: </span> <span
-                                    class="contractor-underline" [@expandCollapse]="divState">{{currentTask.contractor[0].office_phone}}</span>
-                                </button>
-                            </h4>
-
-                        </ion-item>
-                    </ion-list>
-
-                    <ion-list no-padding text-wrap [@expandCollapse]="divState"
-                              *ngIf="currentTask.contractor_contacts?.length > 0">
-                        <ion-item no-padding text-wrap [@expandCollapse]="divState">
-                            <h4 class="contractor-main" [@expandCollapse]="divState">Customer Contacts:</h4>
-                            <div class="contractor-div"
-                                 *ngFor="let contacts of currentTask.contractor_contacts; let p = index"
-                                 [@expandCollapse]="divState">
-                                <h4 class="contractor-sub" [@expandCollapse]="divState">
-                                    {{contacts.first_name}} {{contacts.last_name}} <span [@expandCollapse]="divState"
-                                                                                         *ngIf="contacts.title"> - {{contacts.title}}</span>
+                <ion-card-content>
+                    <div class="task-card-content">
+                        <ion-list no-padding>
+                            <ion-item no-padding text-wrap>
+                                <h4 class="project-name">
+                                    {{currentTask.job_name}}
                                 </h4>
+                                <h4 *ngIf="currentTask.custom_job_id" class="contractor-sub">
+                                    <strong>Project ID: </strong>
+                                    {{currentTask.custom_job_id}}
+                                </h4>
+                            </ion-item>
 
-                                <h4 *ngIf="contacts.office_phone" [@expandCollapse]="divState">
+                            <ion-item no-padding>
+                                <h4 class="contractor-main">Address:</h4>
+                                <h4 class="contractor-sub">
+                                    {{currentTask.address}}
+                                </h4>
+                                <h4 class="contractor-sub">
+                                    {{currentTask.city}}, {{currentTask.state}}&nbsp;{{currentTask.zip}}
+                                </h4>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                    <div class="mar-bot25" *ngIf="contractorDetails">
+                        <ion-list no-padding text-wrap>
+                            <ion-item class="contractor-label" no-padding text-wrap>
+                                <h4 class="contractor-main">Customer:</h4>
+                                <h4 class="contractor-sub">
+                                    {{currentTask.contractor[0].name}}
+                                </h4>
+                                <h4>
                                     <button ion-button icon-left clear medium
                                             class="call-contractor"
-                                            (click)="callPhone(contacts.office_phone)" [@expandCollapse]="divState">
-                                        <span class="contractor-phone" [@expandCollapse]="divState">Office: </span>
-                                        <span class="contractor-underline" [@expandCollapse]="divState">{{contacts.office_phone}}</span>
+                                            (click)="callPhone(currentTask.contractor[0].office_phone)">
+                                        <span class="contractor-phone">Office: </span>
+                                        <span
+                                            class="contractor-underline">{{currentTask.contractor[0].office_phone}}</span>
                                     </button>
                                 </h4>
-                                <h4 *ngIf="contacts.cell_phone" [@expandCollapse]="divState">
-                                    <button ion-button icon-left clear medium
-                                            class="call-contractor"
-                                            (click)="callPhone(contacts.cell_phone)" [@expandCollapse]="divState">
-                                        <span class="contractor-phone" [@expandCollapse]="divState">Cell: </span> <span
-                                        class="contractor-underline" [@expandCollapse]="divState">{{contacts.cell_phone}}</span>
-                                    </button>
-                                </h4>
-                            </div>
-                        </ion-item>
-                    </ion-list>
+
+                            </ion-item>
+                        </ion-list>
+
+                        <ion-list no-padding text-wrap
+                                  *ngIf="currentTask.contractor_contacts?.length > 0">
+                            <ion-item no-padding text-wrap>
+                                <h4 class="contractor-main">Customer Contacts:</h4>
+                                <div class="contractor-div"
+                                     *ngFor="let contacts of currentTask.contractor_contacts; let p = index">
+                                    <h4 class="contractor-sub">
+                                        {{contacts.first_name}} {{contacts.last_name}}
+                                        <span *ngIf="contacts.title"> - {{contacts.title}}</span>
+                                    </h4>
+
+                                    <h4 *ngIf="contacts.office_phone">
+                                        <button ion-button icon-left clear medium
+                                                class="call-contractor"
+                                                (click)="callPhone(contacts.office_phone)">
+                                            <span class="contractor-phone">Office: </span>
+                                            <span class="contractor-underline">{{contacts.office_phone}}</span>
+                                        </button>
+                                    </h4>
+                                    <h4 *ngIf="contacts.cell_phone">
+                                        <button ion-button icon-left clear medium
+                                                class="call-contractor"
+                                                (click)="callPhone(contacts.cell_phone)">
+                                            <span class="contractor-phone">Cell: </span>
+                                            <span
+                                                class="contractor-underline">{{contacts.cell_phone}}</span>
+                                        </button>
+                                    </h4>
+                                </div>
+                            </ion-item>
+                        </ion-list>
+                    </div>
 
                 </ion-card-content>
 
                 <div no-padding class="more-back mar-top-15">
                     <ion-row>
                         <ion-col>
-                            <button ion-button clear medium (click)="toggleDivState()">
-                                {{divState == 'collapse' ? 'More' : 'Less'}}...
+                            <button ion-button clear medium (click)="contractorDetails = !contractorDetails">
+                                <span *ngIf="!contractorDetails">More ...</span>
+                                <span *ngIf="contractorDetails">Less ...</span>
                             </button>
                         </ion-col>
                         <ion-col>

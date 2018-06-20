@@ -33,6 +33,9 @@
                         <h4 class="text-info capitalize">
                             {{currentProject.job_name}}
                         </h4>
+                        <h4 *ngIf="currentProject.custom_job_id" class="contractor-sub">
+                            <strong>Project ID:</strong> {{currentProject.custom_job_id}}
+                        </h4>
                     </ion-item>
 
                     <ion-item no-padding>

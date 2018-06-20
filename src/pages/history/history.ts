@@ -157,6 +157,8 @@ export class HistoryPage {
         alert.present();
     }
 
+    // test
+    
     loadHistory() {
         this.displayOptions = {
             proj: -1,

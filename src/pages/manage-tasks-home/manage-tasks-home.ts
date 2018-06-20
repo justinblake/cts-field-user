@@ -560,7 +560,8 @@ export class ManageTasksHomePage {
     }
 
     openSingleTask(project, task) {
-        // console.log('project ', JSON.stringify(project));
+        console.log('project ', JSON.stringify(project));
+        console.log('this.projectObject[project] ', this.projectObject[project]);
         // console.log('task ', JSON.stringify(task));
         let userInfo = {
             timecardStatus: this.timecardStatus,
@@ -577,7 +578,8 @@ export class ManageTasksHomePage {
             lon: this.projectObject[project].lon,
             notes: this.projectObject[project].notes,
             contractor: this.projectObject[project].contractor,
-            contractor_contacts: this.projectObject[project].contractor_contacts
+            contractor_contacts: this.projectObject[project].contractor_contacts,
+            custom_job_id: this.projectObject[project].custom_job_id
         };
         let currentTask = this.projectObject[project].job_tasks[task];
         // console.log('currentTask in middle ', JSON.stringify(currentTask));

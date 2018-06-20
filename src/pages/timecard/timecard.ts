@@ -186,9 +186,23 @@ export class TimecardPage {
 
 
         let newTimeMinusZ = newTime.slice(0, 19);
+        console.log('newTimeMinusZ ', newTimeMinusZ);
         let newEntryInMilliseconds = Date.parse(newTimeMinusZ);
-        let currentTimeInMilliseconds = Date.parse(new Date().toLocaleString());
+        let currentTimeInMilliseconds = Date.parse(new Date(Date.now()).toLocaleString());
+        let timezone = new Date().getTimezoneOffset();
+
+
+        if(this.isIos) {
+            currentTimeInMilliseconds = currentTimeInMilliseconds - (timezone * 60 * 1000)
+        }
+
+
         let lengthOfTimeEntries = this.todaysTime.length;
+        let more1 = new Date().toISOString();
+
+        console.log('timezone ', timezone);
+
+        console.log('more1 ', more1);
 
         let previousEntry = 0;
         let nextEntry = 0;

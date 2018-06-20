@@ -43,7 +43,7 @@ export class HistoryFeedbackPage {
 
         this.data = {
             notes: '',
-            statusId: 9,
+            statusId: 10,
             files: this.files,
             save: false,
             taskId: this.id

@@ -1,16 +1,13 @@
 import {Component, ViewChild, Pipe, PipeTransform} from '@angular/core';
-import {NavController, NavParams, App, Modal, Content, AlertController} from 'ionic-angular';
+import {NavController, NavParams, App, Content, AlertController} from 'ionic-angular';
 import {CallNumber} from '@ionic-native/call-number';
-
 import {LoginPage} from '../login/login';
 import {TaskManager} from '../../providers/task-manager';
 import {UserManager} from '../../providers/user-manager';
 import {Utils} from '../../utils/utils';
-import {Animations} from '../../animations/animations';
 import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {SingleUpcomingTaskPage} from "../single-upcoming-task/single-upcoming-task";
-
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StorageService} from "../../providers/storage-service";
@@ -26,9 +23,6 @@ export class KeysPipe implements PipeTransform {
 @Component({
     selector: 'page-next-day',
     templateUrl: 'next-day.html',
-    animations: [
-        Animations.expandCollapse
-    ]
 })
 
 export class NextDayPage {
@@ -39,20 +33,15 @@ export class NextDayPage {
     user: any;
     divState: string = 'hide';
     showTasks = false;
-    newStart: any = '';
     isIos: boolean = false;
-    showContractor: number = -1;
-    expandDate: number = -1;
     expandTaskId: number = -1;
     taskId: number = -1;
     userId: any = '';
     role_id: number = -1;
     dispatchAlert: any;
     alert_role_id: number;
-
     alertTask: any = 0;
     alertId: number;
-
     alertObject: any = {};
 
     constructor(public navCtrl: NavController,
@@ -187,19 +176,14 @@ export class NextDayPage {
         })
     }
 
-    toggleDivState() {
-        let states = {
-            expand: 'collapse',
-            collapse: 'expand'
-        };
-        this.divState = states[this.divState];
-    }
 
     loadTomorrowsTasks(userId) {
         this.alertObject = {};
         this.utils.presentLoading();
         this.taskMgr.loadNextDayTaskByDate(userId).then((response: any) => {
             this.nextDayTask = response;
+
+            console.log('this.nextDayTask ', this.nextDayTask);
 
 
             if (this.nextDayTask.data === {}) {
@@ -253,8 +237,6 @@ export class NextDayPage {
                         })
                     }
                 }
-                console.log('this.nextDayTask ', JSON.stringify(this.nextDayTask));
-                console.log('this.nextDayTask ', this.nextDayTask.data['2018-06-15']);
                 this.utils.dismissLoading();
             }
         })
@@ -307,14 +289,6 @@ export class NextDayPage {
     //     }
     // };
 
-    // openRejectModal(statusId: number, taskId: number, dateKey: string, taskIndex: number, notes?: any) {
-    //     let modal: Modal = this.utils.presentRejectNotesModal();
-    //     modal.onDidDismiss((data) => {
-    //         if (data.save === true) {
-    //             this.setStatus(statusId, taskId, dateKey, taskIndex, data.notes);
-    //         }
-    //     })
-    // }
 
     // showContractorInfo(index) {
     //     if (this.showContractor === index) {
@@ -333,34 +307,6 @@ export class NextDayPage {
 
     }
 
-    expandDateTasks(index) {
-        if (this.expandDate === index) {
-            this.expandDate = -1
-        } else {
-            this.expandDate = index;
-        }
-    }
-
-    expandTask(id, index, task) {
-        console.log('task ', JSON.stringify(task));
-
-        if (this.expandTaskId === id && this.taskId === index) {
-            if (!this.isIos) {
-                this.content.scrollTo(0, 0, 300).then(res => {
-                });
-            }
-            this.expandTaskId = -1;
-            this.taskId = -1;
-        } else {
-            if (!this.isIos) {
-                this.content.scrollTo(0, ((index * 50) + 50), 300).then(res => {
-                });
-            }
-            this.expandTaskId = id;
-            this.taskId = index;
-        }
-    }
-
     callPhone(number) {
         this.callNumber.callNumber(number, false)
             .then(() => {
@@ -375,11 +321,9 @@ export class NextDayPage {
             });
     }
 
-    adjustTime(time) {
-        return this.conMgr.adjustTime(time);
-    }
 
     openSingleTask(task) {
+        console.log('task ', task);
         let params = {
             currentTask: task
         };

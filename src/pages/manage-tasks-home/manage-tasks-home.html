@@ -153,6 +153,7 @@
             <ion-card class="card-border">
                 <ion-card-header class="task-card-header">
                     {{project.job_name}}
+                    <h5 *ngIf="project.custom_job_id" class="project-id"><strong>Project ID: </strong>{{project.custom_job_id}}</h5>
                 </ion-card-header>
                 <ion-card-content *ngIf="contractorDetails.proj === i">
 

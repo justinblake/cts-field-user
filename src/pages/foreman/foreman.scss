@@ -166,24 +166,6 @@ page-foreman {
         padding: 0 8px 5px 6px;
     }
 
-    .pad-left-8 {
-        padding-left: 8px;
-    }
-
-    .pad-right-8 {
-        padding-right: 8px;
-    }
-
-    @media (max-width: 360px) {
-        .pad-left-8 {
-            padding-left: 0;
-        }
-
-        .pad-right-8 {
-            padding-right: 0;
-        }
-    }
-
     @media (max-width: 328px) {
         .newTime {
             font-size: 1.5rem;

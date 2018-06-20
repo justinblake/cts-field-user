@@ -13,7 +13,6 @@ import {downloadUpdate} from '../../providers/deploy-manager';
 import {extractUpdate} from '../../providers/deploy-manager';
 import {loadNewVersion} from '../../providers/deploy-manager';
 import {Utils} from '../../utils/utils';
-import {Animations} from '../../animations/animations';
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {NextDayPage} from '../next-day-tasks/next-day';
 import {CompleteNotesPage} from '../complete-notes/complete-notes';
@@ -24,9 +23,6 @@ import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
 import {TaskPhotoReviewPage} from '../task-photo-review/task-photo-review';
 import {StorageService} from "../../providers/storage-service";
-import {TabsPage} from "../tabs/tabs";
-import {ManageTasksHomePage} from "../manage-tasks-home/manage-tasks-home";
-import {SplashPage} from "../splash/splash";
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {SingleLaborerTaskPage} from "../single-laborer-task/single-laborer-task";
 
@@ -38,12 +34,11 @@ export class HomeKeysPipe implements PipeTransform {
     }
 }
 
+
+
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html',
-    animations: [
-        Animations.expandCollapse
-    ]
 })
 
 export class HomePage {
@@ -80,9 +75,8 @@ export class HomePage {
     locationAccuracy: any;
     isCordova: boolean;
     role_id: number;
-
+    contractorDetails: boolean = false;
     empData: any = {};
-
     cell_carrier: any;
     app_version: any;
     software_version: any;
@@ -90,11 +84,9 @@ export class HomePage {
     operating_system: any;
     cell_number: any;
     emp_device_id: any;
-
     retrievingLocation: boolean = false;
     createEntry: boolean = false;
     localHour: number;
-
     taskFileUrl: string = 'https://www.cleartasksolutions.com/assets/task_files/';
 
 
@@ -234,6 +226,10 @@ export class HomePage {
         if (this.debug) {
             console.log('empData ', JSON.stringify(this.empData));
         }
+
+        this.diagnostic.requestLocationAuthorization().then((res:any)=> {
+            console.log('res in location ', res);
+        })
 
 
     }
@@ -747,8 +743,6 @@ export class HomePage {
         this.navCtrl.push(CompleteNotesPage, params).then(res => {
         });
         return true;
-
-
     }
 
 // does not open a modal as the name might suggest.
@@ -872,33 +866,6 @@ export class HomePage {
         }
     };
 
-    openLaborerRejectModal(statusId: number, taskId: number, dateKey: string, taskIndex: number, notes ?: any) {
-        let modal: Modal = this.utils.presentRejectNotesModal();
-        modal.onDidDismiss((data) => {
-            if (data.save === true) {
-                this.setLaborerStatus(statusId, taskId, dateKey, taskIndex, data.notes);
-            }
-        })
-    }
-
-    expandTask(id, index) {
-        if (this.expandTaskId === id && this.taskId === index) {
-            if (!this.isIos) {
-                this.content.scrollTo(0, 0, 300).then(res => {
-                });
-            }
-            this.expandTaskId = -1;
-            this.taskId = -1;
-        } else {
-            if (!this.isIos) {
-                this.content.scrollTo(0, ((index * 50) + 85), 300).then(res => {
-                });
-            }
-            this.expandTaskId = id;
-            this.taskId = index;
-        }
-    }
-
     callPhone(number) {
         this.callNumber.callNumber(number, false)
             .then(() => {
@@ -992,20 +959,13 @@ export class HomePage {
         this.showTimecard = !this.showTimecard;
     }
 
-    adjustTime(time) {
-        return this.conMgr.adjustTime(time);
-    }
-
-
     openSingleTask(task) {
-        console.log('task ', task);
         let params = {
             currentTask: task
         };
         this.navCtrl.push(SingleLaborerTaskPage, params).then(() => {
             // console.log('in promise of push ');
         })
-
     }
 
     checkUpdates() {

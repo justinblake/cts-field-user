@@ -63,7 +63,7 @@
                 </ion-row>
 
                 <ion-row *ngIf="!search && (userRole === 5)">
-                    <ion-col col-12>
+                    <ion-col col-sm-12>
                         <button ion-button block icon-left color="secondary"
                                 class="home-btn"
                                 (click)="search = !search">
@@ -82,20 +82,17 @@
                                           [(ngModel)]="currentDate"></ion-datetime>
                         </ion-item>
                         <ion-row>
-                            <ion-col col-sm-12 col-md-6 no-padding class="pad-right-8">
-
-                                <button class="home-btn" color="primary" ion-button block icon-left
-                                        (click)="loadCurrentDay()">
-                                    Today's Tasks
-                                </button>
-
-                            </ion-col>
-                            <ion-col col-sm-12 col-md-6 no-padding class="pad-left-8">
-
+                            <ion-col no-padding width-100>
                                 <button class="home-btn" color="secondary" ion-button block icon-left
                                         (click)="getForemanTasks(true)">
                                     <ion-icon name="search"></ion-icon>
                                     Search
+                                </button>
+                            </ion-col>
+                            <ion-col no-padding width-100>
+                                <button class="home-btn" color="primary" ion-button block icon-left
+                                        (click)="loadCurrentDay()">
+                                    Today's Tasks
                                 </button>
 
                             </ion-col>
@@ -108,7 +105,7 @@
         </ion-card-content>
     </ion-card>
 
-    <!--Demo-->
+
 
     <div *ngIf="showTasks">
         <div *ngIf="!tasks">
@@ -123,6 +120,7 @@
                 <div>
                     <ion-card-header class="task-card-header">
                         {{project.job_name}}
+                        <h5 *ngIf="project.custom_job_id" class="project-id"><strong>Project ID: </strong>{{project.custom_job_id}}</h5>
                     </ion-card-header>
                     <ion-card-content *ngIf="contractorDetails.proj === i">
 
