@@ -71,7 +71,6 @@ export class NextDayPage {
     }
 
     ionViewDidEnter() {
-        console.log('ion view did enter');
         let alertDispatch = this.taskMgr.returnDispatchAlert();
         if (alertDispatch.hasDispatchAlert === true) {
             this.alertTask = alertDispatch.alertTaskId;
@@ -92,10 +91,7 @@ export class NextDayPage {
 
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
-            console.log('this.alertTask pre ', JSON.stringify(this.alertTask));
-            console.log('this.alertId pre ', JSON.stringify(this.alertId));
             this.fcm.onNotification().subscribe(data => {
-                console.log('data ', JSON.stringify(data));
                 if (data.param1 === 'alert') {
 
                     if (data.project !== 'null') {
@@ -176,6 +172,21 @@ export class NextDayPage {
         })
     }
 
+    sortTasks(data) {
+        let sorted = {},
+            key, a = [];
+        for (key in data) {
+            if (data.hasOwnProperty(key)) {
+                a.push(key);
+            }
+        }
+        a.sort();
+        for (key = 0; key < a.length; key++) {
+            sorted[a[key]] = data[a[key]];
+        }
+        return sorted;
+    }
+
 
     loadTomorrowsTasks(userId) {
         this.alertObject = {};
@@ -183,24 +194,24 @@ export class NextDayPage {
         this.taskMgr.loadNextDayTaskByDate(userId).then((response: any) => {
             this.nextDayTask = response;
 
-            console.log('this.nextDayTask ', this.nextDayTask);
-
-
             if (this.nextDayTask.data === {}) {
                 this.showTasks = false;
                 this.utils.dismissLoading();
             }
             else {
                 this.showTasks = true;
+                this.nextDayTask.data = this.sortTasks(this.nextDayTask.data);
+
                 this.user = response.user;
                 let myKey1 = Object.keys(this.nextDayTask.data);
+
                 for (let m = 0; m < myKey1.length; m++) {
                     let firstKey = this.nextDayTask.data[Object.keys(this.nextDayTask.data)[m]];
                     firstKey.sort(function (a, b) {
                         return (a.task_start_time > b.task_start_time) ? 1 : ((b.task_start_time > a.task_start_time) ? -1 : 0);
                     });
                 }
-                console.log('this.alertTask in next day', JSON.stringify(this.alertTask));
+
                 if (this.alertTask && this.alertTask !== -1) {
                     this.expandTaskId = parseInt(this.alertTask);
                     this.dispatchAlert = parseInt(this.alertTask);
@@ -214,14 +225,11 @@ export class NextDayPage {
                             this.alertObject.viewedBoolean = true;
                         }
 
-
                         this.taskMgr.clearDispatchAlert();
                         this.taskMgr.clearAlertMessage();
                     } else {
                         this.taskMgr.getSingleAlert(userId, this.alertId).then((res: any) => {
-                            console.log('res ', JSON.stringify(res));
                             this.alertObject = res.data[0];
-                            // this.alertBody = res.data[0].alert_description;
                             this.taskMgr.clearDispatchAlert();
                             this.taskMgr.clearAlertMessage();
 
@@ -233,7 +241,6 @@ export class NextDayPage {
                                     // this.taskMgr.badgeNumber -= 1;
                                 })
                             }
-
                         })
                     }
                 }
@@ -244,67 +251,12 @@ export class NextDayPage {
 
     convertDate(input) {
         let tempDate = this.conMgr.convertDate(input);
-        console.log('tempDate ', JSON.stringify(tempDate));
         return tempDate;
     }
 
-
-    // setStatus = (statusId: number, taskId: number, dateKey: string, taskIndex: number, notes?: any): void => {
-    //     if (statusId === 3) {
-    //         this.nextDayTask.data[dateKey][taskIndex].status_id = 3;
-    //         let data = {
-    //             notes: notes || '',
-    //             statusId: statusId,
-    //             files: [],
-    //             timestamp: new Date(Date.now()),
-    //             taskId: taskId
-    //         };
-    //         this.utils.presentLoading();
-    //         this.taskMgr.updateNextDayTaskStatus(data).then((response) => {
-    //             this.utils.dismissLoading();
-    //         }).catch(error => {
-    //             if (this.debug) {
-    //                 console.log(`ERROR: ${Utils.toJson(error)}`);
-    //             }
-    //             this.utils.toastError(error);
-    //         });
-    //     } else if (statusId === 8) {
-    //         this.nextDayTask.data[dateKey][taskIndex].status_id = 8;
-    //         let data = {
-    //             notes: notes || '',
-    //             statusId: statusId,
-    //             files: [],
-    //             timestamp: new Date(Date.now()),
-    //             taskId: taskId
-    //         };
-    //         this.utils.presentLoading();
-    //         this.taskMgr.updateNextDayTaskStatus(data).then((response) => {
-    //             this.utils.dismissLoading();
-    //         }).catch(error => {
-    //             if (this.debug) {
-    //                 console.log(`ERROR: ${Utils.toJson(error)}`);
-    //             }
-    //             this.utils.toastError(error);
-    //         });
-    //     }
-    // };
-
-
-    // showContractorInfo(index) {
-    //     if (this.showContractor === index) {
-    //         this.showContractor = -1
-    //     } else {
-    //         this.showContractor = index;
-    //     }
-    // }
-
     showDrivingDirections(lat, lon) {
-
         let options = "location=no";
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
-
-
-
     }
 
     callPhone(number) {
@@ -321,16 +273,13 @@ export class NextDayPage {
             });
     }
 
-
     openSingleTask(task) {
-        console.log('task ', task);
         let params = {
             currentTask: task
         };
         this.navCtrl.push(SingleUpcomingTaskPage, params).then(() => {
             // console.log('in promise of push ');
         })
-
     }
 }
 
