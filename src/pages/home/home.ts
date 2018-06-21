@@ -262,7 +262,7 @@ export class HomePage {
         }
         setTimeout(() => {
             this.checkUpdates();
-        }, 7500);
+        }, 4000);
 
 
     }
