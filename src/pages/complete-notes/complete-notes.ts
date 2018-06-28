@@ -42,11 +42,8 @@ export class CompleteNotesPage {
 
         this.debug = this.utils.returnDebug();
         this.taskId = navParams.get('task_id');
-
-
         this.userId = navParams.get('user_id');
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
-
 
         if (this.debug) {
             console.log('this.taskId ', JSON.stringify(this.taskId));
@@ -62,7 +59,6 @@ export class CompleteNotesPage {
             files: this.files,
             save: false
         };
-
 
         if (this.platform.is('ios')) {
             // This will only print when on iOS
@@ -81,17 +77,18 @@ export class CompleteNotesPage {
         if (this.isCordova) {
             this.diagnostic.isCameraAvailable().then(successCallback).catch(errorCallback);
         }
-
-
     }
 
     ionViewWillEnter() {
         if (this.isCordova) {
-            this.setLocation().then(() => {
-                this.data.lat = this.lat;
-                this.data.lon = this.lon;
-                this.data.accuracy = this.locationAccuracy;
+            this.retrievingLocation = true;
+            this.geoSrvc.getCurrentBackgroundLocation(45000, 10000).then((res: any) => {
+                this.data.lat = res.lat;
+                this.data.lon = res.lon;
+                this.data.accuracy = res.accuracy;
+                this.retrievingLocation = false;
             })
+
         } else {
             this.retrievingLocation = true;
             setTimeout(() => {
@@ -104,36 +101,36 @@ export class CompleteNotesPage {
 
     }
 
-    setLocation() {
-        this.retrievingLocation = true;
-        return new Promise((resolve, reject) => {
-
-            this.lat = 0;
-            this.lon = 0;
-
-            let platform = 'ios';
-            if (this.isAndroid) {
-                platform = 'android'
-            }
-
-            if (this.isCordova) {
-                this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
-                    this.lat = res.lat;
-                    this.lon = res.lon;
-                    this.locationTimestamp = res.timestamp;
-                    this.locationAccuracy = res.accuracy;
-                    console.log('res in new location service', JSON.stringify(res));
-                    this.retrievingLocation = false;
-                    resolve(`${this.lat},${this.lon}`);
-                }, (err: any) => {
-                    console.log('err ', JSON.stringify(err));
-                    this.retrievingLocation = false;
-                    reject(err)
-                })
-            }
-
-        })
-    }
+    // setLocation() {
+    //     this.retrievingLocation = true;
+    //     return new Promise((resolve, reject) => {
+    //
+    //         this.lat = 0;
+    //         this.lon = 0;
+    //
+    //         let platform = 'ios';
+    //         if (this.isAndroid) {
+    //             platform = 'android'
+    //         }
+    //
+    //         if (this.isCordova) {
+    //             this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
+    //                 this.lat = res.lat;
+    //                 this.lon = res.lon;
+    //                 this.locationTimestamp = res.timestamp;
+    //                 this.locationAccuracy = res.accuracy;
+    //                 console.log('res in new location service', JSON.stringify(res));
+    //                 this.retrievingLocation = false;
+    //                 resolve(`${this.lat},${this.lon}`);
+    //             }, (err: any) => {
+    //                 console.log('err ', JSON.stringify(err));
+    //                 this.retrievingLocation = false;
+    //                 reject(err)
+    //             })
+    //         }
+    //
+    //     })
+    // }
 
     //Nothing is loaded, everything is passed from the home page
 
@@ -159,9 +156,10 @@ export class CompleteNotesPage {
 
     /** save button clicked */
     save() {
+
         this.data.save = true;
         this.data.notes = this.data.notes.trim();
-        console.log('this.data ', JSON.stringify(this.data));
+
         this.utils.presentLoading();
 
 
@@ -282,7 +280,7 @@ export class CompleteNotesPage {
                 path: imageData,
                 //file : file
             };
-            console.log("image log 1")
+            // console.log("image log 1")
             // this.createBlob(fileData.path);
 
             this.data.files.push(fileData);
@@ -302,7 +300,6 @@ export class CompleteNotesPage {
             this.utils.dismissLoading();
         });
     }
-
 
 
 }

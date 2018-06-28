@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Geolocation} from '@ionic-native/geolocation';
+import {Geolocation, GeolocationOptions} from '@ionic-native/geolocation';
 import {Diagnostic} from '@ionic-native/diagnostic';
 
 @Injectable()
@@ -11,12 +11,64 @@ export class GeolocationService {
 
     lat: number;
     lon: number;
+    accuracy: number;
     locEnabled: boolean = false;
     platform: string;
+    debug: boolean = true;
 
     constructor(private diagnostic: Diagnostic,
                 private geolocation: Geolocation) {
     }
+
+    returnLatestPosition() {
+        return ({lat: this.lat, lon: this.lon, accuracy: this.accuracy})
+    }
+
+    getCurrentBackgroundLocation(maxAge?: number, maxTime?: number) {
+        return new Promise((resolve, reject) => {
+
+            let options = {
+                maximumAge: 0,
+                timeout: 30000
+            } as GeolocationOptions;
+
+            if (maxAge) {
+                options.maximumAge = maxAge;
+                options.timeout = maxTime;
+            }
+
+            this.geolocation.getCurrentPosition(options).then(position => {
+                this.lat = position.coords.latitude;
+                this.lon = position.coords.longitude;
+                this.accuracy = position.coords.accuracy;
+                if (this.debug) {
+                    console.log('this.accuracy 1 ', this.accuracy);
+                    console.log('this.lon 1 ', this.lon);
+                    console.log('this.lat 1 ', this.lat);
+                }
+
+                let locationObj = {
+                    lat: this.lat,
+                    lon: this.lon,
+                    accuracy: this.accuracy
+                };
+                resolve(locationObj);
+            }).catch((error) => {
+                let locationObj = {
+                    lat: 0,
+                    lon: 0,
+                    accuracy: 0
+                };
+                resolve(locationObj);
+                if (this.debug) {
+                    console.log('error in catch ', error);
+                }
+            });
+
+
+        })
+    }
+
 
     getCurrentPosition(plat) {
         this.locEnabled = false;
@@ -37,41 +89,42 @@ export class GeolocationService {
                 }
             }).then(() => {
                 this.diagnostic.getLocationAuthorizationStatus().then((res: any) => {
-                    console.log('res ', JSON.stringify(res));
+                    if (this.debug) {
+                        console.log('res ', JSON.stringify(res));
+                    }
                     if (res === 'GRANTED' || res === 'authorized_when_in_use' || res === 'authorized') {
-                        this.geolocation.getCurrentPosition().then(position => {
+
+                        let options = {
+                            timeout: 10000
+                        } as GeolocationOptions;
+
+
+                        this.geolocation.getCurrentPosition(options).then(position => {
                             this.lat = position.coords.latitude;
                             this.lon = position.coords.longitude;
-                            let accuracy = position.coords.accuracy;
-                            let timestamp = position.timestamp;
+                            this.accuracy = position.coords.accuracy;
+                            if (this.debug) {
+                                console.log('this.accuracy ', this.accuracy);
+                                console.log('this.lon ', this.lon);
+                                console.log('this.lat ', this.lat);
+                            }
                             let locationObj = {
                                 lat: this.lat,
                                 lon: this.lon,
-                                timestamp: timestamp,
-                                accuracy: accuracy
+                                accuracy: this.accuracy
                             };
                             resolve(locationObj);
                         }).catch((error) => {
-                            this.geolocation.getCurrentPosition().then(position => {
-                                this.lat = position.coords.latitude;
-                                this.lon = position.coords.longitude;
-                                let accuracy = position.coords.accuracy;
-                                let timestamp = position.timestamp;
-                                let locationObj = {
-                                    lat: this.lat,
-                                    lon: this.lon,
-                                    timestamp: timestamp,
-                                    accuracy: accuracy
-                                };
-                                resolve(locationObj);
-                            }).catch((error) => {
-                                let locationObj = {
-                                    lat: 0,
-                                    lon: 0,
-                                    accuracy: 0
-                                };
-                                resolve(locationObj);
-                            })
+                            if (this.debug) {
+                                console.log('error in catch ', error);
+                                console.log('inside the catch after two attempts ');
+                            }
+                            let locationObj = {
+                                lat: 0,
+                                lon: 0,
+                                accuracy: 0
+                            };
+                            resolve(locationObj);
                         });
                     } else if (res === 'denied' || res === 'DENIED_ALWAYS') {
 

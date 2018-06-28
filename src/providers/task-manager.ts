@@ -44,9 +44,9 @@ export class TaskManager {
                 private platform: Platform,
                 private utils: Utils
     ) {
-
-        console.log("This is the Task Manager");
-
+        if (this.debug) {
+            console.log("This is the Task Manager");
+        }
         this.debug = this.utils.returnDebug();
 
         if (this.platform.is('android')) {
@@ -110,7 +110,9 @@ export class TaskManager {
     }
 
     clearDispatchAlert() {
-        console.log('Clear Dispatch Message');
+        if (this.debug) {
+            console.log('Clear Dispatch Message');
+        }
         this.alertTaskId = -1;
         this.alertId = -1;
         this.hasDispatchAlert = false;
@@ -151,7 +153,7 @@ export class TaskManager {
 
     }
 
-    returnUserRole(){
+    returnUserRole() {
         return this.currentUser.role_id;
     }
 
@@ -488,8 +490,10 @@ export class TaskManager {
     };
 
     updateManagedTaskStatus = (data: any): Promise<any> => {
-        console.log('data ', JSON.stringify(data));
-        console.log('data 2 ', JSON.stringify(data));
+        if (this.debug) {
+            console.log('data ', JSON.stringify(data));
+            console.log('data 2 ', JSON.stringify(data));
+        }
         return new Promise((resolve, reject) => {
             let myMessage = "success";
             this.apiService.postTaskFeedback(data).then((json) => {
@@ -530,7 +534,9 @@ export class TaskManager {
 
     updateNextDayTaskStatus = (data: any): Promise<any> => {
         data.userId = this.userId;
-        console.log('data 2 ', JSON.stringify(data));
+        if (this.debug) {
+            console.log('data 2 ', JSON.stringify(data));
+        }
         return new Promise((resolve, reject) => {
             let myMessage = "success";
             this.apiService.postTaskFeedback(data).then((json) => {
@@ -677,7 +683,9 @@ export class TaskManager {
 
     // * calls the api to post feedback images
     postFeedbackImages(feedbackId, images) {
-        console.log('images in task manager ', JSON.stringify(images));
+        if (this.debug) {
+            console.log('images in task manager ', JSON.stringify(images));
+        }
         let promises = [];
         if (images.length === 0) {
             return new Promise((resolve, reject) => {
@@ -718,16 +726,18 @@ export class TaskManager {
                 status: myStatus,
                 notes: inNotes
             };
-            console.log('data pre', JSON.stringify(data));
+            if (this.debug) {
+                console.log('data pre', JSON.stringify(data));
+            }
 
             if (accuracy) {
                 data.accuracy = accuracy;
             }
 
-            console.log('data post ', JSON.stringify(data));
-
             this.apiService.createTimecardEntry(data).then(response => {
-                console.log('response ', JSON.stringify(response));
+                if (this.debug) {
+                    console.log('response ', JSON.stringify(response));
+                }
                 resolve(response)
             }).catch(error => {
                 reject(error);
@@ -853,7 +863,9 @@ export class TaskManager {
                 alertId: alertId
             };
             this.apiService.loadSingleAlert(data).then((res: any) => {
-                console.log('res in task manager ', JSON.stringify(res));
+                if (this.debug) {
+                    console.log('res in task manager ', JSON.stringify(res));
+                }
                 resolve(res);
             })
         })
@@ -864,7 +876,10 @@ export class TaskManager {
         return new Promise((resolve, reject) => {
 
             this.apiService.updateUserDeviceInfo(userObject).then((res: any) => {
-                console.log('res in task manager ', JSON.stringify(res));
+                if (this.debug) {
+                    console.log('res in task manager ', JSON.stringify(res));
+                }
+
                 resolve(res);
             })
         })

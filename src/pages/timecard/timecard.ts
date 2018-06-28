@@ -168,7 +168,7 @@ export class TimecardPage {
             }
             this.todaysTime = dupArray;
             this.utils.dismissLoading();
-            console.log('todaysTime ', JSON.stringify(this.todaysTime));
+            // console.log('todaysTime ', JSON.stringify(this.todaysTime));
         });
         this.showSearchResults = false;
     }
@@ -178,65 +178,37 @@ export class TimecardPage {
     }
 
     updateTodaysTimecard(id, newTime, repeatIndex, newestNote: string) {
-        console.log("newTime ", newTime);
-        console.log('repeatIndex ', repeatIndex);
-        console.log('this.todaysTime[repeatIndex] ', JSON.stringify(this.todaysTime[repeatIndex]));
-        console.log('this.todaysTime[repeatIndex - 1] ', JSON.stringify(this.todaysTime[repeatIndex - 1]));
-        console.log('this.todaysTime[repeatIndex + 1] ', JSON.stringify(this.todaysTime[repeatIndex + 1]));
-
 
         let newTimeMinusZ = newTime.slice(0, 19);
-        console.log('newTimeMinusZ ', newTimeMinusZ);
         let newEntryInMilliseconds = Date.parse(newTimeMinusZ);
         let currentTimeInMilliseconds = Date.parse(new Date(Date.now()).toLocaleString());
         let timezone = new Date().getTimezoneOffset();
 
-
         if(this.isIos) {
             currentTimeInMilliseconds = currentTimeInMilliseconds - (timezone * 60 * 1000)
         }
-
-
         let lengthOfTimeEntries = this.todaysTime.length;
-        let more1 = new Date().toISOString();
-
-        console.log('timezone ', timezone);
-
-        console.log('more1 ', more1);
-
         let previousEntry = 0;
         let nextEntry = 0;
 
         if (repeatIndex > 0 && repeatIndex < (lengthOfTimeEntries - 1)) {
             previousEntry = Date.parse(this.todaysTime[(repeatIndex - 1)].alt_timestamp);
             nextEntry = Date.parse(this.todaysTime[(repeatIndex + 1)].alt_timestamp);
-            console.log('previousEntry ', previousEntry);
-            console.log('nextEntry ', nextEntry);
         }
         else if (repeatIndex > 0 && repeatIndex === (lengthOfTimeEntries - 1)) {
             previousEntry = Date.parse(this.todaysTime[(repeatIndex - 1)].alt_timestamp);
-
-            console.log('previousEntry ', previousEntry);
-
         }
         else if (repeatIndex === 0 && lengthOfTimeEntries >= 2) {
             nextEntry = Date.parse(this.todaysTime[(repeatIndex + 1)].alt_timestamp);
-            console.log('nextEntry ', nextEntry);
         }
-
-
-        console.log('newEntryInMilliseconds ', newEntryInMilliseconds);
-        console.log('currentTimeInMilliseconds ', currentTimeInMilliseconds);
-        console.log('lengthOfTimeEntries ', lengthOfTimeEntries);
-
 
         // this is the first entry and only entry in the timecard
         if (repeatIndex === 0 && lengthOfTimeEntries === 1) {
             if (newEntryInMilliseconds > currentTimeInMilliseconds) {
-                console.log('sorry, that is past the current time');
+                // console.log('sorry, that is past the current time');
                 this.presentTimecardErrorAlert(2);
             } else {
-                console.log('this is valid');
+                // console.log('this is valid');
                 this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
             }
         }
@@ -244,41 +216,38 @@ export class TimecardPage {
         else if (repeatIndex === 0 && lengthOfTimeEntries > 1) {
 
             if (newEntryInMilliseconds > nextEntry) {
-                console.log('sorry, that is past the current time 2 ');
+                // console.log('sorry, that is past the current time 2 ');
                 this.presentTimecardErrorAlert(1);
             } else {
-                console.log('this is valid 2');
+                // console.log('this is valid 2');
                 this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
             }
         }
         // this is a middle timecard entry but no the last
         else if (repeatIndex > 0 && repeatIndex < (lengthOfTimeEntries - 1)) {
             if ((newEntryInMilliseconds > previousEntry) && (newEntryInMilliseconds < nextEntry)) {
-                console.log('This works');
+                // console.log('This works');
                 this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
             } else if (newEntryInMilliseconds > nextEntry) {
-                console.log('This does not work');
+                // console.log('This does not work');
                 this.presentTimecardErrorAlert(1);
             } else if (newEntryInMilliseconds < previousEntry) {
-                console.log('This does not work');
+                // console.log('This does not work');
                 this.presentTimecardErrorAlert(0);
             }
         }
         // this is the last entry
         else if (repeatIndex > 0 && repeatIndex === (lengthOfTimeEntries - 1)) {
             if ((newEntryInMilliseconds > previousEntry) && (newEntryInMilliseconds < currentTimeInMilliseconds)) {
-                console.log('lkjansdfljhbasdf');
                 this.saveValidatedEntries(id, newTime, repeatIndex, newestNote);
             } else if (newEntryInMilliseconds < previousEntry) {
-                console.log('This does not work');
+                // console.log('This does not work');
                 this.presentTimecardErrorAlert(0);
             } else if (newEntryInMilliseconds > currentTimeInMilliseconds) {
-                console.log('lkjansdfljhbasdf');
-                console.log('This does not work');
+                // console.log('This does not work');
                 this.presentTimecardErrorAlert(2);
             }
         }
-
     }
 
     saveValidatedEntries(id, newTime, repeatIndex, newestNote: string) {
@@ -288,17 +257,14 @@ export class TimecardPage {
         } else {
             notes = newestNote;
         }
-
         let newYear = newTime.slice(0, 10);
         let newestTime = newTime.slice(11, 19);
         let alt_timestamp = newYear + ' ' + newestTime;
-
 
         this.taskMgr.updateTimecard(this.userId, id, alt_timestamp, notes).then((res: any) => {
             if (this.debug) {
                 console.log('Timecard res ', JSON.stringify(res));
             }
-
             this.todaysTime[repeatIndex].alt_timestamp = newTime;
             this.todaysTime[repeatIndex].timestamp = newTime;
             this.todaysTime[repeatIndex].notes = newestNote;
@@ -309,7 +275,6 @@ export class TimecardPage {
 
 
     presentTimecardErrorAlert(problem: number) {
-
         let msg = '';
 
         // new time is earlier than the previous entry

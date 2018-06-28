@@ -248,7 +248,10 @@ export class ForemanPage {
 
         this.taskMgr.loadForemanTasks(this.currentDate).then((response: any) => {
             this.tasks = response.data;
-            console.log('this.tasks ', JSON.stringify(this.tasks));
+            if (this.debug) {
+                console.log('this.tasks ', JSON.stringify(this.tasks));
+            }
+
             if (response.data.length === 0) {
                 this.tasks = false
             }
@@ -313,7 +316,10 @@ export class ForemanPage {
             if (showLoading) {
                 this.utils.dismissLoading();
             }
-            console.log('this.tasks ', JSON.stringify(this.tasks));
+            if (this.debug) {
+                console.log('this.tasks ', JSON.stringify(this.tasks));
+            }
+
         })
     }
 

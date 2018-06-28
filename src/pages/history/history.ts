@@ -6,8 +6,6 @@ import {LoginPage} from '../login/login';
 import {Utils} from '../../utils/utils';
 import {Animations} from '../../animations/animations';
 import {CallNumber} from '@ionic-native/call-number';
-import {HistoryReviewPage} from '../history-review/history-review';
-import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {SingleHistoryTaskPage} from "../single-history-task/single-history-task"
 import {InAppBrowser} from '@ionic-native/in-app-browser';
@@ -40,31 +38,26 @@ export class HistoryPage {
         proj: -1,
         task: -1
     };
-
     public pausedDisplayOptions = {
         proj: -1,
         task: -1
     };
-
     pausedContractorDetails: any = {
         proj: -1
     };
-
     contractorDetails: any = {
         proj: -1
     };
-
-
     month: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     data: any;
     pausedTasks: any;
-
     isAndroid: boolean;
     lat: number;
     lon: number;
-    locationAccuracy: number;
+    accuracy: number;
     isCordova: boolean = false;
     role_id: number;
+
 
 
     constructor(public navCtrl: NavController,
@@ -74,7 +67,6 @@ export class HistoryPage {
                 private taskMgr: TaskManager,
                 private callNumber: CallNumber,
                 private utils: Utils,
-                private conMgr: ConversionManager,
                 private alertCtrl: AlertController,
                 private fcm: FCM,
                 private iab: InAppBrowser,
@@ -93,10 +85,16 @@ export class HistoryPage {
     }
 
 
-
     ionViewDidEnter() {
         this.subscribeAgain();
         this.loadHistory();
+
+        this.geoSrvc.getCurrentBackgroundLocation(45000, 7000).then((res: any) => {
+            this.lat = res.lat;
+            this.lon = res.lon;
+            this.accuracy = res.accuracy;
+        })
+
     }
 
     subscribeAgain() {
@@ -158,7 +156,7 @@ export class HistoryPage {
     }
 
     // test
-    
+
     loadHistory() {
         this.displayOptions = {
             proj: -1,
@@ -225,10 +223,11 @@ export class HistoryPage {
 
     resumeTask(project, task) {
         this.taskMgr.getCurrentTaskRemote().then((res: any) => {
+            console.log('res in resume ', res);
             let currentStatus = res.task.job_tasks.status_id;
             if (currentStatus === 2 || currentStatus === 3 || currentStatus === 7) {
 
-                this.setLocation().then((res: any) => {
+                this.geoSrvc.getCurrentBackgroundLocation(45000, 7000).then((res: any) => {
                     let data = {
                         taskId: this.pausedTasks[project].job_tasks[task].id,
                         userId: this.userId,
@@ -237,7 +236,7 @@ export class HistoryPage {
                         files: [],
                         lat: this.lat,
                         lon: this.lon,
-                        accuracy: this.locationAccuracy
+                        accuracy: this.accuracy
                     };
                     this.taskMgr.resumeOnHoldTask(data).then((response) => {
                         this.taskMgr.passTempHold(false, true);
@@ -264,46 +263,13 @@ export class HistoryPage {
                 files: [],
                 lat: this.lat,
                 lon: this.lon,
-                accuracy: this.locationAccuracy
+                accuracy: this.accuracy
             };
             this.taskMgr.resumeOnHoldTask(data).then((response) => {
                 this.taskMgr.passTempHold(false, true);
                 this.navCtrl.parent.select(0);
             })
         })
-    }
-
-    setLocation() {
-
-        return new Promise((resolve, reject) => {
-
-            this.lat = 0;
-            this.lon = 0;
-
-            let platform = 'ios';
-            if (this.isAndroid) {
-                platform = 'android'
-            }
-
-            if (this.isCordova) {
-                this.geoSrvc.getCurrentPosition(platform).then((res: any) => {
-                    this.lat = res.lat;
-                    this.lon = res.lon;
-                    this.locationAccuracy = res.accuracy;
-                    console.log('res in new location service', JSON.stringify(res));
-                    resolve(`${this.lat},${this.lon}`);
-                }, (err: any) => {
-                    console.log('err ', JSON.stringify(err));
-                    reject(err)
-                })
-            }
-
-        })
-    }
-
-    openImage(image) {
-        this.navCtrl.push(HistoryReviewPage, image);
-        return true;
     }
 
     displayTask(i, j) {
@@ -439,10 +405,6 @@ export class HistoryPage {
             });
     }
 
-    adjustTime(time) {
-        return this.conMgr.adjustTime(time);
-    }
-
     toggleDivStatePaused(proj) {
         if (this.pausedContractorDetails.proj === proj) {
             this.pausedContractorDetails.proj = -1;
@@ -460,24 +422,7 @@ export class HistoryPage {
     }
 
     showDrivingDirections(lat, lon) {
-
         let options = "location=no";
         this.iab.create("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lon + "&travelmode=driving&dir_action=navigate", "_system", options);
-        //
-        //
-        // this.utils.presentLoading();
-        //
-        // this.ddService.generalDirections(lat, lon, this.isIos).then((response) => {
-        //     let params = {
-        //         directions: response
-        //     };
-        //     setTimeout(() => {
-        //         this.navCtrl.push(DrivingDirectionsPage, params);
-        //         this.utils.dismissLoading();
-        //     }, 2000)
-        // }).catch((error) => {
-        //     this.utils.dismissLoading();
-        //     this.utils.presentToast("Location currently unavailable", true);
-        // })
     }
 }

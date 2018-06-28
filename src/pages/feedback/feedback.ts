@@ -5,6 +5,7 @@ import {Diagnostic} from '@ionic-native/diagnostic';
 import {TaskManager} from '../../providers/task-manager';
 import {Utils} from '../../utils/utils';
 import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
+import {GeolocationService} from "../../providers/geolocation-service";
 
 
 @Component({
@@ -27,6 +28,7 @@ export class FeedbackPage {
     hasStatus: boolean = false;
     hasSelected: boolean = false;
     accuracy: any;
+    isCordova: boolean;
 
 
     constructor(public navCtrl: NavController,
@@ -38,17 +40,16 @@ export class FeedbackPage {
                 private utils: Utils,
                 private camera: Camera,
                 private diagnostic: Diagnostic,
+                public geoSrvc: GeolocationService,
                 private alertCtrl: AlertController) {
+
         this.debug = this.utils.returnDebug();
         this.taskId = navParams.get('task_id');
         this.userId = navParams.get('user_id');
-        this.lat = navParams.get('lat');
-        this.lon = navParams.get('lon');
-        this.accuracy = navParams.get('accuracy');
-
 
         this.isAndroid = this.taskMgr.returnPlatform().isAndroid;
         this.isIos = this.taskMgr.returnPlatform().isIos;
+        this.isCordova = this.taskMgr.returnPlatform().isCordova;
 
 
         this.data = {
@@ -110,6 +111,24 @@ export class FeedbackPage {
         this.diagnostic.isCameraAvailable().then(successCallback).catch(errorCallback);
     }
 
+    ionViewWillEnter() {
+        if (this.isCordova) {
+            this.geoSrvc.getCurrentBackgroundLocation(45000, 10000).then((res: any) => {
+                this.data.lat = res.lat;
+                this.data.lon = res.lon;
+                this.data.accuracy = res.accuracy;
+            })
+        } else {
+            setTimeout(() => {
+                this.data.lat = 0;
+                this.data.lon = 0;
+                this.data.accuracy = 0;
+            }, 5000)
+
+        }
+
+    }
+
     /** delete image button clicked, remove from files array */
     deleteImage(index) {
         this.data.files.splice(index, 1);
@@ -150,7 +169,7 @@ export class FeedbackPage {
             this.utils.dismissLoading();
             setTimeout(() => {
                 if (response === true) {
-                    if(this.data.statusId === 12 || this.data.statusId === 7) {
+                    if (this.data.statusId === 12 || this.data.statusId === 7) {
                         this.managesTskMgr.removeTask();
                         this.taskMgr.passTempHold(true, false);
                     }
@@ -195,7 +214,7 @@ export class FeedbackPage {
          *  if false OR false, then disable (true) OR
          *  if true AND true, the don't disable (false)
          */
-        return !( (this.data.notes.trim().length > 4) && (this.data.statusId > 0) )
+        return !((this.data.notes.trim().length > 4) && (this.data.statusId > 0))
     }
 
     /** trim notes  */

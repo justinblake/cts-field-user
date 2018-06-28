@@ -35,7 +35,6 @@ export class HomeKeysPipe implements PipeTransform {
 }
 
 
-
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html',
@@ -45,49 +44,48 @@ export class HomePage {
     @ViewChild('ctsNav') nav: NavController;
     @ViewChild(Content) content: Content;
 
-    debug: boolean;
-
+    app_version: any;
+    cell_carrier: any;
+    cell_number: any;
+    complete: boolean = false;
+    compName: any;
+    contractorDetails: boolean = false;
+    createEntry: boolean = false;
     currentTask: any = '';
     currentUser: any = '';
     data: any;
-    hideMoreProject: boolean = true;
-    divState: string = 'hide';
-    isIos: boolean = false;
-    isAndroid: boolean = false;
-    lat: any;
-    lon: any;
+    debug: boolean;
     desktop: boolean = false;
-    compName: any;
-    myData: any = {};
-    showTasks = false;
-    userRole: number = 0;
-    laborerTasks: any = '';
+    divState: string = 'hide';
+    empData: any = {};
+    emp_device_id: any;
+    emp_platform: any;
     expandTaskId: number = -1;
-    taskId: number = -1;
+    fcmToken: any = '';
+    hideMoreProject: boolean = true;
+    isAndroid: boolean = false;
+    isCordova: boolean;
+    isIos: boolean = false;
+    isLessor: boolean = false;
+    laborerTasks: any = '';
+    lat: any;
+    localHour: number;
+    locationAccuracy: any;
+    locationTimestamp: any;
+    lon: any;
     myAlerts: number = 0;
     myFirstKey: any;
-    timecardStatus: number;
-    showTimecard: boolean = false;
-    isLessor: boolean = false;
-    complete: boolean = false;
-    fcmToken: any = '';
-    locationTimestamp: any;
-    locationAccuracy: any;
-    isCordova: boolean;
-    role_id: number;
-    contractorDetails: boolean = false;
-    empData: any = {};
-    cell_carrier: any;
-    app_version: any;
-    software_version: any;
-    emp_platform: any;
+    myData: any = {};
     operating_system: any;
-    cell_number: any;
-    emp_device_id: any;
     retrievingLocation: boolean = false;
-    createEntry: boolean = false;
-    localHour: number;
+    role_id: number;
+    showTasks = false;
+    showTimecard: boolean = false;
+    software_version: any;
     taskFileUrl: string = 'https://www.cleartasksolutions.com/assets/task_files/';
+    taskId: number = -1;
+    timecardStatus: number;
+    userRole: number = 0;
 
 
     constructor(public navCtrl: NavController,
@@ -114,7 +112,7 @@ export class HomePage {
         this.debug = this.utils.returnDebug();
 
         this.isCordova = this.plt.is('cordova');
-        console.log('this.isCordova ', JSON.stringify(this.isCordova));
+        // console.log('this.isCordova ', JSON.stringify(this.isCordova));
 
         plt.ready().then(() => {
             this.plt.pause.subscribe(() => {
@@ -126,7 +124,14 @@ export class HomePage {
             this.plt.resume.subscribe(() => {
                 if (this.isCordova) {
                     this.localTimeFunction();
-                    this.setLocation();
+                    this.geoSrvc.getCurrentBackgroundLocation().then((res: any) => {
+                        if (this.debug) {
+                            console.log('res in getCurrentBackgroundLocation', res);
+                        }
+                        this.lat = res.lat;
+                        this.lon = res.lon;
+                        this.locationAccuracy = res.accuracy;
+                    })
                 }
 
                 if (this.debug) {
@@ -227,8 +232,8 @@ export class HomePage {
             console.log('empData ', JSON.stringify(this.empData));
         }
 
-        this.diagnostic.requestLocationAuthorization().then((res:any)=> {
-            console.log('res in location ', res);
+        this.diagnostic.requestLocationAuthorization().then((res: any) => {
+            // console.log('res in location ', res);
         })
 
 
@@ -262,7 +267,7 @@ export class HomePage {
         }
         setTimeout(() => {
             this.checkUpdates();
-        }, 4000);
+        }, 10000);
 
 
     }
@@ -284,12 +289,13 @@ export class HomePage {
             this.sim.requestReadPermission().then(
                 () => {
                     this.sim.getSimInfo().then((info: any) => {
-                            console.log('info ', JSON.stringify(info));
+
                             this.empData.cell_carrier = info.carrierName;
                             this.empData.cell_number = info.phoneNumber;
                             this.empData.emp_device_id = info.deviceId;
                             if (this.debug) {
                                 console.log('this.empData ', JSON.stringify(this.empData));
+                                console.log('info ', JSON.stringify(info));
                             }
                         },
                         (err) => {
@@ -526,7 +532,7 @@ export class HomePage {
 
                 resolve(`${this.lat},${this.lon}`);
             }, (err: any) => {
-                console.log('err ', JSON.stringify(err));
+                // console.log('err ', JSON.stringify(err));
                 reject(err)
             })
         })
@@ -595,9 +601,13 @@ export class HomePage {
             }
             else {
                 this.retrievingLocation = true;
-                this.setLocation().then((res: any) => {
-                    let data = this.dataFunction(notes, statusId, this.lat, this.lon);
-                    if (data.statusId === 6 || data.statusId === 9) {
+
+                let data = this.dataFunction(notes, statusId, this.lat, this.lon);
+                if (data.statusId === 6 || data.statusId === 9) {
+                    this.geoSrvc.getCurrentBackgroundLocation(30000, 7000).then((res: any) => {
+                        data.lat = res.lat;
+                        data.lon = res.lon;
+                        data.accuracy = res.accuracy;
                         this.showTasks = false;
                         this.taskMgr.updateTaskStatus(data).then((response) => {
                             this.retrievingLocation = false;
@@ -607,9 +617,14 @@ export class HomePage {
                                 console.log("error " + error);
                             }
                         });
-                    }
-                    else if (data.statusId < 8 || data.statusId === 10 || data.statusId === 13) {
-                        this.taskMgr.updateTaskStatus(data).then((response) => {
+                    })
+                }
+                else if (data.statusId < 8 || data.statusId === 10 || data.statusId === 13) {
+                    this.geoSrvc.getCurrentBackgroundLocation(30000, 7000).then((res: any) => {
+                        data.lat = res.lat;
+                        data.lon = res.lon;
+                        data.accuracy = res.accuracy;
+                        this.taskMgr.updateTaskStatus(data).then(() => {
                             this.retrievingLocation = false;
                             this.setCurrentTask(false);
                         }).catch(error => {
@@ -617,14 +632,14 @@ export class HomePage {
                                 console.log("error " + error);
                             }
                         });
-                    }
-                });
+                    })
+                }
             }
         }
         //test
         else if (statusId === 8) {
             let data = this.dataFunction(notes, statusId);
-            this.taskMgr.updateTaskStatus(data).then((response) => {
+            this.taskMgr.updateTaskStatus(data).then(() => {
                 this.showTasks = false;
                 this.setCurrentTask(false);
             }).catch(error => {
@@ -704,8 +719,7 @@ export class HomePage {
                 })
             }
         })
-            .catch(error => {
-                error = error || {error: 'is undefined'};
+            .catch(() => {
                 this.showTasks = false;
                 this.utils.dismissLoading();
                 setTimeout(() => {
@@ -734,12 +748,16 @@ export class HomePage {
     }
 
     openCompletePage() {
-        this.setLocation();
         this.complete = true;
         let params = {
             'task_id': this.currentTask.job_tasks.id,
-            'user_id': this.currentUser.userId
+            'user_id': this.currentUser.userId,
         };
+        this.geoSrvc.getCurrentBackgroundLocation(0, 7000).then((res: any) => {
+            if (this.debug) {
+                console.log('res in open feedback', res);
+            }
+        });
         this.navCtrl.push(CompleteNotesPage, params).then(res => {
         });
         return true;
@@ -748,31 +766,23 @@ export class HomePage {
 // does not open a modal as the name might suggest.
 // Instead it navigates to a page
     openFeedbackModal() {
-        this.utils.presentLoading();
+        this.geoSrvc.getCurrentBackgroundLocation(0, 7000).then((res: any) => {
+            if (this.debug) {
+                console.log('res in open feedback', res);
+            }
+        });
         this.complete = true;
+        let params = {
+            'task_id': this.currentTask.job_tasks.id,
+            'user_id': this.currentUser.userId
+        };
         if (this.isCordova) {
-            this.setLocation().then((res: any) => {
-                let params = {
-                    'lat': this.lat,
-                    'lon': this.lon,
-                    'accuracy': this.locationAccuracy,
-                    'task_id': this.currentTask.job_tasks.id,
-                    'user_id': this.currentUser.userId
-                };
-                this.navCtrl.push(FeedbackPage, params).then(res => {
-                    this.utils.dismissLoading();
-                });
-                return true;
-            })
-        } else {
-            let params = {
-                'lat': 0,
-                'lon': 0,
-                'task_id': this.currentTask.job_tasks.id,
-                'user_id': this.currentUser.userId
-            };
             this.navCtrl.push(FeedbackPage, params).then(res => {
-                this.utils.dismissLoading();
+            });
+            return true;
+        }
+        else {
+            this.navCtrl.push(FeedbackPage, params).then(res => {
             });
             return true;
         }
@@ -991,7 +1001,10 @@ export class HomePage {
                     }
 
                     this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
-                        console.log('appVerResult ', JSON.stringify(appVerResult));
+                        if (this.debug) {
+                            console.log('appVerResult ', JSON.stringify(appVerResult));
+                        }
+
                         downloadUpdate().then((result: any) => {
                             if (result === 'true') {
                                 extractUpdate().then((extract: any) => {
@@ -1008,7 +1021,7 @@ export class HomePage {
                 }
             });
         } else {
-            console.log('Not Cordova so no updates')
+            // console.log('Not Cordova so no updates')
         }
     }
 

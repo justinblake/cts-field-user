@@ -9,7 +9,6 @@ import {HistoryReviewPage} from "../history-review/history-review";
 import {TaskPhotoReviewPage} from "../task-photo-review/task-photo-review";
 
 
-
 @Component({
     selector: 'page-single-history-task',
     templateUrl: 'single-history-task.html',
@@ -63,7 +62,7 @@ export class SingleHistoryTaskPage {
     }
 
     ionViewWillEnter() {
-        console.log('this.task_user_log ', this.task_user_log);
+        // console.log('this.task_user_log ', this.task_user_log);
     }
 
     adjustTime(time) {
@@ -72,8 +71,12 @@ export class SingleHistoryTaskPage {
 
     callPhone(number) {
         this.callNumber.callNumber(number, false)
-            .then(() => console.log('Launched dialer!'))
-            .catch(() => console.log('Error launching dialer'));
+            .then(() => {
+                // console.log('Launched dialer!')
+            })
+            .catch(() => {
+                // console.log('Error launching dialer')
+            });
     }
 
     showDrivingDirections(lat, lon) {
@@ -83,13 +86,13 @@ export class SingleHistoryTaskPage {
 
     openHistoryFeedback() {
 
-        let params ={
+        let params = {
             id: this.taskId
         };
 
         this.navCtrl.push(HistoryFeedbackPage, params).then(() => {
 
-                })
+        })
 
     }
 
@@ -99,7 +102,7 @@ export class SingleHistoryTaskPage {
     }
 
     openAttachedImage(imageObject) {
-console.log('imageObject ', JSON.stringify(imageObject));
+        // console.log('imageObject ', JSON.stringify(imageObject));
 
         let fileType: string = '';
 
@@ -113,7 +116,7 @@ console.log('imageObject ', JSON.stringify(imageObject));
             };
 
             this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
-                console.log('pushed task photo review')
+                // console.log('pushed task photo review')
             })
 
         } else if (imageObject.file_type === 'application/pdf') {
@@ -126,13 +129,13 @@ console.log('imageObject ', JSON.stringify(imageObject));
 
     reviewImage(imageUrl) {
 
-        let params ={
+        let params = {
             file_name: imageUrl
         };
 
         this.navCtrl.push(HistoryReviewPage, params).then(() => {
 
-                })
+        })
     }
 
 

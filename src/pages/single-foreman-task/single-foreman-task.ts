@@ -198,7 +198,7 @@ export class SingleForemanTaskPage {
     }
 
     openAttachedImage(imageObject) {
-console.log('imageObject ', JSON.stringify(imageObject));
+        // console.log('imageObject ', JSON.stringify(imageObject));
 
         let fileType: string = '';
 
@@ -212,7 +212,7 @@ console.log('imageObject ', JSON.stringify(imageObject));
             };
 
             this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
-                console.log('pushed task photo review')
+                // console.log('pushed task photo review')
             })
 
         } else if (imageObject.file_type === 'application/pdf') {
@@ -222,7 +222,6 @@ console.log('imageObject ', JSON.stringify(imageObject));
         }
 
     }
-
 
 
     showDrivingDirections(lat, lon) {

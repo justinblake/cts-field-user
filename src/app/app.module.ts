@@ -54,10 +54,9 @@ import {ApiService} from '../providers/api-service';
 import {CalendarModule, CALENDAR_COMPONENTS} from '../components/ion2-calendar';
 import {ConversionManager} from "../providers/conversion-manager";
 import {DirectivesModule} from '../directives/directives.module';
-import {Geolocation} from '@ionic-native/geolocation';
+import {Geolocation, GeolocationOptions} from '@ionic-native/geolocation';
 import {GeolocationService} from '../providers/geolocation-service';
 import {HardwareBackButtonService} from '../providers/backbutton';
-import {ImageResizer} from "../providers/image-resizer";
 import {ManagesTasksManager} from "../providers/manages-tasks-manager";
 import {StorageService} from '../providers/storage-service';
 import {TaskManager} from '../providers/task-manager';
@@ -68,7 +67,7 @@ import {Utils} from '../utils/utils';
 import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-    appVersion: "1.4.22"
+    appVersion: "1.4.24"
 });
 
 @Injectable()
@@ -191,7 +190,6 @@ export function provideStorage() {
         Geolocation,
         GeolocationService,
         HardwareBackButtonService,
-        ImageResizer,
         InAppBrowser,
         Keyboard,
         ManagesTasksManager,

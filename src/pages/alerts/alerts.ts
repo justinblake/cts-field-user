@@ -64,6 +64,8 @@ export class AlertsPage {
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
+                if (this.debug) {
+                }
                 console.log('data ', JSON.stringify(data));
                 if (data.param1 === 'alert') {
                     if (data.project !== 'null') {
@@ -119,10 +121,6 @@ export class AlertsPage {
     }
 
     jumpToTask(task) {
-        console.log('taskId ', JSON.stringify(task.task_id));
-        console.log('step 1');
-
-        console.log('task ', JSON.stringify(task));
 
         this.taskMgr.saveAlertDispatch(task.task_id, task.id, true);
         this.taskMgr.passAlertMessage(task);
@@ -137,15 +135,14 @@ export class AlertsPage {
         this.utils.presentLoading();
         this.alertsLoaded = false;
         this.taskMgr.getEmployeeAlerts().then((response: any) => {
-            console.log('response ', JSON.stringify(response));
 
             let interimTime = new Date(Date.now());
 
             this.currentDay = interimTime.getDate();
-            console.log('this.currentDay ', JSON.stringify(this.currentDay));
-            console.log('this.currentDay ', typeof this.currentDay);
 
             if (this.debug) {
+                console.log('this.currentDay ', JSON.stringify(this.currentDay));
+                console.log('this.currentDay ', typeof this.currentDay);
                 console.log('response ', JSON.stringify(response));
             }
 
@@ -161,7 +158,9 @@ export class AlertsPage {
                 this.alerts.data[i].same_day = false;
                 let alertDateString = this.alerts.data[i].time_stamp_sent[8] + '' + this.alerts.data[i].time_stamp_sent[9];
                 let alertDateNum = parseInt(alertDateString);
-                console.log('alertDateNum ', JSON.stringify(alertDateNum));
+                if (this.debug) {
+                    console.log('alertDateNum ', JSON.stringify(alertDateNum));
+                }
                 if (alertDateNum === this.currentDay) {
                     this.alerts.data[i].same_day = true;
                 }

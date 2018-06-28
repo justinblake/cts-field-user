@@ -47,8 +47,10 @@ export class SingleManageTasksPage {
                 public managesTskMgr: ManagesTasksManager,
                 private callNumber: CallNumber,
                 private utils: Utils,
-                private iab: InAppBrowser) {
+                private iab: InAppBrowser,
+    ) {
 
+        this.debug = this.utils.returnDebug();
         this.currentTask = navParams.get('currentTask');
         this.currentProject = navParams.get('currentProject');
         this.userInfo = navParams.get('userInfo');
@@ -60,10 +62,15 @@ export class SingleManageTasksPage {
     }
 
     ionViewWillEnter() {
-        console.log('ionViewWillEnter in manage tasks home');
+        if (this.debug) {
+            console.log('this.currentTask in ionViewDidEnter ', JSON.stringify(this.currentTask));
+            console.log('ionViewWillEnter in manage tasks home');
+            console.log('this.activeTask ', JSON.stringify(this.activeTask));
+        }
+
         this.hasTask = this.managesTskMgr.returnTask().hasTask;
         this.activeTask = this.managesTskMgr.returnTask().activeTask;
-        console.log('this.activeTask ', JSON.stringify(this.activeTask));
+
         if (this.hasTask) {
             if (this.activeTask.id === this.currentTask.id) {
                 this.isActiveTask = true;
@@ -72,7 +79,6 @@ export class SingleManageTasksPage {
             this.isActiveTask = false;
         }
 
-        console.log('this.currentTask in ionViewDidEnter ', JSON.stringify(this.currentTask));
 
     }
 
@@ -83,8 +89,10 @@ export class SingleManageTasksPage {
     }
 
     setStatus(statusId: number, taskId: number, notes?: any) {
+        if (this.debug) {
+            console.log('notes in set status ', JSON.stringify(notes));
+        }
 
-        console.log('notes in set status ', JSON.stringify(notes));
 
         if (statusId === 3 || statusId === 8) {
 
@@ -122,7 +130,10 @@ export class SingleManageTasksPage {
                         this.managesTskMgr.removeTask();
                         this.retrievingLocation = false;
                     }
-                    console.log('response ', JSON.stringify(response));
+                    if (this.debug) {
+                        console.log('response ', JSON.stringify(response));
+                    }
+
                     // if (statusId === 9) {
                     //     this.loadMultipleTasks();
                     // }
@@ -182,11 +193,17 @@ export class SingleManageTasksPage {
                 this.lon = res.lon;
                 this.locationTimestamp = res.timestamp;
                 this.locationAccuracy = res.accuracy;
-                console.log('res in new location service', JSON.stringify(res));
+                if (this.debug) {
+                    console.log('res in new location service', JSON.stringify(res));
+                }
+
 
                 resolve(`${this.lat},${this.lon}`);
             }, (err: any) => {
-                console.log('err ', JSON.stringify(err));
+                if (this.debug) {
+                    console.log('err ', JSON.stringify(err));
+                }
+
                 reject(err)
             })
         })
@@ -194,6 +211,12 @@ export class SingleManageTasksPage {
 
     // 0 = complete page, 1 = feedback page
     openActionPage(page: number) {
+
+        this.geoSrvc.getCurrentBackgroundLocation(0, 7000).then((res: any) => {
+            if (this.debug) {
+                console.log('res in open feedback', res);
+            }
+        });
 
         if (page === 0) {
             let params: any = {
@@ -206,23 +229,16 @@ export class SingleManageTasksPage {
             return true;
         } else if (page === 1) {
             if (this.isCordova) {
-                this.setLocation().then((res: any) => {
-                    let params = {
-                        'lat': this.lat,
-                        'lon': this.lon,
-                        'accuracy': this.locationAccuracy,
-                        'task_id': this.currentTask.id,
-                        'user_id': this.userInfo.userId
-                    };
-                    this.navCtrl.push(FeedbackPage, params).then(res => {
-                        this.utils.dismissLoading();
-                    });
-                    return true;
-                })
+                let params = {
+                    'task_id': this.currentTask.id,
+                    'user_id': this.userInfo.userId
+                };
+                this.navCtrl.push(FeedbackPage, params).then(res => {
+                    this.utils.dismissLoading();
+                });
+                return true;
             } else {
                 let params = {
-                    'lat': 0,
-                    'lon': 0,
                     'task_id': this.currentTask.id,
                     'user_id': this.userInfo.userId
                 };
@@ -268,7 +284,10 @@ export class SingleManageTasksPage {
     }
 
     openAttachedImage(imageObject) {
-        console.log('imageObject ', JSON.stringify(imageObject));
+        if (this.debug) {
+            console.log('imageObject ', JSON.stringify(imageObject));
+        }
+
 
         let fileType: string = '';
 
@@ -282,7 +301,9 @@ export class SingleManageTasksPage {
             };
 
             this.navCtrl.push(TaskPhotoReviewPage, params).then(() => {
-                console.log('pushed task photo review')
+                if (this.debug) {
+                    console.log('pushed task photo review')
+                }
             })
 
         } else if (imageObject.file_type === 'application/pdf') {

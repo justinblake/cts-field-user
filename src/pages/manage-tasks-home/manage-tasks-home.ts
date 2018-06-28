@@ -16,15 +16,11 @@ import {Diagnostic} from '@ionic-native/diagnostic';
 import {NextDayPage} from '../next-day-tasks/next-day';
 import {Badge} from '@ionic-native/badge';
 import {InAppBrowser} from '@ionic-native/in-app-browser';
-import {ConversionManager} from "../../providers/conversion-manager";
 import {FCM} from "@ionic-native/fcm";
 import {Sim} from '@ionic-native/sim';
 import {SingleManageTasksPage} from "../single-manage-tasks/single-manage-tasks";
 import {ManagesTasksManager} from "../../providers/manages-tasks-manager";
-import {TabsPage} from "../tabs/tabs";
 import {StorageService} from "../../providers/storage-service";
-import {HomePage} from "../home/home";
-import {SplashPage} from "../splash/splash";
 import {SplashScreen} from '@ionic-native/splash-screen';
 
 
@@ -39,9 +35,6 @@ export class ManageTasksHomePage {
     @ViewChild(Content) content: Content;
 
     debug: boolean;
-
-    btnName: any = 'Edit Project Arrangement';
-    reorderFlag: any = false;
 
     currentUser: any = '';
     userId: number;
@@ -98,7 +91,6 @@ export class ManageTasksHomePage {
                 private iab: InAppBrowser,
                 private _backBtn: HardwareBackButtonService,
                 private alertCtrl: AlertController,
-                private conMgr: ConversionManager,
                 private fcm: FCM,
                 private sim: Sim,
                 private storage: StorageService,
@@ -106,7 +98,7 @@ export class ManageTasksHomePage {
 
         this.debug = this.utils.returnDebug();
         this.currentUser = this.userMgr.getUser();
-        console.log('this.currentUser ', JSON.stringify(this.currentUser));
+        // console.log('this.currentUser ', JSON.stringify(this.currentUser));
 
         if (this.currentUser.is_lessor === 1) {
             this.isLessor = true;
@@ -175,9 +167,7 @@ export class ManageTasksHomePage {
     }
 
 
-
     ionViewDidLoad() {
-        console.log('test');
         this.localTimeFunction();
         this.checkForCurrentTask();
         this.setUser();
@@ -263,12 +253,11 @@ export class ManageTasksHomePage {
     subscribeAgain() {
         if (this.utils.FCMFlagDebug()) {
             this.fcm.onNotification().subscribe(data => {
-                console.log('data from alert', JSON.stringify(data));
                 if (data.param1 === 'alert') {
                     if (data.project !== 'null') {
                         this.openNextDayTasksAlert(data.task, data.project);
                     } else {
-                         if (this.role_id === 3) {
+                        if (this.role_id === 3) {
                             this.navCtrl.parent.select(2);
                         } else {
                             this.navCtrl.parent.select(3);
@@ -290,8 +279,10 @@ export class ManageTasksHomePage {
                         res1.manages_tasks = tempNumber;
                         res1.role_id = tempRole;
                         this.storage.update('user', res1).then((res: any) => {
-                            console.log('res ', JSON.stringify(res));
-                            console.log('test');
+                            if (this.debug) {
+                                console.log('res ', JSON.stringify(res));
+                                console.log('test');
+                            }
                             this.reload();
                         })
                     });
@@ -488,7 +479,9 @@ export class ManageTasksHomePage {
 
     checkForCurrentTask() {
         this.taskMgr.getCurrentActiveTask().then((response: any) => {
-            console.log('response ', JSON.stringify(response));
+            if (this.debug) {
+                console.log('response ', JSON.stringify(response));
+            }
             if (response.task.job_tasks.status_id > 3) {
                 this.activeTask = response.task.job_tasks;
                 this.managesTskMgr.storeTask(this.activeTask);
@@ -505,9 +498,10 @@ export class ManageTasksHomePage {
 
     showActiveTask() {
         let testObject: any = this.managesTskMgr.returnTask().activeTask;
-
-        console.log('this.activeTask ', JSON.stringify(this.activeTask));
-        console.log('testObject ', JSON.stringify(testObject));
+        if (this.debug) {
+            console.log('this.activeTask ', JSON.stringify(this.activeTask));
+            console.log('testObject ', JSON.stringify(testObject));
+        }
 
 
     }
@@ -560,8 +554,10 @@ export class ManageTasksHomePage {
     }
 
     openSingleTask(project, task) {
-        console.log('project ', JSON.stringify(project));
-        console.log('this.projectObject[project] ', this.projectObject[project]);
+        if (this.debug) {
+            console.log('project ', JSON.stringify(project));
+            console.log('this.projectObject[project] ', this.projectObject[project]);
+        }
         // console.log('task ', JSON.stringify(task));
         let userInfo = {
             timecardStatus: this.timecardStatus,
@@ -624,8 +620,9 @@ export class ManageTasksHomePage {
                 newNotes = "Clocked in, resumed task";
                 this.dataFunction(newNotes, 4, this.activeTask.id).then((res: any) => {
                     this.taskMgr.updateManagedTaskStatus(res).then((response) => {
-
-                        console.log('response in clock back in ', JSON.stringify(response));
+                        if (this.debug) {
+                            console.log('response in clock back in ', JSON.stringify(response));
+                        }
                         this.activeTask.status_id = 4;
                     })
                 })
@@ -713,7 +710,9 @@ export class ManageTasksHomePage {
                     }
 
                     this.taskMgr.updateUserDeviceInfo(empObject).then((appVerResult) => {
-                        console.log('appVerResult ', JSON.stringify(appVerResult));
+                        if (this.debug) {
+                            console.log('appVerResult ', JSON.stringify(appVerResult));
+                        }
                         downloadUpdate().then((result: any) => {
                             if (result === 'true') {
                                 extractUpdate().then((extract: any) => {
@@ -728,7 +727,7 @@ export class ManageTasksHomePage {
                 }
             });
         } else {
-            console.log('Not Cordova so no updates')
+
         }
     }
 
