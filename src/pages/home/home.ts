@@ -981,7 +981,7 @@ export class HomePage {
     checkUpdates() {
         if (this.isCordova) {
             checkForUpdate().then((res: any) => {
-                if (res === 'true') {
+                if (res) {
 
                     let appVersion = this.utils.returnAppVersion();
 

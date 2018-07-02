@@ -12,7 +12,7 @@ export class Utils {
     modal: Modal;
     loadingIsPresent: boolean = false;
     homePage: number = 0;
-    appVersion: string = '1.4.24';
+    appVersion: string = '1.4.25';
     debug: boolean = false;
 
     constructor(public loadingCtrl: LoadingController,

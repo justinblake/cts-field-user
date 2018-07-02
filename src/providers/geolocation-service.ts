@@ -14,7 +14,7 @@ export class GeolocationService {
     accuracy: number;
     locEnabled: boolean = false;
     platform: string;
-    debug: boolean = true;
+    debug: boolean = false;
 
     constructor(private diagnostic: Diagnostic,
                 private geolocation: Geolocation) {

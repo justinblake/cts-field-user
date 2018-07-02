@@ -15,7 +15,7 @@ import {Utils} from '../../utils/utils';
 })
 export class LoginPage {
 
-    debug: boolean = true;
+    debug: boolean = false;
     isLoggedIn: boolean = false;
     platform: Platform;
     showEmail: boolean = false;
