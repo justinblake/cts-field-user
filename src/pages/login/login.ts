@@ -40,7 +40,7 @@ export class LoginPage {
                 private iab: InAppBrowser) {
         this.platform = platform;
         this.platform.ready().then(() => {
-            Keyboard.disableScroll(true);
+            // Keyboard.disableScroll(true);
         });
         this.appVersion = this.utils.returnAppVersion();
     }
@@ -60,7 +60,7 @@ export class LoginPage {
 
 
         this.platform.ready().then(() => {
-            Keyboard.disableScroll(true);
+            // Keyboard.disableScroll(true);
 
 
         });

@@ -30,7 +30,7 @@ export class GeolocationService {
             let options = {
                 maximumAge: 0,
                 timeout: 30000
-            } as GeolocationOptions;
+            }
 
             if (maxAge) {
                 options.maximumAge = maxAge;

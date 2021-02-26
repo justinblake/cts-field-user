@@ -41,7 +41,7 @@ export class MyApp implements OnInit {
 
             this.statusBar.styleDefault();
             this.splashscreen.hide();
-            this.keyboard.disableScroll(true);
+            // this.keyboard.disableScroll(true);
 
 
             // do we have a user in storage?

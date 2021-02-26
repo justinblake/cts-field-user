@@ -67,29 +67,29 @@ import {Utils} from '../utils/utils';
 import {Pro} from '@ionic/pro';
 
 const IonicPro = Pro.init('379d0062', {
-    appVersion: "1.4.25"
+    appVersion: "1.5.01"
 });
 
-@Injectable()
-export class MyErrorHandler implements ErrorHandler {
-    ionicErrorHandler: IonicErrorHandler;
-
-    constructor(injector: Injector) {
-        try {
-            this.ionicErrorHandler = injector.get(IonicErrorHandler);
-        } catch (e) {
-            // Unable to get the IonicErrorHandler provider, ensure
-            // IonicErrorHandler has been added to the providers list below
-        }
-    }
-
-    handleError(err: any): void {
-        IonicPro.monitoring.handleNewError(err);
-        // Remove this if you want to disable Ionic's auto exception handling
-        // in development mode.
-        this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
-    }
-}
+// @Injectable()
+// export class MyErrorHandler implements ErrorHandler {
+//     ionicErrorHandler: IonicErrorHandler;
+//
+//     constructor(injector: Injector) {
+//         try {
+//             this.ionicErrorHandler = injector.get(IonicErrorHandler);
+//         } catch (e) {
+//             // Unable to get the IonicErrorHandler provider, ensure
+//             // IonicErrorHandler has been added to the providers list below
+//         }
+//     }
+//
+//     handleError(err: any): void {
+//         IonicPro.monitoring.handleNewError(err);
+//         // Remove this if you want to disable Ionic's auto exception handling
+//         // in development mode.
+//         this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
+//     }
+// }
 
 export function provideStorage() {
     return new Storage({name: '_ctsdb'});
@@ -175,7 +175,6 @@ export function provideStorage() {
     providers: [
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         {provide: Storage, useFactory: provideStorage},
-        [{provide: ErrorHandler, useClass: MyErrorHandler}],
         ActionSheet,
         AndroidFullScreen,
         ApiService,
