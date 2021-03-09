@@ -10,7 +10,7 @@
   "cordova-plugin-whitelist": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-whitelist@^1.3.1"
+      "id": "cordova-plugin-whitelist@^1.3.4"
     },
     "is_top_level": true,
     "variables": {}
@@ -75,15 +75,15 @@
   "cordova-plugin-file": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-file@>=5.0.0"
+      "id": "cordova-plugin-file@^6.0.2"
     },
-    "is_top_level": false,
+    "is_top_level": true,
     "variables": {}
   },
   "cordova-plugin-actionsheet": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-actionsheet"
+      "id": "cordova-plugin-actionsheet@^2.3.3"
     },
     "is_top_level": true,
     "variables": {}
@@ -91,7 +91,7 @@
   "cordova-plugin-fullscreen": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-fullscreen"
+      "id": "cordova-plugin-fullscreen@^1.2.0"
     },
     "is_top_level": true,
     "variables": {}
@@ -99,7 +99,7 @@
   "cordova-plugin-badge": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-badge"
+      "id": "cordova-plugin-badge@^0.8.8"
     },
     "is_top_level": true,
     "variables": {}
@@ -107,22 +107,18 @@
   "cordova-plugin-camera": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-camera@4.1.0"
+      "id": "cordova-plugin-camera@^4.1.0"
     },
     "is_top_level": true,
-    "variables": {
-      "ANDROID_SUPPORT_V4_VERSION": "27.+"
-    }
+    "variables": {}
   },
   "cordova.plugins.diagnostic": {
     "source": {
       "type": "registry",
-      "id": "cordova.plugins.diagnostic@5.0.1"
+      "id": "cordova.plugins.diagnostic@^5.0.1"
     },
     "is_top_level": true,
-    "variables": {
-      "ANDROID_SUPPORT_VERSION": "28.+"
-    }
+    "variables": {}
   },
   "cordova-plugin-ionic-keyboard": {
     "source": {
@@ -135,7 +131,7 @@
   "cordova-plugin-sim": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-sim"
+      "id": "cordova-plugin-sim@^1.3.3"
     },
     "is_top_level": true,
     "variables": {}
@@ -143,7 +139,7 @@
   "cordova-plugin-statusbar": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-statusbar@2.4.3"
+      "id": "cordova-plugin-statusbar@^2.4.3"
     },
     "is_top_level": true,
     "variables": {}
@@ -164,17 +160,15 @@
   "cordova-plugin-geolocation": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-geolocation@4.0.2"
+      "id": "cordova-plugin-geolocation@^4.0.2"
     },
     "is_top_level": true,
-    "variables": {
-      "GEOLOCATION_USAGE_DESCRIPTION": "To Verify Job Location"
-    }
+    "variables": {}
   },
   "cordova-plugin-inappbrowser": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-inappbrowser@3.1.0"
+      "id": "cordova-plugin-inappbrowser@^3.1.0"
     },
     "is_top_level": true,
     "variables": {}
@@ -183,6 +177,30 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-file-transfer@^1.7.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-fcm": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-fcm"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "ionic-plugin-keyboard": {
+    "source": {
+      "type": "registry",
+      "id": "ionic-plugin-keyboard"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-androidx-adapter": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-androidx-adapter"
     },
     "is_top_level": true,
     "variables": {}

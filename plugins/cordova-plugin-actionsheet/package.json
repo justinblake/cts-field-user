@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-actionsheet",
+  "_from": "cordova-plugin-actionsheet@^2.3.3",
   "_id": "cordova-plugin-actionsheet@2.3.3",
   "_inBundle": false,
   "_integrity": "sha1-6SYbLQBKjaQHOI1g31NMFWxS/xE=",
   "_location": "/cordova-plugin-actionsheet",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "cordova-plugin-actionsheet",
+    "raw": "cordova-plugin-actionsheet@^2.3.3",
     "name": "cordova-plugin-actionsheet",
     "escapedName": "cordova-plugin-actionsheet",
-    "rawSpec": "",
+    "rawSpec": "^2.3.3",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^2.3.3"
   },
   "_requiredBy": [
     "#USER",
@@ -21,8 +21,8 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-actionsheet/-/cordova-plugin-actionsheet-2.3.3.tgz",
   "_shasum": "e9261b2d004a8da407388d60df534c156c52ff11",
-  "_spec": "cordova-plugin-actionsheet",
-  "_where": "/Users/justin/dev/cts/cts-field-user",
+  "_spec": "cordova-plugin-actionsheet@^2.3.3",
+  "_where": "/Users/marksly/Sites/cts-field-user",
   "author": {
     "name": "Eddy Verbruggen - @EddyVerbruggen"
   },

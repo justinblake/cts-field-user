@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-sim",
+  "_from": "cordova-plugin-sim@^1.3.3",
   "_id": "cordova-plugin-sim@1.3.3",
   "_inBundle": false,
   "_integrity": "sha1-QoZjMHfYhX5kVP4GmHB9CMaK2Ik=",
   "_location": "/cordova-plugin-sim",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "cordova-plugin-sim",
+    "raw": "cordova-plugin-sim@^1.3.3",
     "name": "cordova-plugin-sim",
     "escapedName": "cordova-plugin-sim",
-    "rawSpec": "",
+    "rawSpec": "^1.3.3",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^1.3.3"
   },
   "_requiredBy": [
     "#USER",
@@ -21,8 +21,8 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-sim/-/cordova-plugin-sim-1.3.3.tgz",
   "_shasum": "4286633077d8857e6454fe0698707d08c68ad889",
-  "_spec": "cordova-plugin-sim",
-  "_where": "/Users/justin/dev/cts/cts-field-user",
+  "_spec": "cordova-plugin-sim@^1.3.3",
+  "_where": "/Users/marksly/Sites/cts-field-user",
   "author": {
     "name": "Peter Bakondy"
   },
